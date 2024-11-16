@@ -18,24 +18,6 @@ jobs:
       DB_URL: ${{ secrets.DB_URL }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost -u${{ secrets.DB_USERNAME }} --password=${{ secrets.DB_PASSWORD }}"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
 
     steps:
       - name: Github Repository 파일 불러오기
@@ -63,23 +45,6 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: 데이터베이스 연결 대기
-        run: |
-          echo "Waiting for MySQL to be ready..."
-          for i in {1..10}; do
-            if mysqladmin ping -h 127.0.0.1 -u${{ secrets.DB_USERNAME }} --password=${{ secrets.DB_PASSWORD }}; then
-              echo "MySQL is ready!"
-              break
-            fi
-            echo "Waiting for MySQL..."
-            sleep 5
-          done
-
+    
       - name: 빌드 및 테스트
         run: ./gradlew build
-
-      - name: 테스트 리포트 업로드
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: build/reports/tests/test
