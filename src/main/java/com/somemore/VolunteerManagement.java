@@ -1,20 +1,20 @@
 package com.somemore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "Volunteer_management")
 public class VolunteerManagement {
-    @EmbeddedId
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "apply_status", nullable = false, length = 20)
     private String applyStatus;

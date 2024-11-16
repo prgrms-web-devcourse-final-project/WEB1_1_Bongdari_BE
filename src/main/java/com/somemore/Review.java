@@ -1,18 +1,18 @@
 package com.somemore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 public class Review {
-    @EmbeddedId
-    private ReviewId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "center_id", nullable = false, length = 16)
     private String centerId;

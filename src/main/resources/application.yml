@@ -7,9 +7,10 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
         highlight_sql: true
         generate_statistics: true
