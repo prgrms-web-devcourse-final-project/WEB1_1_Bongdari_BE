@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "Recruit_board")
 public class RecruitBoard {
-    @EmbeddedId
-    private RecruitBoardId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "title", nullable = false)
     private String title;

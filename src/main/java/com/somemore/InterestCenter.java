@@ -1,17 +1,18 @@
 package com.somemore;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "interest_center")
 public class InterestCenter {
-    @EmbeddedId
-    private InterestCenterId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
 }
