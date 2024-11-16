@@ -14,27 +14,29 @@ jobs:
   Continuous-Integration:
     runs-on: ubuntu-latest
 
+    env:
+      # 데이터베이스 환경변수 (GitHub Secrets 사용)
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+
     services:
       mysql:
         image: mysql:8.0
         ports:
           - 3306:3306
         env:
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.DB_NAME }}
+          MYSQL_USER: ${{ env.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_ROOT_PASSWORD }}
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -u${{ secrets.DB_USERNAME }} --password=${{ secrets.DB_PASSWORD }}"
+          --health-cmd="mysqladmin ping -h localhost -u${{ env.DB_USERNAME }} --password=${{ env.DB_PASSWORD }}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
-    env:
-      # 데이터베이스 환경변수 (GitHub Secrets 사용)
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Github Repository 파일 불러오기
@@ -66,7 +68,7 @@ jobs:
         run: |
           echo "Waiting for MySQL to be ready..."
           for i in {1..10}; do
-            if mysqladmin ping -h 127.0.0.1 -u${{ secrets.DB_USERNAME }} --password=${{ secrets.DB_PASSWORD }}; then
+            if mysqladmin ping -h 127.0.0.1 -u${{ env.DB_USERNAME }} --password=${{ env.DB_PASSWORD }}; then
               echo "MySQL is ready!"
               break
             fi
