@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       #데이터베이스 환경변수(추후 RDS로 전환할 예정)
-      RDS_URL: ${{ secrets.DB_URL }}
-      RDS_USERNAME: ${{ secrets.DB_USERNAME }}
-      RDS_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       
 
     steps:
