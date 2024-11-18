@@ -15,7 +15,8 @@ spring:
         generate_statistics: true
     show-sql: true
 
-#swagger ??
+
+#swagger
 springdoc:
   swagger-ui:
     groups-order: DESC
