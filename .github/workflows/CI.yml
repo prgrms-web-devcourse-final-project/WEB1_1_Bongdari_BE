@@ -41,6 +41,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: SonarCloud 패키지 캐싱
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: 빌드 권한 부여
         run: chmod +x ./gradlew
         shell: bash
@@ -74,9 +81,15 @@ jobs:
             })
 
 
-      - name: 도커 빌드및 Push
+      - name: Docker build and push
         run: |
           echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
           docker build -t 7zrv/somemore:${GITHUB_SHA::7} -t 7zrv/somemore:latest .
           docker push 7zrv/somemore:${GITHUB_SHA::7}
           docker push 7zrv/somemore:latest
+          
+      - name: SonarCloud 빌드및 분석
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
