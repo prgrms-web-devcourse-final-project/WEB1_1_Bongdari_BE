@@ -49,6 +49,7 @@ def jacocoExcludePatterns = [
         "**/*Interceptor*",
         "**/*Filter*",
         "**/*Resolver*",
+        "**/*Entity*",
         "**/test/**",
         "**/resources/**"
 ]
