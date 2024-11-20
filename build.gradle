@@ -3,7 +3,11 @@ plugins {
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
     id "org.sonarqube" version "5.1.0.4882"
+    id "jacoco"
 }
+
+
+
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
@@ -24,12 +28,72 @@ repositories {
     mavenCentral()
 }
 
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+//QueryDSL 제외 패턴
+def QDomains = []
+for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+    QDomains.add(qPattern + '*')
+}
+
+def jacocoExcludePatterns = [
+        // 측정 안하고 싶은 패턴
+        "**/*Application*",
+        "**/*Config*",
+        "**/*Exception*",
+        "**/*Request*",
+        "**/*Response*",
+        "**/*Dto*",
+        "**/*Interceptor*",
+        "**/*Filter*",
+        "**/*Resolver*",
+        "**/test/**",
+        "**/resources/**"
+]
+
+jacocoTestCoverageVerification {
+
+    violationRules {
+        rule {
+            // rule 활성화
+            enabled = true
+
+            // 클래스 단위로 룰 체크
+            element = 'CLASS'
+
+            // 라인 커버리지를 최소 80% 만족
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            // 브랜치 커버리지를 최소 80% 만족
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+
+            excludes = jacocoExcludePatterns
+        }
+    }
+}
+
 
 sonar {
     properties {
         property "sonar.projectKey", "prgrms-web-devcourse-final-project_WEB1_1_Bongdari_BE"
         property "sonar.organization", "prgrms-web-devcourse-final-project"
         property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.sources', 'src'
+        property 'sonar.language', 'java'
+        property 'sonar.test.exclusions', jacocoExcludePatterns.join(',')
+        property 'sonar.test.inclusions', '**/*Test.java'
+        property 'sonar.java.coveragePlugin', 'jacoco'
+        property 'sonar.coverage.jacoco.xmlReportPaths', jacocoDir.get().file("jacoco/index.xml").asFile
     }
 }
 
@@ -64,4 +128,29 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+def jacocoDir = layout.buildDirectory.dir("reports/")
+
+jacocoTestReport {
+    dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        csv.required.set(true)
+        html.destination jacocoDir.get().file("jacoco/index.html").asFile
+        xml.destination jacocoDir.get().file("jacoco/index.xml").asFile
+        csv.destination jacocoDir.get().file("jacoco/index.csv").asFile
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: jacocoExcludePatterns + QDomains) // Querydsl 관련 제거
+                })
+        )
+    }
+    finalizedBy jacocoTestCoverageVerification
+
 }
