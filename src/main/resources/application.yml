@@ -34,3 +34,6 @@ springdoc:
   writer-with-default-pretty-printer: true
   paths-to-match:
     - /api/**
+
+jwt:
+  secret: ${JWT_SECRET}
