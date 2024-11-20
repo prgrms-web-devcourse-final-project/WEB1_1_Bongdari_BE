@@ -1,4 +1,4 @@
-package com.somemore;
+package com.somemore.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

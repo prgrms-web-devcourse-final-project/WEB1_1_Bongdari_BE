@@ -1,29 +1,28 @@
-package com.somemore;
+package com.somemore.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "Community_board")
-public class CommunityBoard {
+@Table(name = "Community_comment")
+public class CommunityComment {
     @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "writer_id", nullable = false, length = 16)
     private String writerId;
-
-    @Column(name = "title", nullable = false)
-    private String title;
 
     @Lob
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+    @Column(name = "parent_comment_id")
+    private Long parentCommentId;
 
 }
