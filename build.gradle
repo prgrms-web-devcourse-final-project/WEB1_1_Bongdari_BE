@@ -29,17 +29,11 @@ repositories {
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.8"
 }
 
-//QueryDSL 제외 패턴
-def QDomains = []
-for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
-    QDomains.add(qPattern + '*')
-}
-
+def QDomains = ["**/Q*"]
 def jacocoExcludePatterns = [
-        // 측정 안하고 싶은 패턴
         "**/*Application*",
         "**/*Config*",
         "**/*Exception*",
@@ -50,24 +44,17 @@ def jacocoExcludePatterns = [
         "**/*Filter*",
         "**/*Resolver*",
         "**/*Entity*",
-        "**/*Volunteer*",
-        "**/*Location*",
         "**/test/**",
         "**/resources/**",
         "**/domain/**"
 ]
-
+def combinedExcludePatterns = jacocoExcludePatterns + QDomains
 
 jacocoTestCoverageVerification {
-
     violationRules {
         rule {
-            // rule 활성화
             enabled = true
-
-            // 클래스 단위로 룰 체크
             element = 'CLASS'
-
 
             limit {
                 counter = 'LINE'
@@ -75,17 +62,56 @@ jacocoTestCoverageVerification {
                 minimum = 0.60
             }
 
-
             limit {
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
                 minimum = 0.60
             }
 
-            excludes = jacocoExcludePatterns + QDomains
         }
     }
 }
+
+def jacocoDir = layout.buildDirectory.dir("reports/")
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        csv.required.set(true)
+        html.destination jacocoDir.get().file("jacoco/index.html").asFile
+        xml.destination jacocoDir.get().file("jacoco/index.xml").asFile
+        csv.destination jacocoDir.get().file("jacoco/index.csv").asFile
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it,
+                            excludes: [
+                                    "**/*Application*",
+                                    "**/*Config*",
+                                    "**/*Exception*",
+                                    "**/*Request*",
+                                    "**/*Response*",
+                                    "**/*Dto*",
+                                    "**/jwt/**",
+                                    "**/*Interceptor*",
+                                    "**/*Filter*",
+                                    "**/*Resolver*",
+                                    "**/*Entity*",
+                                    "**/test/**",
+                                    "**/resources/**",
+                                    "**/domain/**"
+                            ] + QDomains)
+                })
+        )
+    }
+    finalizedBy jacocoTestCoverageVerification
+}
+
+
 
 
 sonar {
@@ -136,26 +162,6 @@ tasks.named('test') {
     finalizedBy 'jacocoTestReport'
 }
 
-def jacocoDir = layout.buildDirectory.dir("reports/")
 
-jacocoTestReport {
-    dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
-    reports {
-        html.required.set(true)
-        xml.required.set(true)
-        csv.required.set(true)
-        html.destination jacocoDir.get().file("jacoco/index.html").asFile
-        xml.destination jacocoDir.get().file("jacoco/index.xml").asFile
-        csv.destination jacocoDir.get().file("jacoco/index.csv").asFile
-    }
 
-    afterEvaluate {
-        classDirectories.setFrom(
-                files(classDirectories.files.collect {
-                    fileTree(dir: it, excludes: jacocoExcludePatterns + QDomains) // Querydsl 관련 제거
-                })
-        )
-    }
-    finalizedBy jacocoTestCoverageVerification
 
-}
