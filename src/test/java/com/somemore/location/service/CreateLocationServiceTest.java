@@ -1,7 +1,6 @@
 package com.somemore.location.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.location.domain.Location;
