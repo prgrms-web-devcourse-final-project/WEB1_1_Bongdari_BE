@@ -11,7 +11,6 @@ import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
@@ -71,7 +70,6 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(recruitBoard.get().getId()).isEqualTo(saveId);
         assertThat(recruitBoard.get().getCenterId()).isEqualTo(centerId);
         assertThat(recruitBoard.get().getImgUrl()).isEqualTo(imgUrl);
-        assertThat(recruitBoard.get().calculateVolunteerTime()).isEqualTo(LocalTime.of(2, 0));
     }
 
 }

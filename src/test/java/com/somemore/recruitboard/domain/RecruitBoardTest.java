@@ -70,6 +70,10 @@ class RecruitBoardTest {
     @Test
     void testCalculateVolunteerTime() {
         // given
+        int hours = 3;
+        LocalDateTime startDateTime = LocalDateTime.now();
+        LocalDateTime endDateTime = startDateTime.plusHours(hours);
+
         RecruitBoard board = RecruitBoard.builder()
             .centerId(UUID.randomUUID())
             .locationId(1L)
@@ -78,8 +82,8 @@ class RecruitBoardTest {
             .region("경기")
             .recruitmentCount(10)
             .imgUrl("https://image.domain.com/links")
-            .volunteerStartDateTime(LocalDateTime.now())
-            .volunteerEndDateTime(LocalDateTime.now().plusHours(3))
+            .volunteerStartDateTime(startDateTime)
+            .volunteerEndDateTime(endDateTime)
             .volunteerType(OTHER)
             .admitted(true)
             .build();
@@ -88,6 +92,6 @@ class RecruitBoardTest {
         LocalTime volunteerTime = board.calculateVolunteerTime();
 
         // then
-        assertThat(volunteerTime).isEqualTo(LocalTime.of(3, 0));
+        assertThat(volunteerTime).isEqualTo(LocalTime.of(hours, 0));
     }
 }
