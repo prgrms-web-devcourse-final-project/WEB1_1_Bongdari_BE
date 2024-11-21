@@ -61,7 +61,9 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
-    finalizedBy 'jacocoTestReport'
+    if (gradle.startParameter.taskNames.contains('build')) {
+        finalizedBy 'jacocoTestReport'
+    }
 }
 
 def jacocoDir = layout.buildDirectory.dir("reports/")
