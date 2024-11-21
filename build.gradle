@@ -29,10 +29,6 @@ jacoco {
     toolVersion = '0.8.12'
 }
 
-
-
-
-
 dependencies {
 
     // Data Layer: JPA, Redis, Database Drivers
@@ -88,7 +84,6 @@ def jacocoExcludePatterns = [
         '**/domain/*',
         '**/domains/*',
 ]
-
 
 jacocoTestReport {
     dependsOn test
