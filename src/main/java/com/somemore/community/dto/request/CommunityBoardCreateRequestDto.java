@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
-public record CommunityCreateRequestDto(
+public record CommunityBoardCreateRequestDto(
         @Schema(description = "커뮤니티 게시글 제목", example = "11/29 OO도서관 봉사 같이 갈 사람 모집합니다.")
         @NotBlank(message = "게시글 제목은 필수 값입니다.")
         String title,

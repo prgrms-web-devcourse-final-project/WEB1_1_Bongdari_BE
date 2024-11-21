@@ -3,9 +3,9 @@ package com.somemore.community.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.dto.request.CommunityCreateRequestDto;
-import com.somemore.community.repository.CommunityRepository;
-import com.somemore.community.service.command.CreateCommunityService;
+import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
+import com.somemore.community.repository.CommunityBoardRepository;
+import com.somemore.community.service.command.CreateCommunityBoardService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +19,17 @@ import java.util.UUID;
 @ActiveProfiles("test")
 @EnableJpaAuditing
 @SpringBootTest
-public class CreateCommunityServiceTest {
+public class CreateCommunityBoardServiceTest {
     @Autowired
-    private CreateCommunityService createCommunityService;
+    private CreateCommunityBoardService createCommunityBoardService;
     @Autowired
-    private CommunityRepository communityRepository;
+    private CommunityBoardRepository communityBoardRepository;
 
     @DisplayName("커뮤니티에 게시글을 등록한다.")
     @Test
     void createCommunityWithDto() {
         //given
-        CommunityCreateRequestDto dto = CommunityCreateRequestDto.builder()
+        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
                 .title("커뮤니티 테스트 제목")
                 .content("커뮤니티 테스트 내용")
                 .build();
@@ -38,10 +38,10 @@ public class CreateCommunityServiceTest {
         String imgUrl = "https://image.test.url/123";
 
         //when
-        Long communityId = createCommunityService.createCommunityBoard(dto, writerId, imgUrl);
+        Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId, imgUrl);
 
         //then
-        Optional<CommunityBoard> communityBoard = communityRepository.findById(communityId);
+        Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
 
         assertThat(communityBoard.isPresent()).isTrue();
         assertThat(communityBoard.get().getId()).isEqualTo(communityId);
@@ -55,7 +55,7 @@ public class CreateCommunityServiceTest {
     @Test
     void createCommunityWithoutImgUrl() {
         //given
-        CommunityCreateRequestDto dto = CommunityCreateRequestDto.builder()
+        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
                 .title("커뮤니티 테스트 제목")
                 .content("커뮤니티 테스트 내용")
                 .build();
@@ -64,10 +64,10 @@ public class CreateCommunityServiceTest {
         String imgUrl = null;
 
         //when
-        Long communityId = createCommunityService.createCommunityBoard(dto, writerId, imgUrl);
+        Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId, imgUrl);
 
         //then
-        Optional<CommunityBoard> communityBoard = communityRepository.findById(communityId);
+        Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
 
         assertThat(communityBoard.isPresent()).isTrue();
         assertThat(communityBoard.get().getId()).isEqualTo(communityId);
