@@ -51,10 +51,9 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
             .content("봉사 하실분을 모집합니다. <br>")
             .region("지역")
             .recruitmentCount(10)
-            .volunteerDate(LocalDateTime.now())
+            .volunteerStartDateTime(LocalDateTime.now())
+            .volunteerEndDateTime(LocalDateTime.now().plusHours(2))
             .volunteerType(VolunteerType.OTHER)
-            .volunteerHours(1)
-            .volunteerMinutes(30)
             .admitted(true)
             .location(locationDto)
             .build();
@@ -72,7 +71,7 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(recruitBoard.get().getId()).isEqualTo(saveId);
         assertThat(recruitBoard.get().getCenterId()).isEqualTo(centerId);
         assertThat(recruitBoard.get().getImgUrl()).isEqualTo(imgUrl);
-        assertThat(recruitBoard.get().getVolunteerHours()).isEqualTo(LocalTime.of(1, 30));
+        assertThat(recruitBoard.get().calculateVolunteerTime()).isEqualTo(LocalTime.of(2, 0));
     }
 
 }
