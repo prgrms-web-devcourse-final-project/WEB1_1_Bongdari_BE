@@ -40,7 +40,7 @@ public class CommunityBoard extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "img_url")
+    @Column(name = "img_url", nullable = false)
     private String imgUrl;
 
     @Builder
