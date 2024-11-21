@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
+class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
     @Autowired
     private CreateCommunityBoardService createCommunityBoardService;
     @Autowired
@@ -44,7 +44,7 @@ public class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
         //then
         Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
 
-        assertThat(communityBoard.isPresent()).isTrue();
+        assertThat(communityBoard).isPresent();
         assertThat(communityBoard.get().getId()).isEqualTo(communityId);
         assertThat(communityBoard.get().getWriterId()).isEqualTo(writerId);
         assertThat(communityBoard.get().getTitle()).isEqualTo(dto.title());
@@ -70,11 +70,11 @@ public class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
         //then
         Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
 
-        assertThat(communityBoard.isPresent()).isTrue();
+        assertThat(communityBoard).isPresent();
         assertThat(communityBoard.get().getId()).isEqualTo(communityId);
         assertThat(communityBoard.get().getWriterId()).isEqualTo(writerId);
         assertThat(communityBoard.get().getTitle()).isEqualTo(dto.title());
         assertThat(communityBoard.get().getContent()).isEqualTo(dto.content());
-        assertThat(communityBoard.get().getImgUrl()).isEqualTo("");
+        assertThat(communityBoard.get().getImgUrl()).isEmpty();
     }
 }
