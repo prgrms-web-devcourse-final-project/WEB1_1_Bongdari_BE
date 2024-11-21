@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.location.domain.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.Builder;
 
 @JsonNaming(SnakeCaseStrategy.class)
@@ -15,11 +19,16 @@ public record LocationCreateRequestDto(
     @NotBlank(message = "주소는 필수 입력 값입니다.")
     String address,
     @Schema(description = "주소에 해당하는 위도 정보", example = "37.4845373748015")
-    @NotBlank(message = "위도는 필수 입력 값입니다.")
-    String latitude,
+    @NotNull(message = "위도는 필수 입력 값입니다.")
+    @DecimalMin(value = "33", message = "위도는 33도 이상이어야 합니다.")
+    @DecimalMax(value = "39", message = "위도는 38도 이하이어야 합니다.")
+    BigDecimal latitude,
+
     @Schema(description = "주소에 해당하는 경도 정보", example = "127.010842267696")
-    @NotBlank(message = "경도는 필수 입력 값입니다.")
-    String longitude
+    @NotNull(message = "경도는 필수 입력 값입니다.")
+    @DecimalMin(value = "124", message = "경도는 124도 이상이어야 합니다.")
+    @DecimalMax(value = "132", message = "경도는 132도 이하이어야 합니다.")
+    BigDecimal longitude
 ) {
 
     public Location toEntity() {
