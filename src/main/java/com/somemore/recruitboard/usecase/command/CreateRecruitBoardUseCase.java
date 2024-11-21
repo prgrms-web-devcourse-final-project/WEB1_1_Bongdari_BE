@@ -1,4 +1,4 @@
-package com.somemore.recruitboard.usecase;
+package com.somemore.recruitboard.usecase.command;
 
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import java.util.UUID;

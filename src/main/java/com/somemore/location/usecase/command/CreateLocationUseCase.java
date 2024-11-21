@@ -1,4 +1,4 @@
-package com.somemore.location.usecase;
+package com.somemore.location.usecase.command;
 
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 

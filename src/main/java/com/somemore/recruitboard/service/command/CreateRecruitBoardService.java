@@ -1,10 +1,10 @@
-package com.somemore.recruitboard.service;
+package com.somemore.recruitboard.service.command;
 
-import com.somemore.location.usecase.CreateLocationUseCase;
+import com.somemore.location.usecase.command.CreateLocationUseCase;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.recruitboard.usecase.CreateRecruitBoardUseCase;
+import com.somemore.recruitboard.usecase.command.CreateRecruitBoardUseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

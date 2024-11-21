@@ -1,9 +1,9 @@
-package com.somemore.location.service;
+package com.somemore.location.service.command;
 
 import com.somemore.location.domain.Location;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.location.repository.LocationRepository;
-import com.somemore.location.usecase.CreateLocationUseCase;
+import com.somemore.location.usecase.command.CreateLocationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

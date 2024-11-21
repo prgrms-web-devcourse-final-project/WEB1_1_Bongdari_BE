@@ -1,4 +1,4 @@
-package com.somemore.location.service;
+package com.somemore.location.service.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,6 +6,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.location.domain.Location;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.location.repository.LocationRepository;
+import com.somemore.location.service.command.CreateLocationService;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
