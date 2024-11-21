@@ -6,7 +6,6 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.service.command.command.CreateCommunityBoardService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.somemore.community.service.command.command;
+package com.somemore.community.service.command;
 
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
