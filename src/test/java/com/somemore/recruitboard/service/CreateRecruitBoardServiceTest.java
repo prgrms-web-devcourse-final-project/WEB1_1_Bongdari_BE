@@ -63,10 +63,11 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
 
         // when
         Long saveId = createRecruitBoardService.createRecruitBoard(dto, centerId, imgUrl);
-        Optional<RecruitBoard> recruitBoard = recruitBoardRepository.findById(saveId);
 
         // then
-        assertThat(recruitBoard.isPresent()).isTrue();
+        Optional<RecruitBoard> recruitBoard = recruitBoardRepository.findById(saveId);
+
+        assertThat(recruitBoard).isPresent();
         assertThat(recruitBoard.get().getId()).isEqualTo(saveId);
         assertThat(recruitBoard.get().getCenterId()).isEqualTo(centerId);
         assertThat(recruitBoard.get().getImgUrl()).isEqualTo(imgUrl);

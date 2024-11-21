@@ -37,10 +37,10 @@ class CreateLocationServiceTest extends IntegrationTestSupport {
 
         // when
         Long locationId = createLocationService.createLocation(dto);
-        Optional<Location> location = locationRepository.findById(locationId);
 
         // then
-        assertThat(location.isPresent()).isTrue();
+        Optional<Location> location = locationRepository.findById(locationId);
+        assertThat(location).isPresent();
         assertThat(location.get().getId()).isEqualTo(locationId);
 
     }
