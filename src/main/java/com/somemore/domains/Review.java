@@ -1,4 +1,4 @@
-package com.somemore;
+package com.somemore.domains;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,20 +9,19 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "Community_comment")
-public class CommunityComment {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "writer_id", nullable = false, length = 16)
-    private String writerId;
+    @Column(name = "center_id", nullable = false, length = 16)
+    private String centerId;
 
     @Lob
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "parent_comment_id")
-    private Long parentCommentId;
+    @Column(name = "img_url")
+    private String imgUrl;
 
 }
