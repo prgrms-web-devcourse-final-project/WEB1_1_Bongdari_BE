@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -56,23 +57,26 @@ public class RecruitBoard extends BaseEntity {
     @Column(name = "recruit_status", nullable = false, length = 20)
     private RecruitStatus recruitStatus = RECRUITING;
 
-    @Column(name = "volunteer_date", nullable = false)
-    private LocalDateTime volunteerDate;
+    @Column(name = "volunteer_start_date_time", nullable = false)
+    private LocalDateTime volunteerStartDateTime;
+
+    @Column(name = "volunteer_end_date_time", nullable = false)
+    private LocalDateTime volunteerEndDateTime;
 
     @Enumerated(value = STRING)
     @Column(name = "volunteer_type", nullable = false, length = 30)
     private VolunteerType volunteerType;
-
-    @Column(name = "volunteer_hours", nullable = false)
-    private LocalTime volunteerHours;
 
     @Column(name = "admitted", nullable = false)
     private Boolean admitted;
 
     @Builder
     public RecruitBoard(UUID centerId, Long locationId, String title, String content, String region,
-        Integer recruitmentCount, String imgUrl, LocalDateTime volunteerDate,
-        VolunteerType volunteerType, LocalTime volunteerHours, Boolean admitted) {
+        Integer recruitmentCount, String imgUrl, LocalDateTime volunteerStartDateTime,
+        LocalDateTime volunteerEndDateTime, VolunteerType volunteerType, Boolean admitted) {
+
+        validateVolunteerDateTime(volunteerStartDateTime, volunteerEndDateTime);
+
         this.centerId = centerId;
         this.locationId = locationId;
         this.title = title;
@@ -80,9 +84,24 @@ public class RecruitBoard extends BaseEntity {
         this.region = region;
         this.recruitmentCount = recruitmentCount;
         this.imgUrl = imgUrl;
-        this.volunteerDate = volunteerDate;
+        this.volunteerStartDateTime = volunteerStartDateTime;
+        this.volunteerEndDateTime = volunteerEndDateTime;
         this.volunteerType = volunteerType;
-        this.volunteerHours = volunteerHours;
         this.admitted = admitted;
+    }
+
+    public LocalTime calculateVolunteerTime() {
+        Duration duration = Duration.between(volunteerStartDateTime, volunteerEndDateTime);
+
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+
+        return LocalTime.of((int) hours, (int) minutes);
+    }
+
+    private void validateVolunteerDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if (endDateTime.isEqual(startDateTime) || endDateTime.isBefore(startDateTime)) {
+            throw new IllegalArgumentException("종료 시간은 시작 시간보다 이후여야 합니다.");
+        }
     }
 }
