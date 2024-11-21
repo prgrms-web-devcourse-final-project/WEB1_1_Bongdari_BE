@@ -1,4 +1,4 @@
-package com.somemore.community.usecase;
+package com.somemore.community.usecase.command;
 
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 

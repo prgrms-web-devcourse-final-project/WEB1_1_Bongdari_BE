@@ -1,29 +1,30 @@
-package com.somemore.community.service;
+package com.somemore.community.service.command;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.somemore.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.service.command.CreateCommunityBoardService;
+import com.somemore.community.service.command.command.CreateCommunityBoardService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@ActiveProfiles("test")
-@EnableJpaAuditing
-@SpringBootTest
-public class CreateCommunityBoardServiceTest {
+public class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
     @Autowired
     private CreateCommunityBoardService createCommunityBoardService;
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
+
+    @AfterEach
+    void tearDown() {
+        communityBoardRepository.deleteAllInBatch();
+    }
 
     @DisplayName("커뮤니티에 게시글을 등록한다.")
     @Test
