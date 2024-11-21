@@ -9,6 +9,7 @@ import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerType;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
@@ -41,8 +42,8 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
         // given
         LocationCreateRequestDto locationDto = LocationCreateRequestDto.builder()
             .address("도로명 주소 33")
-            .latitude("위도 정보")
-            .longitude("경도 정보")
+            .latitude(BigDecimal.valueOf(37.4845373748015))
+            .longitude(BigDecimal.valueOf(127.010842267696))
             .build();
 
         RecruitBoardCreateRequestDto dto = RecruitBoardCreateRequestDto.builder()

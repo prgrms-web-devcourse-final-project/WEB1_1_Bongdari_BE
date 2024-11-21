@@ -6,6 +6,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.location.domain.Location;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.location.repository.LocationRepository;
+import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,8 +32,8 @@ class CreateLocationServiceTest extends IntegrationTestSupport {
         // given
         LocationCreateRequestDto dto = LocationCreateRequestDto.builder()
             .address("위치위치")
-            .latitude("위도위도")
-            .longitude("경도경도")
+            .latitude(BigDecimal.valueOf(37.4845373748015))
+            .longitude(BigDecimal.valueOf(127.010842267696))
             .build();
 
         // when
