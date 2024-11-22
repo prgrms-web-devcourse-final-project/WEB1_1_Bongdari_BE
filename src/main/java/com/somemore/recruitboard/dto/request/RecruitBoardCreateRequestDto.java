@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.VolunteerInfo;
 import com.somemore.recruitboard.domain.VolunteerType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -44,18 +45,22 @@ public record RecruitBoardCreateRequestDto(
 ) {
 
     public RecruitBoard toEntity(UUID centerId, Long locationId, String imgUrl) {
+        VolunteerInfo volunteerInfo = VolunteerInfo.builder()
+            .region("경기")
+            .recruitmentCount(recruitmentCount)
+            .volunteerStartDateTime(volunteerStartDateTime)
+            .volunteerEndDateTime(volunteerEndDateTime)
+            .volunteerType(volunteerType)
+            .admitted(admitted)
+            .build();
+
         return RecruitBoard.builder()
             .centerId(centerId)
             .locationId(locationId)
             .title(title)
             .content(content)
-            .region(region)
-            .recruitmentCount(recruitmentCount)
             .imgUrl(imgUrl)
-            .volunteerStartDateTime(volunteerStartDateTime)
-            .volunteerEndDateTime(volunteerEndDateTime)
-            .volunteerType(volunteerType)
-            .admitted(admitted)
+            .volunteerInfo(volunteerInfo)
             .build();
     }
 }
