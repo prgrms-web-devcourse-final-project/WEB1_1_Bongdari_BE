@@ -1,9 +1,12 @@
 package com.somemore.auth.jwt.usecase;
 
+import com.somemore.auth.jwt.domain.EncodedToken;
+import com.somemore.auth.jwt.domain.TokenType;
+
 public interface JwtUseCase {
-    String generateToken(String userId, String role);
+    EncodedToken generateToken(String userId, String role, TokenType tokenType);
 
-    boolean verifyToken(String token);
+    void verifyToken(EncodedToken token);
 
-    String getClaimByKey(String token, String key);
+    String getClaimByKey(EncodedToken token, String key);
 }
