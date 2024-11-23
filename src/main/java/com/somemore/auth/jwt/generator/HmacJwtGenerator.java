@@ -2,7 +2,6 @@ package com.somemore.auth.jwt.generator;
 
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
-import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.MacAlgorithm;
