@@ -1,4 +1,4 @@
-package com.somemore.auth;
+package com.somemore.auth.jwt.domain;
 
 public enum UserRole {
     VOLUNTEER,
