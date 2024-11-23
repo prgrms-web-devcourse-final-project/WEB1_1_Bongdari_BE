@@ -14,10 +14,25 @@ jobs:
   Continuous-Integration:
     runs-on: ubuntu-latest
 
+    #Action 환경에서 Redis 실행을 위한 설정 추후 서버 배포시 제거 예정
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+
     env:
       DB_URL: ${{ secrets.DB_URL }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST}}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
+      NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+      NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+      NAVER_SCOPE: ${{ secrets.NAVER_SCOPE }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
 
     steps:
       - name: Github Repository 파일 불러오기
@@ -52,10 +67,8 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-    
       - name: 빌드 및 테스트
         run: ./gradlew build
-
 
       - name: Close PR, if build fail
         if: ${{ failure() }}
@@ -79,7 +92,6 @@ jobs:
               title: updated_title,
               state: 'closed'
             })
-      
 
       - name: 도커 허브 로그인
         run:
@@ -90,7 +102,6 @@ jobs:
           docker build -t 7zrv/somemore:${GITHUB_SHA::7} -t 7zrv/somemore:latest .
           docker push 7zrv/somemore:${GITHUB_SHA::7}
           docker push 7zrv/somemore:latest
-          
 
       - name: SonarCloud 빌드및 분석
         env:
