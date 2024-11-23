@@ -1,7 +1,8 @@
 package com.somemore.auth.jwt.parser;
 
+import com.somemore.auth.jwt.domain.EncodedToken;
 import io.jsonwebtoken.Claims;
 
 public interface JwtParser {
-    Claims parseToken(String token);
+    Claims parseToken(EncodedToken token);
 }
