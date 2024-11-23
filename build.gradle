@@ -57,7 +57,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 
-
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -105,6 +104,7 @@ def jacocoExcludePatterns = [
         '**/*Response*',
         '**/*Entity*',
         '**/*Dto*',
+        '**/*Dto.*',
         '**/*Jwt*',
         '**/auth/*',
         '**/domain/*',
@@ -179,6 +179,7 @@ sonar {
         property 'sonar.language', 'java'
         property 'sonar.sourceEncoding', 'UTF-8'
         property 'sonar.test.exclusions', jacocoExcludePatterns.join(',')
+        property 'sonar.coverage.exclusions', jacocoExcludePatterns.join(',')
         property 'sonar.test.inclusions', '**/*Test.java'
         property 'sonar.java.coveragePlugin', 'jacoco'
         property 'sonar.coverage.jacoco.xmlReportPaths', jacocoDir.get().file("jacoco/index.xml").asFile
