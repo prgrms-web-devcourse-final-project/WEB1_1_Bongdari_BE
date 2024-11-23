@@ -109,7 +109,7 @@ def jacocoExcludePatterns = [
         '**/*Response*',
         '**/*Entity*',
         '**/*Dto*',
-        '**/*jwt*',
+        '**/jwt/*',
         '**/auth/*',
         '**/domain/*',
         '**/domains/*',
