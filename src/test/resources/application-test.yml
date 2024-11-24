@@ -20,3 +20,15 @@ spring:
   sql:
     init:
       mode: never
+
+  data:
+    redis:
+      host: localhost  # 로컬 Redis 사용
+      port: 6379
+      password:  # 테스트에서는 비밀번호 없이 연결
+
+frontend:
+  url: http://localhost:3000  # 테스트용 프론트엔드 주소
+
+jwt:
+  secret: 63bf2c80266cd25072e53b3482e318c30d1cd18d8c98d0f5d278530a94fe28d9fbbec531e5ccb58c725c125738182357786b71f43a7172c5d0c94a17f0da44f2  # 테스트용 JWT 시크릿 키
