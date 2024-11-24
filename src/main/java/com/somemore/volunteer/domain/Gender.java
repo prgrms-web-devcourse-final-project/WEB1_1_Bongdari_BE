@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Gender {
-    Male("M"),
-    Female("F"),
-    Undefined("U");
+    MALE("M"),
+    FEMALE("F"),
+    UNDEFINED("U");
 
     private final String code;
 
@@ -20,6 +20,6 @@ public enum Gender {
                 return gender;
             }
         }
-        return Undefined;
+        return UNDEFINED;
     }
 }
