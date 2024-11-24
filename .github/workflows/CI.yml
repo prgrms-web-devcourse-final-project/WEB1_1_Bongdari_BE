@@ -73,7 +73,7 @@ jobs:
       - name: Close PR, if build fail
         if: ${{ failure() }}
         uses: actions/github-script@v6
-        with: # actions(uses)의 파라미터 역할
+        with:
           github-token: ${{ github.TOKEN }}
           script: | 
             const pull_number = ${{ github.event.pull_request.number }}
@@ -92,16 +92,6 @@ jobs:
               title: updated_title,
               state: 'closed'
             })
-
-      - name: 도커 허브 로그인
-        run:
-          echo "${{ secrets.DOCKER_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: 도커 빌드및 Push
-        run: |
-          docker build -t 7zrv/somemore:${GITHUB_SHA::7} -t 7zrv/somemore:latest .
-          docker push 7zrv/somemore:${GITHUB_SHA::7}
-          docker push 7zrv/somemore:latest
 
       - name: SonarCloud 빌드및 분석
         env:
