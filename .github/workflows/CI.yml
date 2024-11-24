@@ -47,7 +47,7 @@ jobs:
           java-version: 21
 
       - name: Gradle 캐싱
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
