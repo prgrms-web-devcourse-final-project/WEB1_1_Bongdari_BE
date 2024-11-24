@@ -7,9 +7,9 @@ public enum TokenType {
     ACCESS(1000 * 60 * 30),
     REFRESH(1000 * 60 * 60 * 24 * 7);
 
-    private final long period;
+    private final int period;
 
-    TokenType(long period) {
+    TokenType(int period) {
         this.period = period;
     }
 
