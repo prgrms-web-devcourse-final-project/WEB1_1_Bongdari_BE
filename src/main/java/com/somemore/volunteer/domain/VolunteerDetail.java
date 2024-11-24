@@ -23,10 +23,10 @@ public class VolunteerDetail {
     @Column(name = "volunteer_id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID volunteerId;
 
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false, length = 255)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +36,7 @@ public class VolunteerDetail {
     @Column(name = "birth_date", nullable = false, length = 10)
     private String birthDate;
 
-    @Column(name = "contact_number", nullable = false, length = 255)
+    @Column(name = "contact_number", nullable = false)
     private String contactNumber;
 
 
