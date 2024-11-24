@@ -7,5 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface VolunteerDetailRepository extends JpaRepository<VolunteerDetail, Long> {
+
     Optional<VolunteerDetail> findByVolunteerId(UUID volunteerId);
 }
