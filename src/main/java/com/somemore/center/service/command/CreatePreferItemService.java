@@ -6,8 +6,10 @@ import com.somemore.center.usecase.command.CreatePreferItemUseCase;
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class CreatePreferItemService implements CreatePreferItemUseCase {
 
@@ -21,4 +23,5 @@ public class CreatePreferItemService implements CreatePreferItemUseCase {
 
         preferItemRepository.save(requestDto.createPreferItem());
     }
+
 }

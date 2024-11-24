@@ -32,16 +32,16 @@ public class CenterQueryService implements CenterQueryUseCase {
         return CenterProfileResponseDto.of(center, preferItems);
     }
 
-    private Center getCenterById(UUID centerId) {
-        return centerRepository.findCenterById(centerId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_CENTER.getMessage()));
-    }
-
     @Override
     public void validateCenterExists(UUID id) {
         if (centerRepository.doesNotExistById(id)) {
             throw new BadRequestException(NOT_EXISTS_CENTER.getMessage());
         }
+    }
+
+    private Center getCenterById(UUID centerId) {
+        return centerRepository.findCenterById(centerId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_CENTER.getMessage()));
     }
 
 }
