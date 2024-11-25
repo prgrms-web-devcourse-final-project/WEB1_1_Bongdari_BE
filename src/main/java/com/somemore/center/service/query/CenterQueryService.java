@@ -1,7 +1,8 @@
 package com.somemore.center.service.query;
+
 import com.somemore.center.domain.Center;
-import com.somemore.center.domain.PreferItem;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
+import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.CenterRepository;
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.center.usecase.query.PreferItemQueryUseCase;
@@ -27,9 +28,9 @@ public class CenterQueryService implements CenterQueryUseCase {
     public CenterProfileResponseDto getCenterProfileByCenterId(UUID centerId) {
 
         Center center = getCenterById(centerId);
-        List<PreferItem> preferItems = preferItemQueryUseCase.getPreferItemsByCenterId(centerId);
+        List<PreferItemResponseDto> preferItemDtos = preferItemQueryUseCase.getPreferItemDtosByCenterId(centerId);
 
-        return CenterProfileResponseDto.of(center, preferItems);
+        return CenterProfileResponseDto.of(center, preferItemDtos);
     }
 
     @Override

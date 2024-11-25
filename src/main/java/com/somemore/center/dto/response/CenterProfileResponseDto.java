@@ -18,9 +18,9 @@ public record CenterProfileResponseDto(
         String imgUrl,
         String introduce,
         String homepageLink,
-        List<PreferItem> preferItems
+        List<PreferItemResponseDto> preferItems
 ) {
-    public static CenterProfileResponseDto of(Center center, List<PreferItem> preferItems) {
+    public static CenterProfileResponseDto of(Center center, List<PreferItemResponseDto> preferItemDtos) {
         return CenterProfileResponseDto.builder()
                 .centerId(center.getId())
                 .name(center.getName())
@@ -28,7 +28,7 @@ public record CenterProfileResponseDto(
                 .imgUrl(center.getImgUrl())
                 .introduce(center.getIntroduce())
                 .homepageLink(center.getHomepageLink())
-                .preferItems(preferItems)
+                .preferItems(preferItemDtos)
                 .build();
     }
 }
