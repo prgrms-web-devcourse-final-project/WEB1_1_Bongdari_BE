@@ -86,9 +86,10 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
         VolunteerInfo volunteerInfo = updatedRecruitBoard.getVolunteerInfo();
         assertThat(volunteerInfo.getRecruitmentCount()).isEqualTo(dto.recruitmentCount());
-        assertThat(volunteerInfo.getVolunteerStartDateTime()).isEqualTo(
-            dto.volunteerStartDateTime());
-        assertThat(volunteerInfo.getVolunteerEndDateTime()).isEqualTo(dto.volunteerEndDateTime());
+        assertThat(volunteerInfo.getVolunteerStartDateTime()
+            .compareTo(dto.volunteerStartDateTime())).isZero();
+        assertThat(volunteerInfo.getVolunteerEndDateTime()
+            .compareTo(dto.volunteerEndDateTime())).isZero();
         assertThat(volunteerInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
         assertThat(volunteerInfo.getAdmitted()).isEqualTo(dto.admitted());
     }
