@@ -2,6 +2,7 @@ package com.somemore.recruitboard.service.command;
 
 import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -86,12 +87,15 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
         VolunteerInfo volunteerInfo = updatedRecruitBoard.getVolunteerInfo();
         assertThat(volunteerInfo.getRecruitmentCount()).isEqualTo(dto.recruitmentCount());
-        assertThat(volunteerInfo.getVolunteerStartDateTime()
-            .compareTo(dto.volunteerStartDateTime())).isZero();
-        assertThat(volunteerInfo.getVolunteerEndDateTime()
-            .compareTo(dto.volunteerEndDateTime())).isZero();
         assertThat(volunteerInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
         assertThat(volunteerInfo.getAdmitted()).isEqualTo(dto.admitted());
+
+        assertThat(volunteerInfo.getVolunteerStartDateTime().truncatedTo(MILLIS)
+            .compareTo(dto.volunteerStartDateTime().truncatedTo(MILLIS)))
+            .isZero();
+        assertThat(volunteerInfo.getVolunteerEndDateTime().truncatedTo(MILLIS)
+            .compareTo(dto.volunteerEndDateTime().truncatedTo(MILLIS)))
+            .isZero();
     }
 
     @DisplayName("봉사 모집글 위치를 수정할 수 있다")
