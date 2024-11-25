@@ -46,7 +46,7 @@ public record RecruitBoardCreateRequestDto(
 
     public RecruitBoard toEntity(UUID centerId, Long locationId, String imgUrl) {
         VolunteerInfo volunteerInfo = VolunteerInfo.builder()
-            .region("경기")
+            .region(region)
             .recruitmentCount(recruitmentCount)
             .volunteerStartDateTime(volunteerStartDateTime)
             .volunteerEndDateTime(volunteerEndDateTime)
