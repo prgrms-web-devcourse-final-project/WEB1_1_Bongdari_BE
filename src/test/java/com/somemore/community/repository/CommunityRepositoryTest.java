@@ -11,11 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-public class CommunityRepositoryTest extends IntegrationTestSupport {
+class CommunityRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
@@ -69,7 +68,7 @@ public class CommunityRepositoryTest extends IntegrationTestSupport {
         List<CommunityBoard> communityBoards = communityBoardRepository.getCommunityBoards();
 
         //then
-        assertThat(communityBoards.size()).isEqualTo(2);
+        assertThat(communityBoards).hasSize(2);
         assertThat(communityBoards.get(0)).isEqualTo(communityBoard2);
         assertThat(communityBoards.get(1)).isEqualTo(communityBoard1);
     }
@@ -107,7 +106,7 @@ public class CommunityRepositoryTest extends IntegrationTestSupport {
         List<CommunityBoard> communityBoards = communityBoardRepository.getCommunityBoardsByWriterId(communityBoard1.getWriterId());
 
         //then
-        assertThat(communityBoards.size()).isEqualTo(2);
+        assertThat(communityBoards).hasSize(2);
         assertThat(communityBoards.get(0)).isEqualTo(communityBoard2);
         assertThat(communityBoards.get(1)).isEqualTo(communityBoard1);
     }

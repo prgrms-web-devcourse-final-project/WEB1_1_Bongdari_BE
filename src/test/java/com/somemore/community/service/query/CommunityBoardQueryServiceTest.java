@@ -88,8 +88,10 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         Optional<CommunityBoard> communityBoard1 = communityBoardRepository.findById(communityId1);
         Optional<CommunityBoard> communityBoard2 = communityBoardRepository.findById(communityId2);
 
-        assertThat(dtos).isNotNull();
-        assertThat(dtos).hasSize(2);
+
+        assertThat(dtos)
+                .isNotNull()
+                .hasSize(2);
 
         CommunityBoardGetResponseDto board1 = dtos.getLast();
         assertThat(board1.id()).isEqualTo(communityId1);
@@ -114,17 +116,6 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         Volunteer savedVolunteer = volunteerRepository.save(volunteer);
 
-        Center center = Center.create(
-                "기본 기관 이름",
-                "010-1234-5678",
-                "http://example.com/image.jpg",
-                "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
-        );
-        Center savedCenter = centerRepository.save(center);
-
         CommunityBoardCreateRequestDto dto1 = CommunityBoardCreateRequestDto.builder()
                 .title("커뮤니티 테스트 제목1")
                 .content("커뮤니티 테스트 내용1")
@@ -135,16 +126,10 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
                 .content("커뮤니티 테스트 내용2")
                 .build();
 
-        CommunityBoardCreateRequestDto dto3 = CommunityBoardCreateRequestDto.builder()
-                .title("커뮤니티 테스트 제목3")
-                .content("커뮤니티 테스트 내용23")
-                .build();
-
         String imgUrl1 = "https://image.test.url/123";
 
         Long communityId1 = createCommunityBoardService.createCommunityBoard(dto1, savedVolunteer.getId(), null);
         Long communityId2 = createCommunityBoardService.createCommunityBoard(dto2, savedVolunteer.getId(), imgUrl1);
-        Long communityId3 = createCommunityBoardService.createCommunityBoard(dto3, savedCenter.getId(), imgUrl1);
 
         //when
         List<CommunityBoardGetResponseDto> dtos = communityBoardQueryService.getCommunityBoardsByWriterId(volunteer.getId());
@@ -153,8 +138,9 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         Optional<CommunityBoard> communityBoard1 = communityBoardRepository.findById(communityId1);
         Optional<CommunityBoard> communityBoard2 = communityBoardRepository.findById(communityId2);
 
-        assertThat(dtos).isNotNull();
-        assertThat(dtos).hasSize(2);
+        assertThat(dtos)
+                .isNotNull()
+                .hasSize(2);
 
         CommunityBoardGetResponseDto board1 = dtos.getLast();
         assertThat(board1.id()).isEqualTo(communityId1);

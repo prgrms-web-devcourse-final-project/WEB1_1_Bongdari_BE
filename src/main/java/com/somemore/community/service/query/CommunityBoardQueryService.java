@@ -39,7 +39,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
                     String writerNickname = getWriterNickname(board.getWriterId());
                     return CommunityBoardGetResponseDto.fromEntity(board, writerNickname);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
         return boards.stream()
                 .map(board -> CommunityBoardGetResponseDto.fromEntity(board, writerNickname))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

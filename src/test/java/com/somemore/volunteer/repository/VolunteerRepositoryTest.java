@@ -2,17 +2,16 @@ package com.somemore.volunteer.repository;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
-import com.somemore.center.domain.Center;
 import com.somemore.volunteer.domain.Volunteer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-public class VolunteerRepositoryTest extends IntegrationTestSupport {
+class VolunteerRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private VolunteerRepository volunteerRepository;
 
