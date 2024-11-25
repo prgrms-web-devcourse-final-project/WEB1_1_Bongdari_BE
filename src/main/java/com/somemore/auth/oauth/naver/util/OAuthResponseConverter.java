@@ -7,6 +7,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Map;
 
 public class OAuthResponseConverter {
+
+    private OAuthResponseConverter(){
+    }
+
     public static NaverUserProfileResponseDto convertToNaverUserProfileResponseDto(OAuth2User oAuth2User) {
         ObjectMapper objectMapper = new ObjectMapper();
 
