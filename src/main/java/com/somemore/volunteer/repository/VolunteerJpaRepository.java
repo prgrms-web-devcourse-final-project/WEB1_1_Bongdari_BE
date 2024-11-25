@@ -1,16 +1,12 @@
 package com.somemore.volunteer.repository;
 
 import com.somemore.volunteer.domain.Volunteer;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public interface VolunteerRepository {
-    Volunteer save(Volunteer volunteer);
+public interface VolunteerJpaRepository extends JpaRepository<Volunteer, Long> {
     Volunteer findById(UUID id);
-    String findNicknameById(UUID id);
     Optional<Volunteer> findByOauthId(String oauthId);
-    void deleteAllInBatch();
 }

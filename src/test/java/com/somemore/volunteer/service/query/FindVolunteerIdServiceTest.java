@@ -57,4 +57,21 @@ class FindVolunteerIdServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> findVolunteerIdService.findVolunteerIdByOAuthId(oAuthId))
                 .isInstanceOf(EntityNotFoundException.class);
     }
+
+    @DisplayName("봉사자의 id로 nickname을 조회한다.")
+    @Test
+    void getNicknameById() {
+
+        //given
+        String oAuthId = "example-oauth-id";
+        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
+
+        volunteerRepository.save(volunteer);
+
+        //when
+        String nickname = findVolunteerIdService.getNicknameById(volunteer.getId());
+
+        //then
+        assertThat(nickname).isEqualTo(volunteer.getNickname());
+    }
 }

@@ -1,8 +1,15 @@
 package com.somemore.community.repository;
 
 import com.somemore.community.domain.CommunityBoard;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CommunityBoardRepository extends JpaRepository<CommunityBoard, Long> {
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+public interface CommunityBoardRepository {
+    CommunityBoard save(CommunityBoard communityBoard);
+    Optional<CommunityBoard> findById(Long id);
+    List<CommunityBoard> getCommunityBoards();
+    List<CommunityBoard> getCommunityBoardsByWriterId(UUID writerId);
+    void deleteAllInBatch();
 }

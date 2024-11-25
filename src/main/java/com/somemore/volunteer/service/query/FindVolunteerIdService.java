@@ -1,5 +1,7 @@
 package com.somemore.volunteer.service.query;
 
+import com.somemore.volunteer.domain.Volunteer;
+import com.somemore.volunteer.dto.response.VolunteerForCommunityResponseDto;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.usecase.query.FindVolunteerIdUseCase;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,5 +25,17 @@ public class FindVolunteerIdService implements FindVolunteerIdUseCase {
         return volunteerRepository.findByOauthId(oAuthId)
                 .orElseThrow(EntityNotFoundException::new)
                 .getId();
+    }
+
+    @Override
+    public String getNicknameById(UUID id) {
+        return volunteerRepository.findNicknameById(id);
+    }
+
+    @Override
+    public VolunteerForCommunityResponseDto getVolunteerDetailForCommunity(UUID id) {
+        Volunteer volunteer = volunteerRepository.findById(id);
+
+        return VolunteerForCommunityResponseDto.fromEntity(volunteer);
     }
 }
