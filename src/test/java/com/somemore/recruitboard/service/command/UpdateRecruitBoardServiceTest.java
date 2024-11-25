@@ -4,7 +4,6 @@ import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTi
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
-import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -48,9 +47,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         centerId = UUID.randomUUID();
         recruitBoard = createRecruitBoard(centerId, location.getId());
         recruitBoardRepository.saveAndFlush(recruitBoard);
-
     }
-
 
     @AfterEach
     void tearDown() {
@@ -92,12 +89,10 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(volunteerInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
         assertThat(volunteerInfo.getAdmitted()).isEqualTo(dto.admitted());
 
-        assertThat(volunteerInfo.getVolunteerStartDateTime().truncatedTo(MINUTES)
-            .compareTo(dto.volunteerStartDateTime().truncatedTo(MINUTES)))
-            .isZero();
-        assertThat(volunteerInfo.getVolunteerEndDateTime().truncatedTo(MINUTES)
-            .compareTo(dto.volunteerEndDateTime().truncatedTo(MINUTES)))
-            .isZero();
+        assertThat(volunteerInfo.getVolunteerStartDateTime())
+            .isEqualToIgnoringNanos(dto.volunteerStartDateTime());
+        assertThat(volunteerInfo.getVolunteerEndDateTime())
+            .isEqualToIgnoringNanos(dto.volunteerEndDateTime());
     }
 
     @DisplayName("봉사 모집글 위치를 수정할 수 있다")
@@ -122,14 +117,17 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
         assertThat(updateRecruitBoard.getVolunteerInfo().getRegion()).isEqualTo(dto.region());
         assertThat(updateLocation.getAddress()).isEqualTo(dto.address());
-        assertThat(updateLocation.getLongitude().compareTo(dto.longitude())).isZero();
-        assertThat(updateLocation.getLatitude().compareTo(dto.latitude())).isZero();
+        assertThat(updateLocation.getLongitude())
+            .isEqualByComparingTo(dto.longitude());
+        assertThat(updateLocation.getLatitude())
+            .isEqualByComparingTo(dto.latitude());
     }
 
     @DisplayName("봉사 모집글은 작성자만 수정할 수 있다")
     @Test
     void updateRecruitBoardWhenCenterIdIsWrong() {
         // given
+        Long id = recruitBoard.getId();
         UUID wrongCenterId = UUID.randomUUID();
         LocalDateTime newStartDateTime = createUpdateStartDateTime();
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
@@ -147,9 +145,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         // when
         // then
         Assertions.assertThatThrownBy(
-            () -> updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(),
-                wrongCenterId,
-                newImgUrl)
+            () -> updateRecruitBoardService.updateRecruitBoard(dto, id, wrongCenterId, newImgUrl)
         ).isInstanceOf(BadRequestException.class);
 
     }

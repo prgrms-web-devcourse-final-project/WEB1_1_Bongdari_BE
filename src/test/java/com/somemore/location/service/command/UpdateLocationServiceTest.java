@@ -57,7 +57,9 @@ class UpdateLocationServiceTest extends IntegrationTestSupport {
         // then
         Location updateLocation = locationRepository.findById(location.getId()).orElseThrow();
         assertThat(updateLocation.getAddress()).isEqualTo(dto.address());
-        assertThat(updateLocation.getLatitude().compareTo(dto.latitude())).isZero();
-        assertThat(updateLocation.getLongitude().compareTo(dto.longitude())).isZero();
+        assertThat(updateLocation.getLatitude())
+            .isEqualByComparingTo(dto.latitude());
+        assertThat(updateLocation.getLongitude())
+            .isEqualByComparingTo(dto.longitude());
     }
 }

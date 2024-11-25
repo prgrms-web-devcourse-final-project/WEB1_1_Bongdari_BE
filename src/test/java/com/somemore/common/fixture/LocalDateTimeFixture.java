@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 public class LocalDateTimeFixture {
 
+    private LocalDateTimeFixture() {
+    }
+
     public static LocalDateTime createStartDateTime() {
         // 2024-11-25 T:13:00:00
         return LocalDateTime.of(2024, 11, 25, 13, 0);

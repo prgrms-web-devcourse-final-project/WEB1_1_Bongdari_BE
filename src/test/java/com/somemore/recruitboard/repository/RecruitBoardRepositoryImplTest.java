@@ -5,7 +5,6 @@ import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.common.fixture.LocalDateTimeFixture;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerInfo;
 import java.time.LocalDateTime;
@@ -23,6 +22,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     private RecruitBoardRepositoryImpl recruitBoardRepository;
 
     private RecruitBoard recruitBoard;
+
     @BeforeEach
     void setUp() {
         recruitBoard = createRecruitBoard();

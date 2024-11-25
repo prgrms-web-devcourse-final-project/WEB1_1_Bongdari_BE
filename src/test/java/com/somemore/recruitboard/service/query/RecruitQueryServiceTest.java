@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.common.fixture.LocalDateTimeFixture;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerInfo;
