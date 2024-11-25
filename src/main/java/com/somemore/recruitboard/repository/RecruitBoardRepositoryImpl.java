@@ -1,6 +1,5 @@
 package com.somemore.recruitboard.repository;
 
-import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import java.util.Optional;
