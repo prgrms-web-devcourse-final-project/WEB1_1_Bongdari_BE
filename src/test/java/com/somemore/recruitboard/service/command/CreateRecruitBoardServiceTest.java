@@ -1,5 +1,6 @@
 package com.somemore.recruitboard.service.command;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -45,13 +46,16 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
             .longitude(BigDecimal.valueOf(127.010842267696))
             .build();
 
+        LocalDateTime startDateTime = createStartDateTime();
+        LocalDateTime endDateTime = startDateTime.plusHours(2);
+
         RecruitBoardCreateRequestDto dto = RecruitBoardCreateRequestDto.builder()
             .title("봉사 모집글 작성")
             .content("봉사 하실분을 모집합니다. <br>")
             .region("지역")
             .recruitmentCount(10)
-            .volunteerStartDateTime(LocalDateTime.now())
-            .volunteerEndDateTime(LocalDateTime.now().plusHours(2))
+            .volunteerStartDateTime(startDateTime)
+            .volunteerEndDateTime(endDateTime)
             .volunteerType(VolunteerType.OTHER)
             .admitted(true)
             .location(locationDto)

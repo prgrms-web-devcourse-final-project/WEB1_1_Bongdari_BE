@@ -19,6 +19,11 @@ public class LocationRepositoryImpl implements LocationRepository {
     }
 
     @Override
+    public Location saveAndFlush(Location location) {
+        return locationJpaRepository.saveAndFlush(location);
+    }
+
+    @Override
     public Optional<Location> findById(Long id) {
         return locationJpaRepository.findById(id);
     }

@@ -43,8 +43,5 @@ class CreateLocationServiceTest extends IntegrationTestSupport {
         Optional<Location> location = locationRepository.findById(locationId);
         assertThat(location).isPresent();
         assertThat(location.get().getId()).isEqualTo(locationId);
-
     }
-
-
 }
