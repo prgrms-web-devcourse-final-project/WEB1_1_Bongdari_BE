@@ -10,8 +10,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = PROTECTED)
 @Embeddable
 public class VolunteerInfo {
@@ -57,6 +59,23 @@ public class VolunteerInfo {
         long minutes = duration.toMinutes() % 60;
 
         return LocalTime.of((int) hours, (int) minutes);
+    }
+
+    public void updateWith(Integer recruitmentCount, VolunteerType volunteerType,
+        LocalDateTime volunteerStartDateTime, LocalDateTime volunteerEndDateTime,
+        Boolean admitted) {
+
+        validateVolunteerDateTime(volunteerStartDateTime, volunteerEndDateTime);
+
+        this.recruitmentCount = recruitmentCount;
+        this.volunteerType = volunteerType;
+        this.volunteerStartDateTime = volunteerStartDateTime;
+        this.volunteerEndDateTime = volunteerEndDateTime;
+        this.admitted = admitted;
+    }
+
+    public void updateWith(String region) {
+        this.region = region;
     }
 
     private void validateVolunteerDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {

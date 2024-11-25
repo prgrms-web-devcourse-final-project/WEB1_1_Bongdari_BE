@@ -6,6 +6,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.somemore.global.common.BaseEntity;
+import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -68,5 +69,33 @@ public class RecruitBoard extends BaseEntity {
         return volunteerInfo.calculateVolunteerTime();
     }
 
+    public boolean isWriter(UUID centerId) {
+        return this.centerId.equals(centerId);
+    }
+
+    public boolean isNotWriter(UUID centerId) {
+        return !isWriter(centerId);
+    }
+
+    public void updateWith(RecruitBoardUpdateRequestDto dto, String imgUrl) {
+        updateVolunteerInfo(dto);
+        this.title = dto.title();
+        this.content = dto.content();
+        this.imgUrl = imgUrl;
+    }
+
+    public void updateWith(String region) {
+        volunteerInfo.updateWith(region);
+    }
+
+    private void updateVolunteerInfo(RecruitBoardUpdateRequestDto dto) {
+        volunteerInfo.updateWith(
+            dto.recruitmentCount(),
+            dto.volunteerType(),
+            dto.volunteerStartDateTime(),
+            dto.volunteerEndDateTime(),
+            dto.admitted()
+        );
+    }
 
 }
