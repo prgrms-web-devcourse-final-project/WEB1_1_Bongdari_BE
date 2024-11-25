@@ -1,11 +1,11 @@
 package com.somemore.location.repository;
 
+import static java.math.RoundingMode.HALF_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.location.domain.Location;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,9 +28,9 @@ class LocationRepositoryTest extends IntegrationTestSupport {
         Location locationWithRound = Location.builder()
             .address("서울특별시 서초구 반포대로 45, 4층(서초동, 명정빌딩)")
             .latitude(
-                new BigDecimal("37.484537379").setScale(8, RoundingMode.HALF_UP))  // 9자리 반올림
+                new BigDecimal("37.484537379").setScale(8, HALF_UP))  // 9자리 반올림
             .longitude(
-                new BigDecimal("127.010842349").setScale(8, RoundingMode.HALF_UP))  // 9자리 반올림
+                new BigDecimal("127.010842349").setScale(8, HALF_UP))  // 9자리 반올림
             .build();
 
         // when
@@ -49,9 +49,9 @@ class LocationRepositoryTest extends IntegrationTestSupport {
         Location locationWithLargeValues = Location.builder()
             .address("서울특별시 서초구 반포대로 45, 4층(서초동, 명정빌딩)")
             .latitude(
-                new BigDecimal("89.999999999").setScale(8, RoundingMode.HALF_UP))  // 9자리
+                new BigDecimal("89.999999999").setScale(8, HALF_UP))  // 9자리
             .longitude(
-                new BigDecimal("179.999999999").setScale(8, RoundingMode.HALF_UP))  // 9자리
+                new BigDecimal("179.999999999").setScale(8, HALF_UP))  // 9자리
             .build();
 
         // when
