@@ -149,5 +149,4 @@ class RecruitBoardTest {
             .volunteerInfo(volunteerInfo)
             .build();
     }
-
 }

@@ -57,5 +57,4 @@ class LocationTest {
         assertThat(location.getLatitude()
             .compareTo(requestDto.latitude().setScale(8, HALF_UP))).isZero();
     }
-
 }

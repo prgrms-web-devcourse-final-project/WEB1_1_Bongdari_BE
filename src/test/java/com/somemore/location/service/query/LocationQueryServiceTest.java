@@ -90,7 +90,5 @@ class LocationQueryServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(
             () -> locationQueryService.findByIdOrThrow(wrongId)
         ).isInstanceOf(BadRequestException.class);
-
     }
-
 }

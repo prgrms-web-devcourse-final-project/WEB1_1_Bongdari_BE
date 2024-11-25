@@ -72,5 +72,4 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
             .volunteerInfo(volunteerInfo)
             .build();
     }
-
 }

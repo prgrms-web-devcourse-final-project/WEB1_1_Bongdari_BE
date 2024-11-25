@@ -97,5 +97,4 @@ public class RecruitBoard extends BaseEntity {
             dto.admitted()
         );
     }
-
 }
