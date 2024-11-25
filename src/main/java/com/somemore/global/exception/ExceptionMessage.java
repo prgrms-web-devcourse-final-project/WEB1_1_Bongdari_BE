@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ExceptionMessage {
 
-    NOT_EXISTS_CENTER("존재하지 않는 기관 ID 입니다.")
+    NOT_EXISTS_CENTER("존재하지 않는 기관 ID 입니다."),
+    NOT_EXISTS_COMMUNITY_BOARD("삭제된 게시글 입니다.")
     ;
 
     private final String message;
