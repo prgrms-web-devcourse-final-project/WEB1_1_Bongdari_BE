@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface VolunteerRepository extends JpaRepository<Volunteer, UUID> {
 
-    Optional<Volunteer> findByOauthId(String OauthId);
+    Optional<Volunteer> findByOauthId(String oauthId);
 }
