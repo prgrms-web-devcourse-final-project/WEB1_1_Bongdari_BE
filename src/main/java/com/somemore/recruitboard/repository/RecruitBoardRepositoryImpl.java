@@ -1,5 +1,7 @@
 package com.somemore.recruitboard.repository;
 
+import com.querydsl.core.QueryFactory;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private final RecruitBoardJpaRepository recruitBoardJpaRepository;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public RecruitBoard save(RecruitBoard recruitBoard) {
