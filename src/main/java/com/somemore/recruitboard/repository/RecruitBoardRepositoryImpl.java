@@ -1,6 +1,8 @@
 package com.somemore.recruitboard.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.somemore.recruitboard.domain.QRecruitBoard;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +27,23 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     @Override
     public Optional<RecruitBoard> findById(Long id) {
-        return recruitBoardJpaRepository.findById(id);
-    }
+        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
 
+        RecruitBoard result = queryFactory
+            .selectFrom(recruitBoard)
+            .where(isNotDeleted().and(recruitBoard.id.eq(id)))
+            .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+    
     @Override
     public void deleteAllInBatch() {
         recruitBoardJpaRepository.deleteAllInBatch();
     }
 
-
+    private BooleanExpression isNotDeleted() {
+        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+        return recruitBoard.deleted.eq(false);
+    }
 }
