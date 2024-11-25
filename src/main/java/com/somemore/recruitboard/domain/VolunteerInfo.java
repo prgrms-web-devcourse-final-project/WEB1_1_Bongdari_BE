@@ -1,6 +1,7 @@
 package com.somemore.recruitboard.domain;
 
 import static jakarta.persistence.EnumType.STRING;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
@@ -46,8 +47,8 @@ public class VolunteerInfo {
 
         this.region = region;
         this.recruitmentCount = recruitmentCount;
-        this.volunteerStartDateTime = volunteerStartDateTime;
-        this.volunteerEndDateTime = volunteerEndDateTime;
+        this.volunteerStartDateTime = volunteerStartDateTime.truncatedTo(MINUTES);
+        this.volunteerEndDateTime = volunteerEndDateTime.truncatedTo(MINUTES);
         this.volunteerType = volunteerType;
         this.admitted = admitted;
     }
@@ -69,8 +70,8 @@ public class VolunteerInfo {
 
         this.recruitmentCount = recruitmentCount;
         this.volunteerType = volunteerType;
-        this.volunteerStartDateTime = volunteerStartDateTime;
-        this.volunteerEndDateTime = volunteerEndDateTime;
+        this.volunteerStartDateTime = volunteerStartDateTime.truncatedTo(MINUTES);
+        this.volunteerEndDateTime = volunteerEndDateTime.truncatedTo(MINUTES);
         this.admitted = admitted;
     }
 

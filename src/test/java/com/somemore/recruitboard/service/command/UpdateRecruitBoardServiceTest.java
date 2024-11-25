@@ -1,8 +1,10 @@
 package com.somemore.recruitboard.service.command;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
-import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -60,7 +62,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     @Test
     void updateRecruitBoard() {
         // given
-        LocalDateTime newStartDateTime = LocalDateTime.now();
+        LocalDateTime newStartDateTime = createUpdateStartDateTime();
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
         String newImgUrl = "https://image.domain.com/updates";
         RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
@@ -90,11 +92,11 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(volunteerInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
         assertThat(volunteerInfo.getAdmitted()).isEqualTo(dto.admitted());
 
-        assertThat(volunteerInfo.getVolunteerStartDateTime().truncatedTo(MILLIS)
-            .compareTo(dto.volunteerStartDateTime().truncatedTo(MILLIS)))
+        assertThat(volunteerInfo.getVolunteerStartDateTime().truncatedTo(MINUTES)
+            .compareTo(dto.volunteerStartDateTime().truncatedTo(MINUTES)))
             .isZero();
-        assertThat(volunteerInfo.getVolunteerEndDateTime().truncatedTo(MILLIS)
-            .compareTo(dto.volunteerEndDateTime().truncatedTo(MILLIS)))
+        assertThat(volunteerInfo.getVolunteerEndDateTime().truncatedTo(MINUTES)
+            .compareTo(dto.volunteerEndDateTime().truncatedTo(MINUTES)))
             .isZero();
     }
 
@@ -129,7 +131,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     void updateRecruitBoardWhenCenterIdIsWrong() {
         // given
         UUID wrongCenterId = UUID.randomUUID();
-        LocalDateTime newStartDateTime = LocalDateTime.now();
+        LocalDateTime newStartDateTime = createUpdateStartDateTime();
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
         String newImgUrl = "https://image.domain.com/updates";
         RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
@@ -152,9 +154,8 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
     }
 
-
     private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId) {
-        LocalDateTime startDateTime = LocalDateTime.now();
+        LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(1);
 
         return createRecruitBoard(centerId, locationId, startDateTime, endDateTime);

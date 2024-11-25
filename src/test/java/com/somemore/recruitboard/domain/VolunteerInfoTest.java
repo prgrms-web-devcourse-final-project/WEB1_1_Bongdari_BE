@@ -1,5 +1,7 @@
 package com.somemore.recruitboard.domain;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.recruitboard.domain.VolunteerType.SAFETY_PREVENTION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,10 +19,10 @@ class VolunteerInfoTest {
     @DisplayName("봉사 종료 시간이 시작 시간과 같거나 빠르면, 봉사 모집글 생성 시 에러가 발생한다")
     @ParameterizedTest
     @ValueSource(longs = {0, -1})
-    void createRecruitBoardWithInValidVolunteerTime(long secondsOffset) {
+    void createRecruitBoardWithInValidVolunteerTime(long minutesOffset) {
         // given
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime endDateTime = now.plusSeconds(secondsOffset);
+        LocalDateTime now = createStartDateTime();
+        LocalDateTime endDateTime = now.plusMinutes(minutesOffset);
 
         // when & then
         assertThatThrownBy(
@@ -34,10 +36,11 @@ class VolunteerInfoTest {
     void testCalculateVolunteerTime() {
         // given
         int hours = 3;
-        LocalDateTime startDateTime = LocalDateTime.now();
+        LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(hours);
 
         VolunteerInfo volunteerInfo = createVolunteerInfo(startDateTime, endDateTime);
+
         // when
         LocalTime volunteerTime = volunteerInfo.calculateVolunteerTime();
 
@@ -53,7 +56,7 @@ class VolunteerInfoTest {
 
         Integer count = 2;
         VolunteerType volunteerType = SAFETY_PREVENTION;
-        LocalDateTime startDateTime = LocalDateTime.now();
+        LocalDateTime startDateTime = createUpdateStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(2);
         Boolean admitted = false;
 
@@ -86,10 +89,10 @@ class VolunteerInfoTest {
     @DisplayName("봉사 종료 시간이 시작 시간과 같거나 빠르면, 봉사 모집글을 업데이트시 에러가 발생한다")
     @ParameterizedTest
     @ValueSource(longs = {0, -1})
-    void updateRecruitBoardWithInValidVolunteerTime(long secondsOffset) {
+    void updateRecruitBoardWithInValidVolunteerTime(long minutesOffset) {
         // given
-        LocalDateTime startDateTime = LocalDateTime.now();
-        LocalDateTime endDateTime = startDateTime.plusSeconds(secondsOffset);
+        LocalDateTime startDateTime = createStartDateTime();
+        LocalDateTime endDateTime = startDateTime.plusMinutes(minutesOffset);
 
         VolunteerInfo volunteerInfo = createVolunteerInfo();
 
@@ -114,7 +117,9 @@ class VolunteerInfoTest {
     }
 
     private static VolunteerInfo createVolunteerInfo() {
-        return createVolunteerInfo(LocalDateTime.now(), LocalDateTime.now().plusHours(1));
+        LocalDateTime startDateTime = createStartDateTime();
+        LocalDateTime endDateTime = startDateTime.plusHours(1);
+        return createVolunteerInfo(startDateTime, endDateTime);
     }
 
 }

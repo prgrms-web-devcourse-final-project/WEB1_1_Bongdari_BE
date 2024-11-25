@@ -1,10 +1,12 @@
 package com.somemore.recruitboard.service.query;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.common.fixture.LocalDateTimeFixture;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerInfo;
@@ -94,7 +96,7 @@ class RecruitQueryServiceTest extends IntegrationTestSupport {
 
     private static RecruitBoard createRecruitBoard() {
 
-        LocalDateTime startDateTime = LocalDateTime.now();
+        LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(1);
 
         VolunteerInfo volunteerInfo = VolunteerInfo.builder()
