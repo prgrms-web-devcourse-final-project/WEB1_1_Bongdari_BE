@@ -4,12 +4,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.somemore.global.common.BaseEntity;
+import com.somemore.location.dto.request.LocationUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +38,13 @@ public class Location extends BaseEntity {
     @Builder
     public Location(String address, BigDecimal latitude, BigDecimal longitude) {
         this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.latitude = latitude.setScale(8, RoundingMode.HALF_UP);
+        this.longitude = longitude.setScale(8, RoundingMode.HALF_UP);
+    }
+
+    public void updateWith(LocationUpdateRequestDto requestDto) {
+        this.address = requestDto.address();
+        this.latitude = requestDto.latitude().setScale(8, RoundingMode.HALF_UP);
+        this.longitude = requestDto.longitude().setScale(8, RoundingMode.HALF_UP);
     }
 }
