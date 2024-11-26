@@ -46,6 +46,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    private EncodedToken getAccessToken(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if (accessToken == null || accessToken.isEmpty()) {
+            throw new JwtException(JwtErrorType.MISSING_TOKEN);
+        }
+        return new EncodedToken(accessToken);
+    }
+
     private JwtAuthenticationToken createAuthenticationToken(Claims claims, EncodedToken accessToken) {
         String userId = claims.get("id", String.class);
         UserRole role = claims.get("role", UserRole.class);
@@ -56,13 +64,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 List.of(new SimpleGrantedAuthority(role.name()))
         );
     }
-
-    private EncodedToken getAccessToken(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        if (accessToken == null || accessToken.isEmpty()) {
-            throw new JwtException(JwtErrorType.MISSING_TOKEN);
-        }
-        return new EncodedToken(accessToken);
-    }
-
 }
