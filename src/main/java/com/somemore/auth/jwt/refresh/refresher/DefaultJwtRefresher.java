@@ -1,6 +1,5 @@
 package com.somemore.auth.jwt.refresh.refresher;
 
-import com.somemore.auth.cookie.SetCookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
 import com.somemore.auth.jwt.generator.JwtGenerator;
