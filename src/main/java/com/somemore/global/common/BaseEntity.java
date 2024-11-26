@@ -33,4 +33,8 @@ public class BaseEntity {
             this.deleted = false;
         }
     }
+
+    public void markAsDeleted() {
+        this.deleted = true;
+    }
 }

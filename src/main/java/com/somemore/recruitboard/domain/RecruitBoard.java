@@ -6,15 +6,15 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.somemore.global.common.BaseEntity;
+import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 import lombok.Builder;
@@ -44,64 +44,53 @@ public class RecruitBoard extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "region", nullable = false)
-    private String region;
-
-    @Column(name = "recruitment_count", nullable = false)
-    private Integer recruitmentCount;
-
-    @Column(name = "img_url", nullable = false)
-    private String imgUrl;
+    @Embedded
+    private RecruitmentInfo recruitmentInfo;
 
     @Enumerated(value = STRING)
     @Column(name = "recruit_status", nullable = false, length = 20)
     private RecruitStatus recruitStatus = RECRUITING;
 
-    @Column(name = "volunteer_start_date_time", nullable = false)
-    private LocalDateTime volunteerStartDateTime;
-
-    @Column(name = "volunteer_end_date_time", nullable = false)
-    private LocalDateTime volunteerEndDateTime;
-
-    @Enumerated(value = STRING)
-    @Column(name = "volunteer_type", nullable = false, length = 30)
-    private VolunteerType volunteerType;
-
-    @Column(name = "admitted", nullable = false)
-    private Boolean admitted;
+    @Column(name = "img_url", nullable = false)
+    private String imgUrl;
 
     @Builder
-    public RecruitBoard(UUID centerId, Long locationId, String title, String content, String region,
-        Integer recruitmentCount, String imgUrl, LocalDateTime volunteerStartDateTime,
-        LocalDateTime volunteerEndDateTime, VolunteerType volunteerType, Boolean admitted) {
-
-        validateVolunteerDateTime(volunteerStartDateTime, volunteerEndDateTime);
-
+    public RecruitBoard(UUID centerId, Long locationId, String title, String content,
+        RecruitmentInfo recruitmentInfo, String imgUrl) {
         this.centerId = centerId;
         this.locationId = locationId;
         this.title = title;
         this.content = content;
-        this.region = region;
-        this.recruitmentCount = recruitmentCount;
+        this.recruitmentInfo = recruitmentInfo;
         this.imgUrl = imgUrl;
-        this.volunteerStartDateTime = volunteerStartDateTime;
-        this.volunteerEndDateTime = volunteerEndDateTime;
-        this.volunteerType = volunteerType;
-        this.admitted = admitted;
     }
 
-    public LocalTime calculateVolunteerTime() {
-        Duration duration = Duration.between(volunteerStartDateTime, volunteerEndDateTime);
-
-        long hours = duration.toHours();
-        long minutes = duration.toMinutes() % 60;
-
-        return LocalTime.of((int) hours, (int) minutes);
+    public LocalTime getVolunteerHours() {
+        return recruitmentInfo.calculateVolunteerTime();
     }
 
-    private void validateVolunteerDateTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if (endDateTime.isEqual(startDateTime) || endDateTime.isBefore(startDateTime)) {
-            throw new IllegalArgumentException("종료 시간은 시작 시간보다 이후여야 합니다.");
-        }
+    public boolean isWriter(UUID centerId) {
+        return this.centerId.equals(centerId);
+    }
+
+    public void updateWith(RecruitBoardUpdateRequestDto dto, String imgUrl) {
+        updateRecruitmentInfo(dto);
+        this.title = dto.title();
+        this.content = dto.content();
+        this.imgUrl = imgUrl;
+    }
+
+    public void updateWith(String region) {
+        recruitmentInfo.updateWith(region);
+    }
+
+    private void updateRecruitmentInfo(RecruitBoardUpdateRequestDto dto) {
+        recruitmentInfo.updateWith(
+            dto.recruitmentCount(),
+            dto.volunteerType(),
+            dto.volunteerStartDateTime(),
+            dto.volunteerEndDateTime(),
+            dto.admitted()
+        );
     }
 }
