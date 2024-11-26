@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
 
@@ -66,7 +65,6 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
         if (nickname == null) {
             nickname = centerQueryUseCase.getNameById(writerId);
         }
-
         return nickname;
     }
 
@@ -75,8 +73,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
         if (volunteer == null) {
             return centerQueryUseCase.getCenterDetailForCommunity(writerId);
-        } else {
-            return volunteer;
         }
+        return volunteer;
     }
 }

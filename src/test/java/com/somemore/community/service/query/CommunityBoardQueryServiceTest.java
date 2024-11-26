@@ -9,7 +9,7 @@ import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
 import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.service.command.CreateCommunityBoardService;
+import com.somemore.community.usecase.command.CreateCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.volunteer.domain.Volunteer;
@@ -35,7 +35,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     CenterRepository centerRepository;
     @Autowired
-    CreateCommunityBoardService createCommunityBoardService;
+    CreateCommunityBoardUseCase createCommunityBoardUseCase;
     @Autowired
     CommunityBoardQueryService communityBoardQueryService;
 
@@ -52,7 +52,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         String oAuthId = "example-oauth-id";
         Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
 
-       Volunteer savedVolunteer = volunteerRepository.save(volunteer);
+        Volunteer savedVolunteer = volunteerRepository.save(volunteer);
 
         Center center = Center.create(
                 "기본 기관 이름",
@@ -78,8 +78,8 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         String imgUrl1 = "https://image.test.url/123";
 
-        Long communityId1 = createCommunityBoardService.createCommunityBoard(dto1, savedCenter.getId(), null);
-        Long communityId2 = createCommunityBoardService.createCommunityBoard(dto2, savedVolunteer.getId(), imgUrl1);
+        Long communityId1 = createCommunityBoardUseCase.createCommunityBoard(dto1, savedCenter.getId(), null);
+        Long communityId2 = createCommunityBoardUseCase.createCommunityBoard(dto2, savedVolunteer.getId(), imgUrl1);
 
         // when
         List<CommunityBoardGetResponseDto> dtos = communityBoardQueryService.getCommunityBoards();
@@ -128,8 +128,8 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         String imgUrl1 = "https://image.test.url/123";
 
-        Long communityId1 = createCommunityBoardService.createCommunityBoard(dto1, savedVolunteer.getId(), null);
-        Long communityId2 = createCommunityBoardService.createCommunityBoard(dto2, savedVolunteer.getId(), imgUrl1);
+        Long communityId1 = createCommunityBoardUseCase.createCommunityBoard(dto1, savedVolunteer.getId(), null);
+        Long communityId2 = createCommunityBoardUseCase.createCommunityBoard(dto2, savedVolunteer.getId(), imgUrl1);
 
         //when
         List<CommunityBoardGetResponseDto> dtos = communityBoardQueryService.getCommunityBoardsByWriterId(volunteer.getId());
@@ -172,7 +172,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         String imgUrl = "https://image.test.url/123";
 
-        Long communityId1 = createCommunityBoardService.createCommunityBoard(dto1, savedVolunteer.getId(), imgUrl);
+        Long communityId1 = createCommunityBoardUseCase.createCommunityBoard(dto1, savedVolunteer.getId(), imgUrl);
 
         //when
         CommunityBoardGetDetailResponseDto communityBoard = communityBoardQueryService.getCommunityBoardDetail(communityId1);
@@ -207,7 +207,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         String imgUrl = "https://image.test.url/123";
 
-        Long communityId = createCommunityBoardService.createCommunityBoard(dto1, savedVolunteer.getId(), imgUrl);
+        Long communityId = createCommunityBoardUseCase.createCommunityBoard(dto1, savedVolunteer.getId(), imgUrl);
 
         communityBoardRepository.deleteAllInBatch();
 
