@@ -1,10 +1,8 @@
 package com.somemore.location.service.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import java.math.BigDecimal;
@@ -66,29 +64,4 @@ class LocationQueryServiceTest extends IntegrationTestSupport {
         assertThat(findLocation).isEmpty();
     }
 
-    @DisplayName("ID로 Location 조회할 수 있다")
-    @Test
-    void findByIdOrThrowWithExistsId() {
-        // given
-        Long id = location.getId();
-
-        // when
-        Location findLocation = locationQueryService.findByIdOrThrow(id);
-
-        // then
-        assertThat(findLocation.getId()).isEqualTo(id);
-    }
-
-    @DisplayName("존재하지 않는 ID로 Location 조회하면 에러가 발생한다")
-    @Test
-    void findByIdOrThrowWithDoesNotExistId() {
-        // given
-        Long wrongId = 999L;
-
-        // when
-        // then
-        assertThatThrownBy(
-            () -> locationQueryService.findByIdOrThrow(wrongId)
-        ).isInstanceOf(BadRequestException.class);
-    }
 }

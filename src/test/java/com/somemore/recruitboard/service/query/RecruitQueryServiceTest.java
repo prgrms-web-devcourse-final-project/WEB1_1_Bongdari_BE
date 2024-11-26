@@ -3,10 +3,8 @@ package com.somemore.recruitboard.service.query;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerInfo;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
@@ -22,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 class RecruitQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private RecruitQueryService recruitQueryService;
+    private RecruitBoardQueryService recruitQueryService;
 
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;
@@ -64,33 +62,6 @@ class RecruitQueryServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(findBoard).isEmpty();
-    }
-
-    @DisplayName("ID로 RecruitBoard 조회할 수 있다")
-    @Test
-    void findByIdOrThrowWithExistsId() {
-        // given
-        Long id = recruitBoard.getId();
-
-        // when
-        RecruitBoard findBoard = recruitQueryService.findByIdOrThrow(id);
-
-        // then
-        assertThat(findBoard.getId()).isEqualTo(id);
-    }
-
-    @DisplayName("존재하지 않는 ID로 RecruitBoard 조회하면 에러가 발생한다")
-    @Test
-    void findByIdOrThrowWithDoesNotExistId() {
-        // given
-        Long wrongId = 999L;
-
-        // when
-        // then
-        assertThatThrownBy(
-            () -> recruitQueryService.findByIdOrThrow(wrongId)
-        ).isInstanceOf(BadRequestException.class);
-
     }
 
     private static RecruitBoard createRecruitBoard() {
