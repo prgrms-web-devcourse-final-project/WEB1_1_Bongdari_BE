@@ -120,7 +120,8 @@ class JwtServiceTest extends IntegrationTestSupport {
         RefreshToken refreshToken = new RefreshToken(userId, expiredAccessToken, expiredRefreshToken);
         refreshTokenManager.save(refreshToken);
 
-        // when & then
+        // when
+        // then
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
         assertThatThrownBy(() -> jwtService.processAccessToken(expiredAccessToken, mockResponse))
@@ -136,7 +137,8 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
 
-        // when & then
+        // when
+        // then
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
         assertThatThrownBy(() -> jwtService.processAccessToken(expiredAccessToken, mockResponse))
