@@ -17,4 +17,9 @@ public class LocalDateTimeFixture {
         return LocalDateTime.of(2024, 11, 25, 16, 0);
     }
 
+    public static LocalDateTime createCurrentDateTime() {
+        // 2024-11-24 T:18:00:00
+        return LocalDateTime.of(2024, 11, 24, 18, 0);
+    }
+
 }

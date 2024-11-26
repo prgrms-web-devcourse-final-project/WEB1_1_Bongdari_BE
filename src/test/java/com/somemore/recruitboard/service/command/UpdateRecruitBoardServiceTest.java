@@ -1,5 +1,6 @@
 package com.somemore.recruitboard.service.command;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
@@ -11,6 +12,7 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
@@ -37,12 +39,11 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     private LocationRepository locationRepository;
 
     private RecruitBoard recruitBoard;
-    private Location location;
     private UUID centerId;
 
     @BeforeEach
     void setUp() {
-        location = createLocation();
+        Location location = createLocation();
         locationRepository.saveAndFlush(location);
         centerId = UUID.randomUUID();
         recruitBoard = createRecruitBoard(centerId, location.getId());
@@ -148,6 +149,23 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             () -> updateRecruitBoardService.updateRecruitBoard(dto, id, wrongCenterId, newImgUrl)
         ).isInstanceOf(BadRequestException.class);
 
+    }
+
+    @DisplayName("봉사 모집글 상태를 변경할 수 있다")
+    @Test
+    void updateRecruitBoardStatus() {
+        // given
+        Long recruitBoardId = recruitBoard.getId();
+        RecruitStatus newStatus = RecruitStatus.CLOSED;
+        LocalDateTime currentDateTime = createCurrentDateTime();
+
+        // when
+        updateRecruitBoardService.updateRecruitBoardStatus(newStatus, recruitBoardId, centerId,
+            currentDateTime);
+
+        // then
+        RecruitBoard findBoard = recruitBoardRepository.findById(recruitBoardId).orElseThrow();
+        assertThat(findBoard.getRecruitStatus()).isEqualTo(newStatus);
     }
 
     private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId) {
