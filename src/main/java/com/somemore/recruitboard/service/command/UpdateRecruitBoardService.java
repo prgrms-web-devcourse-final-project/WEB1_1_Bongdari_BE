@@ -60,7 +60,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
         RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
         validateWriter(recruitBoard, centerId);
 
-        recruitBoard.changeStatus(status, currentDateTime);
+        recruitBoard.changeRecruitStatus(status, currentDateTime);
         recruitBoardRepository.save(recruitBoard);
     }
 

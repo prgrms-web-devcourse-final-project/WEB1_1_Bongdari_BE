@@ -136,7 +136,7 @@ class RecruitBoardTest {
         LocalDateTime currentDateTime = createCurrentDateTime();
 
         // when
-        recruitBoard.changeStatus(newStatus, currentDateTime);
+        recruitBoard.changeRecruitStatus(newStatus, currentDateTime);
 
         // then
         assertThat(recruitBoard.getRecruitStatus()).isEqualTo(newStatus);
@@ -149,11 +149,11 @@ class RecruitBoardTest {
         UUID centerId = UUID.randomUUID();
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
         LocalDateTime currentDateTime = createCurrentDateTime();
-        recruitBoard.changeStatus(CLOSED, currentDateTime);
+        recruitBoard.changeRecruitStatus(CLOSED, currentDateTime);
         RecruitStatus newStatus = RECRUITING;
 
         // when
-        recruitBoard.changeStatus(newStatus, currentDateTime);
+        recruitBoard.changeRecruitStatus(newStatus, currentDateTime);
 
         // then
         assertThat(recruitBoard.getRecruitStatus()).isEqualTo(newStatus);
@@ -168,7 +168,7 @@ class RecruitBoardTest {
         LocalDateTime currentDateTime = createCurrentDateTime();
 
         // when & then
-        assertThatThrownBy(() -> recruitBoard.changeStatus(COMPLETED, currentDateTime))
+        assertThatThrownBy(() -> recruitBoard.changeRecruitStatus(COMPLETED, currentDateTime))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -186,7 +186,7 @@ class RecruitBoardTest {
         // when
         // then
         assertThatThrownBy(
-            () -> recruitBoard.changeStatus(CLOSED, currentDateTime)
+            () -> recruitBoard.changeRecruitStatus(CLOSED, currentDateTime)
         ).isInstanceOf(IllegalStateException.class);
 
     }

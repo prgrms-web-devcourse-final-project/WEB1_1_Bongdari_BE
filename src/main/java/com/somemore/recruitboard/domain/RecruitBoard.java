@@ -86,7 +86,7 @@ public class RecruitBoard extends BaseEntity {
         recruitmentInfo.updateWith(region);
     }
 
-    public void changeStatus(RecruitStatus newStatus, LocalDateTime currentDateTime) {
+    public void changeRecruitStatus(RecruitStatus newStatus, LocalDateTime currentDateTime) {
         validateStatusChange(newStatus);
         validateChangeDeadline(currentDateTime);
 
