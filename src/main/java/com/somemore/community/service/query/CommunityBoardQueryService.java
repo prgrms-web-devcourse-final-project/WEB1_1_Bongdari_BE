@@ -43,7 +43,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     @Override
     public List<CommunityBoardGetResponseDto> getCommunityBoardsByWriterId(UUID writerId) {
-        List<CommunityBoard> boards = communityBoardRepository.getCommunityBoardsByWriterId(writerId);
+        List<CommunityBoard> boards = communityBoardRepository.findByWriterId(writerId);
         String writerNickname = getWriterNickname(writerId);
 
         return boards.stream()
