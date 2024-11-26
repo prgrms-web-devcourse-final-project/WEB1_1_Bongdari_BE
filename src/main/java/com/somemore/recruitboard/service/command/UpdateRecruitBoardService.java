@@ -59,8 +59,10 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     }
 
     private void validateWriter(RecruitBoard recruitBoard, UUID centerId) {
-        if (recruitBoard.isNotWriter(centerId)) {
-            throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
+        if (recruitBoard.isWriter(centerId)) {
+            return;
         }
+
+        throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
     }
 }

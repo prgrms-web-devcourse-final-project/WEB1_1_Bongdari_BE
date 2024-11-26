@@ -73,10 +73,6 @@ public class RecruitBoard extends BaseEntity {
         return this.centerId.equals(centerId);
     }
 
-    public boolean isNotWriter(UUID centerId) {
-        return !isWriter(centerId);
-    }
-
     public void updateWith(RecruitBoardUpdateRequestDto dto, String imgUrl) {
         updateVolunteerInfo(dto);
         this.title = dto.title();
