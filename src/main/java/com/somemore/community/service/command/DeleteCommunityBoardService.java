@@ -22,16 +22,22 @@ class DeleteCommunityBoardService implements DeleteCommunityBoardUseCase {
 
     @Override
     public void deleteCommunityBoard(UUID writerId, Long id) {
-        CommunityBoard communityBoard = communityBoardRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
+        CommunityBoard communityBoard = getCommunityBoardById(id);
 
         validateWriter(communityBoard, writerId);
 
         communityBoard.markAsDeleted();
+
+        communityBoardRepository.save(communityBoard);
+    }
+
+    private CommunityBoard getCommunityBoardById(Long id) {
+        return communityBoardRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
     }
 
     private void validateWriter(CommunityBoard communityBoard, UUID writerId) {
-        if (communityBoard.getWriterId().equals(writerId)) {
+        if (communityBoard.isWriter(writerId)) {
             return;
         }
 

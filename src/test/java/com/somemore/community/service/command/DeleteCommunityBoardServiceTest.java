@@ -12,6 +12,7 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,23 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
 
+    private UUID writerId;
+    private Long communityId;
+    private String imgUrl;
+
+    @BeforeEach
+    void setUp() {
+        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
+                .title("커뮤니티 테스트 제목")
+                .content("커뮤니티 테스트 내용")
+                .build();
+
+        writerId = UUID.randomUUID();
+        imgUrl = "https://image.test.url/123";
+
+        communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId, imgUrl);
+    }
+
     @AfterEach
     void tearDown() {
         communityBoardRepository.deleteAllInBatch();
@@ -37,16 +55,6 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
     @Test
     void deleteCommunityBoardWithId() {
         //given
-        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
-                .title("커뮤니티 테스트 제목")
-                .content("커뮤니티 테스트 내용")
-                .build();
-
-        UUID writerId = UUID.randomUUID();
-        String imgUrl = "https://image.test.url/123";
-
-        Long communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId, imgUrl);
-
         //when
         deleteCommunityBoardService.deleteCommunityBoard(writerId, communityId);
 
@@ -58,15 +66,6 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
     @Test
     void deleteCommunityBoardWithDeletedId() {
         //given
-        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
-                .title("커뮤니티 테스트 제목")
-                .content("커뮤니티 테스트 내용")
-                .build();
-
-        UUID writerId = UUID.randomUUID();
-        String imgUrl = "https://image.test.url/123";
-
-        Long communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId, imgUrl);
         deleteCommunityBoardService.deleteCommunityBoard(writerId, communityId);
 
         //when
@@ -82,16 +81,6 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
     @Test
     void deleteCommunityBoardWithNotWriterId() {
         //given
-        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
-                .title("커뮤니티 테스트 제목")
-                .content("커뮤니티 테스트 내용")
-                .build();
-
-        UUID writerId = UUID.randomUUID();
-        String imgUrl = "https://image.test.url/123";
-
-        Long communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId, imgUrl);
-
         //when
         ThrowableAssert.ThrowingCallable callable = () -> deleteCommunityBoardService.deleteCommunityBoard(UUID.randomUUID(), communityId);
 
