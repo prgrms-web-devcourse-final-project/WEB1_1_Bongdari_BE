@@ -1,17 +1,17 @@
 package com.somemore.recruitboard.domain;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class RecruitBoardTest {
 
@@ -19,51 +19,15 @@ class RecruitBoardTest {
     @Test
     void createRecruitBoardWithDefaultStatus() {
         // given
-        RecruitBoard board = RecruitBoard.builder()
-            .centerId(UUID.randomUUID())
-            .locationId(1L)
-            .title("봉사모집제목")
-            .content("봉사모집내용")
-            .region("경기")
-            .recruitmentCount(10)
-            .imgUrl("https://image.domain.com/links")
-            .volunteerStartDateTime(LocalDateTime.now())
-            .volunteerEndDateTime(LocalDateTime.now().plusHours(1))
-            .volunteerType(OTHER)
-            .admitted(true)
-            .build();
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard board = createRecruitBoard(centerId);
 
         // when
         RecruitStatus recruitStatus = board.getRecruitStatus();
 
         // then
+        assertThat(board.getCenterId()).isEqualTo(centerId);
         assertThat(recruitStatus).isEqualTo(RECRUITING);
-    }
-
-    @DisplayName("봉사 종료 시간이 시작 시간과 같거나 빠르면, 봉사 모집글 생성 시 에러가 발생한다")
-    @ParameterizedTest
-    @ValueSource(longs = {0, -1})
-    void createRecruitBoardWithInValidVolunteerTime(long secondsOffset) {
-        // given
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime endDateTime = now.plusSeconds(secondsOffset);
-
-        // when & then
-        assertThatThrownBy(
-            () -> RecruitBoard.builder()
-                .centerId(UUID.randomUUID())
-                .locationId(1L)
-                .title("봉사모집제목")
-                .content("봉사모집내용")
-                .region("경기")
-                .recruitmentCount(10)
-                .imgUrl("https://image.domain.com/links")
-                .volunteerStartDateTime(now)
-                .volunteerEndDateTime(endDateTime)
-                .volunteerType(VolunteerType.OTHER)
-                .admitted(true)
-                .build()
-        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("봉사 시간을 계산할 수 있다")
@@ -71,27 +35,118 @@ class RecruitBoardTest {
     void testCalculateVolunteerTime() {
         // given
         int hours = 3;
-        LocalDateTime startDateTime = LocalDateTime.now();
+        UUID centerId = UUID.randomUUID();
+        LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(hours);
 
-        RecruitBoard board = RecruitBoard.builder()
-            .centerId(UUID.randomUUID())
-            .locationId(1L)
-            .title("봉사모집제목")
-            .content("봉사모집내용")
-            .region("경기")
+        RecruitBoard board = createRecruitBoard(centerId, startDateTime, endDateTime);
+
+        // when
+        LocalTime volunteerTime = board.getVolunteerHours();
+
+        // then
+        assertThat(volunteerTime).isEqualTo(LocalTime.of(hours, 0));
+    }
+
+    @DisplayName("봉사 모집글을 업데이트 할 수 있다")
+    @Test
+    void updateRecruitBoard() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard board = createRecruitBoard(centerId);
+        String imgUrl = "https://image.domain.com/updates";
+        LocalDateTime startDateTime = createUpdateStartDateTime();
+        LocalDateTime endDateTime = startDateTime.plusHours(2);
+
+        RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
+            .title("봉사 모집글 작성 수정")
+            .content("봉사 하실분을 모집합니다. 수정 <br>")
             .recruitmentCount(10)
-            .imgUrl("https://image.domain.com/links")
+            .volunteerStartDateTime(startDateTime)
+            .volunteerEndDateTime(endDateTime)
+            .volunteerType(OTHER)
+            .admitted(true).build();
+
+        // when
+        board.updateWith(dto, imgUrl);
+
+        // then
+        assertThat(board.getTitle()).isEqualTo(dto.title());
+        assertThat(board.getContent()).isEqualTo(dto.content());
+        assertThat(board.getImgUrl()).isEqualTo(imgUrl);
+    }
+
+    @DisplayName("봉사 활동 지역을 수정할 수 있다.")
+    @Test
+    void updateWithRegion() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard board = createRecruitBoard(centerId);
+        String updateRegion = "새로운지역";
+
+        // when
+        board.updateWith(updateRegion);
+
+        // then
+        RecruitmentInfo recruitmentInfo = board.getRecruitmentInfo();
+        assertThat(recruitmentInfo.getRegion()).isEqualTo(updateRegion);
+    }
+
+    @DisplayName("올바른 기관 식별 값이 주어지면 작성자인지 확인할 수 있다")
+    @Test
+    void isWriterWithCorrectCenterId() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId);
+
+        // when
+        boolean isWriter = recruitBoard.isWriter(centerId);
+
+        // then
+        assertThat(isWriter).isTrue();
+    }
+
+    @DisplayName("잘못된 기관 식별 값이 주어지면 잘못된 작성자인 확인할 수있다.")
+    @Test
+    void isNotWriterWithWrongCenterId() {
+        UUID centerId = UUID.randomUUID();
+        UUID wrongId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId);
+
+        // when
+        boolean isWriter = recruitBoard.isWriter(wrongId);
+
+        // then
+        assertThat(isWriter).isFalse();
+    }
+
+
+    private static RecruitBoard createRecruitBoard(UUID centerId) {
+        LocalDateTime startDateTime = createStartDateTime();
+        LocalDateTime endDateTime = startDateTime.plusHours(1);
+
+        return createRecruitBoard(centerId, startDateTime, endDateTime);
+    }
+
+    private static RecruitBoard createRecruitBoard(UUID centerId, LocalDateTime startDateTime,
+        LocalDateTime endDateTime) {
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+            .region("경기")
+            .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
             .volunteerType(OTHER)
             .admitted(true)
             .build();
 
-        // when
-        LocalTime volunteerTime = board.calculateVolunteerTime();
-
-        // then
-        assertThat(volunteerTime).isEqualTo(LocalTime.of(hours, 0));
+        return RecruitBoard.builder()
+            .centerId(centerId)
+            .locationId(1L)
+            .title("봉사모집제목")
+            .content("봉사모집내용")
+            .imgUrl("https://image.domain.com/links")
+            .recruitmentInfo(recruitmentInfo)
+            .build();
     }
 }

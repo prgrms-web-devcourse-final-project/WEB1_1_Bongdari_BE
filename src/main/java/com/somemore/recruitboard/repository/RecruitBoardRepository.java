@@ -1,8 +1,16 @@
 package com.somemore.recruitboard.repository;
 
 import com.somemore.recruitboard.domain.RecruitBoard;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-public interface RecruitBoardRepository extends JpaRepository<RecruitBoard, Long> {
+public interface RecruitBoardRepository {
 
+
+    RecruitBoard save(RecruitBoard recruitBoard);
+
+    RecruitBoard saveAndFlush(RecruitBoard recruitBoard);
+
+    Optional<RecruitBoard> findById(Long id);
+
+    void deleteAllInBatch();
 }
