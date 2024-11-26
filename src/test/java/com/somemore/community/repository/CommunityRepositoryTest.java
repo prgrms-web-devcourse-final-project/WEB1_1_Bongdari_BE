@@ -33,7 +33,7 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.save(communityBoard);
 
         //when
-        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.getCommunityBoardWithId(communityBoard.getId());
+        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.findById(communityBoard.getId());
 
         //then
         assertThat(foundCommunityBoard).isNotNull();
@@ -58,7 +58,7 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.deleteAllInBatch();
 
         //when
-        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.getCommunityBoardWithId(communityBoard.getId());
+        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.findById(communityBoard.getId());
 
         //then
         assertThat(foundCommunityBoard).isEmpty();
@@ -124,7 +124,7 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.save(communityBoard3);
 
         //when
-        List<CommunityBoard> communityBoards = communityBoardRepository.getCommunityBoardsByWriterId(communityBoard1.getWriterId());
+        List<CommunityBoard> communityBoards = communityBoardRepository.findByWriterId(communityBoard1.getWriterId());
 
         //then
         assertThat(communityBoards).hasSize(2);

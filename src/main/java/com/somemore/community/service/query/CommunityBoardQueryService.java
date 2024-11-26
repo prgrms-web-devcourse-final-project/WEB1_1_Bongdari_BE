@@ -43,7 +43,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     @Override
     public List<CommunityBoardGetResponseDto> getCommunityBoardsByWriterId(UUID writerId) {
-        List<CommunityBoard> boards = communityBoardRepository.getCommunityBoardsByWriterId(writerId);
+        List<CommunityBoard> boards = communityBoardRepository.findByWriterId(writerId);
         String writerNickname = getWriterNickname(writerId);
 
         return boards.stream()
@@ -53,7 +53,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     @Override
     public CommunityBoardGetDetailResponseDto getCommunityBoardDetail(Long id) {
-        CommunityBoard board = communityBoardRepository.getCommunityBoardWithId(id)
+        CommunityBoard board = communityBoardRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
 
         return CommunityBoardGetDetailResponseDto.fromEntity(board, getWriterDetail(board.getWriterId()));

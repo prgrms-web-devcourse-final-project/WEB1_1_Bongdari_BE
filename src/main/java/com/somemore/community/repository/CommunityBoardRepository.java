@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public interface CommunityBoardRepository {
     CommunityBoard save(CommunityBoard communityBoard);
-    Optional<CommunityBoard> getCommunityBoardWithId(Long id);
+    Optional<CommunityBoard> findById(Long id);
     List<CommunityBoard> getCommunityBoards();
-    List<CommunityBoard> getCommunityBoardsByWriterId(UUID writerId);
+    List<CommunityBoard> findByWriterId(UUID writerId);
     void deleteAllInBatch();
 }

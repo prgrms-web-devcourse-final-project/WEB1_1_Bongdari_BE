@@ -23,7 +23,7 @@ public class CommunityRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public Optional<CommunityBoard> getCommunityBoardWithId(Long id) {
+    public Optional<CommunityBoard> findById(Long id) {
         QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
 
         return Optional.ofNullable(queryFactory
@@ -45,7 +45,7 @@ public class CommunityRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public List<CommunityBoard> getCommunityBoardsByWriterId(UUID writerId) {
+    public List<CommunityBoard> findByWriterId(UUID writerId) {
         QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
 
         return queryFactory
