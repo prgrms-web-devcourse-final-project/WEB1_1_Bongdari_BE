@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.net.URI;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -45,7 +44,6 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     private ProblemDetail buildUnauthorizedProblemDetail(JwtException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
         problemDetail.setTitle("Authentication Error");
-        problemDetail.setType(URI.create("http://프론트엔드주소/errors/unauthorized"));
         problemDetail.setProperty("timestamp", System.currentTimeMillis());
         return problemDetail;
     }
