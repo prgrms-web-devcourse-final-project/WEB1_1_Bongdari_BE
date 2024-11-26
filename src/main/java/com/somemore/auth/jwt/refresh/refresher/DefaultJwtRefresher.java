@@ -1,5 +1,6 @@
 package com.somemore.auth.jwt.refresh.refresher;
 
+import com.somemore.auth.cookie.SetCookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
 import com.somemore.auth.jwt.generator.JwtGenerator;
@@ -25,21 +26,14 @@ public class DefaultJwtRefresher implements JwtRefresher {
     @Override
     public EncodedToken refreshAccessToken(EncodedToken accessToken) {
         RefreshToken refreshToken = refreshTokenManager.findRefreshToken(accessToken);
-        validateToken(refreshToken);
+        EncodedToken refreshTokenValue = new EncodedToken(refreshToken.getRefreshToken());
+        jwtValidator.validateToken(refreshTokenValue);
 
-        Claims claims = jwtParser.parseToken(accessToken);
+        Claims claims = jwtParser.parseToken(refreshTokenValue);
         refreshToken.updateAccessToken(generateAccessToken(claims));
         refreshTokenManager.save(refreshToken);
 
         return new EncodedToken(refreshToken.getAccessToken());
-    }
-
-    private void validateToken(RefreshToken refreshToken) {
-        if (jwtValidator.validateToken(new EncodedToken(refreshToken.getAccessToken()))) {
-            // TODO Security Context (JwtFilter) 구현 시 예외 처리 구체화
-            log.error("리프레시 토큰이 만료되었습니다. 로그인을 다시 해야합니다");
-            throw new RuntimeException();
-        }
     }
 
     private EncodedToken generateAccessToken(Claims claims) {
