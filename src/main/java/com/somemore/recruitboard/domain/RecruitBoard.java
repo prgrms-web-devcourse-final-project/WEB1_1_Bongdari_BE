@@ -1,6 +1,5 @@
 package com.somemore.recruitboard.domain;
 
-import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -104,9 +103,10 @@ public class RecruitBoard extends BaseEntity {
     }
 
     private void validateStatusChange(RecruitStatus newStatus) {
-        if (newStatus != RECRUITING && newStatus != CLOSED) {
-            throw new IllegalArgumentException("상태는 '모집중' 또는 '마감'으로만 변경할 수 있습니다.");
+        if (newStatus.isChangeable()) {
+            return;
         }
+        throw new IllegalArgumentException("상태는 '모집중' 또는 '마감'으로만 변경할 수 있습니다.");
     }
 
     private void validateChangeDeadline(LocalDateTime currentDateTime) {
