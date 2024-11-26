@@ -21,10 +21,4 @@ public class LocationQueryService implements LocationQueryUseCase {
         return locationRepository.findById(id);
     }
 
-    @Override
-    public Location findByIdOrThrow(Long id) {
-        return locationRepository.findById(id).orElseThrow(
-            () -> new BadRequestException("존재하지 않는 위치입니다.")
-        );
-    }
 }

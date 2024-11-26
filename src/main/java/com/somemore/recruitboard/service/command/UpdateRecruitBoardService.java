@@ -1,5 +1,8 @@
 package com.somemore.recruitboard.service.command;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
+
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.usecase.command.UpdateLocationUseCase;
 import com.somemore.recruitboard.domain.RecruitBoard;
@@ -7,7 +10,7 @@ import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDt
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.recruitboard.usecase.command.UpdateRecruitBoardUseCase;
-import com.somemore.recruitboard.usecase.query.RecruitQueryUseCase;
+import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
 
     private final RecruitBoardRepository recruitBoardRepository;
-    private final RecruitQueryUseCase recruitQueryUseCase;
+    private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final UpdateLocationUseCase updateLocationUseCase;
 
     @Override
@@ -30,7 +33,9 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
         UUID centerId,
         String imgUrl) {
 
-        RecruitBoard recruitBoard = recruitQueryUseCase.findByIdOrThrow(recruitBoardId);
+        RecruitBoard recruitBoard = recruitBoardQueryUseCase.findById(recruitBoardId).orElseThrow(
+            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
+        );
         validateWriter(recruitBoard, centerId);
         recruitBoard.updateWith(requestDto, imgUrl);
 
@@ -41,7 +46,9 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     public void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto,
         Long recruitBoardId, UUID centerId) {
 
-        RecruitBoard recruitBoard = recruitQueryUseCase.findByIdOrThrow(recruitBoardId);
+        RecruitBoard recruitBoard = recruitBoardQueryUseCase.findById(recruitBoardId).orElseThrow(
+            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
+        );
         validateWriter(recruitBoard, centerId);
 
         updateLocationUseCase.updateLocation(requestDto.toLocationUpdateRequestDto(),
@@ -53,8 +60,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
 
     private void validateWriter(RecruitBoard recruitBoard, UUID centerId) {
         if (recruitBoard.isNotWriter(centerId)) {
-            throw new BadRequestException("자신이 작성한 봉사 모집글만 수정할 수 있습니다.");
+            throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
         }
-
     }
 }

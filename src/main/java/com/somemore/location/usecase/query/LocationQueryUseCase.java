@@ -7,6 +7,4 @@ public interface LocationQueryUseCase {
 
     Optional<Location> findById(Long id);
 
-    Location findByIdOrThrow(Long id);
-
 }
