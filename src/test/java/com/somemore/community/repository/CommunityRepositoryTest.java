@@ -19,9 +19,9 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
 
-    @DisplayName("커뮤니티 id로 커뮤니티 상세 정보를 조회할 수 있다. (Repository)")
+    @DisplayName("커뮤니티 게시글 id로 커뮤니티 상세 정보를 조회할 수 있다. (Repository)")
     @Test
-    void findById() {
+    void getCommunityBoardById() {
         //given
         CommunityBoard communityBoard = CommunityBoard.builder()
                 .title("테스트 커뮤니티 게시글 제목")
@@ -33,7 +33,7 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.save(communityBoard);
 
         //when
-        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.findById(communityBoard.getId());
+        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.getCommunityBoardWithId(communityBoard.getId());
 
         //then
         assertThat(foundCommunityBoard).isNotNull();
@@ -41,6 +41,27 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         assertThat(foundCommunityBoard.get().getContent()).isEqualTo("테스트 커뮤니티 게시글 내용");
         assertThat(foundCommunityBoard.get().getImgUrl()).isEqualTo("http://community.example.com/123");
         assertThat(foundCommunityBoard.get().getWriterId()).isEqualTo(communityBoard.getWriterId());
+    }
+
+    @DisplayName("삭제된 커뮤니티 id로 커뮤니티 상세 정보를 조회할 때 예외를 반환할 수 있다. (Repository)")
+    @Test
+    void getCommunityBoardByDeletedId() {
+        //given
+        CommunityBoard communityBoard = CommunityBoard.builder()
+                .title("테스트 커뮤니티 게시글 제목")
+                .content("테스트 커뮤니티 게시글 내용")
+                .imgUrl("http://community.example.com/123")
+                .writerId(UUID.randomUUID())
+                .build();
+
+        communityBoardRepository.save(communityBoard);
+        communityBoardRepository.deleteAllInBatch();
+
+        //when
+        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.getCommunityBoardWithId(communityBoard.getId());
+
+        //then
+        assertThat(foundCommunityBoard).isEmpty();
     }
 
     @DisplayName("저장된 전체 커뮤니티 게시글을 목록으로 조회할 수 있다. (Repository)")

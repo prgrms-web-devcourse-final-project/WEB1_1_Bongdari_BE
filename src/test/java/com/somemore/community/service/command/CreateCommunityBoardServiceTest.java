@@ -41,7 +41,7 @@ class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
         Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId, imgUrl);
 
         //then
-        Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
+        Optional<CommunityBoard> communityBoard = communityBoardRepository.getCommunityBoardWithId(communityId);
 
         assertThat(communityBoard).isPresent();
         assertThat(communityBoard.get().getId()).isEqualTo(communityId);
@@ -67,7 +67,7 @@ class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
         Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId, imgUrl);
 
         //then
-        Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
+        Optional<CommunityBoard> communityBoard = communityBoardRepository.getCommunityBoardWithId(communityId);
 
         assertThat(communityBoard).isPresent();
         assertThat(communityBoard.get().getId()).isEqualTo(communityId);
