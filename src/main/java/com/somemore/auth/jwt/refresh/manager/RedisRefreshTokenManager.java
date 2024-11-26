@@ -1,9 +1,10 @@
 package com.somemore.auth.jwt.refresh.manager;
 
 import com.somemore.auth.jwt.domain.EncodedToken;
+import com.somemore.auth.jwt.exception.JwtErrorType;
+import com.somemore.auth.jwt.exception.JwtException;
 import com.somemore.auth.jwt.refresh.domain.RefreshToken;
 import com.somemore.auth.jwt.refresh.repository.RefreshTokenRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class RedisRefreshTokenManager implements RefreshTokenManager {
     @Override
     public RefreshToken findRefreshToken(EncodedToken accessToken) {
         return refreshTokenRepository.findByAccessToken(accessToken.value())
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new JwtException(JwtErrorType.EXPIRED_TOKEN));
     }
 
     @Override
@@ -24,11 +25,10 @@ public class RedisRefreshTokenManager implements RefreshTokenManager {
         refreshTokenRepository.save(refreshToken);
     }
 
-    // TODO 로그아웃에 사용
     @Override
     public void removeRefreshToken(EncodedToken accessToken) {
         RefreshToken refreshToken = refreshTokenRepository.findByAccessToken(accessToken.value())
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new JwtException(JwtErrorType.EXPIRED_TOKEN));
 
         refreshTokenRepository.delete(refreshToken);
     }
