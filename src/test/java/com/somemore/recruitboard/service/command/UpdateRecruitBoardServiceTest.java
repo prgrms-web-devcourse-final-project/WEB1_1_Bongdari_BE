@@ -11,7 +11,7 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerInfo;
+import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
@@ -84,14 +84,14 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(updatedRecruitBoard.getContent()).isEqualTo(dto.content());
         assertThat(updatedRecruitBoard.getImgUrl()).isEqualTo(newImgUrl);
 
-        VolunteerInfo volunteerInfo = updatedRecruitBoard.getVolunteerInfo();
-        assertThat(volunteerInfo.getRecruitmentCount()).isEqualTo(dto.recruitmentCount());
-        assertThat(volunteerInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
-        assertThat(volunteerInfo.getAdmitted()).isEqualTo(dto.admitted());
+        RecruitmentInfo recruitmentInfo = updatedRecruitBoard.getRecruitmentInfo();
+        assertThat(recruitmentInfo.getRecruitmentCount()).isEqualTo(dto.recruitmentCount());
+        assertThat(recruitmentInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
+        assertThat(recruitmentInfo.getAdmitted()).isEqualTo(dto.admitted());
 
-        assertThat(volunteerInfo.getVolunteerStartDateTime())
+        assertThat(recruitmentInfo.getVolunteerStartDateTime())
             .isEqualToIgnoringNanos(dto.volunteerStartDateTime());
-        assertThat(volunteerInfo.getVolunteerEndDateTime())
+        assertThat(recruitmentInfo.getVolunteerEndDateTime())
             .isEqualToIgnoringNanos(dto.volunteerEndDateTime());
     }
 
@@ -115,7 +115,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         Location updateLocation = locationRepository.findById(recruitBoard.getLocationId())
             .orElseThrow();
 
-        assertThat(updateRecruitBoard.getVolunteerInfo().getRegion()).isEqualTo(dto.region());
+        assertThat(updateRecruitBoard.getRecruitmentInfo().getRegion()).isEqualTo(dto.region());
         assertThat(updateLocation.getAddress()).isEqualTo(dto.address());
         assertThat(updateLocation.getLongitude())
             .isEqualByComparingTo(dto.longitude());
@@ -161,7 +161,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         LocalDateTime startDateTime,
         LocalDateTime endDateTime) {
 
-        VolunteerInfo volunteerInfo = VolunteerInfo.builder()
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
             .region("경기")
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
@@ -176,7 +176,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             .title("봉사모집제목")
             .content("봉사모집내용")
             .imgUrl("https://image.domain.com/links")
-            .volunteerInfo(volunteerInfo)
+            .recruitmentInfo(recruitmentInfo)
             .build();
     }
 

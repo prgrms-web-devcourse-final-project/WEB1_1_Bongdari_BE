@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerInfo;
+import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -69,7 +69,7 @@ class RecruitQueryServiceTest extends IntegrationTestSupport {
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(1);
 
-        VolunteerInfo volunteerInfo = VolunteerInfo.builder()
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
             .region("경기")
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
@@ -84,7 +84,7 @@ class RecruitQueryServiceTest extends IntegrationTestSupport {
             .title("봉사모집제목")
             .content("봉사모집내용")
             .imgUrl("https://image.domain.com/links")
-            .volunteerInfo(volunteerInfo)
+            .recruitmentInfo(recruitmentInfo)
             .build();
     }
 }

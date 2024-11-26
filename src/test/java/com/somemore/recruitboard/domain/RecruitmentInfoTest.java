@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class VolunteerInfoTest {
+class RecruitmentInfoTest {
 
     @DisplayName("봉사 종료 시간이 시작 시간과 같거나 빠르면, 봉사 모집글 생성 시 에러가 발생한다")
     @ParameterizedTest
@@ -26,7 +26,7 @@ class VolunteerInfoTest {
 
         // when & then
         assertThatThrownBy(
-            () -> createVolunteerInfo(now, endDateTime)
+            () -> createRecruitmentInfo(now, endDateTime)
         ).isInstanceOf(IllegalArgumentException.class);
 
     }
@@ -39,10 +39,10 @@ class VolunteerInfoTest {
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(hours);
 
-        VolunteerInfo volunteerInfo = createVolunteerInfo(startDateTime, endDateTime);
+        RecruitmentInfo recruitmentInfo = createRecruitmentInfo(startDateTime, endDateTime);
 
         // when
-        LocalTime volunteerTime = volunteerInfo.calculateVolunteerTime();
+        LocalTime volunteerTime = recruitmentInfo.calculateVolunteerTime();
 
         // then
         assertThat(volunteerTime).isEqualTo(LocalTime.of(hours, 0));
@@ -50,9 +50,9 @@ class VolunteerInfoTest {
 
     @DisplayName("봉사 활동 정보를 업데이트 할 수 있다")
     @Test
-    void updateVolunteerInfo() {
+    void updateRecruitmentInfo() {
         // given
-        VolunteerInfo volunteerInfo = createVolunteerInfo();
+        RecruitmentInfo recruitmentInfo = createRecruitmentInfo();
 
         Integer count = 2;
         VolunteerType volunteerType = SAFETY_PREVENTION;
@@ -61,29 +61,29 @@ class VolunteerInfoTest {
         Boolean admitted = false;
 
         // when
-        volunteerInfo.updateWith(count, volunteerType, startDateTime,
+        recruitmentInfo.updateWith(count, volunteerType, startDateTime,
             endDateTime, admitted);
 
         // then
-        assertThat(volunteerInfo.getRecruitmentCount()).isEqualTo(count);
-        assertThat(volunteerInfo.getVolunteerType()).isEqualTo(volunteerType);
-        assertThat(volunteerInfo.getVolunteerStartDateTime().compareTo(startDateTime)).isZero();
-        assertThat(volunteerInfo.getVolunteerEndDateTime().compareTo(endDateTime)).isZero();
-        assertThat(volunteerInfo.getAdmitted()).isEqualTo(admitted);
+        assertThat(recruitmentInfo.getRecruitmentCount()).isEqualTo(count);
+        assertThat(recruitmentInfo.getVolunteerType()).isEqualTo(volunteerType);
+        assertThat(recruitmentInfo.getVolunteerStartDateTime().compareTo(startDateTime)).isZero();
+        assertThat(recruitmentInfo.getVolunteerEndDateTime().compareTo(endDateTime)).isZero();
+        assertThat(recruitmentInfo.getAdmitted()).isEqualTo(admitted);
     }
 
     @DisplayName("봉사활동 지역 정보를 업데이트할 수 있다")
     @Test
-    void updateVolunteerInfoWithRegion() {
+    void updateRecruitmentInfoWithRegion() {
         // given
-        VolunteerInfo volunteerInfo = createVolunteerInfo();
+        RecruitmentInfo recruitmentInfo = createRecruitmentInfo();
         String updateRegion = "새로운지역";
 
         // when
-        volunteerInfo.updateWith(updateRegion);
+        recruitmentInfo.updateWith(updateRegion);
 
         // then
-        assertThat(volunteerInfo.getRegion()).isEqualTo(updateRegion);
+        assertThat(recruitmentInfo.getRegion()).isEqualTo(updateRegion);
     }
 
     @DisplayName("봉사 종료 시간이 시작 시간과 같거나 빠르면, 봉사 모집글을 업데이트시 에러가 발생한다")
@@ -94,19 +94,19 @@ class VolunteerInfoTest {
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusMinutes(minutesOffset);
 
-        VolunteerInfo volunteerInfo = createVolunteerInfo();
+        RecruitmentInfo recruitmentInfo = createRecruitmentInfo();
 
         // when & then
         assertThatThrownBy(
-            () -> volunteerInfo.updateWith(3, ADMINISTRATIVE_SUPPORT, startDateTime, endDateTime,
+            () -> recruitmentInfo.updateWith(3, ADMINISTRATIVE_SUPPORT, startDateTime, endDateTime,
                 false)
         ).isInstanceOf(IllegalArgumentException.class);
 
     }
 
-    private static VolunteerInfo createVolunteerInfo(LocalDateTime startDateTime,
+    private static RecruitmentInfo createRecruitmentInfo(LocalDateTime startDateTime,
         LocalDateTime endDateTime) {
-        return VolunteerInfo.builder()
+        return RecruitmentInfo.builder()
             .region("경기")
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
@@ -116,10 +116,10 @@ class VolunteerInfoTest {
             .build();
     }
 
-    private static VolunteerInfo createVolunteerInfo() {
+    private static RecruitmentInfo createRecruitmentInfo() {
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(1);
-        return createVolunteerInfo(startDateTime, endDateTime);
+        return createRecruitmentInfo(startDateTime, endDateTime);
     }
 
 }

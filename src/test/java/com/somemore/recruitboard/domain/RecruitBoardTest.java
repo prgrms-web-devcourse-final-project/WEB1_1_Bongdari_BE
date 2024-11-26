@@ -88,8 +88,8 @@ class RecruitBoardTest {
         board.updateWith(updateRegion);
 
         // then
-        VolunteerInfo volunteerInfo = board.getVolunteerInfo();
-        assertThat(volunteerInfo.getRegion()).isEqualTo(updateRegion);
+        RecruitmentInfo recruitmentInfo = board.getRecruitmentInfo();
+        assertThat(recruitmentInfo.getRegion()).isEqualTo(updateRegion);
     }
 
     @DisplayName("올바른 기관 식별 값이 주어지면 작성자인지 확인할 수 있다")
@@ -131,7 +131,7 @@ class RecruitBoardTest {
     private static RecruitBoard createRecruitBoard(UUID centerId, LocalDateTime startDateTime,
         LocalDateTime endDateTime) {
 
-        VolunteerInfo volunteerInfo = VolunteerInfo.builder()
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
             .region("경기")
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
@@ -146,7 +146,7 @@ class RecruitBoardTest {
             .title("봉사모집제목")
             .content("봉사모집내용")
             .imgUrl("https://image.domain.com/links")
-            .volunteerInfo(volunteerInfo)
+            .recruitmentInfo(recruitmentInfo)
             .build();
     }
 }
