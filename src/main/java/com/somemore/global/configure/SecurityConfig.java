@@ -1,5 +1,7 @@
 package com.somemore.global.configure;
 
+import com.somemore.auth.jwt.filter.JwtAuthFilter;
+import com.somemore.auth.jwt.filter.JwtExceptionFilter;
 import com.somemore.auth.oauth.handler.failure.CustomOAuthFailureHandler;
 import com.somemore.auth.oauth.handler.success.CustomOAuthSuccessHandler;
 import com.somemore.auth.oauth.service.CustomOAuth2UserService;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -24,10 +27,12 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuthSuccessHandler customOAuthSuccessHandler;
     private final CustomOAuthFailureHandler customOAuthFailureHandler;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+        httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -57,13 +62,12 @@ public class SecurityConfig {
                                         userInfoEndpointConfig.userService(customOAuth2UserService))
                                 .failureHandler(customOAuthFailureHandler)
                                 .successHandler(customOAuthSuccessHandler)
-                ).build();
+                );
 
 
-//        TODO JWT 인증 필터가 인증 요청 처리, JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가
-//        return httpSecurity
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(jwtExceptionFilter, JwtAuthFilter.class)
-//                .build();
+        return httpSecurity
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtAuthFilter.class)
+                .build();
     }
 }

@@ -1,12 +1,17 @@
 package com.somemore.auth.jwt.service;
 
+import com.somemore.auth.cookie.SetCookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
+import com.somemore.auth.jwt.exception.JwtErrorType;
+import com.somemore.auth.jwt.exception.JwtException;
 import com.somemore.auth.jwt.generator.JwtGenerator;
 import com.somemore.auth.jwt.parser.JwtParser;
 import com.somemore.auth.jwt.refresh.refresher.JwtRefresher;
 import com.somemore.auth.jwt.usecase.JwtUseCase;
 import com.somemore.auth.jwt.validator.JwtValidator;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +24,7 @@ public class JwtService implements JwtUseCase {
     private final JwtParser jwtParser;
     private final JwtValidator jwtValidator;
     private final JwtRefresher jwtRefresher;
+    private final SetCookieUseCase setCookieUseCase;
 
     @Override
     public EncodedToken generateToken(String userId, String role, TokenType tokenType) {
@@ -26,16 +32,25 @@ public class JwtService implements JwtUseCase {
     }
 
     @Override
-    public void verifyToken(EncodedToken token) {
-        if (jwtValidator.validateToken(token)) {
-            return;
+    public void processAccessToken(EncodedToken accessToken, HttpServletResponse response) {
+        try {
+            jwtValidator.validateToken(accessToken);
+        } catch (JwtException e) {
+            handleJwtExpiredException(e, accessToken, response);
         }
-        EncodedToken accessToken = jwtRefresher.refreshAccessToken(token);
-        // TODO Security Context (JwtFilter) 구현 시 setCookie(accessToken) 구체화
     }
 
     @Override
-    public String getClaimByKey(EncodedToken token, String key) {
-        return jwtParser.parseToken(token).get(key, String.class);
+    public Claims getClaims(EncodedToken token) {
+        return jwtParser.parseToken(token);
+    }
+
+    private void handleJwtExpiredException(JwtException e, EncodedToken accessToken, HttpServletResponse response) {
+        if (e.getErrorType() == JwtErrorType.EXPIRED_TOKEN) {
+            EncodedToken refreshedToken = jwtRefresher.refreshAccessToken(accessToken);
+            setCookieUseCase.setToken(response, refreshedToken.value(), TokenType.ACCESS);
+            return;
+        }
+        throw e;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -23,9 +24,11 @@ public class HmacJwtGenerator implements JwtGenerator {
         Claims claims = buildClaims(userId, role);
         Instant now = Instant.now();
         Instant expiration = now.plusMillis(tokenType.getPeriod());
+        String uniqueId = UUID.randomUUID().toString(); // JTI
 
         return new EncodedToken(Jwts.builder()
                 .claims(claims)
+                .id(uniqueId)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expiration))
                 .signWith(secretKey, ALGORITHM)

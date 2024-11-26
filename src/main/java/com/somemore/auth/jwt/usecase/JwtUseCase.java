@@ -2,11 +2,14 @@ package com.somemore.auth.jwt.usecase;
 
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface JwtUseCase {
     EncodedToken generateToken(String userId, String role, TokenType tokenType);
 
-    void verifyToken(EncodedToken token);
+    void processAccessToken(EncodedToken token, HttpServletResponse response);
 
-    String getClaimByKey(EncodedToken token, String key);
+    Claims getClaims(EncodedToken token);
+
 }
