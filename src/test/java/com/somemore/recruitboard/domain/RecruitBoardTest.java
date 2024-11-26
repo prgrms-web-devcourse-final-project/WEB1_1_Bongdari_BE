@@ -114,10 +114,10 @@ class RecruitBoardTest {
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
 
         // when
-        boolean isNotWriter = recruitBoard.isNotWriter(wrongId);
+        boolean isWriter = recruitBoard.isWriter(wrongId);
 
         // then
-        assertThat(isNotWriter).isTrue();
+        assertThat(isWriter).isFalse();
     }
 
 
