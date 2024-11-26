@@ -85,8 +85,8 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         List<CommunityBoardGetResponseDto> dtos = communityBoardQueryService.getCommunityBoards();
 
         // then
-        Optional<CommunityBoard> communityBoard1 = communityBoardRepository.findById(communityId1);
-        Optional<CommunityBoard> communityBoard2 = communityBoardRepository.findById(communityId2);
+        Optional<CommunityBoard> communityBoard1 = communityBoardRepository.getCommunityBoardWithId(communityId1);
+        Optional<CommunityBoard> communityBoard2 = communityBoardRepository.getCommunityBoardWithId(communityId2);
 
 
         assertThat(dtos)
@@ -135,8 +135,8 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         List<CommunityBoardGetResponseDto> dtos = communityBoardQueryService.getCommunityBoardsByWriterId(volunteer.getId());
 
         //then
-        Optional<CommunityBoard> communityBoard1 = communityBoardRepository.findById(communityId1);
-        Optional<CommunityBoard> communityBoard2 = communityBoardRepository.findById(communityId2);
+        Optional<CommunityBoard> communityBoard1 = communityBoardRepository.getCommunityBoardWithId(communityId1);
+        Optional<CommunityBoard> communityBoard2 = communityBoardRepository.getCommunityBoardWithId(communityId2);
 
         assertThat(dtos)
                 .isNotNull()
