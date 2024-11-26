@@ -3,13 +3,14 @@ package com.somemore.auth.jwt.filter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
-    private final Object principal;
-    private final Object credentials;
+    private final Serializable principal;
+    private final transient Object credentials;
 
-    public JwtAuthenticationToken(Object principal,
+    public JwtAuthenticationToken(Serializable principal,
                                   Object credentials,
                                   Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
