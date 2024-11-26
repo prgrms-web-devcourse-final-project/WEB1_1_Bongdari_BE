@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Embeddable
-public class VolunteerInfo {
+public class RecruitmentInfo {
 
     @Column(name = "region", nullable = false)
     private String region;
@@ -39,7 +39,7 @@ public class VolunteerInfo {
     private Boolean admitted;
 
     @Builder
-    public VolunteerInfo(String region, Integer recruitmentCount,
+    public RecruitmentInfo(String region, Integer recruitmentCount,
         LocalDateTime volunteerStartDateTime, LocalDateTime volunteerEndDateTime,
         VolunteerType volunteerType, Boolean admitted) {
 

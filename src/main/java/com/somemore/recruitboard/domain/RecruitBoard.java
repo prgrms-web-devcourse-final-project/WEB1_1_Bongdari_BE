@@ -45,7 +45,7 @@ public class RecruitBoard extends BaseEntity {
     private String content;
 
     @Embedded
-    private VolunteerInfo volunteerInfo;
+    private RecruitmentInfo recruitmentInfo;
 
     @Enumerated(value = STRING)
     @Column(name = "recruit_status", nullable = false, length = 20)
@@ -56,17 +56,17 @@ public class RecruitBoard extends BaseEntity {
 
     @Builder
     public RecruitBoard(UUID centerId, Long locationId, String title, String content,
-        VolunteerInfo volunteerInfo, String imgUrl) {
+        RecruitmentInfo recruitmentInfo, String imgUrl) {
         this.centerId = centerId;
         this.locationId = locationId;
         this.title = title;
         this.content = content;
-        this.volunteerInfo = volunteerInfo;
+        this.recruitmentInfo = recruitmentInfo;
         this.imgUrl = imgUrl;
     }
 
     public LocalTime getVolunteerHours() {
-        return volunteerInfo.calculateVolunteerTime();
+        return recruitmentInfo.calculateVolunteerTime();
     }
 
     public boolean isWriter(UUID centerId) {
@@ -74,18 +74,18 @@ public class RecruitBoard extends BaseEntity {
     }
 
     public void updateWith(RecruitBoardUpdateRequestDto dto, String imgUrl) {
-        updateVolunteerInfo(dto);
+        updateRecruitmentInfo(dto);
         this.title = dto.title();
         this.content = dto.content();
         this.imgUrl = imgUrl;
     }
 
     public void updateWith(String region) {
-        volunteerInfo.updateWith(region);
+        recruitmentInfo.updateWith(region);
     }
 
-    private void updateVolunteerInfo(RecruitBoardUpdateRequestDto dto) {
-        volunteerInfo.updateWith(
+    private void updateRecruitmentInfo(RecruitBoardUpdateRequestDto dto) {
+        recruitmentInfo.updateWith(
             dto.recruitmentCount(),
             dto.volunteerType(),
             dto.volunteerStartDateTime(),

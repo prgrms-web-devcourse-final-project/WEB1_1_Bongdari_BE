@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerInfo;
+import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.domain.VolunteerType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -45,7 +45,7 @@ public record RecruitBoardCreateRequestDto(
 ) {
 
     public RecruitBoard toEntity(UUID centerId, Long locationId, String imgUrl) {
-        VolunteerInfo volunteerInfo = VolunteerInfo.builder()
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
             .region(region)
             .recruitmentCount(recruitmentCount)
             .volunteerStartDateTime(volunteerStartDateTime)
@@ -60,7 +60,7 @@ public record RecruitBoardCreateRequestDto(
             .title(title)
             .content(content)
             .imgUrl(imgUrl)
-            .volunteerInfo(volunteerInfo)
+            .recruitmentInfo(recruitmentInfo)
             .build();
     }
 }
