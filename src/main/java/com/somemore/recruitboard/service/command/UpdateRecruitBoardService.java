@@ -6,11 +6,12 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUI
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.usecase.command.UpdateLocationUseCase;
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.recruitboard.usecase.command.UpdateRecruitBoardUseCase;
-import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
 
     private final RecruitBoardRepository recruitBoardRepository;
-    private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final UpdateLocationUseCase updateLocationUseCase;
 
     @Override
@@ -33,9 +33,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
         UUID centerId,
         String imgUrl) {
 
-        RecruitBoard recruitBoard = recruitBoardQueryUseCase.findById(recruitBoardId).orElseThrow(
-            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
-        );
+        RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
         validateWriter(recruitBoard, centerId);
         recruitBoard.updateWith(requestDto, imgUrl);
 
@@ -46,9 +44,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     public void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto,
         Long recruitBoardId, UUID centerId) {
 
-        RecruitBoard recruitBoard = recruitBoardQueryUseCase.findById(recruitBoardId).orElseThrow(
-            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
-        );
+        RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
         validateWriter(recruitBoard, centerId);
 
         updateLocationUseCase.updateLocation(requestDto.toLocationUpdateRequestDto(),
@@ -56,6 +52,22 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
 
         recruitBoard.updateWith(requestDto.region());
         recruitBoardRepository.save(recruitBoard);
+    }
+
+    @Override
+    public void updateRecruitBoardStatus(RecruitStatus status, Long recruitBoardId, UUID centerId,
+        LocalDateTime currentDateTime) {
+        RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
+        validateWriter(recruitBoard, centerId);
+
+        recruitBoard.changeRecruitStatus(status, currentDateTime);
+        recruitBoardRepository.save(recruitBoard);
+    }
+
+    private RecruitBoard getRecruitBoard(Long recruitBoardId) {
+        return recruitBoardRepository.findById(recruitBoardId).orElseThrow(
+            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
+        );
     }
 
     private void validateWriter(RecruitBoard recruitBoard, UUID centerId) {

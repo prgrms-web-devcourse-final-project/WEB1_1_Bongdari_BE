@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 import lombok.Builder;
@@ -84,6 +85,13 @@ public class RecruitBoard extends BaseEntity {
         recruitmentInfo.updateWith(region);
     }
 
+    public void changeRecruitStatus(RecruitStatus newStatus, LocalDateTime currentDateTime) {
+        validateStatusChange(newStatus);
+        validateChangeDeadline(currentDateTime);
+
+        this.recruitStatus = newStatus;
+    }
+
     private void updateRecruitmentInfo(RecruitBoardUpdateRequestDto dto) {
         recruitmentInfo.updateWith(
             dto.recruitmentCount(),
@@ -93,4 +101,21 @@ public class RecruitBoard extends BaseEntity {
             dto.admitted()
         );
     }
+
+    private void validateStatusChange(RecruitStatus newStatus) {
+        if (newStatus.isChangeable()) {
+            return;
+        }
+        throw new IllegalArgumentException("상태는 '모집중' 또는 '마감'으로만 변경할 수 있습니다.");
+    }
+
+    private void validateChangeDeadline(LocalDateTime currentDateTime) {
+        LocalDateTime volunteerStartDateTime = recruitmentInfo.getVolunteerStartDateTime();
+        LocalDateTime deadline = volunteerStartDateTime.toLocalDate().atStartOfDay();
+
+        if (!currentDateTime.isBefore(deadline)) {
+            throw new IllegalStateException("봉사 시작 일시 자정 전까지만 상태를 변경할 수 있습니다.");
+        }
+    }
+
 }
