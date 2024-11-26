@@ -1,10 +1,14 @@
 package com.somemore.recruitboard.domain;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
+import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import java.time.LocalDateTime;
@@ -12,6 +16,8 @@ import java.time.LocalTime;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class RecruitBoardTest {
 
@@ -120,6 +126,70 @@ class RecruitBoardTest {
         assertThat(isWriter).isFalse();
     }
 
+    @DisplayName("모집글 상태를 모집중에서 모집 마감으로 변경할 수 있다")
+    @Test
+    void changeStatusFromRecruitingToClose() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId);
+        RecruitStatus newStatus = CLOSED;
+        LocalDateTime currentDateTime = createCurrentDateTime();
+
+        // when
+        recruitBoard.changeStatus(newStatus, currentDateTime);
+
+        // then
+        assertThat(recruitBoard.getRecruitStatus()).isEqualTo(newStatus);
+    }
+
+    @DisplayName("모집글 상태를 모집마감에서 모집중으로 변경할 수 있다")
+    @Test
+    void changeStatusFromCloseToRecruiting() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId);
+        LocalDateTime currentDateTime = createCurrentDateTime();
+        recruitBoard.changeStatus(CLOSED, currentDateTime);
+        RecruitStatus newStatus = RECRUITING;
+
+        // when
+        recruitBoard.changeStatus(newStatus, currentDateTime);
+
+        // then
+        assertThat(recruitBoard.getRecruitStatus()).isEqualTo(newStatus);
+    }
+
+    @DisplayName("모집글 상태는 마감으로 변경할 수 없다")
+    @Test
+    void changeStatusWhenInvalidStatus() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId);
+        LocalDateTime currentDateTime = createCurrentDateTime();
+
+        // when & then
+        assertThatThrownBy(() -> recruitBoard.changeStatus(COMPLETED, currentDateTime))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("봉사 시작일 자정 이후 모집 상태를 변경할 경우 에러가 발생한다")
+    @ParameterizedTest
+    @ValueSource(longs = {0, 1})
+    void changeStatusWhenDeadLineAfter(Long secondsOffset) {
+        // given
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId);
+        LocalDateTime deadLineDateTime = recruitBoard.getRecruitmentInfo()
+            .getVolunteerStartDateTime().toLocalDate().atStartOfDay();
+        LocalDateTime currentDateTime = deadLineDateTime.plusSeconds(secondsOffset);
+
+        // when
+        // then
+        assertThatThrownBy(
+            () -> recruitBoard.changeStatus(CLOSED, currentDateTime)
+        ).isInstanceOf(IllegalStateException.class);
+
+    }
 
     private static RecruitBoard createRecruitBoard(UUID centerId) {
         LocalDateTime startDateTime = createStartDateTime();
@@ -149,4 +219,5 @@ class RecruitBoardTest {
             .recruitmentInfo(recruitmentInfo)
             .build();
     }
+
 }
