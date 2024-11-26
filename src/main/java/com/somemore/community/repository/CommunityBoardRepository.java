@@ -10,6 +10,6 @@ public interface CommunityBoardRepository {
     CommunityBoard save(CommunityBoard communityBoard);
     Optional<CommunityBoard> findById(Long id);
     List<CommunityBoard> getCommunityBoards();
-    List<CommunityBoard> getCommunityBoardsByWriterId(UUID writerId);
+    List<CommunityBoard> findByWriterId(UUID writerId);
     void deleteAllInBatch();
 }

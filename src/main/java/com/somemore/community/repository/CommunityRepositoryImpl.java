@@ -24,7 +24,13 @@ public class CommunityRepositoryImpl implements CommunityBoardRepository {
 
     @Override
     public Optional<CommunityBoard> findById(Long id) {
-        return communityBoardJpaRepository.findById(id);
+        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(communityBoard)
+                .where(communityBoard.id.eq(id)
+                        .and(communityBoard.deleted.eq(false)))
+                .fetchOne());
     }
 
     @Override
@@ -39,7 +45,7 @@ public class CommunityRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public List<CommunityBoard> getCommunityBoardsByWriterId(UUID writerId) {
+    public List<CommunityBoard> findByWriterId(UUID writerId) {
         QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
 
         return queryFactory

@@ -1,7 +1,10 @@
 package com.somemore.auth.jwt.validator;
 
 import com.somemore.auth.jwt.domain.EncodedToken;
+import com.somemore.auth.jwt.exception.JwtErrorType;
+import com.somemore.auth.jwt.exception.JwtException;
 import com.somemore.auth.jwt.parser.DefaultJwtParser;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +16,15 @@ public class DefaultJwtValidator implements JwtValidator {
 
     private final DefaultJwtParser defaultJwtParser;
 
-    public boolean validateToken(EncodedToken token) {
-        return defaultJwtParser.parseToken(token)
-                .getExpiration()
-                .toInstant()
-                .isAfter(Instant.now());
+    @Override
+    public void validateToken(EncodedToken token) {
+        Claims claims = defaultJwtParser.parseToken(token);
+        validateExpiration(claims);
+    }
+
+    private void validateExpiration(Claims claims) {
+        if (claims.getExpiration() == null || claims.getExpiration().toInstant().isBefore(Instant.now())) {
+            throw new JwtException(JwtErrorType.EXPIRED_TOKEN);
+        }
     }
 }
