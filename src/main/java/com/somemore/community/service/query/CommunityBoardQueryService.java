@@ -53,7 +53,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     @Override
     public CommunityBoardGetDetailResponseDto getCommunityBoardDetail(Long id) {
-        CommunityBoard board = communityBoardRepository.findById(id)
+        CommunityBoard board = communityBoardRepository.getCommunityBoardWithId(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
 
         return CommunityBoardGetDetailResponseDto.fromEntity(board, getWriterDetail(board.getWriterId()));

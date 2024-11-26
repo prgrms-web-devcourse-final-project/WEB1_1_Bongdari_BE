@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface CommunityBoardRepository {
     CommunityBoard save(CommunityBoard communityBoard);
-    Optional<CommunityBoard> findById(Long id);
+    Optional<CommunityBoard> getCommunityBoardWithId(Long id);
     List<CommunityBoard> getCommunityBoards();
     List<CommunityBoard> getCommunityBoardsByWriterId(UUID writerId);
     void deleteAllInBatch();

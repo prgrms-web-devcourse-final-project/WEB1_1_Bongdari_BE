@@ -23,8 +23,14 @@ public class CommunityRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public Optional<CommunityBoard> findById(Long id) {
-        return communityBoardJpaRepository.findById(id);
+    public Optional<CommunityBoard> getCommunityBoardWithId(Long id) {
+        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(communityBoard)
+                .where(communityBoard.id.eq(id)
+                        .and(communityBoard.deleted.eq(false)))
+                .fetchOne());
     }
 
     @Override
