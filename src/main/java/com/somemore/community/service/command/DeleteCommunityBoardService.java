@@ -22,7 +22,7 @@ class DeleteCommunityBoardService implements DeleteCommunityBoardUseCase {
 
     @Override
     public void deleteCommunityBoard(UUID writerId, Long id) {
-        CommunityBoard communityBoard = communityBoardRepository.getCommunityBoardWithId(id)
+        CommunityBoard communityBoard = communityBoardRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
 
         validateWriter(communityBoard, writerId);
