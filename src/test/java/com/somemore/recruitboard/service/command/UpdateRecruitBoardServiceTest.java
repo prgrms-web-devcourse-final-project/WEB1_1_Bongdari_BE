@@ -156,7 +156,6 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     void updateRecruitBoardStatus() {
         // given
         Long recruitBoardId = recruitBoard.getId();
-        UUID centerId = recruitBoard.getCenterId();
         RecruitStatus newStatus = RecruitStatus.CLOSED;
         LocalDateTime currentDateTime = createCurrentDateTime();
 
