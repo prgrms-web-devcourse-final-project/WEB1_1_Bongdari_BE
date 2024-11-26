@@ -1,6 +1,5 @@
 package com.somemore.location.service.query;
 
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.location.usecase.query.LocationQueryUseCase;

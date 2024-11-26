@@ -3,7 +3,6 @@ package com.somemore.location.service.command;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_LOCATION;
 
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.location.domain.Location;
 import com.somemore.location.dto.request.LocationUpdateRequestDto;
 import com.somemore.location.repository.LocationRepository;
