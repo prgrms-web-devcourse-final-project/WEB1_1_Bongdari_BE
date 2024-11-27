@@ -1,6 +1,5 @@
 package com.somemore.community.service;
 
-import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityBoardWithNickname;
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;

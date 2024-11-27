@@ -2,7 +2,6 @@ package com.somemore.center.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.Center;
-import com.somemore.center.domain.QCenter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,6 @@ import java.util.UUID;
 public class CenterRepositoryImpl implements CenterRepository {
 
     private final CenterJpaRepository centerJpaRepository;
-    private final JPAQueryFactory queryFactory;
 
     @Override
     public Center save(Center center) {

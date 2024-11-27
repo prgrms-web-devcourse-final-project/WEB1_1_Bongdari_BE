@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityBoardWithNickname;
 import com.somemore.community.domain.QCommunityBoard;
-import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
