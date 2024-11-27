@@ -11,10 +11,13 @@ import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
 import com.somemore.auth.jwt.validator.JwtValidator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
@@ -34,6 +37,15 @@ class JwtServiceTest extends IntegrationTestSupport {
     private SecretKey secretKey;
     @Autowired
     private RefreshTokenManager refreshTokenManager;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+
+    @AfterEach
+    void tearDown() {
+        redisTemplate.keys("*")
+                .forEach(redisTemplate::delete);
+    }
 
     @DisplayName("토큰이 올바르게 생성된다")
     @Test
