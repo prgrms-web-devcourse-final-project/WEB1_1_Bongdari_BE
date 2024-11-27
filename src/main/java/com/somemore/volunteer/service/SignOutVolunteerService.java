@@ -22,7 +22,7 @@ public class SignOutVolunteerService implements SignOutVolunteerUseCase {
     @Override
     public void signOut(
             HttpServletResponse response,
-            @AuthenticationPrincipal String volunteerId) {
+            String volunteerId) {
 
         cookieUseCase.deleteAccessToken(response);
         refreshTokenManager.removeRefreshToken(volunteerId);
