@@ -1,7 +1,6 @@
 package com.somemore.center.service.query;
 
 import com.somemore.center.domain.Center;
-import com.somemore.center.dto.response.CenterForCommunityResponseDto;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.CenterRepository;
@@ -44,16 +43,5 @@ public class CenterQueryService implements CenterQueryUseCase {
     private Center getCenterById(UUID centerId) {
         return centerRepository.findCenterById(centerId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_CENTER.getMessage()));
-    }
-
-    @Override
-    public String getNameById(UUID id) {
-        return centerRepository.findNameById(id);
-    }
-
-    @Override
-    public CenterForCommunityResponseDto getCenterDetailForCommunity(UUID id) {
-        Center center = getCenterById(id);
-        return CenterForCommunityResponseDto.fromEntity(center);
     }
 }

@@ -14,6 +14,5 @@ public interface CenterRepository {
         return !existsById(id);
     }
     Optional<Center> findCenterById(UUID id);
-    String findNameById(UUID id);
     void deleteAllInBatch();
 }

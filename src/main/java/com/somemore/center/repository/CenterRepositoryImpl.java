@@ -32,17 +32,6 @@ public class CenterRepositoryImpl implements CenterRepository {
     }
 
     @Override
-    public String findNameById(UUID id) {
-        QCenter center = QCenter.center;
-
-        return queryFactory
-                .select(center.name)
-                .from(center)
-                .where(center.id.eq(id))
-                .fetchOne();
-    }
-
-    @Override
     public void deleteAllInBatch() {
         centerJpaRepository.deleteAllInBatch();
     }

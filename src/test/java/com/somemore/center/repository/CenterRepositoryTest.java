@@ -81,26 +81,4 @@ class CenterRepositoryTest extends IntegrationTestSupport {
         //then
         assertThat(isExist).isFalse();
     }
-
-    @DisplayName("센터의 id로 name을 조회한다. (Repository)")
-    @Test
-    void findNameById() {
-        //given
-        Center center = Center.create(
-                "기본 기관 이름",
-                "010-1234-5678",
-                "http://example.com/image.jpg",
-                "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
-        );
-        centerRepository.save(center);
-
-        //when
-        String centerName = centerRepository.findNameById(center.getId());
-
-        //then
-        assertThat(centerName).isEqualTo("기본 기관 이름");
-    }
 }
