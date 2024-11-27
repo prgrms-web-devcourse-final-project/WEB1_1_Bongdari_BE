@@ -1,5 +1,6 @@
 package com.somemore.community.domain;
 
+import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.global.common.BaseEntity;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -51,5 +52,11 @@ public class CommunityBoard extends BaseEntity {
 
     public boolean isWriter(UUID writerId) {
         return this.writerId.equals(writerId);
+    }
+
+    public void updateWith(CommunityBoardUpdateRequestDto dto, String imgUrl) {
+        this.title = dto.title();
+        this.content = dto.content();
+        this.imgUrl = imgUrl;
     }
 }
