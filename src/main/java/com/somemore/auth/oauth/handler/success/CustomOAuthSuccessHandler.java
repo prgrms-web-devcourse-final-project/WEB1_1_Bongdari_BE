@@ -2,7 +2,7 @@ package com.somemore.auth.oauth.handler.success;
 
 import com.somemore.auth.cookie.CookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
-import com.somemore.auth.jwt.usecase.command.GenerateTokensOnLoginUseCase;
+import com.somemore.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.auth.oauth.naver.service.query.ProcessNaverOAuthUserService;
 import com.somemore.auth.redirect.RedirectUseCase;

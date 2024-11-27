@@ -1,4 +1,4 @@
-package com.somemore.volunteer.controller.query;
+package com.somemore.volunteer.controller;
 
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.BadRequestException;
