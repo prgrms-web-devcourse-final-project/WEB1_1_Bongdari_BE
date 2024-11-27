@@ -1,13 +1,12 @@
 package com.somemore.auth.oauth.handler.success;
 
-import com.somemore.auth.cookie.SetCookieUseCase;
+import com.somemore.auth.cookie.CookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
-import com.somemore.auth.jwt.domain.TokenType;
 import com.somemore.auth.jwt.usecase.command.GenerateTokensOnLoginUseCase;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.auth.oauth.naver.service.query.ProcessNaverOAuthUserService;
 import com.somemore.auth.redirect.RedirectUseCase;
-import com.somemore.volunteer.usecase.query.FindVolunteerIdUseCase;
+import com.somemore.volunteer.usecase.FindVolunteerIdUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +28,10 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final ProcessNaverOAuthUserService processNaverOAuthService;
     private final FindVolunteerIdUseCase findVolunteerIdUseCase;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
-    private final SetCookieUseCase setCookieUseCase;
+    private final CookieUseCase cookieUseCase;
     private final RedirectUseCase redirectUseCase;
 
-    @Value("${frontend.url}")
+    @Value("${app.front-url}")
     private String frontendRootUrl;
 
     @Override
@@ -49,7 +48,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         UUID volunteerId = findVolunteerIdUseCase.findVolunteerIdByOAuthId(oAuthId);
         EncodedToken accessToken = generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(volunteerId);
 
-        setCookieUseCase.setToken(response, accessToken.value(), TokenType.ACCESS);
+        cookieUseCase.setAccessToken(response, accessToken.value());
         redirectUseCase.redirect(request, response, frontendRootUrl);
     }
 
