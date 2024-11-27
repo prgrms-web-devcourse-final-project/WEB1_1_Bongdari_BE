@@ -1,6 +1,5 @@
 package com.somemore.center.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.Center;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
