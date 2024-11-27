@@ -26,10 +26,8 @@ public class RedisRefreshTokenManager implements RefreshTokenManager {
     }
 
     @Override
-    public void removeRefreshToken(EncodedToken accessToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByAccessToken(accessToken.value())
-                .orElseThrow(() -> new JwtException(JwtErrorType.EXPIRED_TOKEN));
-
-        refreshTokenRepository.delete(refreshToken);
+    public void removeRefreshToken(String userId) {
+        refreshTokenRepository.findByUserId(userId)
+                .ifPresent(refreshTokenRepository::delete);
     }
 }

@@ -1,4 +1,4 @@
-package com.somemore.volunteer.usecase.command;
+package com.somemore.volunteer.usecase;
 
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 

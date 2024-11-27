@@ -1,11 +1,11 @@
-package com.somemore.volunteer.service.command;
+package com.somemore.volunteer.service;
 
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
-import com.somemore.volunteer.usecase.command.RegisterVolunteerUseCase;
+import com.somemore.volunteer.usecase.RegisterVolunteerUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

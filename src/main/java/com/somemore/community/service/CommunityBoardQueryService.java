@@ -9,7 +9,7 @@ import com.somemore.community.repository.CommunityBoardRepository;
 import com.somemore.community.usecase.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.dto.response.VolunteerForCommunityResponseDto;
-import com.somemore.volunteer.usecase.query.FindVolunteerIdUseCase;
+import com.somemore.volunteer.usecase.FindVolunteerIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
