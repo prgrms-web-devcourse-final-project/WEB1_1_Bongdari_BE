@@ -1,6 +1,6 @@
 app:
-  front-url: "http://localhost:3000"
-  back-url: "http://localhost:8080"
+  front-url: ${FRONT_URL}
+  back-url: ${BACK_URL}
 
 spring:
   datasource:
