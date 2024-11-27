@@ -23,7 +23,6 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Transactional
 class SignOutVolunteerServiceTest extends IntegrationTestSupport {
 
     @Autowired

@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
