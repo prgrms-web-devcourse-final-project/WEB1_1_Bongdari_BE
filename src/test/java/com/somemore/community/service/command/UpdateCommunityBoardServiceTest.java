@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
+class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private CreateCommunityBoardUseCase createCommunityBoardUseCase;
