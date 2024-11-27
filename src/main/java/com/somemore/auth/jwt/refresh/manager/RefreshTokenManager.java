@@ -8,5 +8,5 @@ public interface RefreshTokenManager {
 
     void save(RefreshToken refreshToken);
 
-    void removeRefreshToken(EncodedToken accessToken);
+    void removeRefreshToken(String userId);
 }
