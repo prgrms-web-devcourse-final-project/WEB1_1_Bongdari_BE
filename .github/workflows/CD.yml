@@ -24,6 +24,8 @@ jobs:
       NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
       NAVER_SCOPE: ${{ secrets.NAVER_SCOPE }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      FRONT-URL: ${{FRONT_URL}}
+      BACK_URL: ${{BACK_URL}}
 
     steps:
       - name: Github Repository 파일 불러오기
