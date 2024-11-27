@@ -1,8 +1,8 @@
-package com.somemore.community.service.command;
+package com.somemore.community.service;
 
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.command.DeleteCommunityBoardUseCase;
+import com.somemore.community.usecase.DeleteCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

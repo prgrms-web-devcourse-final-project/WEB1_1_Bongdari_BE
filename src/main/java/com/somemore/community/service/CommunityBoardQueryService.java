@@ -1,4 +1,4 @@
-package com.somemore.community.service.query;
+package com.somemore.community.service;
 
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.community.domain.CommunityBoard;
@@ -6,7 +6,7 @@ import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
 import com.somemore.community.dto.response.WriterDetailDto;
 import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.query.CommunityBoardQueryUseCase;
+import com.somemore.community.usecase.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.dto.response.VolunteerForCommunityResponseDto;
 import com.somemore.volunteer.usecase.query.FindVolunteerIdUseCase;

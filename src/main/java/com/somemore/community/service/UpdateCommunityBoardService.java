@@ -1,18 +1,11 @@
-package com.somemore.community.service.command;
+package com.somemore.community.service;
 
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.command.UpdateCommunityBoardUseCase;
+import com.somemore.community.usecase.UpdateCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.location.usecase.command.UpdateLocationUseCase;
-import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
-import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
-import com.somemore.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.recruitboard.usecase.command.UpdateRecruitBoardUseCase;
-import java.time.LocalDateTime;
+
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
