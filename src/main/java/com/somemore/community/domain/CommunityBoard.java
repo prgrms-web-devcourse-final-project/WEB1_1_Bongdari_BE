@@ -48,4 +48,8 @@ public class CommunityBoard extends BaseEntity {
         this.content = content;
         this.imgUrl = imgUrl;
     }
+
+    public boolean isWriter(UUID writerId) {
+        return this.writerId.equals(writerId);
+    }
 }

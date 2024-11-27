@@ -10,6 +10,7 @@ import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
 import com.somemore.community.repository.CommunityBoardRepository;
 import com.somemore.community.usecase.command.CreateCommunityBoardUseCase;
+import com.somemore.community.usecase.command.DeleteCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.volunteer.domain.Volunteer;
@@ -36,6 +37,8 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
     CenterRepository centerRepository;
     @Autowired
     CreateCommunityBoardUseCase createCommunityBoardUseCase;
+    @Autowired
+    DeleteCommunityBoardUseCase deleteCommunityBoardUseCase;
     @Autowired
     CommunityBoardQueryService communityBoardQueryService;
 
@@ -209,7 +212,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         Long communityId = createCommunityBoardUseCase.createCommunityBoard(dto1, savedVolunteer.getId(), imgUrl);
 
-        communityBoardRepository.deleteAllInBatch();
+        deleteCommunityBoardUseCase.deleteCommunityBoard(savedVolunteer.getId(), communityId);
 
         //when
         ThrowableAssert.ThrowingCallable callable = () -> communityBoardQueryService.getCommunityBoardDetail(communityId);
