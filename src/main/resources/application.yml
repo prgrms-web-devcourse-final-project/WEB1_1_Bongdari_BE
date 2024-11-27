@@ -1,3 +1,7 @@
+app:
+  front-url: "http://localhost:3000"
+  back-url: "http://localhost:8080"
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -57,9 +61,6 @@ springdoc:
   writer-with-default-pretty-printer: true
   paths-to-match:
     - /api/**
-
-frontend:
-  url: localhost
 
 jwt:
   secret: ${JWT_SECRET}
