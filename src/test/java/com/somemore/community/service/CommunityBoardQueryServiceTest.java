@@ -43,7 +43,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     CommunityBoardQueryService communityBoardQueryService;
 
-    private UUID writerId1, writerId2;
+    private UUID writerId1;
     private Long communityId1, communityId2;
     private String imgUrl, nickName1, nickName2;
 
@@ -70,7 +70,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         volunteerRepository.save(volunteer2);
 
         writerId1 = volunteer.getId();
-        writerId2 = volunteer2.getId();
+        UUID writerId2 = volunteer2.getId();
         nickName1 = volunteer.getNickname();
         nickName2 = volunteer2.getNickname();
         imgUrl = "https://image.test.url/123";

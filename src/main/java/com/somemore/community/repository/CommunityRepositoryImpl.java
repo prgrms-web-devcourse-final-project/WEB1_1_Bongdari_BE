@@ -1,9 +1,10 @@
 package com.somemore.community.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.domain.CommunityBoardWithNickname;
+import com.somemore.community.domain.CommunityBoardView;
 import com.somemore.community.domain.QCommunityBoard;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
@@ -37,38 +38,33 @@ public class CommunityRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public List<CommunityBoardWithNickname> getCommunityBoards() {
-        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
-        QVolunteer volunteer = QVolunteer.volunteer;
-
-        return queryFactory
-                .select(Projections.constructor(CommunityBoardWithNickname.class,
-                        communityBoard,
-                        volunteer.nickname))
-                .from(communityBoard)
-                .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-                .where(communityBoard.deleted.eq(false))
-                .orderBy(communityBoard.createdAt.desc())
+    public List<CommunityBoardView> getCommunityBoards() {
+        return getCommunityBoardsQuery()
+                .where(QCommunityBoard.communityBoard.deleted.eq(false))
                 .fetch();
     }
 
     @Override
-    public List<CommunityBoardWithNickname> findByWriterId(UUID writerId) {
+    public List<CommunityBoardView> findByWriterId(UUID writerId) {
+        return getCommunityBoardsQuery()
+                .where(QCommunityBoard.communityBoard.writerId.eq(writerId)
+                        .and(QCommunityBoard.communityBoard.deleted.eq(false)))
+                .fetch();
+    }
+
+    private JPAQuery<CommunityBoardView> getCommunityBoardsQuery() {
         QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
         QVolunteer volunteer = QVolunteer.volunteer;
 
         return queryFactory
-                .select(Projections.constructor(CommunityBoardWithNickname.class,
+                .select(Projections.constructor(CommunityBoardView.class,
                         communityBoard,
                         volunteer.nickname))
                 .from(communityBoard)
                 .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-                .where(communityBoard.writerId.eq(writerId)
-                        .and(communityBoard.deleted.eq(false))
-                )
-                .orderBy(communityBoard.createdAt.desc())
-                .fetch();
+                .orderBy(communityBoard.createdAt.desc());
     }
+
 
     @Override
     public void deleteAllInBatch() {

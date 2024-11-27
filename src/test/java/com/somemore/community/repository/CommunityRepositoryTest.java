@@ -3,7 +3,7 @@ package com.somemore.community.repository;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.domain.CommunityBoardWithNickname;
+import com.somemore.community.domain.CommunityBoardView;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -96,18 +96,18 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.save(communityBoard2);
 
         //when
-        List<CommunityBoardWithNickname> communityBoards = communityBoardRepository.getCommunityBoards();
+        List<CommunityBoardView> communityBoards = communityBoardRepository.getCommunityBoards();
 
         //then
         assertThat(communityBoards).hasSize(2);
-        assertThat(communityBoards.getFirst().getCommunityBoard().getId()).isEqualTo(communityBoard2.getId());
-        assertThat(communityBoards.getFirst().getCommunityBoard().getTitle()).isEqualTo(communityBoard2.getTitle());
-        assertThat(communityBoards.getFirst().getWriterNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getFirst().getCommunityBoard().getCreatedAt()).isEqualTo(communityBoard2.getCreatedAt());
-        assertThat(communityBoards.getLast().getCommunityBoard().getId()).isEqualTo(communityBoard1.getId());
-        assertThat(communityBoards.getLast().getCommunityBoard().getTitle()).isEqualTo(communityBoard1.getTitle());
-        assertThat(communityBoards.getLast().getWriterNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getLast().getCommunityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
+        assertThat(communityBoards.getFirst().communityBoard().getId()).isEqualTo(communityBoard2.getId());
+        assertThat(communityBoards.getFirst().communityBoard().getTitle()).isEqualTo(communityBoard2.getTitle());
+        assertThat(communityBoards.getFirst().writerNickname()).isEqualTo(volunteer.getNickname());
+        assertThat(communityBoards.getFirst().communityBoard().getCreatedAt()).isEqualTo(communityBoard2.getCreatedAt());
+        assertThat(communityBoards.getLast().communityBoard().getId()).isEqualTo(communityBoard1.getId());
+        assertThat(communityBoards.getLast().communityBoard().getTitle()).isEqualTo(communityBoard1.getTitle());
+        assertThat(communityBoards.getLast().writerNickname()).isEqualTo(volunteer.getNickname());
+        assertThat(communityBoards.getLast().communityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
     }
 
     @DisplayName("저장된 커뮤니티 게시글 리스트를 작성자별로 조회할 수 있다. (Repository)")
@@ -144,17 +144,17 @@ class CommunityRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.save(communityBoard3);
 
         //when
-        List<CommunityBoardWithNickname> communityBoards = communityBoardRepository.findByWriterId(volunteer.getId());
+        List<CommunityBoardView> communityBoards = communityBoardRepository.findByWriterId(volunteer.getId());
 
         //then
         assertThat(communityBoards).hasSize(2);
-        assertThat(communityBoards.getFirst().getCommunityBoard().getId()).isEqualTo(communityBoard2.getId());
-        assertThat(communityBoards.getFirst().getCommunityBoard().getTitle()).isEqualTo(communityBoard2.getTitle());
-        assertThat(communityBoards.getFirst().getWriterNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getFirst().getCommunityBoard().getCreatedAt()).isEqualTo(communityBoard2.getCreatedAt());
-        assertThat(communityBoards.getLast().getCommunityBoard().getId()).isEqualTo(communityBoard1.getId());
-        assertThat(communityBoards.getLast().getCommunityBoard().getTitle()).isEqualTo(communityBoard1.getTitle());
-        assertThat(communityBoards.getLast().getWriterNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getLast().getCommunityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
+        assertThat(communityBoards.getFirst().communityBoard().getId()).isEqualTo(communityBoard2.getId());
+        assertThat(communityBoards.getFirst().communityBoard().getTitle()).isEqualTo(communityBoard2.getTitle());
+        assertThat(communityBoards.getFirst().writerNickname()).isEqualTo(volunteer.getNickname());
+        assertThat(communityBoards.getFirst().communityBoard().getCreatedAt()).isEqualTo(communityBoard2.getCreatedAt());
+        assertThat(communityBoards.getLast().communityBoard().getId()).isEqualTo(communityBoard1.getId());
+        assertThat(communityBoards.getLast().communityBoard().getTitle()).isEqualTo(communityBoard1.getTitle());
+        assertThat(communityBoards.getLast().writerNickname()).isEqualTo(volunteer.getNickname());
+        assertThat(communityBoards.getLast().communityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
     }
 }

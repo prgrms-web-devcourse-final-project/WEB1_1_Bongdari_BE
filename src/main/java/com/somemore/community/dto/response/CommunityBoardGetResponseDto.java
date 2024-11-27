@@ -2,7 +2,7 @@ package com.somemore.community.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.community.domain.CommunityBoardWithNickname;
+import com.somemore.community.domain.CommunityBoardView;
 
 import java.time.LocalDateTime;
 
@@ -13,12 +13,12 @@ public record CommunityBoardGetResponseDto(
         String writerNickname,
         LocalDateTime createdAt
 ) {
-    public static CommunityBoardGetResponseDto fromEntity(CommunityBoardWithNickname board) {
+    public static CommunityBoardGetResponseDto fromEntity(CommunityBoardView board) {
         return new CommunityBoardGetResponseDto(
-                board.getCommunityBoard().getId(),
-                board.getCommunityBoard().getTitle(),
-                board.getWriterNickname(),
-                board.getCommunityBoard().getCreatedAt()
+                board.communityBoard().getId(),
+                board.communityBoard().getTitle(),
+                board.writerNickname(),
+                board.communityBoard().getCreatedAt()
         );
     }
 }
