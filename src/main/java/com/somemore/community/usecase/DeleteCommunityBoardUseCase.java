@@ -1,4 +1,4 @@
-package com.somemore.community.usecase.command;
+package com.somemore.community.usecase;
 
 import java.util.UUID;
 

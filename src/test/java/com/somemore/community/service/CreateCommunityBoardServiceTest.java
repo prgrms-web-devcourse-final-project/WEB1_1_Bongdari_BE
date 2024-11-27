@@ -1,4 +1,4 @@
-package com.somemore.community.service.command;
+package com.somemore.community.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

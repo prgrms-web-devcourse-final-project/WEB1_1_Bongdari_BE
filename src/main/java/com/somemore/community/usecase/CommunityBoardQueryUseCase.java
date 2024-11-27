@@ -1,4 +1,4 @@
-package com.somemore.community.usecase.query;
+package com.somemore.community.usecase;
 
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
