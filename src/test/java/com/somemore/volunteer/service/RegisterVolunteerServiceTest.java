@@ -1,4 +1,4 @@
-package com.somemore.volunteer.service.command;
+package com.somemore.volunteer.service;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
