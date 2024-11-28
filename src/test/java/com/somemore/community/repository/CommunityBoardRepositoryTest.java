@@ -4,6 +4,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityBoardView;
+import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class CommunityRepositoryTest extends IntegrationTestSupport {
+class CommunityBoardRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
