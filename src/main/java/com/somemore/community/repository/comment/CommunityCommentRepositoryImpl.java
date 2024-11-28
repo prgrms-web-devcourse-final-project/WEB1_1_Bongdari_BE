@@ -2,7 +2,6 @@ package com.somemore.community.repository.comment;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityComment;
-import com.somemore.community.domain.QCommunityBoard;
 import com.somemore.community.domain.QCommunityComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -12,7 +12,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-public class CommunityCommentRepositoryTest extends IntegrationTestSupport {
+class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     @Autowired
     CommunityCommentRepository communityCommentRepository;
 
