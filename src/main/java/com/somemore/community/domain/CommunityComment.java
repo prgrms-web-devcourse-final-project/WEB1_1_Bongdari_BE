@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-@Table(name = "Community_comment")
+@Table(name = "community_comment")
 public class CommunityComment extends BaseEntity {
 
     @Id
