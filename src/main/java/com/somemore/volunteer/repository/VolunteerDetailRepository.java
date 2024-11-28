@@ -1,11 +1,14 @@
 package com.somemore.volunteer.repository;
 
 import com.somemore.volunteer.domain.VolunteerDetail;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface VolunteerDetailRepository extends JpaRepository<VolunteerDetail, Long> {
+@Repository
+public interface VolunteerDetailRepository {
+    VolunteerDetail save(VolunteerDetail volunteerDetail);
     Optional<VolunteerDetail> findByVolunteerId(UUID volunteerId);
+    void deleteAllInBatch();
 }

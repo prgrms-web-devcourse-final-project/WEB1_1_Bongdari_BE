@@ -3,6 +3,7 @@ package com.somemore.volunteer.service;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
+import com.somemore.volunteer.repository.VolunteerDetailJpaRepository;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.usecase.RegisterVolunteerUseCase;
