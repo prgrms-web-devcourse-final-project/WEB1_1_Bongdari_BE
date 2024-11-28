@@ -115,7 +115,7 @@ def jacocoExcludePatterns = [
         '**/auth/**',
         '**/domain/*',
         '**/domains/*',
-        '**/*Fixture.class'
+        '**/fixture/*'
 ]
 
 def jacocoExcludePatternsForVerify = [
@@ -130,7 +130,7 @@ def jacocoExcludePatternsForVerify = [
         '*.auth.*',
         '*.domain.*',
         '*.domains.*',
-        '*.*Fixture*'
+        '*.fixture.*'
 ]
 
 jacocoTestReport {
