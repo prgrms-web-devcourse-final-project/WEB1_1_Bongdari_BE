@@ -5,6 +5,6 @@ import java.util.Optional;
 
 public interface RecruitBoardQueryUseCase {
 
-    Optional<RecruitBoard> findById(Long id);
+    RecruitBoard getById(Long id);
 
 }
