@@ -5,8 +5,7 @@ import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 import java.util.UUID;
 
 public interface CreateCommunityCommentUseCase {
-    Long CreateCommunityComment(
+    Long createCommunityComment(
             CommunityCommentCreateRequestDto requestDto,
-            UUID writerId,
-            Long parentCommunityId);
+            UUID writerId);
 }
