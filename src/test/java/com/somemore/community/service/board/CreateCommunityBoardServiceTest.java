@@ -1,11 +1,11 @@
-package com.somemore.community.service;
+package com.somemore.community.service.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
-import com.somemore.community.repository.CommunityBoardRepository;
+import com.somemore.community.repository.board.CommunityBoardRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

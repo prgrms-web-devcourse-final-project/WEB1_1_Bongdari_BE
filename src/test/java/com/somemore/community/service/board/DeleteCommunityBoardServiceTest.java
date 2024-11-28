@@ -1,13 +1,13 @@
-package com.somemore.community.service;
+package com.somemore.community.service.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
-import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.CreateCommunityBoardUseCase;
-import com.somemore.community.usecase.CommunityBoardQueryUseCase;
+import com.somemore.community.repository.board.CommunityBoardRepository;
+import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
+import com.somemore.community.usecase.board.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import org.assertj.core.api.ThrowableAssert;

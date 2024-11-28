@@ -1,32 +1,31 @@
-package com.somemore.community.service;
+package com.somemore.community.service.board;
 
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.DeleteCommunityBoardUseCase;
+import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
+import com.somemore.community.repository.board.CommunityBoardRepository;
+import com.somemore.community.usecase.board.UpdateCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
+
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import static com.somemore.global.exception.ExceptionMessage.*;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_COMMUNITY_BOARD;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
-class DeleteCommunityBoardService implements DeleteCommunityBoardUseCase {
+public class UpdateCommunityBoardService implements UpdateCommunityBoardUseCase {
 
     private final CommunityBoardRepository communityBoardRepository;
 
     @Override
-    public void deleteCommunityBoard(UUID writerId, Long id) {
-        CommunityBoard communityBoard = getCommunityBoardById(id);
-
+    public void updateCommunityBoard(CommunityBoardUpdateRequestDto requestDto, Long communityBoardId, UUID writerId, String imgUrl) {
+        CommunityBoard communityBoard = getCommunityBoardById(communityBoardId);
         validateWriter(communityBoard, writerId);
-
-        communityBoard.markAsDeleted();
+        communityBoard.updateWith(requestDto, imgUrl);
 
         communityBoardRepository.save(communityBoard);
     }
