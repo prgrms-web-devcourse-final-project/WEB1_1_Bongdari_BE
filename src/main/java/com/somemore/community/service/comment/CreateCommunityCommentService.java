@@ -4,11 +4,14 @@ import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
 import com.somemore.community.usecase.comment.CreateCommunityCommentUseCase;
+import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_COMMENT;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,12 +21,15 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
     private final CommunityCommentRepository communityCommentRepository;
 
     @Override
-    public Long CreateCommunityComment(CommunityCommentCreateRequestDto requestDto, UUID writerId, Long parentCommunityId) {
+    public Long createCommunityComment(CommunityCommentCreateRequestDto requestDto, UUID writerId) {
 
-        CommunityComment communityComment = requestDto.toEntity(writerId, parentCommunityId);
+        CommunityComment communityComment = requestDto.toEntity(writerId);
 
-        communityCommentRepository.save(communityComment);
+        if (communityComment.getParentCommentId() != null) {
+            communityCommentRepository.findById(communityComment.getParentCommentId())
+                    .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_COMMENT.getMessage()));
+        }
 
-        return communityComment.getId();
+        return communityCommentRepository.save(communityComment).getId();
     }
 }
