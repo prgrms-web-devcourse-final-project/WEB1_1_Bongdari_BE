@@ -119,7 +119,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(boards.size());
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(5);
 
         assertThat(result.getContent().get(0).recruitBoard().getCreatedAt())
@@ -149,7 +149,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getTitle())
@@ -180,7 +180,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getRecruitmentInfo()
@@ -213,7 +213,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getRecruitmentInfo()
@@ -245,7 +245,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getRecruitmentInfo()
@@ -279,7 +279,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getRecruitStatus()).isEqualTo(
@@ -326,7 +326,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(0);
+        assertThat(result.getTotalElements()).isZero();
         assertThat(result.getContent()).isEmpty();
 
     }
