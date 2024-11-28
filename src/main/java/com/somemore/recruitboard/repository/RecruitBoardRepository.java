@@ -1,8 +1,14 @@
 package com.somemore.recruitboard.repository;
 
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.mapping.RecruitBoardDetail;
+import com.somemore.recruitboard.domain.mapping.RecruitBoardWithCenter;
+import com.somemore.recruitboard.domain.mapping.RecruitBoardWithLocation;
+import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
+import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,8 +20,11 @@ public interface RecruitBoardRepository {
 
     Optional<RecruitBoard> findById(Long id);
 
-    List<RecruitBoard> findAll();
+    Optional<RecruitBoardWithLocation> findWithLocationById(Long id);
 
-    Page<RecruitBoard> findAllWithPaging(Pageable pageable);
+    Page<RecruitBoardWithCenter> findAllWithCenter(RecruitBoardSearchCondition condition);
 
+    Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition);
+
+    Page<RecruitBoard> findAllByCenterId(UUID centerId, Pageable pageable);
 }

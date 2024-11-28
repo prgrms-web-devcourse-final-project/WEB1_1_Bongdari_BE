@@ -1,10 +1,25 @@
 package com.somemore.recruitboard.usecase.query;
 
-import com.somemore.recruitboard.domain.RecruitBoard;
-import java.util.Optional;
+import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
+import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
+import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
+import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
+import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
+import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
+import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface RecruitBoardQueryUseCase {
 
-    RecruitBoard getById(Long id);
+    RecruitBoardResponseDto getById(Long id);
 
+    RecruitBoardWithLocationResponseDto getWithLocationById(Long id);
+
+    Page<RecruitBoardWithCenterResponseDto> getAllWithCenter(RecruitBoardSearchCondition condition);
+
+    Page<RecruitBoardDetailResponseDto> getRecruitBoardsNearby(
+        RecruitBoardNearByCondition condition);
+
+    Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId, Pageable pageable);
 }
