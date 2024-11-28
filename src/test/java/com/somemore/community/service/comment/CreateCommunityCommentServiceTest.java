@@ -88,7 +88,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
     @DisplayName("삭제된 댓글에 대댓글을 등록할 때 예외를 던진다.")
     @Test
-    void createCommunityCommentRelyWithDeletedParentId() {
+    void createCommunityCommentReplyWithDeletedParentId() {
 
         //given
         CommunityCommentCreateRequestDto replyDto = CommunityCommentCreateRequestDto.builder()
