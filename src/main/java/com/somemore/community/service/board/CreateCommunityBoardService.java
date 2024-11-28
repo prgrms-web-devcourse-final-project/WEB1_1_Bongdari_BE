@@ -1,9 +1,9 @@
-package com.somemore.community.service;
+package com.somemore.community.service.board;
 
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
-import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.CreateCommunityBoardUseCase;
+import com.somemore.community.repository.board.CommunityBoardRepository;
+import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

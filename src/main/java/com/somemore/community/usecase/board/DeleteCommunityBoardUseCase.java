@@ -1,4 +1,4 @@
-package com.somemore.community.usecase;
+package com.somemore.community.usecase.board;
 
 import java.util.UUID;
 

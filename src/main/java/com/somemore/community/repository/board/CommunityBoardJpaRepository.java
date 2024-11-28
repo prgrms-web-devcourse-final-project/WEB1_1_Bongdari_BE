@@ -1,4 +1,4 @@
-package com.somemore.community.repository;
+package com.somemore.community.repository.board;
 
 import com.somemore.community.domain.CommunityBoard;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,11 +1,11 @@
-package com.somemore.community.service;
+package com.somemore.community.service.board;
 
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityBoardView;
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
-import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.CommunityBoardQueryUseCase;
+import com.somemore.community.repository.board.CommunityBoardRepository;
+import com.somemore.community.usecase.board.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

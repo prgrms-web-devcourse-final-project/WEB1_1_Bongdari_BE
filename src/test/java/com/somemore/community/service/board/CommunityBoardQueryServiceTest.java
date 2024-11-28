@@ -1,4 +1,4 @@
-package com.somemore.community.service;
+package com.somemore.community.service.board;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
@@ -7,9 +7,9 @@ import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
-import com.somemore.community.repository.CommunityBoardRepository;
-import com.somemore.community.usecase.CreateCommunityBoardUseCase;
-import com.somemore.community.usecase.DeleteCommunityBoardUseCase;
+import com.somemore.community.repository.board.CommunityBoardRepository;
+import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
+import com.somemore.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.volunteer.domain.Volunteer;
