@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
+class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private CreateCommunityCommentService createCommunityCommentService;

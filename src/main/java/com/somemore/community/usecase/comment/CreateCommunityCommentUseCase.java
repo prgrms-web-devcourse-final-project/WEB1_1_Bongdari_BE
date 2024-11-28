@@ -1,6 +1,5 @@
 package com.somemore.community.usecase.comment;
 
-import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 
 import java.util.UUID;
