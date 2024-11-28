@@ -344,13 +344,13 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         Pageable pageable = getPageable();
 
         // when
-        Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(center.getId(),
+        Page<RecruitBoard> result = recruitBoardRepository.findAllByCenterId(center.getId(),
             pageable);
 
         // then
-        assertThat(boards).isNotEmpty();
-        assertThat(boards.getTotalElements()).isEqualTo(1);
-        assertThat(boards.getContent()).hasSize(1);
+        assertThat(result).isNotEmpty();
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent()).hasSize(1);
     }
 
     @DisplayName("잘못된 기관 아이디로 모집글 리스트를 조회하면 빈 리스트가 반환된다.")
@@ -361,11 +361,11 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         Pageable pageable = getPageable();
 
         // when
-        Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(centerId,
+        Page<RecruitBoard> results = recruitBoardRepository.findAllByCenterId(centerId,
             pageable);
 
         // then
-        assertThat(boards).isEmpty();
+        assertThat(results).isEmpty();
     }
 
     private Pageable getPageable() {
