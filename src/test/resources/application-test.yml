@@ -44,3 +44,17 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: test-access-key
+      secret-key: test-secret-key
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: somemore
+      base-url: https://somemore-image.s3.ap-northeast-2.amazonaws.com
+    stack:
+      auto: false
+
