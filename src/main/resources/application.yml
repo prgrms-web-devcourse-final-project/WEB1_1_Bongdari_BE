@@ -2,6 +2,20 @@ app:
   front-url: ${FRONT_URL}
   back-url: ${BACK_URL}
 
+# AWS S3
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ${BUCKET_REGION}
+    s3:
+      bucket: ${BUCKET_NAME}
+      base-url: ${IMG_BASE_URL}
+    stack:
+      auto: false
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -46,6 +60,12 @@ spring:
   web:
     locale: ko_KR
     locale-resolver: fixed
+
+  servlet:
+    multipart:
+      max-file-size: 8MB
+      max-request-size: 8MB
+
 
 #swagger
 springdoc:

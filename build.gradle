@@ -52,6 +52,9 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
+    // AWS
+    implementation(platform("software.amazon.awssdk:bom:2.29.20"))
+    implementation("software.amazon.awssdk:s3")
 
     // Web Layer
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -60,7 +63,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
-
 
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
