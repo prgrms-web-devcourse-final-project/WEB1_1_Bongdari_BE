@@ -1,5 +1,10 @@
 package com.somemore.global.common.utils;
 
+import static lombok.AccessLevel.PRIVATE;
+
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = PRIVATE)
 public class GeoUtils {
 
     private static final double EARTH_RADIUS = 6371.0;

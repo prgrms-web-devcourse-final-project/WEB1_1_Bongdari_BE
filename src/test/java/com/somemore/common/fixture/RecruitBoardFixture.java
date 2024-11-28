@@ -11,6 +11,9 @@ import java.util.UUID;
 
 public class RecruitBoardFixture {
 
+    private RecruitBoardFixture() {
+    }
+
     public static RecruitBoard createRecruitBoard() {
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(1);

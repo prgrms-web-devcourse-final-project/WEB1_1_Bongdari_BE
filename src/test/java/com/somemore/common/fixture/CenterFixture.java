@@ -4,6 +4,9 @@ import com.somemore.center.domain.Center;
 
 public class CenterFixture {
 
+    private CenterFixture() {
+    }
+
     public static Center createCenter() {
         return Center.builder()
             .name("센터 이름")

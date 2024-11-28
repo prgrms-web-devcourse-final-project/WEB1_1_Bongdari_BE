@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 
 public class LocationFixture {
 
+    private LocationFixture() {
+    }
+
     public static Location createLocation() {
         return Location.builder()
             .address("주소주소")
