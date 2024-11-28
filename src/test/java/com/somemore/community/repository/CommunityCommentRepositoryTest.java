@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +40,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         assertThat(savedComment.getParentCommentId()).isNull();
     }
 
-    @DisplayName("커뮤니티 게시글에 대댓글을 생성할 수 있다. (Repository)")
+    @DisplayName("댓글에 대댓글을 생성할 수 있다. (Repository)")
     @Test
     void createCommunityCommentReply() {
 
@@ -58,5 +60,30 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         assertThat(savedComment.getWriterId()).isEqualTo(writerId);
         assertThat(savedComment.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
         assertThat(savedComment.getParentCommentId()).isEqualTo(1L);
+    }
+
+    @DisplayName("댓글을 id로 조회할 수 있다. (Repository)")
+    @Test
+    void findCommunityCommentById() {
+
+        //given
+        UUID writerId = UUID.randomUUID();
+
+        CommunityComment communityComment = CommunityComment.builder()
+                .writerId(writerId)
+                .content("커뮤니티 댓글 테스트 내용")
+                .parentCommentId(null)
+                .build();
+
+        CommunityComment savedComment = communityCommentRepository.save(communityComment);
+
+        //when
+        Optional<CommunityComment> comment = communityCommentRepository.findById(savedComment.getId());
+
+        //then
+        assertThat(comment).isPresent();
+        assertThat(comment.get().getWriterId()).isEqualTo(writerId);
+        assertThat(comment.get().getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
+        assertThat(comment.get().getParentCommentId()).isNull();
     }
 }
