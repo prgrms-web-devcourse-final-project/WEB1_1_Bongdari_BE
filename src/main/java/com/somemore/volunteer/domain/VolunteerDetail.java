@@ -1,5 +1,6 @@
 package com.somemore.volunteer.domain;
 
+import com.somemore.global.common.BaseEntity;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "volunteer_detail")
-public class VolunteerDetail {
+public class VolunteerDetail extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
