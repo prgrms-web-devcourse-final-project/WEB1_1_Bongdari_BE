@@ -3,6 +3,7 @@ package com.somemore.imageupload.service;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.global.exception.ImageUploadException;
 import com.somemore.imageupload.dto.ImageUploadRequestDto;
+import com.somemore.imageupload.validator.ImageUploadValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
     @Mock
     private S3Client s3Client;
 
+    @Mock
+    private ImageUploadValidator imageUploadValidator;
+
     @InjectMocks
     private ImageUploadService imageUploadService;
 
@@ -33,8 +37,6 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUp() throws IOException {
-        imageUploadService = new ImageUploadService(s3Client);
-
         ReflectionTestUtils.setField(imageUploadService, "bucket", "test-bucket");
         ReflectionTestUtils.setField(imageUploadService, "baseUrl", "https://amazonaws.com/");
 

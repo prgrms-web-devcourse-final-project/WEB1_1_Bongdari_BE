@@ -4,6 +4,7 @@ import com.somemore.global.exception.ImageUploadException;
 import com.somemore.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.imageupload.util.ImageUploadUtils;
+import com.somemore.imageupload.validator.ImageUploadValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import static com.somemore.global.exception.ExceptionMessage.UPLOAD_FAILED;
 public class ImageUploadService implements ImageUploadUseCase {
 
     private final S3Client s3Client;
+    private final ImageUploadValidator imageUploadValidator;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -29,6 +31,8 @@ public class ImageUploadService implements ImageUploadUseCase {
 
     @Override
     public String uploadImage(ImageUploadRequestDto requestDto) {
+        imageUploadValidator.validateFileSize(requestDto.imageFile());
+        imageUploadValidator.validateFileType(requestDto.imageFile());
 
         String fileName = ImageUploadUtils.generateUniqueFileName(requestDto.imageFile().getOriginalFilename());
 

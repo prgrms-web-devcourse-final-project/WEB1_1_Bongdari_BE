@@ -17,6 +17,7 @@ public enum ExceptionMessage {
     UPLOAD_FAILED("파일 업로드에 실패했습니다."),
     INVALID_FILE_TYPE("지원하지 않는 파일 형식입니다."),
     FILE_SIZE_EXCEEDED("파일 크기가 허용된 한도를 초과했습니다."),
+    EMPTY_FILE("파일이 존재하지 않습니다.")
     ;
 
     private final String message;
