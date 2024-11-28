@@ -9,6 +9,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
+import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -27,17 +28,20 @@ class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;
 
+    @Autowired
+    private RecruitBoardJpaRepository recruitBoardJpaRepository;
+
     private RecruitBoard recruitBoard;
 
     @BeforeEach
     void setUp() {
         recruitBoard = createRecruitBoard();
-        recruitBoardRepository.saveAndFlush(recruitBoard);
+        recruitBoardRepository.save(recruitBoard);
     }
 
     @AfterEach
     void tearDown() {
-        recruitBoardRepository.deleteAllInBatch();
+        recruitBoardJpaRepository.deleteAllInBatch();
     }
 
     @DisplayName("봉사 모집글 식별값으로 모집글을 삭제할 수 있다")
