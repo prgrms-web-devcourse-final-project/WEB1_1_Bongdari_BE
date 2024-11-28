@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository
@@ -29,6 +30,18 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
                 .where(communityComment.id.eq(id)
                         .and(communityComment.deleted.eq(false)))
                 .fetchOne());
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        QCommunityComment communityComment = QCommunityComment.communityComment;
+
+        return queryFactory
+                .selectOne()
+                .from(communityComment)
+                .where(communityComment.id.eq(id)
+                        .and(communityComment.deleted.eq(false)))
+                .fetchFirst() != null;
     }
 
     @Override

@@ -86,4 +86,26 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         assertThat(comment.get().getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
         assertThat(comment.get().getParentCommentId()).isNull();
     }
+
+    @DisplayName("댓글 id로 댓글이 존재하는지 확인할 수 있다.")
+    @Test
+    void existsById() {
+
+        //given
+        UUID writerId = UUID.randomUUID();
+
+        CommunityComment communityComment = CommunityComment.builder()
+                .writerId(writerId)
+                .content("커뮤니티 댓글 테스트 내용")
+                .parentCommentId(null)
+                .build();
+
+        CommunityComment savedComment = communityCommentRepository.save(communityComment);
+
+        //when
+        boolean isExist = communityCommentRepository.existsById(savedComment.getId());
+
+        //then
+        assertThat(isExist).isTrue();
+    }
 }

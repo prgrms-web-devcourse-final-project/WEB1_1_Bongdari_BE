@@ -30,10 +30,8 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
     }
 
     private void validateParentCommentExists(Long parentCommentId) {
-        if (parentCommentId != null) {
-            communityCommentRepository.findById(parentCommentId)
-                    .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_COMMENT.getMessage()));
+        if (parentCommentId != null && !communityCommentRepository.existsById(parentCommentId)) {
+            throw new BadRequestException(NOT_EXISTS_COMMUNITY_COMMENT.getMessage());
         }
     }
-
 }
