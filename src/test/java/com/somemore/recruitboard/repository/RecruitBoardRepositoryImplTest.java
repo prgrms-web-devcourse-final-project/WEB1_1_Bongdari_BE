@@ -8,6 +8,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
@@ -21,32 +22,51 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Autowired
     private RecruitBoardRepositoryImpl recruitBoardRepository;
 
-    private RecruitBoard recruitBoard;
+    @Autowired
+    private RecruitBoardJpaRepository recruitBoardJpaRepository;
+
+    private RecruitBoard deletedRecruitBoard;
 
     @BeforeEach
     void setUp() {
-        recruitBoard = createRecruitBoard();
-        recruitBoardRepository.saveAndFlush(recruitBoard);
-        recruitBoard.markAsDeleted();
-        recruitBoardRepository.saveAndFlush(recruitBoard);
+        deletedRecruitBoard = createRecruitBoard();
+        recruitBoardRepository.save(deletedRecruitBoard);
+        deletedRecruitBoard.markAsDeleted();
+        recruitBoardRepository.save(deletedRecruitBoard);
     }
 
     @AfterEach
     void tearDown() {
-        recruitBoardRepository.deleteAllInBatch();
+        recruitBoardJpaRepository.deleteAllInBatch();
     }
 
     @DisplayName("논리 삭제된 데이터를 id로 조회시 빈 Optional 반환된다")
     @Test
     void findById() {
         // given
-        Long deletedId = recruitBoard.getId();
+        Long deletedId = deletedRecruitBoard.getId();
 
         // when
         Optional<RecruitBoard> findBoard = recruitBoardRepository.findById(deletedId);
 
         // then
         assertThat(findBoard).isEmpty();
+    }
+
+    @DisplayName("논리 삭제된 데이터는 findAll()로 조회하지 않는다.")
+    @Test
+    void logicallyDeletedDataIsNotFetchedByGetAll() {
+        // given
+        RecruitBoard notDeletedRecruitBoard = createRecruitBoard();
+        recruitBoardRepository.save(notDeletedRecruitBoard);
+
+        // when
+        List<RecruitBoard> allBoards = recruitBoardRepository.findAll();
+
+        // then
+        assertThat(allBoards).isNotEmpty();
+        assertThat(allBoards).hasSize(1);
+        assertThat(allBoards.getFirst().getId()).isEqualTo(notDeletedRecruitBoard.getId());
     }
 
     private static RecruitBoard createRecruitBoard() {

@@ -1,17 +1,19 @@
 package com.somemore.recruitboard.service.query;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
-import com.somemore.recruitboard.repository.RecruitBoardRepository;
+import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
+import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,19 +27,19 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
     private RecruitBoardQueryService recruitBoardQueryService;
 
     @Autowired
-    private RecruitBoardRepository recruitBoardRepository;
+    private RecruitBoardJpaRepository recruitBoardJpaRepository;
 
     private RecruitBoard recruitBoard;
 
     @BeforeEach
     void setUp() {
         recruitBoard = createRecruitBoard();
-        recruitBoardRepository.saveAndFlush(recruitBoard);
+        recruitBoardJpaRepository.saveAndFlush(recruitBoard);
     }
 
     @AfterEach
     void tearDown() {
-        recruitBoardRepository.deleteAllInBatch();
+        recruitBoardJpaRepository.deleteAllInBatch();
     }
 
     @DisplayName("존재하는 ID가 주어지면 RecruitBoard 엔티티를 조회할 수 있다")
@@ -47,13 +49,13 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         Long id = recruitBoard.getId();
 
         // when
-        RecruitBoard board = recruitBoardQueryService.getById(id);
+        RecruitBoardResponseDto dto = recruitBoardQueryService.getById(id);
 
         // then
-        assertThat(board.getId()).isEqualTo(recruitBoard.getId());
+        assertThat(dto.id()).isEqualTo(recruitBoard.getId());
     }
 
-    @DisplayName("존재하지 않는 ID가 주어지면 빈 Optional 반환한다.")
+    @DisplayName("존재하지 않는 ID가 주어지면 에러가 발생한다.")
     @Test
     void getByIdWithDoesNotExistId() {
         // given
@@ -64,7 +66,24 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(
             () -> recruitBoardQueryService.getById(wrongId)
         ).isInstanceOf(BadRequestException.class)
-            .hasMessage(ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD.getMessage());
+            .hasMessage(NOT_EXISTS_RECRUIT_BOARD.getMessage());
+    }
+
+    @DisplayName("모든 데이터를 조회할 수 있다")
+    @Test
+    void getAll() {
+        // given
+        RecruitBoard board = createRecruitBoard();
+        recruitBoardJpaRepository.saveAndFlush(board);
+        board.markAsDeleted();
+        recruitBoardJpaRepository.saveAndFlush(board);
+
+        // when
+        List<RecruitBoardResponseDto> responseDtos = recruitBoardQueryService.getAll();
+
+        // then
+        assertThat(responseDtos).hasSize(1);
+        assertThat(responseDtos.getFirst().id()).isEqualTo(recruitBoard.getId());
     }
 
     private static RecruitBoard createRecruitBoard() {
