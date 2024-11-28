@@ -1,6 +1,6 @@
 package com.somemore.auth.jwt.service;
 
-import com.somemore.auth.cookie.SetCookieUseCase;
+import com.somemore.auth.cookie.CookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
 import com.somemore.auth.jwt.exception.JwtErrorType;
@@ -24,7 +24,7 @@ public class JwtService implements JwtUseCase {
     private final JwtParser jwtParser;
     private final JwtValidator jwtValidator;
     private final JwtRefresher jwtRefresher;
-    private final SetCookieUseCase setCookieUseCase;
+    private final CookieUseCase cookieUseCase;
 
     @Override
     public EncodedToken generateToken(String userId, String role, TokenType tokenType) {
@@ -48,7 +48,7 @@ public class JwtService implements JwtUseCase {
     private void handleJwtExpiredException(JwtException e, EncodedToken accessToken, HttpServletResponse response) {
         if (e.getErrorType() == JwtErrorType.EXPIRED_TOKEN) {
             EncodedToken refreshedToken = jwtRefresher.refreshAccessToken(accessToken);
-            setCookieUseCase.setToken(response, refreshedToken.value(), TokenType.ACCESS);
+            cookieUseCase.setAccessToken(response, refreshedToken.value());
             return;
         }
         throw e;

@@ -1,4 +1,4 @@
-package com.somemore.volunteer.usecase.query;
+package com.somemore.volunteer.usecase;
 
 import java.util.UUID;
 

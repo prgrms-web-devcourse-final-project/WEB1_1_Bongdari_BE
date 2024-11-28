@@ -1,6 +1,5 @@
 package com.somemore.auth.jwt.filter;
 
-import com.somemore.auth.UserRole;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.exception.JwtErrorType;
 import com.somemore.auth.jwt.exception.JwtException;

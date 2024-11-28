@@ -1,4 +1,4 @@
-package com.somemore.auth.jwt.usecase.command;
+package com.somemore.auth.jwt.usecase;
 
 import com.somemore.auth.jwt.domain.EncodedToken;
 

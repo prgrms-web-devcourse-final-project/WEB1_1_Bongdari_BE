@@ -1,7 +1,7 @@
-package com.somemore.volunteer.service.query;
+package com.somemore.volunteer.service;
 
 import com.somemore.volunteer.repository.VolunteerRepository;
-import com.somemore.volunteer.usecase.query.FindVolunteerIdUseCase;
+import com.somemore.volunteer.usecase.FindVolunteerIdUseCase;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
