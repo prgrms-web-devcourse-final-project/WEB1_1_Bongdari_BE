@@ -15,6 +15,7 @@ class DefaultImageUploadValidatorTest {
 
     @BeforeEach
     void setUp() {
+        // given
         imageUploadValidator = new DefaultImageUploadValidator();
     }
 
@@ -24,47 +25,62 @@ class DefaultImageUploadValidatorTest {
         //given
         MultipartFile emptyFile = new MockMultipartFile("file", new byte[0]);
 
-        //when&then
-        assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileSize(emptyFile));
+        //when
+        Throwable exception = assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileSize(emptyFile));
+
+        //then
+        assertEquals(ImageUploadException.class, exception.getClass());
     }
 
     @Test
     @DisplayName("파일 크기가 최대 8MB를 초과하는 경우, 예외가 발생한다.")
     void shouldThrowExceptionWhenFileSizeExceeded() {
-        //given
+        // given
         MultipartFile largeFile = new MockMultipartFile("file", "largeImage.jpg", "image/jpeg", new byte[9 * 1024 * 1024]);
 
-        //when&then
-        assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileSize(largeFile));
+        // when
+        Throwable exception = assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileSize(largeFile));
+
+        // then
+        assertEquals(ImageUploadException.class, exception.getClass());
     }
 
     @Test
-    @DisplayName("유효한 이미지 타입(JPEG) 파일이 있을 경우, 검증에 통과한다.")
+    @DisplayName("유효한 이미지 타입(JPEG) 파일은, 검증에 통과한다.")
     void shouldNotThrowExceptionWhenFileTypeIsValidJpeg() {
-        //given
+        // given
         MultipartFile validFile = new MockMultipartFile("file", "validImage.jpg", "image/jpeg", new byte[1024]);
 
-        //when&then
+        // when
+        imageUploadValidator.validateFileType(validFile);
+
+        // then
         assertDoesNotThrow(() -> imageUploadValidator.validateFileType(validFile));
     }
 
     @Test
     @DisplayName("유효하지 않은 이미지 타입 파일이 있을 경우, 예외가 발생한다.")
     void shouldThrowExceptionWhenFileTypeIsInvalid() {
-        //given
+        // given
         MultipartFile invalidFile = new MockMultipartFile("file", "invalidFile.pdf", "application/pdf", new byte[1024]);
 
-        //when&then
-        assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileType(invalidFile));
+        // when
+        Throwable exception = assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileType(invalidFile));
+
+        // then
+        assertEquals(ImageUploadException.class, exception.getClass());
     }
 
     @Test
     @DisplayName("파일 타입이 올바르지 않을 경우, 예외가 발생한다.")
     void shouldThrowExceptionWhenFileTypeIsNull() {
-        //given
+        // given
         MultipartFile nullContentTypeFile = new MockMultipartFile("file", "noContentTypeFile.jpg", null, new byte[1024]);
 
-        //when&then
-        assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileType(nullContentTypeFile));
+        // when
+        Throwable exception = assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileType(nullContentTypeFile));
+
+        // then
+        assertEquals(ImageUploadException.class, exception.getClass());
     }
 }

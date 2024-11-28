@@ -2,10 +2,12 @@ package com.somemore.imageupload.util;
 
 import java.util.UUID;
 
-public final class ImageUploadUtils {
+import static com.somemore.global.exception.ExceptionMessage.INSTANTIATION_NOT_ALLOWED;
+
+public class ImageUploadUtils {
 
     private ImageUploadUtils() {
-        throw new UnsupportedOperationException("인스턴스화 할 수 없는 클래스 입니다.");
+        throw new UnsupportedOperationException(INSTANTIATION_NOT_ALLOWED.getMessage());
     }
 
     public static String generateUniqueFileName(String originalFileName) {
@@ -14,7 +16,7 @@ public final class ImageUploadUtils {
         return uuid + fileExtension;
     }
 
-    public static String extractFileExtension(String fileName) {
+    private static String extractFileExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 

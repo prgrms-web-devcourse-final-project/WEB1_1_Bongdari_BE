@@ -3,9 +3,25 @@ package com.somemore.imageupload.util;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ImageUploadUtilsTest {
+
+    @Test
+    void privateConstructorShouldThrowException() throws Exception {
+        // given
+        Constructor<ImageUploadUtils> constructor = ImageUploadUtils.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        // when
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class, constructor::newInstance);
+
+        // then
+        assertThrows(UnsupportedOperationException.class, () -> { throw exception.getCause(); });
+    }
 
     @DisplayName("이미지 업로드시 유일한 이미지 이름을 만들어줄 수 있다.")
     @Test
@@ -21,18 +37,21 @@ class ImageUploadUtilsTest {
         assertNotEquals(fileName, uniqueName);
     }
 
-    @DisplayName("이미지의 확장자를 검증할 수 있다.")
+    @DisplayName("유니크한 파일 이름을 생성할 때 UUID는 정상적으로 생성된다.")
     @Test
-    void testExtractFileExtension() {
-        //given
-        String fileName = "example.jpg";
+    void testGenerateUniqueFileName_uuid() {
+        // given
+        String fileName = "image.png";
 
-        //when
-        String extension = ImageUploadUtils.extractFileExtension(fileName);
+        // when
+        String uniqueName = ImageUploadUtils.generateUniqueFileName(fileName);
 
-        //then
-        assertEquals(".jpg", extension);
+        // then
+        assertNotNull(uniqueName);
+        assertTrue(uniqueName.contains("-"));
+        assertTrue(uniqueName.endsWith(".png"));
     }
+
 
     @DisplayName("이미지의 주소를 반환할 수 있다.")
     @Test
@@ -47,4 +66,19 @@ class ImageUploadUtilsTest {
         //then
         assertEquals("https://amazonaws.com/unique-image.png", url);
     }
+
+    @DisplayName("baseUrl이 빈 문자열일 경우 URL을 생성할 수 있다.")
+    @Test
+    void testGenerateS3Url_emptyBaseUrl() {
+        // given
+        String baseUrl = "";
+        String fileName = "unique-image.png";
+
+        // when
+        String url = ImageUploadUtils.generateS3Url(baseUrl, fileName);
+
+        // then
+        assertEquals("/unique-image.png", url);
+    }
+
 }

@@ -12,7 +12,7 @@ cloud:
       static: ${BUCKET_REGION}
     s3:
       bucket: ${BUCKET_NAME}
-      base-url: ${BASE_URL}
+      base-url: ${IMG_BASE_URL}
     stack:
       auto: false
 
