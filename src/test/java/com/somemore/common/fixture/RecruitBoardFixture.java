@@ -60,7 +60,7 @@ public class RecruitBoardFixture {
         return RecruitBoard.builder()
             .centerId(UUID.randomUUID())
             .locationId(LOCATION_ID)
-            .title(TITLE)
+            .title(title)
             .content(CONTENT)
             .imgUrl(IMG_URL)
             .recruitmentInfo(recruitmentInfo)
