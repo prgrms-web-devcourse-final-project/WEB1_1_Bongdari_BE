@@ -1,4 +1,4 @@
-package com.somemore.community.repository;
+package com.somemore.community.repository.board;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository
-public class CommunityRepositoryImpl implements CommunityBoardRepository {
+public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
     private final JPAQueryFactory queryFactory;
     private final CommunityBoardJpaRepository communityBoardJpaRepository;
