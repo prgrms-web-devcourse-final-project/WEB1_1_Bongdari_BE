@@ -1,7 +1,5 @@
 package com.somemore.volunteer.service;
 
-import com.somemore.volunteer.domain.Volunteer;
-import com.somemore.volunteer.dto.response.VolunteerForCommunityResponseDto;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.usecase.FindVolunteerIdUseCase;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,12 +28,5 @@ public class FindVolunteerIdService implements FindVolunteerIdUseCase {
     @Override
     public String getNicknameById(UUID id) {
         return volunteerRepository.findNicknameById(id);
-    }
-
-    @Override
-    public VolunteerForCommunityResponseDto getVolunteerDetailForCommunity(UUID id) {
-        Volunteer volunteer = volunteerRepository.findById(id);
-
-        return VolunteerForCommunityResponseDto.fromEntity(volunteer);
     }
 }

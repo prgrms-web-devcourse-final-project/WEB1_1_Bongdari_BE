@@ -22,11 +22,6 @@ public class VolunteerRepositoryImpl implements VolunteerRepository{
     }
 
     @Override
-    public Volunteer findById(UUID id) {
-        return volunteerJpaRepository.findById(id);
-    }
-
-    @Override
     public String findNicknameById(UUID id) {
         QVolunteer volunteer = QVolunteer.volunteer;
 

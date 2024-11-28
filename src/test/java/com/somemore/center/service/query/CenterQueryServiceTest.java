@@ -118,30 +118,4 @@ class CenterQueryServiceTest extends IntegrationTestSupport {
         // then
         assertThatCode(callable).doesNotThrowAnyException();
     }
-
-    @DisplayName("센터의 id로 name을 조회한다.")
-    @Test
-    void getNameById() {
-
-        //given
-        Center center = Center.create(
-                "기본 기관 이름",
-                "010-1234-5678",
-                "http://example.com/image.jpg",
-                "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
-        );
-
-        Center savedCenter = centerRepository.save(center);
-
-        //when
-        String name = centerQueryService.getNameById(savedCenter.getId());
-
-        //then
-        assertThat(name).isEqualTo("기본 기관 이름");
-
-    }
-
 }

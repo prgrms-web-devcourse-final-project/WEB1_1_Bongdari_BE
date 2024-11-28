@@ -1,24 +1,21 @@
 package com.somemore.community.service;
 
-import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.community.domain.CommunityBoard;
+import com.somemore.community.domain.CommunityBoardView;
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
-import com.somemore.community.dto.response.WriterDetailDto;
 import com.somemore.community.repository.CommunityBoardRepository;
 import com.somemore.community.usecase.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.volunteer.dto.response.VolunteerForCommunityResponseDto;
-import com.somemore.volunteer.usecase.FindVolunteerIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
-
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,54 +23,29 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNIT
 public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     private final CommunityBoardRepository communityBoardRepository;
-    private final CenterQueryUseCase centerQueryUseCase;
-    private final FindVolunteerIdUseCase findVolunteerIdUseCase;
 
     @Override
     public List<CommunityBoardGetResponseDto> getCommunityBoards() {
-        List<CommunityBoard> boards = communityBoardRepository.getCommunityBoards();
-
-        return boards.stream()
-                .map(board -> {
-                    String writerNickname = getWriterNickname(board.getWriterId());
-                    return CommunityBoardGetResponseDto.fromEntity(board, writerNickname);
-                })
-                .toList();
+        List<CommunityBoardView> boards = communityBoardRepository.getCommunityBoards();
+        return mapEntitiesToDtos(boards, CommunityBoardGetResponseDto::fromEntity);
     }
 
     @Override
     public List<CommunityBoardGetResponseDto> getCommunityBoardsByWriterId(UUID writerId) {
-        List<CommunityBoard> boards = communityBoardRepository.findByWriterId(writerId);
-        String writerNickname = getWriterNickname(writerId);
-
-        return boards.stream()
-                .map(board -> CommunityBoardGetResponseDto.fromEntity(board, writerNickname))
-                .toList();
+        List<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId);
+        return mapEntitiesToDtos(boards, CommunityBoardGetResponseDto::fromEntity);
     }
 
     @Override
     public CommunityBoardGetDetailResponseDto getCommunityBoardDetail(Long id) {
         CommunityBoard board = communityBoardRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
-
-        return CommunityBoardGetDetailResponseDto.fromEntity(board, getWriterDetail(board.getWriterId()));
+        return CommunityBoardGetDetailResponseDto.fromEntity(board);
     }
 
-    private String getWriterNickname(UUID writerId) {
-        String nickname = findVolunteerIdUseCase.getNicknameById(writerId);
-
-        if (nickname == null) {
-            nickname = centerQueryUseCase.getNameById(writerId);
-        }
-        return nickname;
-    }
-
-    private WriterDetailDto getWriterDetail(UUID writerId) {
-        VolunteerForCommunityResponseDto volunteer = findVolunteerIdUseCase.getVolunteerDetailForCommunity(writerId);
-
-        if (volunteer == null) {
-            return centerQueryUseCase.getCenterDetailForCommunity(writerId);
-        }
-        return volunteer;
+    private <T, R> List<R> mapEntitiesToDtos(List<T> entities, Function<T, R> mapper) {
+        return entities.stream()
+                .map(mapper)
+                .toList();
     }
 }
