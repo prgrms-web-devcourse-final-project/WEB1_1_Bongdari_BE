@@ -1,5 +1,6 @@
 package com.somemore.community.domain;
 
+import com.somemore.community.dto.request.CommunityCommentUpdateRequestDto;
 import com.somemore.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -41,5 +42,9 @@ public class CommunityComment extends BaseEntity {
 
     public boolean isWriter(UUID writerId) {
         return this.writerId.equals(writerId);
+    }
+
+    public void updateWith(CommunityCommentUpdateRequestDto dto) {
+        this.content = dto.content();
     }
 }
