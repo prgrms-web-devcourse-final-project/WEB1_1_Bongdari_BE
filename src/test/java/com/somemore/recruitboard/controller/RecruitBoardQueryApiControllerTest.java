@@ -29,7 +29,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-class RecruitBoardQueryControllerTest extends ControllerTestSupport {
+class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
 
     @Autowired
     private MockMvc mockMvc;

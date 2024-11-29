@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
-public class RecruitBoardQueryController {
+public class RecruitBoardQueryApiController {
 
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
 
