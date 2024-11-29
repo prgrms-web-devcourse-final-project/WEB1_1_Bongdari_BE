@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/interest-center")
 @Tag(name = "Interest Center Command API", description = "관심 기관의 등록과 취소 API를 제공합니다")
 public class InterestCenterCommandApiController {
 
@@ -21,7 +20,7 @@ public class InterestCenterCommandApiController {
     private final CancelInterestCenterUseCase cancelInterestCenterUseCase;
 
     @Operation(summary = "관심기관 등록 API")
-    @PostMapping()
+    @PostMapping("/api/interest-center")
     public ApiResponse<RegisterInterestCenterResponseDto> registerInterestCenter(@Valid @RequestBody RegisterInterestCenterRequestDto requestDto) {
 
         RegisterInterestCenterResponseDto responseDto = registerInterestCenterUseCase.registerInterestCenter(requestDto);
@@ -30,7 +29,7 @@ public class InterestCenterCommandApiController {
     }
 
     @Operation(summary = "관심기관 취소 API")
-    @DeleteMapping("/{interest-center-id}")
+    @DeleteMapping("/api/interest-center/{interest-center-id}")
     public ApiResponse<String> deleteInterestCenter(@PathVariable("interest-center-id") Long interestCenterId) {
 
         cancelInterestCenterUseCase.cancelInterestCenter(interestCenterId);
