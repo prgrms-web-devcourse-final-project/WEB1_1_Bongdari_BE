@@ -48,7 +48,7 @@ public class RecruitBoardQueryController {
     @GetMapping("/recruit-boards")
     @Operation(summary = "전체 모집글 조회", description = "모든 봉사 모집글 목록을 조회합니다.")
     public ApiResponse<Page<RecruitBoardWithCenterResponseDto>> getAll(
-        @PageableDefault(size = 10, page = 0, sort = "created_at", direction = DESC)
+        @PageableDefault(sort = "created_at", direction = DESC)
         Pageable pageable
     ) {
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
@@ -65,7 +65,7 @@ public class RecruitBoardQueryController {
     @GetMapping("/recruit-boards/search")
     @Operation(summary = "모집글 검색 조회", description = "검색 조건을 기반으로 모집글을 조회합니다.")
     public ApiResponse<Page<RecruitBoardWithCenterResponseDto>> getAllBySearch(
-        @PageableDefault(size = 10, page = 0, sort = "created_at", direction = DESC) Pageable pageable,
+        @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
         @RequestParam(required = false) String keyword,
         @RequestParam(required = false) VolunteerType type,
         @RequestParam(required = false) String region,
