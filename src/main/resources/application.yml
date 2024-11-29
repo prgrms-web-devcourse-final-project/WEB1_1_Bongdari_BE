@@ -101,3 +101,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+default:
+  image:
+    url: ${DEFAULT_IMG_URL}
