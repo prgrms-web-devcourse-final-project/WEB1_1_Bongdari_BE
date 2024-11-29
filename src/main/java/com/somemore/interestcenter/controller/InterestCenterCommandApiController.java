@@ -35,8 +35,7 @@ public class InterestCenterCommandApiController {
 
         cancelInterestCenterUseCase.cancelInterestCenter(interestCenterId);
 
-        return ApiResponse.okWithoutData("관심 기관 취소 성공");
+        return ApiResponse.ok("관심 기관 취소 성공");
     }
-
 
 }

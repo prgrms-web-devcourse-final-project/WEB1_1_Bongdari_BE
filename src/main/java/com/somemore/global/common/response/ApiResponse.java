@@ -15,11 +15,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(status, message, data);
     }
 
-    public static ApiResponse<?> ok(String message) {
-        return new ApiResponse<>(200, message, "");
-    }
-
-    public static ApiResponse<String> okWithoutData(String message) {
+    public static ApiResponse<String> ok(String message) {
         return new ApiResponse<>(200, message, "");
     }
 
