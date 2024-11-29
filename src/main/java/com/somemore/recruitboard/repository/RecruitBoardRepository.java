@@ -6,9 +6,12 @@ import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
+
 import java.util.List;
+
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 
 public interface RecruitBoardRepository {
@@ -26,4 +29,6 @@ public interface RecruitBoardRepository {
     Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition);
 
     Page<RecruitBoard> findAllByCenterId(UUID centerId, RecruitBoardSearchCondition condition);
+
+    List<Long> findNotCompletedIdsByCenterId(UUID centerId);
 }
