@@ -7,7 +7,7 @@ import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.domain.VolunteerType;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardWithLocation;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

@@ -5,9 +5,9 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardDetail;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardWithCenter;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardWithLocation;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;

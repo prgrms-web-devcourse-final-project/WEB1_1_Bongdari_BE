@@ -1,9 +1,9 @@
 package com.somemore.recruitboard.repository;
 
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardDetail;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardWithCenter;
-import com.somemore.recruitboard.domain.mapping.RecruitBoardWithLocation;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
+import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import java.util.List;

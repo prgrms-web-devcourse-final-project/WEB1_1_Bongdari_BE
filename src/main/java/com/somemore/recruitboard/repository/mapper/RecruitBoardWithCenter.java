@@ -1,4 +1,4 @@
-package com.somemore.recruitboard.domain.mapping;
+package com.somemore.recruitboard.repository.mapper;
 
 import com.somemore.recruitboard.domain.RecruitBoard;
 
