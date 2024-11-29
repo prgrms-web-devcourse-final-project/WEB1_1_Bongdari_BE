@@ -8,7 +8,6 @@ import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface RecruitBoardQueryUseCase {
 
@@ -21,5 +20,6 @@ public interface RecruitBoardQueryUseCase {
     Page<RecruitBoardDetailResponseDto> getRecruitBoardsNearby(
         RecruitBoardNearByCondition condition);
 
-    Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId, Pageable pageable);
+    Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
+        RecruitBoardSearchCondition condition);
 }

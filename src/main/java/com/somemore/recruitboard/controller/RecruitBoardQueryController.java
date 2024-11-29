@@ -116,11 +116,25 @@ public class RecruitBoardQueryController {
     @Operation(summary = "특정 기관 모집글 조회", description = "특정 기관의 봉사 모집글을 조회합니다.")
     public ApiResponse<Page<RecruitBoardResponseDto>> getRecruitBoardsByCenterId(
         @PathVariable UUID centerId,
-        @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable
+        @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) VolunteerType type,
+        @RequestParam(required = false) String region,
+        @RequestParam(required = false) Boolean admitted,
+        @RequestParam(required = false) RecruitStatus status
     ) {
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+            .keyword(keyword)
+            .type(type)
+            .region(region)
+            .admitted(admitted)
+            .status(status)
+            .pageable(pageable)
+            .build();
+
         return ApiResponse.ok(
             200,
-            recruitBoardQueryUseCase.getRecruitBoardsByCenterId(centerId, pageable),
+            recruitBoardQueryUseCase.getRecruitBoardsByCenterId(centerId, condition),
             "기관 봉사 활동 모집글 조회 성공"
         );
     }

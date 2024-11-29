@@ -10,8 +10,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.QCenter;
-import com.somemore.location.utils.GeoUtils;
 import com.somemore.location.domain.QLocation;
+import com.somemore.location.utils.GeoUtils;
 import com.somemore.recruitboard.domain.QRecruitBoard;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitStatus;
@@ -55,7 +55,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
         RecruitBoard result = queryFactory
             .selectFrom(recruitBoard)
-            .where(isNotDeleted(recruitBoard).and(recruitBoard.id.eq(id)))
+            .where(isNotDeleted().and(idEq(id)))
             .fetchOne();
 
         return Optional.ofNullable(result);
@@ -71,7 +71,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                     getRecruitBoardWithLocationConstructorExpression(recruitBoard, location))
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
-                .where(isNotDeleted(recruitBoard).and(recruitBoard.id.eq(id)))
+                .where(isNotDeleted().and(idEq(id)))
                 .fetchOne());
     }
 
@@ -81,7 +81,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         QCenter center = QCenter.center;
 
         Pageable pageable = condition.pageable();
-        BooleanExpression predicate = isNotDeleted(recruitBoard)
+        BooleanExpression predicate = isNotDeleted()
             .and(keywordEq(condition.keyword()))
             .and(volunteerTypeEq(condition.type()))
             .and(regionEq(condition.region()))
@@ -114,7 +114,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
         Pageable pageable = condition.pageable();
 
-        BooleanExpression predicate = isNotDeleted(recruitBoard)
+        BooleanExpression predicate = isNotDeleted()
             .and(locationBetween(condition))
             .and(keywordEq(condition.keyword()));
 
@@ -140,10 +140,18 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public Page<RecruitBoard> findAllByCenterId(UUID centerId, Pageable pageable) {
+    public Page<RecruitBoard> findAllByCenterId(UUID centerId,
+        RecruitBoardSearchCondition condition) {
         QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-        BooleanExpression predicate = isNotDeleted(recruitBoard)
-            .and(recruitBoard.centerId.eq(centerId));
+
+        Pageable pageable = condition.pageable();
+        BooleanExpression predicate = isNotDeleted()
+            .and(centerIdEq(centerId))
+            .and(keywordEq(condition.keyword()))
+            .and(volunteerTypeEq(condition.type()))
+            .and(regionEq(condition.region()))
+            .and(admittedEq(condition.admitted()))
+            .and(statusEq(condition.status()));
 
         List<RecruitBoard> content = queryFactory
             .selectFrom(recruitBoard)
@@ -161,48 +169,16 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-    private BooleanExpression isNotDeleted(QRecruitBoard recruitBoard) {
+    private static BooleanExpression idEq(Long id) {
+        return recruitBoard.id.eq(id);
+    }
+
+    private static BooleanExpression centerIdEq(UUID centerId) {
+        return recruitBoard.centerId.eq(centerId);
+    }
+
+    private BooleanExpression isNotDeleted() {
         return recruitBoard.deleted.eq(false);
-    }
-
-    private static ConstructorExpression<RecruitBoardWithCenter> getRecruitBoardWithCenterConstructorExpression(
-        QRecruitBoard recruitBoard, QCenter center) {
-        return Projections.constructor(RecruitBoardWithCenter.class,
-            recruitBoard, center.name);
-    }
-
-    private static ConstructorExpression<RecruitBoardWithLocation> getRecruitBoardWithLocationConstructorExpression(
-        QRecruitBoard recruitBoard, QLocation location) {
-        return Projections.constructor(RecruitBoardWithLocation.class,
-            recruitBoard, location.address, location.latitude, location.longitude);
-    }
-
-    private static ConstructorExpression<RecruitBoardDetail> getRecruitBoardDetailConstructorExpression(
-        QRecruitBoard recruitBoard, QLocation location, QCenter center) {
-        return Projections.constructor(RecruitBoardDetail.class,
-            recruitBoard, location.address, location.latitude, location.longitude, center.name);
-    }
-
-    private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-
-        return sort.stream()
-            .map(order -> {
-                String property = order.getProperty();
-
-                if ("created_at".equals(property)) {
-                    return order.isAscending()
-                        ? recruitBoard.createdAt.asc()
-                        : recruitBoard.createdAt.desc();
-                } else if ("volunteer_start_date_time".equals(property)) {
-                    return order.isAscending()
-                        ? recruitBoard.recruitmentInfo.volunteerStartDateTime.asc()
-                        : recruitBoard.recruitmentInfo.volunteerStartDateTime.desc();
-                } else {
-                    throw new IllegalStateException("Invalid sort property: " + property);
-                }
-            })
-            .toArray(OrderSpecifier[]::new);
     }
 
     private BooleanExpression keywordEq(String keyword) {
@@ -245,4 +221,45 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return location.latitude.between(minLatitude, maxLatitude)
             .and(location.longitude.between(minLongitude, maxLongitude));
     }
+
+    private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {
+        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+
+        return sort.stream()
+            .map(order -> {
+                String property = order.getProperty();
+
+                if ("created_at".equals(property)) {
+                    return order.isAscending()
+                        ? recruitBoard.createdAt.asc()
+                        : recruitBoard.createdAt.desc();
+                } else if ("volunteer_start_date_time".equals(property)) {
+                    return order.isAscending()
+                        ? recruitBoard.recruitmentInfo.volunteerStartDateTime.asc()
+                        : recruitBoard.recruitmentInfo.volunteerStartDateTime.desc();
+                } else {
+                    throw new IllegalStateException("Invalid sort property: " + property);
+                }
+            })
+            .toArray(OrderSpecifier[]::new);
+    }
+
+    private static ConstructorExpression<RecruitBoardWithCenter> getRecruitBoardWithCenterConstructorExpression(
+        QRecruitBoard recruitBoard, QCenter center) {
+        return Projections.constructor(RecruitBoardWithCenter.class,
+            recruitBoard, center.name);
+    }
+
+    private static ConstructorExpression<RecruitBoardWithLocation> getRecruitBoardWithLocationConstructorExpression(
+        QRecruitBoard recruitBoard, QLocation location) {
+        return Projections.constructor(RecruitBoardWithLocation.class,
+            recruitBoard, location.address, location.latitude, location.longitude);
+    }
+
+    private static ConstructorExpression<RecruitBoardDetail> getRecruitBoardDetailConstructorExpression(
+        QRecruitBoard recruitBoard, QLocation location, QCenter center) {
+        return Projections.constructor(RecruitBoardDetail.class,
+            recruitBoard, location.address, location.latitude, location.longitude, center.name);
+    }
+
 }

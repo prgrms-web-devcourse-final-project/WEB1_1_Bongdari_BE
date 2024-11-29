@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface RecruitBoardRepository {
 
@@ -26,5 +25,5 @@ public interface RecruitBoardRepository {
 
     Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition);
 
-    Page<RecruitBoard> findAllByCenterId(UUID centerId, Pageable pageable);
+    Page<RecruitBoard> findAllByCenterId(UUID centerId, RecruitBoardSearchCondition condition);
 }

@@ -2,6 +2,7 @@ package com.somemore.recruitboard.service.query;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 
+import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.mapping.RecruitBoardDetail;
@@ -18,7 +19,6 @@ import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     private final RecruitBoardRepository recruitBoardRepository;
+    private final CenterQueryUseCase centerQueryUseCase;
 
     @Override
     public RecruitBoardResponseDto getById(Long id) {
@@ -60,8 +61,10 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     @Override
     public Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
-        Pageable pageable) {
-        Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(centerId, pageable);
+        RecruitBoardSearchCondition condition) {
+        centerQueryUseCase.validateCenterExists(centerId);
+
+        Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(centerId, condition);
         return boards.map(RecruitBoardResponseDto::from);
     }
 
