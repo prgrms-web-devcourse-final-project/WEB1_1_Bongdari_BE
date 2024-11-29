@@ -6,4 +6,5 @@ public interface ImageUploadValidator {
 
     void validateFileSize(MultipartFile file);
     void validateFileType(MultipartFile file);
+    boolean isEmptyFile(MultipartFile file);
 }
