@@ -7,6 +7,7 @@ import com.somemore.interestcenter.usecase.CancelInterestCenterUseCase;
 import com.somemore.interestcenter.usecase.RegisterInterestCenterUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class InterestCenterCommandApiController {
 
     @Operation(summary = "관심기관 등록 API")
     @PostMapping()
-    public ApiResponse<RegisterInterestCenterResponseDto> registerInterestCenter(@RequestBody RegisterInterestCenterRequestDto requestDto) {
+    public ApiResponse<RegisterInterestCenterResponseDto> registerInterestCenter(@Valid @RequestBody RegisterInterestCenterRequestDto requestDto) {
 
         RegisterInterestCenterResponseDto responseDto = registerInterestCenterUseCase.registerInterestCenter(requestDto);
 
