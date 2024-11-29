@@ -22,7 +22,7 @@ public class DeleteCommunityCommentService implements DeleteCommunityCommentUseC
     @Override
     public void deleteCommunityComment(UUID writerId, Long id) {
 
-        CommunityComment communityComment = getCommunityBoardById(id);
+        CommunityComment communityComment = getCommunityCommentById(id);
 
         validateWriter(communityComment, writerId);
 
@@ -31,7 +31,7 @@ public class DeleteCommunityCommentService implements DeleteCommunityCommentUseC
         communityCommentRepository.save(communityComment);
     }
 
-    private CommunityComment getCommunityBoardById(Long id) {
+    private CommunityComment getCommunityCommentById(Long id) {
         return communityCommentRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_COMMENT.getMessage()));
     }
