@@ -38,4 +38,8 @@ public class CommunityComment extends BaseEntity {
         this.content = content;
         this.parentCommentId = parentCommentId;
     }
+
+    public boolean isWriter(UUID writerId) {
+        return this.writerId.equals(writerId);
+    }
 }
