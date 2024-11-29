@@ -10,5 +10,4 @@ import java.util.UUID;
 public interface VolunteerDetailRepository {
     VolunteerDetail save(VolunteerDetail volunteerDetail);
     Optional<VolunteerDetail> findByVolunteerId(UUID volunteerId);
-    void deleteAllInBatch();
 }
