@@ -6,8 +6,10 @@ import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
-import java.util.UUID;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface RecruitBoardQueryUseCase {
 
@@ -18,8 +20,11 @@ public interface RecruitBoardQueryUseCase {
     Page<RecruitBoardWithCenterResponseDto> getAllWithCenter(RecruitBoardSearchCondition condition);
 
     Page<RecruitBoardDetailResponseDto> getRecruitBoardsNearby(
-        RecruitBoardNearByCondition condition);
+            RecruitBoardNearByCondition condition);
 
     Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
-        RecruitBoardSearchCondition condition);
+                                                             RecruitBoardSearchCondition condition);
+
+    List<Long> getNotCompletedIdsByCenterIds(UUID centerId);
+
 }
