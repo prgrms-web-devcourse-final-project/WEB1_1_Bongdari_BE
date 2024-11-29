@@ -1,4 +1,4 @@
-package com.somemore.global.common.utils;
+package com.somemore.location.utils;
 
 import static lombok.AccessLevel.PRIVATE;
 

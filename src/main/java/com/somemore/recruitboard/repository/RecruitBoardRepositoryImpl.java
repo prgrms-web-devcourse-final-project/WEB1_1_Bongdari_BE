@@ -10,7 +10,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.QCenter;
-import com.somemore.global.common.utils.GeoUtils;
+import com.somemore.location.utils.GeoUtils;
 import com.somemore.location.domain.QLocation;
 import com.somemore.recruitboard.domain.QRecruitBoard;
 import com.somemore.recruitboard.domain.RecruitBoard;
