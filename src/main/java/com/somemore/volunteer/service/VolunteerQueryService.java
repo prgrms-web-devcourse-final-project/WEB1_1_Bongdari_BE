@@ -1,6 +1,6 @@
 package com.somemore.volunteer.service;
 
-import com.somemore.facade.validator.VolunteerDetailAccessValidator;
+import com.somemore.facade.validator.VolunteerDetailAccessValidatorImpl;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
@@ -25,7 +25,7 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDetailRepository volunteerDetailRepository;
-    private final VolunteerDetailAccessValidator volunteerDetailAccessValidator;
+    private final VolunteerDetailAccessValidatorImpl volunteerDetailAccessValidatorImpl;
 
     @Override
     public VolunteerResponseDto getMyProfile(UUID volunteerId) {
@@ -46,8 +46,7 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     @Override
     public VolunteerResponseDto getVolunteerDetailedProfile(UUID volunteerId, UUID centerId) {
-        // TODO 권한 검사
-
+        volunteerDetailAccessValidatorImpl.validateByCenterId(centerId, volunteerId);
 
         return VolunteerResponseDto.from(
                 findVolunteer(volunteerId),
