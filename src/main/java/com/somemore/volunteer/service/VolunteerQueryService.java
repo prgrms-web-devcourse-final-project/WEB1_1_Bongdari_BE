@@ -1,5 +1,6 @@
 package com.somemore.volunteer.service;
 
+import com.somemore.facade.validator.VolunteerDetailAccessValidator;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
@@ -24,6 +25,7 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDetailRepository volunteerDetailRepository;
+    private final VolunteerDetailAccessValidator volunteerDetailAccessValidator;
 
     @Override
     public VolunteerResponseDto getMyProfile(UUID volunteerId) {
@@ -62,7 +64,13 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     @Override
     public String getNicknameById(UUID id) {
-        return volunteerRepository.findNicknameById(id);
+        String nickname = volunteerRepository.findNicknameById(id);
+
+        if (nickname == null || nickname.isBlank()) {
+            throw new BadRequestException(NOT_EXISTS_VOLUNTEER);
+        }
+
+        return nickname;
     }
 
     private Volunteer findVolunteer(UUID volunteerId) {
