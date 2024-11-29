@@ -21,6 +21,8 @@ public enum ExceptionMessage {
     FILE_SIZE_EXCEEDED("파일 크기가 허용된 한도를 초과했습니다."),
     EMPTY_FILE("파일이 존재하지 않습니다."),
     INSTANTIATION_NOT_ALLOWED("인스턴스화 할 수 없는 클래스 입니다."),
+    CANNOT_CANCEL_DELETED_INTEREST_CENTER("이미 삭제된 관심 기관은 취소할 수 없습니다."),
+    DUPLICATE_INTEREST_CENTER("이미 관심 표시한 기관입니다.")
     ;
 
     private final String message;
