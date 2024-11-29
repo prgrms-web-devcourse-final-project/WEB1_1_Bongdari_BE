@@ -17,6 +17,7 @@ import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
+import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -34,6 +35,9 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private RecruitBoardJpaRepository recruitBoardJpaRepository;
+
+    @Autowired
+    private RecruitBoardRepository recruitBoardRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -78,7 +82,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             newImgUrl);
 
         // then
-        RecruitBoard updatedRecruitBoard = recruitBoardJpaRepository.findById(recruitBoard.getId())
+        RecruitBoard updatedRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
             .orElseThrow();
 
         assertThat(updatedRecruitBoard.getTitle()).isEqualTo(dto.title());
@@ -111,7 +115,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         updateRecruitBoardService.updateRecruitBoardLocation(dto, recruitBoard.getId(), centerId);
 
         // then
-        RecruitBoard updateRecruitBoard = recruitBoardJpaRepository.findById(recruitBoard.getId())
+        RecruitBoard updateRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
             .orElseThrow();
         Location updateLocation = locationRepository.findById(recruitBoard.getLocationId())
             .orElseThrow();
@@ -164,7 +168,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             currentDateTime);
 
         // then
-        RecruitBoard findBoard = recruitBoardJpaRepository.findById(recruitBoardId).orElseThrow();
+        RecruitBoard findBoard = recruitBoardRepository.findById(recruitBoardId).orElseThrow();
         assertThat(findBoard.getRecruitStatus()).isEqualTo(newStatus);
     }
 

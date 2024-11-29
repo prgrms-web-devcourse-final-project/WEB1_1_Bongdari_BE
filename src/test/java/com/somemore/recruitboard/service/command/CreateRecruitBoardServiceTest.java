@@ -10,6 +10,7 @@ import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerType;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
+import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -26,6 +27,9 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private RecruitBoardJpaRepository recruitBoardJpaRepository;
+
+    @Autowired
+    private RecruitBoardRepository recruitBoardRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -68,7 +72,7 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
         Long saveId = createRecruitBoardService.createRecruitBoard(dto, centerId, imgUrl);
 
         // then
-        Optional<RecruitBoard> recruitBoard = recruitBoardJpaRepository.findById(saveId);
+        Optional<RecruitBoard> recruitBoard = recruitBoardRepository.findById(saveId);
 
         assertThat(recruitBoard).isPresent();
         assertThat(recruitBoard.get().getId()).isEqualTo(saveId);
