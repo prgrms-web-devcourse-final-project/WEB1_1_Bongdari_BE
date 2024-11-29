@@ -1,12 +1,14 @@
 package com.somemore.location.service.query;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_LOCATION;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import java.math.BigDecimal;
-import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,23 +47,24 @@ class LocationQueryServiceTest extends IntegrationTestSupport {
         Long id = location.getId();
 
         // when
-        Optional<Location> findLocation = locationQueryService.findById(id);
+        Location findLocation = locationQueryService.getById(id);
 
         // then
-        assertThat(findLocation).isPresent();
+        assertThat(findLocation.getId()).isEqualTo(id);
     }
 
-    @DisplayName("존재하지 않는 ID가 주어지면 빈 Optional 반환한다.")
+    @DisplayName("존재하지 않는 ID가 주어지면 에러가 발생한다.")
     @Test
     void findByIdWithDoesNotExistId() {
         // given
         Long wrongId = 999L;
 
         // when
-        Optional<Location> findLocation = locationQueryService.findById(wrongId);
-
         // then
-        assertThat(findLocation).isEmpty();
+        assertThatThrownBy(
+            () -> locationQueryService.getById(wrongId)
+        ).isInstanceOf(BadRequestException.class)
+            .hasMessage(NOT_EXISTS_LOCATION.getMessage());
     }
 
 }
