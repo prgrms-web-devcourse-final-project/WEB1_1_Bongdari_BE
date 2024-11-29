@@ -12,5 +12,9 @@ public interface CommunityBoardRepository {
     Optional<CommunityBoard> findById(Long id);
     List<CommunityBoardView> getCommunityBoards();
     List<CommunityBoardView> findByWriterId(UUID writerId);
+    boolean existsById(Long id);
+    default boolean doesNotExistById(Long id) {
+        return !existsById(id);
+    }
     void deleteAllInBatch();
 }

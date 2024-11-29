@@ -52,6 +52,18 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
                 .fetch();
     }
 
+    @Override
+    public boolean existsById(Long id) {
+        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
+
+        return queryFactory
+                .selectOne()
+                .from(communityBoard)
+                .where(communityBoard.id.eq(id)
+                        .and(communityBoard.deleted.eq(false)))
+                .fetchFirst() != null;
+    }
+
     private JPAQuery<CommunityBoardView> getCommunityBoardsQuery() {
         QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
         QVolunteer volunteer = QVolunteer.volunteer;
