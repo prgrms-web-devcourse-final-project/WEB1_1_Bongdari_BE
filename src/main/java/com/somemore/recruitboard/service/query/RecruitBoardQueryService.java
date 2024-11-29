@@ -31,9 +31,7 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     @Override
     public RecruitBoardResponseDto getById(Long id) {
-        RecruitBoard recruitBoard = recruitBoardRepository.findById(id).orElseThrow(
-            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
-        );
+        RecruitBoard recruitBoard = getRecruitBoard(id);
         return RecruitBoardResponseDto.from(recruitBoard);
     }
 
@@ -67,4 +65,9 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
         return boards.map(RecruitBoardResponseDto::from);
     }
 
+    private RecruitBoard getRecruitBoard(Long id) {
+        return recruitBoardRepository.findById(id).orElseThrow(
+            () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
+        );
+    }
 }

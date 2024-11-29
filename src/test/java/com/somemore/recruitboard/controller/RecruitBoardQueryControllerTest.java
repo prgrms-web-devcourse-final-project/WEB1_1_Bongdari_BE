@@ -1,6 +1,7 @@
 package com.somemore.recruitboard.controller;
 
 import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
@@ -45,11 +46,13 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
     @Test
     @DisplayName("모집글 ID로 상세 조회할 수 있다.")
     void getById() throws Exception {
+        // given
         Long recruitBoardId = 1L;
         var responseDto = RecruitBoardWithLocationResponseDto.builder().build();
+        given(recruitBoardQueryUseCase.getWithLocationById(recruitBoardId)).willReturn(responseDto);
 
-        when(recruitBoardQueryUseCase.getWithLocationById(recruitBoardId)).thenReturn(responseDto);
-
+        // when
+        // then
         mockMvc.perform(get("/api/recruit-board/{id}", recruitBoardId)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -63,11 +66,14 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
     @Test
     @DisplayName("모집글 페이징 처리하여 전체 조회 할 수 있다.")
     void getAll() throws Exception {
+        // given
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        when(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
-            .thenReturn(page);
+        given(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
+            .willReturn(page);
 
+        // when
+        // then
         mockMvc.perform(get("/api/recruit-boards")
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -82,11 +88,14 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
     @Test
     @DisplayName("모집글을 검색 조건으로 페이징 조회할 수 있다.")
     void getAllBySearch() throws Exception {
+        // given
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        when(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
-            .thenReturn(page);
+        given(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
+            .willReturn(page);
 
+        // when
+        // then
         mockMvc.perform(get("/api/recruit-boards/search")
                 .param("keyword", "volunteer")
                 .param("type", ADMINISTRATIVE_SUPPORT.name())
@@ -103,12 +112,14 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
     @Test
     @DisplayName("위치 기반으로 근처 있는 모집글 페이징 조회할 수 있다.")
     void getNearby() throws Exception {
+        // given
         Page<RecruitBoardDetailResponseDto> page = new PageImpl<>(Collections.emptyList());
+        given(recruitBoardQueryUseCase.getRecruitBoardsNearby(
+            any(RecruitBoardNearByCondition.class)
+        )).willReturn(page);
 
-        when(
-            recruitBoardQueryUseCase.getRecruitBoardsNearby(any(RecruitBoardNearByCondition.class)))
-            .thenReturn(page);
-
+        // when
+        // then
         mockMvc.perform(get("/api/recruit-boards/nearby")
                 .param("latitude", "37.5665")
                 .param("longitude", "126.9780")
@@ -126,12 +137,15 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
     @Test
     @DisplayName("기관 ID로 모집글 페이징 조회할 수 있다.")
     void getRecruitBoardsByCenterId() throws Exception {
+        // given
         UUID centerId = UUID.randomUUID();
         Page<RecruitBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        when(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(eq(centerId), any(Pageable.class)))
-            .thenReturn(page);
+        given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(eq(centerId), any(Pageable.class)))
+            .willReturn(page);
 
+        // when
+        // then
         mockMvc.perform(get("/api/recruit-boards/center/{centerId}", centerId)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
