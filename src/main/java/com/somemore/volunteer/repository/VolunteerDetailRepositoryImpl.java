@@ -1,6 +1,5 @@
 package com.somemore.volunteer.repository;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteer.domain.QVolunteerDetail;
@@ -30,12 +29,6 @@ public class VolunteerDetailRepositoryImpl implements VolunteerDetailRepository 
         return findOne(volunteerDetail.volunteerId.eq(volunteerId));
     }
 
-    @Override
-    public void deleteAllInBatch() {
-        volunteerDetailJpaRepository.deleteAllInBatch();
-    }
-
-
     private Optional<VolunteerDetail> findOne(BooleanExpression condition) {
         VolunteerDetail result = queryFactory
                 .selectFrom(volunteerDetail)
@@ -46,20 +39,6 @@ public class VolunteerDetailRepositoryImpl implements VolunteerDetailRepository 
                 .fetchOne();
 
         return Optional.ofNullable(result);
-    }
-
-    private <T> Optional<T> findDynamicField(Long id, Path<T> field) {
-
-        return Optional.ofNullable(
-                queryFactory
-                        .select(field)
-                        .from(volunteerDetail)
-                        .where(
-                                volunteerDetail.id.eq(id),
-                                isNotDeleted()
-                        )
-                        .fetchOne()
-        );
     }
 
     private BooleanExpression isNotDeleted() {
