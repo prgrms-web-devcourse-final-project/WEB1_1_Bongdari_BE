@@ -3,7 +3,7 @@ package com.somemore.community.repository;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.domain.CommunityBoardView;
+import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;

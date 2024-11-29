@@ -2,7 +2,7 @@ package com.somemore.community.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.community.domain.CommunityBoardView;
+import com.somemore.community.repository.mapper.CommunityBoardView;
 
 import java.time.LocalDateTime;
 

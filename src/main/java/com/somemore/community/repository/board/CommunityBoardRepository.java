@@ -1,7 +1,7 @@
 package com.somemore.community.repository.board;
 
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.domain.CommunityBoardView;
+import com.somemore.community.repository.mapper.CommunityBoardView;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.domain.CommunityBoardView;
+import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.domain.QCommunityBoard;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
