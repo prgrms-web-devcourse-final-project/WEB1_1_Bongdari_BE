@@ -342,10 +342,13 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+            .pageable(pageable)
+            .build();
 
         // when
         Page<RecruitBoard> result = recruitBoardRepository.findAllByCenterId(center.getId(),
-            pageable);
+            condition);
 
         // then
         assertThat(result).isNotEmpty();
@@ -359,10 +362,13 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         // given
         UUID centerId = UUID.randomUUID();
         Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+            .pageable(pageable)
+            .build();
 
         // when
         Page<RecruitBoard> results = recruitBoardRepository.findAllByCenterId(centerId,
-            pageable);
+            condition);
 
         // then
         assertThat(results).isEmpty();

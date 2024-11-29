@@ -6,7 +6,6 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -141,7 +140,8 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
         UUID centerId = UUID.randomUUID();
         Page<RecruitBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(eq(centerId), any(Pageable.class)))
+        given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(centerId,
+            any(RecruitBoardSearchCondition.class)))
             .willReturn(page);
 
         // when
@@ -152,7 +152,7 @@ class RecruitBoardQueryControllerTest extends IntegrationTestSupport {
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.message").value("기관 봉사 활동 모집글 조회 성공"));
 
-        verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsByCenterId(eq(centerId),
-            any(Pageable.class));
+        verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsByCenterId(centerId,
+            any(RecruitBoardSearchCondition.class));
     }
 }

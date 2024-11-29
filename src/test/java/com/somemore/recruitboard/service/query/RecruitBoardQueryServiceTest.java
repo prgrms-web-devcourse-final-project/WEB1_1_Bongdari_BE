@@ -3,6 +3,7 @@ package com.somemore.recruitboard.service.query;
 import static com.somemore.common.fixture.CenterFixture.createCenter;
 import static com.somemore.common.fixture.LocationFixture.createLocation;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -10,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
+import com.somemore.common.fixture.CenterFixture;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
@@ -176,27 +178,46 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getRecruitBoardsByCenterId() {
         // given
-        UUID centerId = UUID.randomUUID();
-        RecruitBoard one = createRecruitBoard(centerId);
-        RecruitBoard two = createRecruitBoard(centerId);
-        RecruitBoard three = createRecruitBoard(centerId);
+        Center center = createCenter("센터");
+        centerRepository.save(center);
+        RecruitBoard one = createRecruitBoard(center.getId());
+        RecruitBoard two = createRecruitBoard(center.getId());
+        RecruitBoard three = createRecruitBoard(center.getId());
         recruitBoardRepository.saveAll(List.of(one, two, three));
 
+        UUID centerId = center.getId();
         Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+            .pageable(pageable)
+            .build();
+
         // when
         Page<RecruitBoardResponseDto> result = recruitBoardQueryService.getRecruitBoardsByCenterId(
-            centerId, pageable);
+            centerId, condition);
 
         // then
         assertThat(result).isNotEmpty();
         assertThat(result.getTotalElements()).isEqualTo(3);
     }
 
+    @DisplayName("존재하지 않는 기관 아이디로 모집글을 조회할 경우 에러가 발생한다")
+    @Test
+    void getRecruitBoardsByCenterIdWhenNotExistsCenterId() {
+        // given
+        UUID wrongCenterId = UUID.randomUUID();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+            .build();
+
+        // when
+        // then
+        assertThatThrownBy(
+            () -> recruitBoardQueryService.getRecruitBoardsByCenterId(wrongCenterId, condition))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage(NOT_EXISTS_CENTER.getMessage());
+    }
 
     private Pageable getPageable() {
         Sort sort = Sort.by(Sort.Order.desc("created_at"));
         return PageRequest.of(0, 5, sort);
     }
-
-
 }
