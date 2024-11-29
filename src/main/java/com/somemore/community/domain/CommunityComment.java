@@ -22,6 +22,9 @@ public class CommunityComment extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "community_board_id", nullable = false)
+    private Long communityBoardId;
+
     @Column(name = "writer_id", nullable = false, length = 16)
     private UUID writerId;
 
@@ -33,7 +36,8 @@ public class CommunityComment extends BaseEntity {
     private Long parentCommentId;
 
     @Builder
-    public CommunityComment(UUID writerId, String content, Long parentCommentId) {
+    public CommunityComment(Long communityBoardId, UUID writerId, String content, Long parentCommentId) {
+        this.communityBoardId = communityBoardId;
         this.writerId = writerId;
         this.content = content;
         this.parentCommentId = parentCommentId;
