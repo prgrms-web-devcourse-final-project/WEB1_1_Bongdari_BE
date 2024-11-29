@@ -60,3 +60,6 @@ cloud:
     stack:
       auto: false
 
+default:
+  image:
+    url: ""
