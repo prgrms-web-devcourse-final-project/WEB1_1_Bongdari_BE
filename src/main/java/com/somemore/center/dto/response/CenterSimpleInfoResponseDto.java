@@ -10,22 +10,22 @@ import lombok.Builder;
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)
 @Schema(description = "기관 정보 응답 DTO")
-public record CenterInfoResponse(
+public record CenterSimpleInfoResponseDto(
     @Schema(description = "기관 아이디", example = "123e4567-e89b-12d3-a456-426614174000")
     UUID id,
     @Schema(description = "기관 이름", example = "환경 봉사 센터")
     String name
 ) {
 
-    public static CenterInfoResponse from(Center center) {
-        return CenterInfoResponse.builder()
+    public static CenterSimpleInfoResponseDto from(Center center) {
+        return CenterSimpleInfoResponseDto.builder()
             .id(center.getId())
             .name(center.getName())
             .build();
     }
 
-    public static CenterInfoResponse of(UUID centerId, String name) {
-        return CenterInfoResponse.builder()
+    public static CenterSimpleInfoResponseDto of(UUID centerId, String name) {
+        return CenterSimpleInfoResponseDto.builder()
             .id(centerId)
             .name(name)
             .build();

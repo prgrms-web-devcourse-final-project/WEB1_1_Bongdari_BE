@@ -2,7 +2,7 @@ package com.somemore.recruitboard.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.center.dto.response.CenterInfoResponse;
+import com.somemore.center.dto.response.CenterSimpleInfoResponseDto;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
@@ -48,7 +48,7 @@ public record RecruitBoardWithCenterResponseDto(
     @Schema(description = "이미지 URL", example = "https://image.domain.com/links")
     String imgUrl,
     @Schema(description = "센터 간단 정보")
-    CenterInfoResponse center
+    CenterSimpleInfoResponseDto center
 ) {
 
     public static RecruitBoardWithCenterResponseDto from(
@@ -72,7 +72,7 @@ public record RecruitBoardWithCenterResponseDto(
             .volunteerTime(info.calculateVolunteerTime())
             .admitted(info.getAdmitted())
             .imgUrl(board.getImgUrl())
-            .center(CenterInfoResponse.of(board.getCenterId(), recruitBoardWithCenter.centerName()))
+            .center(CenterSimpleInfoResponseDto.of(board.getCenterId(), recruitBoardWithCenter.centerName()))
             .build();
     }
 }
