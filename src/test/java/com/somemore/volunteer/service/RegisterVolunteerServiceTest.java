@@ -10,13 +10,14 @@ import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 class RegisterVolunteerServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -27,12 +28,6 @@ class RegisterVolunteerServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerDetailRepository volunteerDetailRepository;
-
-    @AfterEach
-    void tearDown() {
-        volunteerRepository.deleteAllInBatch();
-        volunteerDetailRepository.deleteAllInBatch();
-    }
 
     @DisplayName("봉사자와 상세 정보를 저장한다")
     @Test
