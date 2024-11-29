@@ -14,7 +14,7 @@ public class Center extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(name = "name", nullable = false)
