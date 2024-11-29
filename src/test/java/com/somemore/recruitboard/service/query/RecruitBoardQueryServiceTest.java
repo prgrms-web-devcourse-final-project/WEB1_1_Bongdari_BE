@@ -11,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
-import com.somemore.common.fixture.CenterFixture;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
