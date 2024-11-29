@@ -1,8 +1,12 @@
 package com.somemore.community.repository;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
+import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
+import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     @Autowired
     CommunityCommentRepository communityCommentRepository;
+    @Autowired
+    CommunityBoardRepository communityBoardRepository;
+
+    private Long boardId;
+
+    @BeforeEach
+    void setUp() {
+        CommunityBoard communityBoard = CommunityBoard.builder()
+                .title("테스트 커뮤니티 게시글 제목")
+                .content("테스트 커뮤니티 게시글 내용")
+                .imgUrl("http://community.example.com/123")
+                .writerId(UUID.randomUUID())
+                .build();
+
+        communityBoardRepository.save(communityBoard);
+
+        boardId = communityBoard.getId();
+    }
 
     @DisplayName("커뮤니티 게시글에 댓글을 생성할 수 있다. (Repository)")
     @Test
@@ -26,6 +48,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         UUID writerId = UUID.randomUUID();
 
         CommunityComment communityComment = CommunityComment.builder()
+                .communityBoardId(boardId)
                 .writerId(writerId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
@@ -48,6 +71,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         UUID writerId = UUID.randomUUID();
 
         CommunityComment communityComment = CommunityComment.builder()
+                .communityBoardId(boardId)
                 .writerId(writerId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(1L)
@@ -70,6 +94,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         UUID writerId = UUID.randomUUID();
 
         CommunityComment communityComment = CommunityComment.builder()
+                .communityBoardId(boardId)
                 .writerId(writerId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
@@ -95,6 +120,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         UUID writerId = UUID.randomUUID();
 
         CommunityComment communityComment = CommunityComment.builder()
+                .communityBoardId(boardId)
                 .writerId(writerId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
