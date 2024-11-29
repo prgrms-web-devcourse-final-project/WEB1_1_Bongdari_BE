@@ -15,7 +15,7 @@ public record RegisterInterestCenterRequestDto(
         @NotNull(message = "봉사자 ID는 필수값입니다.")
         UUID volunteerId,
 
-        @Schema(description = "봉사자 ID", example = "123e4567-e89b-12d3-a456-426614174000")
+        @Schema(description = "기관 ID", example = "123e4567-e89b-12d3-a456-426614174000")
         @NotNull(message = "기관 ID는 필수값입니다.")
         UUID centerId
 ) {
