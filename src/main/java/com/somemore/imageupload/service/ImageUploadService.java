@@ -5,6 +5,7 @@ import com.somemore.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.imageupload.util.ImageUploadUtils;
 import com.somemore.imageupload.validator.ImageUploadValidator;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,22 @@ public class ImageUploadService implements ImageUploadUseCase {
     @Value("${cloud.aws.s3.base-url}")
     private String baseUrl;
 
+    @Value("${default.image.url}")
+    private String defaultImageUrl;
+
+    public static String DEFAULT_IMAGE_URL;
+
+    @PostConstruct
+    private void init() {
+        DEFAULT_IMAGE_URL = defaultImageUrl;
+    }
+
     @Override
     public String uploadImage(ImageUploadRequestDto requestDto) {
+        if (imageUploadValidator.isEmptyFile(requestDto.imageFile())) {
+            return DEFAULT_IMAGE_URL;
+        }
+
         imageUploadValidator.validateFileSize(requestDto.imageFile());
         imageUploadValidator.validateFileType(requestDto.imageFile());
 
