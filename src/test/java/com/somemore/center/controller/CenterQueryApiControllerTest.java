@@ -84,7 +84,7 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("400"))
-                .andExpect(jsonPath("$.detail").value("존재하지 않는 기관 ID 입니다."));
+                .andExpect(jsonPath("$.detail").value("존재하지 않는 기관 입니다."));
 
         verify(centerQueryUseCase, times(1)).getCenterProfileByCenterId(nonExistentCenterId);
     }
