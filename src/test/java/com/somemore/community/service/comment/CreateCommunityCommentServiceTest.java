@@ -2,12 +2,16 @@ package com.somemore.community.service.comment;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityComment;
+import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
+import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
+import com.somemore.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,25 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
     private CreateCommunityCommentService createCommunityCommentService;
     @Autowired
     private CommunityCommentRepository communityCommentRepository;
+    @Autowired
+    private CreateCommunityBoardUseCase createCommunityBoardUseCase;
+    @Autowired
+    private DeleteCommunityBoardUseCase deleteCommunityBoardUseCase;
+
+    private UUID writerId;
+    private Long boardId;
+
+    @BeforeEach
+    void setUp() {
+        CommunityBoardCreateRequestDto boardDto = CommunityBoardCreateRequestDto.builder()
+                .title("커뮤니티 테스트 제목")
+                .content("커뮤니티 테스트 내용")
+                .build();
+
+        writerId = UUID.randomUUID();
+
+        boardId = createCommunityBoardUseCase.createCommunityBoard(boardDto, writerId, null);
+    }
 
     @AfterEach
     void tearDown() {
@@ -36,6 +59,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         CommunityCommentCreateRequestDto dto = CommunityCommentCreateRequestDto.builder()
+                .communityBoardId(boardId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
@@ -61,6 +85,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         CommunityCommentCreateRequestDto commentDto = CommunityCommentCreateRequestDto.builder()
+                .communityBoardId(boardId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
@@ -69,6 +94,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
         Long commentId = createCommunityCommentService.createCommunityComment(commentDto, writerId);
 
         CommunityCommentCreateRequestDto replyDto = CommunityCommentCreateRequestDto.builder()
+                .communityBoardId(boardId)
                 .content("커뮤니티 대댓글 테스트 내용")
                 .parentCommentId(commentId)
                 .build();
@@ -86,12 +112,13 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
         assertThat(communityCommentReply.get().getParentCommentId()).isEqualTo(commentId);
     }
 
-    @DisplayName("삭제된 댓글에 대댓글을 등록할 때 예외를 던진다.")
+    @DisplayName("삭제된 댓글이나 존재하지 않는 댓글에 대댓글을 등록할 때 예외를 던진다.")
     @Test
     void createCommunityCommentReplyWithDeletedParentId() {
 
         //given
         CommunityCommentCreateRequestDto replyDto = CommunityCommentCreateRequestDto.builder()
+                .communityBoardId(boardId)
                 .content("커뮤니티 대댓글 테스트 내용")
                 .parentCommentId(2L)
                 .build();
@@ -103,5 +130,27 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
         assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(callable)
                 .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_COMMENT.getMessage());
+    }
+
+    @DisplayName("삭제된 게시글에 댓글을 등록할 때 예외를 던진다.")
+    @Test
+    void createCommunityCommentWithDeletedBoardId() {
+
+        //given
+        CommunityCommentCreateRequestDto commentDto = CommunityCommentCreateRequestDto.builder()
+                .communityBoardId(boardId)
+                .content("커뮤니티 댓글 테스트 내용")
+                .parentCommentId(null)
+                .build();
+
+        deleteCommunityBoardUseCase.deleteCommunityBoard(writerId, boardId);
+
+        //when
+        ThrowableAssert.ThrowingCallable callable = () -> createCommunityCommentService.createCommunityComment(commentDto, UUID.randomUUID());
+
+        //then
+        assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(callable)
+                .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD.getMessage());
     }
 }

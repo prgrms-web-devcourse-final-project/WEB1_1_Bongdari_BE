@@ -1,8 +1,10 @@
 package com.somemore.community.service.comment;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
+import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.community.usecase.comment.CreateCommunityCommentUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
@@ -26,13 +28,25 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
     private CreateCommunityCommentUseCase createCommunityCommentUseCase;
     @Autowired
     private CommunityCommentRepository communityCommentRepository;
+    @Autowired
+    private CreateCommunityBoardUseCase createCommunityBoardUseCase;
 
     private UUID writerId;
     private Long commentId;
 
     @BeforeEach
     void setUp() {
+        CommunityBoardCreateRequestDto boardDto = CommunityBoardCreateRequestDto.builder()
+                .title("커뮤니티 테스트 제목")
+                .content("커뮤니티 테스트 내용")
+                .build();
+
+        writerId = UUID.randomUUID();
+
+        Long boardId = createCommunityBoardUseCase.createCommunityBoard(boardDto, writerId, null);
+
         CommunityCommentCreateRequestDto dto = CommunityCommentCreateRequestDto.builder()
+                .communityBoardId(boardId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
