@@ -16,6 +16,7 @@ import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
+import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,6 +34,9 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     private UpdateRecruitBoardService updateRecruitBoardService;
 
     @Autowired
+    private RecruitBoardJpaRepository recruitBoardJpaRepository;
+
+    @Autowired
     private RecruitBoardRepository recruitBoardRepository;
 
     @Autowired
@@ -47,12 +51,12 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         locationRepository.saveAndFlush(location);
         centerId = UUID.randomUUID();
         recruitBoard = createRecruitBoard(centerId, location.getId());
-        recruitBoardRepository.saveAndFlush(recruitBoard);
+        recruitBoardJpaRepository.saveAndFlush(recruitBoard);
     }
 
     @AfterEach
     void tearDown() {
-        recruitBoardRepository.deleteAllInBatch();
+        recruitBoardJpaRepository.deleteAllInBatch();
         locationRepository.deleteAllInBatch();
     }
 

@@ -9,6 +9,7 @@ import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerType;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
+import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +26,9 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
     private CreateRecruitBoardService createRecruitBoardService;
 
     @Autowired
+    private RecruitBoardJpaRepository recruitBoardJpaRepository;
+
+    @Autowired
     private RecruitBoardRepository recruitBoardRepository;
 
     @Autowired
@@ -32,7 +36,7 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
 
     @AfterEach
     void tearDown() {
-        recruitBoardRepository.deleteAllInBatch();
+        recruitBoardJpaRepository.deleteAllInBatch();
         locationRepository.deleteAllInBatch();
     }
 
