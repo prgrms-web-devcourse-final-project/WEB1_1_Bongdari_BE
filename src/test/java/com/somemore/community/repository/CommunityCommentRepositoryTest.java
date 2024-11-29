@@ -3,7 +3,6 @@ package com.somemore.community.repository;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
-import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -64,8 +64,6 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
                 .parentCommentId(null)
                 .build();
 
-        UUID writerId = UUID.randomUUID();
-
         //when
         Long commentId = createCommunityCommentService.createCommunityComment(dto, writerId);
 
@@ -90,7 +88,6 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
                 .parentCommentId(null)
                 .build();
 
-        UUID writerId = UUID.randomUUID();
         Long commentId = createCommunityCommentService.createCommunityComment(commentDto, writerId);
 
         CommunityCommentCreateRequestDto replyDto = CommunityCommentCreateRequestDto.builder()
