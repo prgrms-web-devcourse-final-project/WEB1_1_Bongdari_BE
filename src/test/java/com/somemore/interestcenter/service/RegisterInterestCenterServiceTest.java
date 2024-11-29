@@ -87,7 +87,7 @@ class RegisterInterestCenterServiceTest extends IntegrationTestSupport {
         });
 
         //then
-        assertEquals("존재하지 않는 기관 입니다.", exception.getMessage());
+        assertEquals("존재하지 않는 기관입니다.", exception.getMessage());
     }
 
     private Center createCenter() {
