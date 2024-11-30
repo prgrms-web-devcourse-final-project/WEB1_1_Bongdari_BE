@@ -33,7 +33,7 @@ public class DevAccountSetUpConfig {
     private Volunteer volunteer;
     private Center center;
 
-    @Value("${app.develop.mode:false}")
+    @Value("${app.develop.mode}")
     private boolean developMode;
 
     @PostConstruct
