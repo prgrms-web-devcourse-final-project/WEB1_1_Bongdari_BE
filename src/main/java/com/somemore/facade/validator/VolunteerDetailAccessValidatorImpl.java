@@ -23,13 +23,15 @@ public class VolunteerDetailAccessValidatorImpl implements VolunteerDetailAccess
      * 해당 모집글들에 연관된 봉사자들의 ID 목록에 타겟 봉사자 ID가 포함되어 있는지 검증.
      */
     public void validateByCenterId(UUID centerId, UUID targetVolunteerId) {
-        List<Long> allNotCompletedIdsByCenterId = recruitBoardQueryUseCase.getNotCompletedIdsByCenterIds(centerId);
+        List<Long> notCompletedIdsByCenterIds = recruitBoardQueryUseCase.getNotCompletedIdsByCenterIds(centerId);
 
-        List<UUID> volunteerIdsByRecruitIds = volunteerApplyQueryUseCase.getVolunteerIdsByRecruitIds(allNotCompletedIdsByCenterId);
+        List<UUID> volunteerIdsByRecruitIds = volunteerApplyQueryUseCase.getVolunteerIdsByRecruitIds(notCompletedIdsByCenterIds);
 
-        volunteerIdsByRecruitIds.stream()
-                .filter(volunteerId -> volunteerId.equals(targetVolunteerId))
-                .findAny()
-                .orElseThrow(() -> new BadRequestException(UNAUTHORIZED_VOLUNTEER_DETAIL));
+        if (volunteerIdsByRecruitIds.stream()
+                .anyMatch(volunteerId -> volunteerId.equals(targetVolunteerId))) {
+            return;
+        }
+
+        throw new BadRequestException(UNAUTHORIZED_VOLUNTEER_DETAIL);
     }
 }
