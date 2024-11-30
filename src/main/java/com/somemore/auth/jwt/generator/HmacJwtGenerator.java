@@ -36,12 +36,10 @@ public class HmacJwtGenerator implements JwtGenerator {
     }
 
     private static Claims buildClaims(String userId, String role) {
-        final String ID = "id";
-        final String ROLE = "role";
 
         return Jwts.claims()
-                .add(ID, userId)
-                .add(ROLE, role)
+                .add("id", userId)
+                .add("role", role)
                 .build();
     }
 }
