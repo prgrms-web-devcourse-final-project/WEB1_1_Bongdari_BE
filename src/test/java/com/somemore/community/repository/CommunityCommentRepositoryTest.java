@@ -18,12 +18,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class CommunityCommentRepositoryTest extends IntegrationTestSupport {
+
     @Autowired
     CommunityCommentRepository communityCommentRepository;
     @Autowired
     CommunityBoardRepository communityBoardRepository;
 
     private Long boardId;
+    private UUID writerId;
+    private CommunityComment savedComment;
 
     @BeforeEach
     void setUp() {
@@ -37,14 +40,8 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
         communityBoardRepository.save(communityBoard);
 
         boardId = communityBoard.getId();
-    }
 
-    @DisplayName("커뮤니티 게시글에 댓글을 생성할 수 있다. (Repository)")
-    @Test
-    void createCommunityComment() {
-
-        //given
-        UUID writerId = UUID.randomUUID();
+        writerId = UUID.randomUUID();
 
         CommunityComment communityComment = CommunityComment.builder()
                 .communityBoardId(boardId)
@@ -53,9 +50,15 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
                 .parentCommentId(null)
                 .build();
 
-        //when
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
+        savedComment = communityCommentRepository.save(communityComment);
+    }
 
+    @DisplayName("커뮤니티 게시글에 댓글을 생성할 수 있다. (Repository)")
+    @Test
+    void createCommunityComment() {
+
+        //given
+        //when
         //then
         assertThat(savedComment.getWriterId()).isEqualTo(writerId);
         assertThat(savedComment.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
@@ -67,9 +70,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     void createCommunityCommentReply() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
+        CommunityComment communityCommentReply = CommunityComment.builder()
                 .communityBoardId(boardId)
                 .writerId(writerId)
                 .content("커뮤니티 댓글 테스트 내용")
@@ -77,7 +78,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
+        CommunityComment savedComment = communityCommentRepository.save(communityCommentReply);
 
         //then
         assertThat(savedComment.getWriterId()).isEqualTo(writerId);
@@ -90,17 +91,6 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     void findCommunityCommentById() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
-                .communityBoardId(boardId)
-                .writerId(writerId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
-
         //when
         Optional<CommunityComment> comment = communityCommentRepository.findById(savedComment.getId());
 
@@ -116,17 +106,6 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     void existsById() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
-                .communityBoardId(boardId)
-                .writerId(writerId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
-
         //when
         boolean isExist = communityCommentRepository.existsById(savedComment.getId());
 

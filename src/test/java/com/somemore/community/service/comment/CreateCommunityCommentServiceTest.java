@@ -1,14 +1,13 @@
 package com.somemore.community.service.comment;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
+import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
-import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
-import com.somemore.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.global.exception.ExceptionMessage;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_COMMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -29,9 +30,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
     @Autowired
     private CommunityCommentRepository communityCommentRepository;
     @Autowired
-    private CreateCommunityBoardUseCase createCommunityBoardUseCase;
-    @Autowired
-    private DeleteCommunityBoardUseCase deleteCommunityBoardUseCase;
+    private CommunityBoardRepository communityBoardRepository;
 
     private UUID writerId;
     private Long boardId;
@@ -45,7 +44,8 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         writerId = UUID.randomUUID();
 
-        boardId = createCommunityBoardUseCase.createCommunityBoard(boardDto, writerId, null);
+        CommunityBoard communityBoard = communityBoardRepository.save(boardDto.toEntity(writerId, "https://test.image/123"));
+        boardId = communityBoard.getId();
     }
 
     @AfterEach
@@ -126,7 +126,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
         //then
         assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(callable)
-                .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_COMMENT.getMessage());
+                .withMessage(NOT_EXISTS_COMMUNITY_COMMENT.getMessage());
     }
 
     @DisplayName("삭제된 게시글에 댓글을 등록할 때 예외를 던진다.")
@@ -140,7 +140,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
                 .parentCommentId(null)
                 .build();
 
-        deleteCommunityBoardUseCase.deleteCommunityBoard(writerId, boardId);
+        communityBoardRepository.deleteAllInBatch();
 
         //when
         ThrowableAssert.ThrowingCallable callable = () -> createCommunityCommentService.createCommunityComment(commentDto, UUID.randomUUID());
@@ -148,6 +148,6 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
         //then
         assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(callable)
-                .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD.getMessage());
+                .withMessage(NOT_EXISTS_COMMUNITY_BOARD.getMessage());
     }
 }

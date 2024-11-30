@@ -29,7 +29,9 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
 
         validateCommunityBoardExists(communityComment.getCommunityBoardId());
 
-        validateParentCommentExists(communityComment.getParentCommentId());
+        if (requestDto.parentCommentId() != null) {
+            validateParentCommentExists(communityComment.getParentCommentId());
+        }
 
         return communityCommentRepository.save(communityComment).getId();
     }
@@ -41,7 +43,7 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
     }
 
     private void validateParentCommentExists(Long parentCommentId) {
-        if (parentCommentId != null && !communityCommentRepository.existsById(parentCommentId)) {
+        if (communityCommentRepository.doesNotExistById(parentCommentId)) {
             throw new BadRequestException(NOT_EXISTS_COMMUNITY_COMMENT.getMessage());
         }
     }

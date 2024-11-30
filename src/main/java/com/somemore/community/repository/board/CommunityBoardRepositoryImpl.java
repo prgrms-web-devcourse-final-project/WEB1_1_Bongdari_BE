@@ -54,14 +54,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
     @Override
     public boolean existsById(Long id) {
-        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
-
-        return queryFactory
-                .selectOne()
-                .from(communityBoard)
-                .where(communityBoard.id.eq(id)
-                        .and(communityBoard.deleted.eq(false)))
-                .fetchFirst() != null;
+        return communityBoardJpaRepository.existsByIdAndDeletedFalse(id);
     }
 
     private JPAQuery<CommunityBoardView> getCommunityBoardsQuery() {
