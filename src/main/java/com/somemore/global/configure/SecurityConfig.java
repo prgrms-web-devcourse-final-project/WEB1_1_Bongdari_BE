@@ -6,7 +6,6 @@ import com.somemore.auth.oauth.handler.failure.CustomOAuthFailureHandler;
 import com.somemore.auth.oauth.handler.success.CustomOAuthSuccessHandler;
 import com.somemore.auth.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -20,8 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
-@Slf4j
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
