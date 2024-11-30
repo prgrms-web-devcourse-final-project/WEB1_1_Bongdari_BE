@@ -31,15 +31,16 @@ jobs:
       NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
       NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
       NAVER_SCOPE: ${{ secrets.NAVER_SCOPE }}
-      NAVER_REDIRECT_URL: ${{secrets.NAVER_REDIRECT_URL}}
+      NAVER_REDIRECT_URL: ${{ secrets.NAVER_REDIRECT_URL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      FRONT_URL: ${{secrets.FRONT_URL}}
-      BACK_URL: ${{secrets.BACK_URL}}
-      BUCKET_NAME: ${{secrets.BUCKET_NAME}}
-      BUCKET_REGION: ${{secrets.BUCKET_REGION}}
-      IMG_BASE_URL: ${{secrets.BASE_URL}}
-      S3_ACCESS_KEY: ${{secrets.S3_ACCESS_KEY}}
-      S3_SECRET_KEY: ${{secrets.S3_SECRET_KEY}}
+      FRONT_URL: ${{ secrets.FRONT_URL }}
+      BACK_URL: ${{ secrets.BACK_URL }}
+      BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+      BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+      IMG_BASE_URL: ${{ secrets.BASE_URL }}
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+      DEFAULT_IMG_URL: ${{ secrets.DEFAULT_IMG_URL }}
 
 
     steps:
