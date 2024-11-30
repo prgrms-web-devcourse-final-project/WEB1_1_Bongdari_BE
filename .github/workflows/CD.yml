@@ -33,6 +33,7 @@ jobs:
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       DEFAULT_IMG_URL: ${{ secrets.DEFAULT_IMG_URL }}
+      APP_DEVELOP_MODE: ${{ secrets.APP_DEVELOP_MODE }}
 
     steps:
       - name: Github Repository 파일 불러오기
