@@ -34,7 +34,7 @@ public class VolunteerQueryController {
         return ApiResponse.ok(
                 200,
                 volunteerQueryUseCase.getMyProfile(UUID.fromString(volunteerId)),
-                "프로필 조회 성공");
+                "본인 상세 프로필 조회 성공");
     }
 
     @GetMapping("/{volunteerId}")
@@ -45,13 +45,13 @@ public class VolunteerQueryController {
         return ApiResponse.ok(
                 200,
                 volunteerQueryUseCase.getVolunteerProfile(volunteerId),
-                "프로필 조회 성공"
+                "타인 프로필 조회 성공"
         );
     }
 
     @GetMapping("/{volunteerId}/detailed")
     @Secured("ROLE_CENTER")
-    @Operation(summary = "타인 상세 프로필 조회", description = "기관이 작성한 모집 글에 지원한 봉사자의 상세 프로필을 조회합니다.")
+    @Operation(summary = "지원자 상세 프로필 조회", description = "기관이 작성한 모집 글에 지원한 봉사자의 상세 프로필을 조회합니다.")
     public ApiResponse<VolunteerResponseDto> getVolunteerDetailedProfile(
             @PathVariable UUID volunteerId,
             @AuthenticationPrincipal String centerId) {
@@ -59,7 +59,7 @@ public class VolunteerQueryController {
         return ApiResponse.ok(
                 200,
                 volunteerQueryUseCase.getVolunteerDetailedProfile(volunteerId, UUID.fromString(centerId)),
-                "프로필 조회 성공"
+                "지원자 상세 프로필 조회 성공"
         );
     }
 }
