@@ -114,7 +114,6 @@ public class RecruitBoardCommandApiController {
         return ApiResponse.ok("봉사 활동 모집글 삭제 성공");
     }
 
-
     private static UUID getCenterId() {
         return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
     }
