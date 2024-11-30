@@ -1,8 +1,11 @@
 package com.somemore.community.repository;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
+import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +18,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class CommunityCommentRepositoryTest extends IntegrationTestSupport {
+
     @Autowired
     CommunityCommentRepository communityCommentRepository;
+    @Autowired
+    CommunityBoardRepository communityBoardRepository;
+
+    private Long boardId;
+    private UUID writerId;
+    private CommunityComment savedComment;
+
+    @BeforeEach
+    void setUp() {
+        CommunityBoard communityBoard = CommunityBoard.builder()
+                .title("테스트 커뮤니티 게시글 제목")
+                .content("테스트 커뮤니티 게시글 내용")
+                .imgUrl("http://community.example.com/123")
+                .writerId(UUID.randomUUID())
+                .build();
+
+        communityBoardRepository.save(communityBoard);
+
+        boardId = communityBoard.getId();
+
+        writerId = UUID.randomUUID();
+
+        CommunityComment communityComment = CommunityComment.builder()
+                .communityBoardId(boardId)
+                .writerId(writerId)
+                .content("커뮤니티 댓글 테스트 내용")
+                .parentCommentId(null)
+                .build();
+
+        savedComment = communityCommentRepository.save(communityComment);
+    }
 
     @DisplayName("커뮤니티 게시글에 댓글을 생성할 수 있다. (Repository)")
     @Test
     void createCommunityComment() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
-                .writerId(writerId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-
         //when
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
-
         //then
         assertThat(savedComment.getWriterId()).isEqualTo(writerId);
         assertThat(savedComment.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
@@ -45,21 +70,20 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     void createCommunityCommentReply() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
+        CommunityComment communityCommentReply = CommunityComment.builder()
+                .communityBoardId(boardId)
                 .writerId(writerId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(1L)
                 .build();
 
         //when
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
+        CommunityComment savedCommentReply = communityCommentRepository.save(communityCommentReply);
 
         //then
-        assertThat(savedComment.getWriterId()).isEqualTo(writerId);
-        assertThat(savedComment.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
-        assertThat(savedComment.getParentCommentId()).isEqualTo(1L);
+        assertThat(savedCommentReply.getWriterId()).isEqualTo(writerId);
+        assertThat(savedCommentReply.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
+        assertThat(savedCommentReply.getParentCommentId()).isEqualTo(1L);
     }
 
     @DisplayName("댓글을 id로 조회할 수 있다. (Repository)")
@@ -67,16 +91,6 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     void findCommunityCommentById() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
-                .writerId(writerId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
-
         //when
         Optional<CommunityComment> comment = communityCommentRepository.findById(savedComment.getId());
 
@@ -92,16 +106,6 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     void existsById() {
 
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityComment communityComment = CommunityComment.builder()
-                .writerId(writerId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-
-        CommunityComment savedComment = communityCommentRepository.save(communityComment);
-
         //when
         boolean isExist = communityCommentRepository.existsById(savedComment.getId());
 

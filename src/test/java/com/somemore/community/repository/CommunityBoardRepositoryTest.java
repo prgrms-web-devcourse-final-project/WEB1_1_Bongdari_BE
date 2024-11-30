@@ -158,4 +158,27 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(communityBoards.getLast().writerNickname()).isEqualTo(volunteer.getNickname());
         assertThat(communityBoards.getLast().communityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
     }
+
+    @DisplayName("게시글 id로 게시글이 존재하는지 확인할 수 있다.")
+    @Test
+    void existsById() {
+
+        //given
+        UUID writerId = UUID.randomUUID();
+
+        CommunityBoard communityBoard = CommunityBoard.builder()
+                .title("테스트 커뮤니티 게시글 제목")
+                .content("테스트 커뮤니티 게시글 내용")
+                .imgUrl("http://community.example.com/123")
+                .writerId(writerId)
+                .build();
+
+        CommunityBoard savedComment = communityBoardRepository.save(communityBoard);
+
+        //when
+        boolean isExist = communityBoardRepository.existsById(savedComment.getId());
+
+        //then
+        assertThat(isExist).isTrue();
+    }
 }
