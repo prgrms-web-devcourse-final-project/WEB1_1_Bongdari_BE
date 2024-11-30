@@ -1,6 +1,8 @@
 app:
   front-url: ${FRONT_URL}
   back-url: ${BACK_URL}
+  develop:
+    mode: ${APP_DEVELOP_MODE}
 
 # AWS S3
 cloud:

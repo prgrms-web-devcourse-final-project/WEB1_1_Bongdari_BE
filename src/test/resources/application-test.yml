@@ -1,6 +1,8 @@
 app:
   front-url: "http://localhost:3000"
   back-url: "http://localhost:8080"
+  develop:
+    mode: false
 
 spring:
   config:
