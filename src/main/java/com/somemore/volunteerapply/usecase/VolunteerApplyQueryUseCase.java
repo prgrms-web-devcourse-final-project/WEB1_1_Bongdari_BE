@@ -1,4 +1,4 @@
-package com.somemore.volunteerApply.usecase;
+package com.somemore.volunteerapply.usecase;
 
 import java.util.List;
 import java.util.UUID;

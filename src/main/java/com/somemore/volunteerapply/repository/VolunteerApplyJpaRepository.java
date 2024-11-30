@@ -1,6 +1,6 @@
-package com.somemore.volunteerApply.repository;
+package com.somemore.volunteerapply.repository;
 
-import com.somemore.volunteerApply.domain.VolunteerApply;
+import com.somemore.volunteerapply.domain.VolunteerApply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VolunteerApplyJpaRepository extends JpaRepository<VolunteerApply, Long> {

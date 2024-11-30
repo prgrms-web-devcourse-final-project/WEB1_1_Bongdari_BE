@@ -2,7 +2,7 @@ package com.somemore.facade.validator;
 
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.volunteerApply.usecase.VolunteerApplyQueryUseCase;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

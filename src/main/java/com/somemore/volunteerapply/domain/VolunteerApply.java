@@ -1,4 +1,4 @@
-package com.somemore.volunteerApply.domain;
+package com.somemore.volunteerapply.domain;
 
 import com.somemore.global.common.BaseEntity;
 import jakarta.persistence.*;

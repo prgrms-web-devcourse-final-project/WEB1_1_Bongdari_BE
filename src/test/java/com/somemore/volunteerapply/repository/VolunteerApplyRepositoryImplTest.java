@@ -1,8 +1,8 @@
-package com.somemore.volunteerApply.repository;
+package com.somemore.volunteerapply.repository;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.volunteerApply.domain.VolunteerApply;
-import com.somemore.volunteerApply.domain.ApplyStatus;
+import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.domain.ApplyStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

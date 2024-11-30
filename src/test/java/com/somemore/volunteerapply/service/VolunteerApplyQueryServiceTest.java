@@ -1,9 +1,9 @@
-package com.somemore.volunteerApply.service;
+package com.somemore.volunteerapply.service;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.volunteerApply.domain.ApplyStatus;
-import com.somemore.volunteerApply.domain.VolunteerApply;
-import com.somemore.volunteerApply.repository.VolunteerApplyRepository;
+import com.somemore.volunteerapply.domain.ApplyStatus;
+import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

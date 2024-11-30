@@ -1,4 +1,4 @@
-package com.somemore.volunteerApply.domain;
+package com.somemore.volunteerapply.domain;
 
 public enum ApplyStatus {
     WAITING,

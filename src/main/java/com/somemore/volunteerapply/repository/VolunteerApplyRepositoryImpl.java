@@ -1,10 +1,10 @@
-package com.somemore.volunteerApply.repository;
+package com.somemore.volunteerapply.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.somemore.volunteerApply.domain.QVolunteerApply;
-import com.somemore.volunteerApply.domain.VolunteerApply;
+import com.somemore.volunteerapply.domain.QVolunteerApply;
+import com.somemore.volunteerapply.domain.VolunteerApply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

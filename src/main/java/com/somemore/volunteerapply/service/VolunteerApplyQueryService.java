@@ -1,7 +1,7 @@
-package com.somemore.volunteerApply.service;
+package com.somemore.volunteerapply.service;
 
-import com.somemore.volunteerApply.repository.VolunteerApplyRepository;
-import com.somemore.volunteerApply.usecase.VolunteerApplyQueryUseCase;
+import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
