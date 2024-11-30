@@ -35,7 +35,7 @@ public class GenerateTokensOnLoginService implements GenerateTokensOnLoginUseCas
     private EncodedToken generateToken(UUID volunteerId, TokenType tokenType) {
         return jwtGenerator.generateToken(
                 volunteerId.toString(),
-                UserRole.VOLUNTEER.name(),
+                UserRole.VOLUNTEER.getAuthority(),
                 tokenType);
     }
 
