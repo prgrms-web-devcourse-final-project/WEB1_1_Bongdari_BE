@@ -23,7 +23,7 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     private final VolunteerApplyJpaRepository volunteerApplyJpaRepository;
     private final JPAQueryFactory queryFactory;
 
-    private final QVolunteerApply volunteerApply = QVolunteerApply.volunteerApply;
+    private static final QVolunteerApply volunteerApply = QVolunteerApply.volunteerApply;
 
     @Override
     public VolunteerApply save(VolunteerApply volunteerApply) {

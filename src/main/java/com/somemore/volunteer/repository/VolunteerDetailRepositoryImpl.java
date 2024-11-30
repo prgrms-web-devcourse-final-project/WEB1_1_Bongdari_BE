@@ -17,7 +17,7 @@ public class VolunteerDetailRepositoryImpl implements VolunteerDetailRepository 
     private final VolunteerDetailJpaRepository volunteerDetailJpaRepository;
     private final JPAQueryFactory queryFactory;
 
-    private final QVolunteerDetail volunteerDetail = QVolunteerDetail.volunteerDetail;
+    private static final QVolunteerDetail volunteerDetail = QVolunteerDetail.volunteerDetail;
 
     @Override
     public VolunteerDetail save(VolunteerDetail volunteerDetail) {

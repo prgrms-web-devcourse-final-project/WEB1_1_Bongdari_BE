@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Repository
@@ -19,7 +18,7 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
     private final VolunteerJpaRepository volunteerJpaRepository;
     private final JPAQueryFactory queryFactory;
 
-    private final QVolunteer volunteer = QVolunteer.volunteer;
+    private static final QVolunteer volunteer = QVolunteer.volunteer;
 
     @Override
     public Volunteer save(Volunteer volunteer) {

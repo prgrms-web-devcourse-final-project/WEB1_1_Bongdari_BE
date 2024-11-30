@@ -247,9 +247,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(notCompletedBoardIds)
-                .hasSize(2);
-
-        assertThat(notCompletedBoardIds)
+                .hasSize(2)
                 .doesNotContain(deletedRecruitingBoard.getId())
                 .doesNotContain(deletedClosedBoard.getId())
                 .doesNotContain(deletedCompletedRecruitBoard.getId())

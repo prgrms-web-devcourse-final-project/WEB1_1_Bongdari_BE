@@ -27,17 +27,17 @@ public class VolunteerApply extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private ApplyStatus status;
+    private ApplyStatus status = ApplyStatus.WAITING;
 
     @Column(name = "attended", nullable = false)
-    private Boolean attended;
+    private Boolean attended = false;
 
     @Builder
     public VolunteerApply(UUID volunteerId, Long recruitBoardId, ApplyStatus status, Boolean attended) {
         this.volunteerId = volunteerId;
         this.recruitBoardId = recruitBoardId;
-        this.status = status != null ? status : ApplyStatus.WAITING;
-        this.attended = attended != null ? attended : false;
+        this.status = status;
+        this.attended = attended;
     }
 }
 
