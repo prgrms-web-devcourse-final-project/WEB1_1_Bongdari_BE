@@ -1,6 +1,7 @@
 package com.somemore.volunteerApply.service;
 
 import com.somemore.IntegrationTestSupport;
+import com.somemore.volunteerApply.domain.ApplyStatus;
 import com.somemore.volunteerApply.domain.VolunteerApply;
 import com.somemore.volunteerApply.repository.VolunteerApplyRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -50,8 +51,8 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
-                .status(null)
-                .attended(null)
+                .status(ApplyStatus.WAITING)
+                .attended(false)
                 .build();
     }
 }
