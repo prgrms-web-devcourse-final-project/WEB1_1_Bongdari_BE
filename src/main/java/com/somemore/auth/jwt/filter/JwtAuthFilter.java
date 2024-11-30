@@ -19,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value.Str;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,8 +30,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return true; // 개발 중 모든 요청 허용
-//        return httpServletRequest.getRequestURI().contains("token");
+        String token = request.getHeader("Authorization");
+        return token == null || token.isEmpty();
     }
 
     @Override
@@ -47,15 +48,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private EncodedToken getAccessToken(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization");
-        if (accessToken == null || accessToken.isEmpty()) {
+        if (!accessToken.startsWith("Bearer ")) {
             throw new JwtException(JwtErrorType.MISSING_TOKEN);
         }
+
+        accessToken = accessToken.substring(7);
+
         return new EncodedToken(accessToken);
     }
 
     private JwtAuthenticationToken createAuthenticationToken(Claims claims, EncodedToken accessToken) {
         String userId = claims.get("id", String.class);
-        UserRole role = claims.get("role", UserRole.class);
+        UserRole role = UserRole.valueOf(claims.get("role", String.class));
 
         return new JwtAuthenticationToken(
                 userId,
