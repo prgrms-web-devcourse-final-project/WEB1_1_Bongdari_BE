@@ -63,7 +63,7 @@ public class RecruitBoardCommandApiController {
     @PreAuthorize("hasRole('CENTER')")
     @Operation(summary = "봉사 활동 모집글 수정", description = "봉사 활동 모집글을 수정합니다.")
     @PutMapping(value = "/recruit-board/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<?> updateRecruitBoard(
+    public ApiResponse<String> updateRecruitBoard(
             @AuthenticationPrincipal String userId,
             @PathVariable Long id,
             @Valid @RequestPart("data") RecruitBoardUpdateRequestDto requestDto,
@@ -78,7 +78,7 @@ public class RecruitBoardCommandApiController {
     @PreAuthorize("hasRole('CENTER')")
     @Operation(summary = "봉사 활동 모집글 위치 수정", description = "봉사 활동 모집글의 위치를 수정합니다.")
     @PutMapping(value = "/recruit-board/{id}/location")
-    public ApiResponse<?> updateRecruitBoardLocation(
+    public ApiResponse<String> updateRecruitBoardLocation(
             @AuthenticationPrincipal String userId,
             @PathVariable Long id,
             @Valid @RequestBody RecruitBoardLocationUpdateRequestDto requestDto
@@ -91,7 +91,7 @@ public class RecruitBoardCommandApiController {
     @PreAuthorize("hasRole('CENTER')")
     @Operation(summary = "봉사 활동 모집글 상태 수정", description = "봉사 활동 모집글의 상태를 수정합니다.")
     @PatchMapping(value = "/recruit-board/{id}")
-    public ApiResponse<?> updateRecruitBoardStatus(
+    public ApiResponse<String> updateRecruitBoardStatus(
             @AuthenticationPrincipal String userId,
             @PathVariable Long id,
             @RequestBody RecruitBoardStatusUpdateRequestDto requestDto
@@ -106,7 +106,7 @@ public class RecruitBoardCommandApiController {
     @PreAuthorize("hasRole('CENTER')")
     @Operation(summary = "봉사 활동 모집글 삭제", description = "봉사 활동 모집글을 삭제합니다.")
     @DeleteMapping(value = "/recruit-board/{id}")
-    public ApiResponse<?> deleteRecruitBoard(
+    public ApiResponse<String> deleteRecruitBoard(
             @AuthenticationPrincipal String userId,
             @PathVariable Long id
     ) {
