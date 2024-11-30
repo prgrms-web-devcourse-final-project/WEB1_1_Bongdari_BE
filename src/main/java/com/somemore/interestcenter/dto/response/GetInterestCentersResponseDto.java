@@ -3,7 +3,6 @@ package com.somemore.interestcenter.dto.response;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.center.dto.response.CenterOverviewInfoResponseDto;
-import com.somemore.interestcenter.domain.InterestCenter;
 import lombok.Builder;
 
 import java.util.UUID;
