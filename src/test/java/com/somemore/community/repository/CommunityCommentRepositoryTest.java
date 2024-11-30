@@ -78,12 +78,12 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        CommunityComment savedComment = communityCommentRepository.save(communityCommentReply);
+        CommunityComment savedCommentReply = communityCommentRepository.save(communityCommentReply);
 
         //then
-        assertThat(savedComment.getWriterId()).isEqualTo(writerId);
-        assertThat(savedComment.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
-        assertThat(savedComment.getParentCommentId()).isEqualTo(1L);
+        assertThat(savedCommentReply.getWriterId()).isEqualTo(writerId);
+        assertThat(savedCommentReply.getContent()).isEqualTo("커뮤니티 댓글 테스트 내용");
+        assertThat(savedCommentReply.getParentCommentId()).isEqualTo(1L);
     }
 
     @DisplayName("댓글을 id로 조회할 수 있다. (Repository)")
