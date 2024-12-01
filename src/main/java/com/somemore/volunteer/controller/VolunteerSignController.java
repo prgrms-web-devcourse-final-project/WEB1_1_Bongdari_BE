@@ -21,7 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/volunteer")
-@Tag(name = "Volunteer OAuth API", description = "Handles Volunteer OAuth Sign-in, Sign-out")
+@Tag(name = "Volunteer Sign API", description = "봉사자 로그인, 로그아웃")
 public class VolunteerSignController {
 
     private final GenerateOAuthUrlUseCase generateOAuthUrlUseCase;
