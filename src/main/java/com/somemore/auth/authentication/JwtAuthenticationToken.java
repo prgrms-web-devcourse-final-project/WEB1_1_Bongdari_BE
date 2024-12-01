@@ -1,11 +1,13 @@
 package com.somemore.auth.authentication;
 
+import lombok.EqualsAndHashCode;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.util.Collection;
 
+@EqualsAndHashCode(callSuper = true)
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private final Serializable principal;
     private final transient Object credentials;
