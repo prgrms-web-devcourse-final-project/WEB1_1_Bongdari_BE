@@ -44,7 +44,7 @@ public class CommunityCommentQueryService implements CommunityCommentQueryUseCas
     private Optional<CommunityCommentView> processDeletedComment(List<Long> parentCommentIds, CommunityCommentView commentView) {
         CommunityComment comment = commentView.communityComment();
 
-        if (comment.getDeleted()) {
+        if (comment.isDeleted()) {
             if (parentCommentIds.contains(comment.getId())) {
                 return Optional.of(commentView.replaceWriterNickname(commentView));
             }

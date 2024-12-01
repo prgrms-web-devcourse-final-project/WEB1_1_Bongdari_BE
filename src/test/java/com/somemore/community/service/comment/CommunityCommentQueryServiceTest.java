@@ -131,7 +131,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
         //then
         assertThat(comments).hasSize(1);
         assertThat(comments.getFirst().content()).isEqualTo("삭제된 댓글입니다");
-        assertThat(comments.getFirst().writerNickname()).isEqualTo("");
+        assertThat(comments.getFirst().writerNickname()).isEmpty();
         assertThat(comments.getFirst().replies()).hasSize(1);
         assertThat(comments.getFirst().replies().getFirst().id()).isEqualTo(replyId);
     }
