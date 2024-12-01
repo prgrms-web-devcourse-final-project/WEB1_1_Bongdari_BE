@@ -17,7 +17,7 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 annotation.username(),
                 "password",
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + annotation.role()))
         );
 
         context.setAuthentication(auth);
