@@ -129,7 +129,7 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         assertThat(response).isNotNull();
         assertThat(response.volunteerId()).isEqualTo(volunteerId.toString());
         assertThat(response.nickname()).isEqualTo(volunteer.getNickname());
-        assertThat(response.volunteerDetailProfileResponseDto()).isNull();
+        assertThat(response.detail()).isNull();
     }
 
     @DisplayName("권한이 없는 기관의 봉사자 상세 프로필 조회 실패")

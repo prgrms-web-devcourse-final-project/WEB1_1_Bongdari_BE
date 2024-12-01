@@ -30,8 +30,8 @@ public record VolunteerProfileResponseDto(
         @Schema(description = "총 봉사 횟수", example = "20")
         Integer totalVolunteerCount,
 
-        @Schema(description = "봉사자 상세 정보", implementation = VolunteerDetailProfileResponseDto.class)
-        VolunteerDetailProfileResponseDto volunteerDetailProfileResponseDto
+        @Schema(description = "봉사자 상세 정보", implementation = Detail.class)
+        Detail detail
 ) {
 
     public static VolunteerProfileResponseDto from(
@@ -46,7 +46,7 @@ public record VolunteerProfileResponseDto(
                 volunteer.getTier().name(),
                 volunteer.getTotalVolunteerHours(),
                 volunteer.getTotalVolunteerCount(),
-                VolunteerDetailProfileResponseDto.from(volunteerDetail)
+                Detail.from(volunteerDetail)
         );
     }
 
@@ -66,8 +66,8 @@ public record VolunteerProfileResponseDto(
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    @Schema(description = "봉사자 상세 프로필 응답 DTO")
-    private record VolunteerDetailProfileResponseDto(
+    @Schema(description = "봉사자 상세 프로필")
+    private record Detail(
             @Schema(description = "이름", example = "홍길동")
             String name,
 
@@ -83,10 +83,10 @@ public record VolunteerProfileResponseDto(
             @Schema(description = "연락처", example = "010-1234-5678")
             String contactNumber
     ) {
-        public static VolunteerDetailProfileResponseDto from(
+        public static Detail from(
                 VolunteerDetail volunteerDetail
         ) {
-            return new VolunteerDetailProfileResponseDto(
+            return new Detail(
                     volunteerDetail.getName(),
                     volunteerDetail.getEmail(),
                     volunteerDetail.getGender().name(),
