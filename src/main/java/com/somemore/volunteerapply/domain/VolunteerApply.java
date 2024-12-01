@@ -1,13 +1,21 @@
 package com.somemore.volunteerapply.domain;
 
+import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
+
 import com.somemore.global.common.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,12 +41,29 @@ public class VolunteerApply extends BaseEntity {
     private Boolean attended = false;
 
     @Builder
-    public VolunteerApply(UUID volunteerId, Long recruitBoardId, ApplyStatus status, Boolean attended) {
+    public VolunteerApply(UUID volunteerId, Long recruitBoardId, ApplyStatus status,
+            Boolean attended) {
         this.volunteerId = volunteerId;
         this.recruitBoardId = recruitBoardId;
         this.status = status;
         this.attended = attended;
     }
-}
 
-// TODO 상태 업데이트 메서드들을 만들고 빌더에서 status를 변경 불가하도록
+    public void changeStatus(ApplyStatus status) {
+        if (isVolunteerActivityCompleted()) {
+            throw new IllegalStateException("이미 완료된 봉사활동에 대해서는 변경이 불가능합니다.");
+        }
+        this.status = status;
+    }
+
+    public void changeAttended(Boolean attended) {
+        if (this.status != APPROVED) {
+            throw new IllegalStateException("승인되지 않은 봉사 지원은 참석 여부를 변경할 수 없습니다.");
+        }
+        this.attended = attended;
+    }
+
+    public boolean isVolunteerActivityCompleted() {
+        return this.attended && this.status == APPROVED;
+    }
+}
