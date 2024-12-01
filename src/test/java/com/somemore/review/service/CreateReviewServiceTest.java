@@ -5,16 +5,12 @@ import static com.somemore.global.exception.ExceptionMessage.REVIEW_RESTRICTED_T
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.review.domain.Review;
 import com.somemore.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.review.repository.ReviewRepository;
-import com.somemore.review.repository.ReviewRepositoryImpl;
-import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.Optional;
