@@ -1,9 +1,9 @@
-package com.somemore.center.dto.response;
+package com.somemore.center.repository.mapper;
 
 
 import java.util.UUID;
 
-public record CenterOverviewInfoResponseDto(
+public record CenterOverviewInfo(
         UUID centerId,
         String centerName,
         String imgUrl

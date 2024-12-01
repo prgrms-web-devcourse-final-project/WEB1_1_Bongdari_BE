@@ -1,7 +1,7 @@
 package com.somemore.interestcenter.controller;
 
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.interestcenter.dto.response.GetInterestCentersResponseDto;
+import com.somemore.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.interestcenter.usecase.InterestCenterQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,9 +22,9 @@ public class InterestCenterQueryApiController {
 
     @Operation(summary = "관심기관 목록 조회 API")
     @GetMapping("/api/interest-centers")
-    public ApiResponse<List<GetInterestCentersResponseDto>> getInterestCenters(@AuthenticationPrincipal String volunteerId) {
+    public ApiResponse<List<InterestCentersResponseDto>> getInterestCenters(@AuthenticationPrincipal String volunteerId) {
 
-        List<GetInterestCentersResponseDto> responseDtos = interestCenterQueryUseCase.getInterestCenters(UUID.fromString(volunteerId));
+        List<InterestCentersResponseDto> responseDtos = interestCenterQueryUseCase.getInterestCenters(UUID.fromString(volunteerId));
 
         return ApiResponse.ok(200, responseDtos, "관심기관 조회 성공");
     }

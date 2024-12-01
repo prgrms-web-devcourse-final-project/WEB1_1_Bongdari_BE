@@ -17,7 +17,7 @@ public record RegisterInterestCenterResponseDto(
         @Schema(description = "봉사자 ID", example = "123e4567-e89b-12d3-a456-426614174000")
         UUID volunteerId,
 
-        @Schema(description = "센터 ID", example = "123e4567-e89b-12d3-a456-426614174000")
+        @Schema(description = "기관 ID", example = "123e4567-e89b-12d3-a456-426614174000")
         UUID centerId
 ) {
         public static RegisterInterestCenterResponseDto from(InterestCenter interestCenter) {

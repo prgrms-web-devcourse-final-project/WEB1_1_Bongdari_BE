@@ -1,7 +1,7 @@
 package com.somemore.center.service.query;
 
 import com.somemore.center.domain.Center;
-import com.somemore.center.dto.response.CenterOverviewInfoResponseDto;
+import com.somemore.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.CenterRepository;
@@ -35,7 +35,7 @@ public class CenterQueryService implements CenterQueryUseCase {
     }
 
     @Override
-    public List<CenterOverviewInfoResponseDto> getCenterOverviewsByIds(List<UUID> centerIds) {
+    public List<CenterOverviewInfo> getCenterOverviewsByIds(List<UUID> centerIds) {
         return centerRepository.findCenterOverviewsByIds(centerIds);
     }
 

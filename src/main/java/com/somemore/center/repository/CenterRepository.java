@@ -1,7 +1,7 @@
 package com.somemore.center.repository;
 
 import com.somemore.center.domain.Center;
-import com.somemore.center.dto.response.CenterOverviewInfoResponseDto;
+import com.somemore.center.repository.mapper.CenterOverviewInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +16,6 @@ public interface CenterRepository {
         return !existsById(id);
     }
     Optional<Center> findCenterById(UUID id);
-    List<CenterOverviewInfoResponseDto> findCenterOverviewsByIds(List<UUID> ids);
+    List<CenterOverviewInfo> findCenterOverviewsByIds(List<UUID> ids);
     void deleteAllInBatch();
 }

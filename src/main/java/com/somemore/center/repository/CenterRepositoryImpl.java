@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.Center;
 import com.somemore.center.domain.QCenter;
-import com.somemore.center.dto.response.CenterOverviewInfoResponseDto;
+import com.somemore.center.repository.mapper.CenterOverviewInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -35,12 +35,12 @@ public class CenterRepositoryImpl implements CenterRepository {
     }
 
     @Override
-    public List<CenterOverviewInfoResponseDto> findCenterOverviewsByIds(List<UUID> ids) {
+    public List<CenterOverviewInfo> findCenterOverviewsByIds(List<UUID> ids) {
         QCenter center = QCenter.center;
 
         return queryFactory
                 .select(Projections.constructor(
-                        CenterOverviewInfoResponseDto.class,
+                        CenterOverviewInfo.class,
                         center.id,
                         center.name,
                         center.imgUrl

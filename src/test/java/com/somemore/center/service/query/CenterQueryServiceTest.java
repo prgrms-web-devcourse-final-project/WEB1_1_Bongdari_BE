@@ -3,7 +3,7 @@ package com.somemore.center.service.query;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.domain.PreferItem;
-import com.somemore.center.dto.response.CenterOverviewInfoResponseDto;
+import com.somemore.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.repository.CenterJpaRepository;
 import com.somemore.center.repository.CenterRepository;
@@ -86,7 +86,7 @@ class CenterQueryServiceTest extends IntegrationTestSupport {
         List<UUID> ids = List.of(center.getId(),center1.getId(), center2.getId());
 
         //when
-        List<CenterOverviewInfoResponseDto> responseDtos = centerQueryService.getCenterOverviewsByIds(ids);
+        List<CenterOverviewInfo> responseDtos = centerQueryService.getCenterOverviewsByIds(ids);
 
         //then
         assertThat(responseDtos)

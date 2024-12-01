@@ -2,7 +2,7 @@ package com.somemore.interestcenter.controller;
 
 import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
-import com.somemore.interestcenter.dto.response.GetInterestCentersResponseDto;
+import com.somemore.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.interestcenter.usecase.InterestCenterQueryUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,9 +29,9 @@ class InterestCenterQueryApiControllerTest extends ControllerTestSupport {
         // given
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         UUID centerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
-        List<GetInterestCentersResponseDto> responseDtos = List.of(
-                new GetInterestCentersResponseDto(centerId, "센터1", "http://image1.jpg"),
-                new GetInterestCentersResponseDto(centerId, "센터2", "http://image2.jpg")
+        List<InterestCentersResponseDto> responseDtos = List.of(
+                new InterestCentersResponseDto(centerId, "센터1", "http://image1.jpg"),
+                new InterestCentersResponseDto(centerId, "센터2", "http://image2.jpg")
         );
 
         given(interestCenterQueryUseCase.getInterestCenters(volunteerId)).willReturn(responseDtos);

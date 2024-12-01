@@ -4,7 +4,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterJpaRepository;
 import com.somemore.interestcenter.domain.InterestCenter;
-import com.somemore.interestcenter.dto.response.GetInterestCentersResponseDto;
+import com.somemore.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.interestcenter.repository.InterestCenterJpaRepository;
 import com.somemore.interestcenter.repository.InterestCenterRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +50,7 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         interestCenterJpaRepository.saveAll(List.of(interestCenter, interestCenter1, interestCenter2));
 
         // when
-        List<GetInterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(volunteerId);
+        List<InterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(volunteerId);
 
         // then
         assertThat(result)
@@ -80,7 +80,7 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         interestCenterJpaRepository.save(unrelatedInterestCenter);
 
         // when
-        List<GetInterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(volunteerId);
+        List<InterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(volunteerId);
 
         // then
         assertThat(result).isEmpty();
