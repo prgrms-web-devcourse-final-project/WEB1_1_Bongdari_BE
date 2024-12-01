@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.ControllerTestSupport;
+import com.somemore.WithMockCustomUser;
 import com.somemore.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.recruitboard.domain.RecruitStatus;
@@ -38,7 +39,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
@@ -65,7 +65,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @Test
     @DisplayName("봉사 활동 모집글 등록 성공 테스트")
-    @WithMockUser(roles = "CENTER", value = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
+    @WithMockCustomUser(role = "CENTER")
     void createRecruitBoard_success() throws Exception {
         // given
         LocalDateTime startDateTime = createStartDateTime();
@@ -125,7 +125,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 수정 성공 테스트")
     @Test
-    @WithMockUser(roles = "CENTER", value = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
+    @WithMockCustomUser(role = "CENTER")
     void updateRecruitBoard() throws Exception {
         // given
         LocalDateTime startDateTime = createStartDateTime();
@@ -186,7 +186,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 위치 수정 성공 테스트")
     @Test
-    @WithMockUser(roles = "CENTER", value = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
+    @WithMockCustomUser(role = "CENTER")
     void updateRecruitBoardLocation() throws Exception {
         // given
         RecruitBoardLocationUpdateRequestDto requestDto = RecruitBoardLocationUpdateRequestDto.builder()
@@ -216,7 +216,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 상태 변경 성공")
     @Test
-    @WithMockUser(roles = "CENTER", value = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
+    @WithMockCustomUser(role = "CENTER")
     void updateRecruitBoardStatus() throws Exception {
         // given
         RecruitStatus status = CLOSED;
@@ -241,7 +241,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 삭제 성공")
     @Test
-    @WithMockUser(roles = "CENTER", value = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
+    @WithMockCustomUser(role = "CENTER")
     void deleteRecruitBoard() throws Exception {
         // given
         Long recruitBoardId = 1L;
