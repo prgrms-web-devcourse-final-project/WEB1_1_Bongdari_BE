@@ -1,8 +1,13 @@
 package com.somemore.volunteerapply.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.IntegrationTestSupport;
-import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.domain.ApplyStatus;
+import com.somemore.volunteerapply.domain.VolunteerApply;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,12 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
@@ -73,7 +72,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findVolunteerIdsByRecruitIds() {
         // When
-        List<UUID> volunteerIds = volunteerApplyRepository.findVolunteerIdsByRecruitIds(List.of(1L, 2L));
+        List<UUID> volunteerIds = volunteerApplyRepository.findVolunteerIdsByRecruitIds(
+                List.of(1L, 2L));
 
         // Then
         assertThat(volunteerIds).hasSize(20);
@@ -87,8 +87,10 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         PageRequest secondPage = PageRequest.of(1, 10, Sort.by(Sort.Order.asc("created_at")));
 
         // When
-        Page<VolunteerApply> firstPageResult = volunteerApplyRepository.findAllByRecruitId(1L, firstPage);
-        Page<VolunteerApply> secondPageResult = volunteerApplyRepository.findAllByRecruitId(1L, secondPage);
+        Page<VolunteerApply> firstPageResult = volunteerApplyRepository.findAllByRecruitId(1L,
+                firstPage);
+        Page<VolunteerApply> secondPageResult = volunteerApplyRepository.findAllByRecruitId(1L,
+                secondPage);
 
         // Then
         assertThat(firstPageResult.getContent()).hasSize(10);
@@ -100,5 +102,28 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         assertThat(secondPageResult.getContent()).hasSize(5);
         assertThat(secondPageResult.hasNext()).isFalse();
         assertThat(secondPageResult.hasPrevious()).isTrue();
+    }
+
+    @DisplayName("모집글 아이디와 봉사자 아이디로 봉사 지원을 조회할 수 있다.")
+    @Test
+    void findByRecruitIdAndVolunteerId() {
+        // given
+        Long recruitId = 1234L;
+        UUID volunteerId = UUID.randomUUID();
+
+        VolunteerApply newApply = VolunteerApply.builder()
+                .volunteerId(volunteerId)
+                .recruitBoardId(recruitId)
+                .status(ApplyStatus.APPROVED)
+                .attended(false)
+                .build();
+        volunteerApplyRepository.save(newApply);
+
+        // when
+        Optional<VolunteerApply> findApply = volunteerApplyRepository.findByRecruitIdAndVolunteerId(
+                recruitId, volunteerId);
+
+        // then
+        assertThat(findApply).isPresent();
     }
 }
