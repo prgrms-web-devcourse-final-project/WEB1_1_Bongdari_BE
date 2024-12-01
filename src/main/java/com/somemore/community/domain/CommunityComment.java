@@ -51,4 +51,8 @@ public class CommunityComment extends BaseEntity {
     public void updateWith(CommunityCommentUpdateRequestDto dto) {
         this.content = dto.content();
     }
+
+    public void replaceComment() {
+        this.content = "삭제된 댓글입니다";
+    }
 }
