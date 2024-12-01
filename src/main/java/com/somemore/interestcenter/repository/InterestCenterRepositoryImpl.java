@@ -8,6 +8,7 @@ import com.somemore.interestcenter.dto.response.RegisterInterestCenterResponseDt
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,6 +60,20 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
                 .fetchOne();
 
         return Optional.ofNullable(result);
+    }
+
+    @Override
+    public List<UUID> findInterestCenterIdsByVolunteerId(UUID volunteerId) {
+        QInterestCenter interestCenter = QInterestCenter.interestCenter;
+
+        return queryFactory
+                .select(interestCenter.centerId)
+                .from(interestCenter)
+                .where(
+                        interestCenter.volunteerId.eq(volunteerId)
+                                .and(interestCenter.deleted.eq(false))
+                )
+                .fetch();
     }
 
     @Override
