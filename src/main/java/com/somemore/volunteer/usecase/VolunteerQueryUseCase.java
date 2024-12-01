@@ -1,16 +1,16 @@
 package com.somemore.volunteer.usecase;
 
-import com.somemore.volunteer.dto.response.VolunteerResponseDto;
+import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 
 import java.util.UUID;
 
 public interface VolunteerQueryUseCase {
 
-    VolunteerResponseDto getMyProfile(UUID volunteerId);
+    VolunteerProfileResponseDto getMyProfile(UUID volunteerId);
 
-    VolunteerResponseDto getVolunteerProfile(UUID volunteerId);
+    VolunteerProfileResponseDto getVolunteerProfile(UUID volunteerId);
 
-    VolunteerResponseDto getVolunteerDetailedProfile(UUID volunteerId, UUID centerId);
+    VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId, UUID centerId);
 
     UUID getVolunteerIdByOAuthId(String oAuthId);
 

@@ -7,8 +7,8 @@ import com.somemore.volunteer.domain.VolunteerDetail;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Schema(description = "봉사자 응답 DTO")
-public record VolunteerResponseDto(
+@Schema(description = "봉사자 프로필 응답 DTO")
+public record VolunteerProfileResponseDto(
         @Schema(description = "봉사자 ID", example = "123e4567-e89b-12d3-a456-426614174000")
         String volunteerId,
 
@@ -30,15 +30,15 @@ public record VolunteerResponseDto(
         @Schema(description = "총 봉사 횟수", example = "20")
         Integer totalVolunteerCount,
 
-        @Schema(description = "봉사자 상세 정보", implementation = VolunteerDetailResponseDto.class)
-        VolunteerDetailResponseDto volunteerDetailResponseDto
+        @Schema(description = "봉사자 상세 정보", implementation = Detail.class)
+        Detail detail
 ) {
 
-    public static VolunteerResponseDto from(
+    public static VolunteerProfileResponseDto from(
             Volunteer volunteer,
             VolunteerDetail volunteerDetail
     ) {
-        return new VolunteerResponseDto(
+        return new VolunteerProfileResponseDto(
                 volunteer.getId().toString(),
                 volunteer.getNickname(),
                 volunteer.getImgUrl(),
@@ -46,14 +46,14 @@ public record VolunteerResponseDto(
                 volunteer.getTier().name(),
                 volunteer.getTotalVolunteerHours(),
                 volunteer.getTotalVolunteerCount(),
-                VolunteerDetailResponseDto.from(volunteerDetail)
+                Detail.from(volunteerDetail)
         );
     }
 
-    public static VolunteerResponseDto from(
+    public static VolunteerProfileResponseDto from(
             Volunteer volunteer
     ) {
-        return new VolunteerResponseDto(
+        return new VolunteerProfileResponseDto(
                 volunteer.getId().toString(),
                 volunteer.getNickname(),
                 volunteer.getImgUrl(),
@@ -66,8 +66,8 @@ public record VolunteerResponseDto(
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    @Schema(description = "봉사자 상세 응답 DTO")
-    private record VolunteerDetailResponseDto(
+    @Schema(description = "봉사자 상세 프로필")
+    private record Detail(
             @Schema(description = "이름", example = "홍길동")
             String name,
 
@@ -83,10 +83,10 @@ public record VolunteerResponseDto(
             @Schema(description = "연락처", example = "010-1234-5678")
             String contactNumber
     ) {
-        public static VolunteerDetailResponseDto from(
+        public static Detail from(
                 VolunteerDetail volunteerDetail
         ) {
-            return new VolunteerDetailResponseDto(
+            return new Detail(
                     volunteerDetail.getName(),
                     volunteerDetail.getEmail(),
                     volunteerDetail.getGender().name(),

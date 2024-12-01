@@ -6,7 +6,7 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
-import com.somemore.volunteer.dto.response.VolunteerResponseDto;
+import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -103,7 +103,7 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         volunteerDetailRepository.save(volunteerDetail);
 
         // when
-        VolunteerResponseDto response = volunteerQueryService.getMyProfile(volunteerId);
+        VolunteerProfileResponseDto response = volunteerQueryService.getMyProfile(volunteerId);
 
         // then
         assertThat(response).isNotNull();
@@ -123,13 +123,13 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         volunteerDetailRepository.save(volunteerDetail);
 
         // when
-        VolunteerResponseDto response = volunteerQueryService.getVolunteerProfile(volunteerId);
+        VolunteerProfileResponseDto response = volunteerQueryService.getVolunteerProfile(volunteerId);
 
         // then
         assertThat(response).isNotNull();
         assertThat(response.volunteerId()).isEqualTo(volunteerId.toString());
         assertThat(response.nickname()).isEqualTo(volunteer.getNickname());
-        assertThat(response.volunteerDetailResponseDto()).isNull();
+        assertThat(response.detail()).isNull();
     }
 
     @DisplayName("권한이 없는 기관의 봉사자 상세 프로필 조회 실패")

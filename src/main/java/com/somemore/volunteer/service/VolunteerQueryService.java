@@ -4,7 +4,7 @@ import com.somemore.facade.validator.VolunteerDetailAccessValidator;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
-import com.somemore.volunteer.dto.response.VolunteerResponseDto;
+import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
@@ -28,27 +28,27 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     private final VolunteerDetailAccessValidator volunteerDetailAccessValidator;
 
     @Override
-    public VolunteerResponseDto getMyProfile(UUID volunteerId) {
+    public VolunteerProfileResponseDto getMyProfile(UUID volunteerId) {
 
-        return VolunteerResponseDto.from(
+        return VolunteerProfileResponseDto.from(
                 findVolunteer(volunteerId),
                 findVolunteerDetail(volunteerId)
         );
     }
 
     @Override
-    public VolunteerResponseDto getVolunteerProfile(UUID volunteerId) {
+    public VolunteerProfileResponseDto getVolunteerProfile(UUID volunteerId) {
 
-        return VolunteerResponseDto.from(
+        return VolunteerProfileResponseDto.from(
                 findVolunteer(volunteerId)
         );
     }
 
     @Override
-    public VolunteerResponseDto getVolunteerDetailedProfile(UUID volunteerId, UUID centerId) {
+    public VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId, UUID centerId) {
         volunteerDetailAccessValidator.validateByCenterId(centerId, volunteerId);
 
-        return VolunteerResponseDto.from(
+        return VolunteerProfileResponseDto.from(
                 findVolunteer(volunteerId),
                 findVolunteerDetail(volunteerId)
         );
