@@ -22,7 +22,10 @@ public enum ExceptionMessage {
     EMPTY_FILE("파일이 존재하지 않습니다."),
     INSTANTIATION_NOT_ALLOWED("인스턴스화 할 수 없는 클래스 입니다."),
     CANNOT_CANCEL_DELETED_INTEREST_CENTER("이미 삭제된 관심 기관은 취소할 수 없습니다."),
-    DUPLICATE_INTEREST_CENTER("이미 관심 표시한 기관입니다.")
+    DUPLICATE_INTEREST_CENTER("이미 관심 표시한 기관입니다."),
+    NOT_EXISTS_VOLUNTEER_APPLY("존재하지 않는 봉사 활동 지원입니다."),
+    REVIEW_ALREADY_EXISTS("이미 작성한 리뷰가 존재합니다."),
+    REVIEW_RESTRICTED_TO_ATTENDED("리뷰는 참석한 봉사에 한해서만 작성할 수 있습니다.")
     ;
 
     private final String message;
