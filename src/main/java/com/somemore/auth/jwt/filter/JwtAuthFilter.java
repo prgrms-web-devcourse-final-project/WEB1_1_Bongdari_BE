@@ -1,5 +1,6 @@
 package com.somemore.auth.jwt.filter;
 
+import com.somemore.auth.authentication.JwtAuthenticationToken;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.exception.JwtErrorType;
 import com.somemore.auth.jwt.exception.JwtException;
@@ -30,12 +31,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        return token == null || token.isEmpty();
+        String path = request.getRequestURI();
+
+        return token == null
+                || token.isEmpty()
+                || path.equals("/api/center/sign-in");
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
         EncodedToken accessToken = getAccessToken(request);
         jwtUseCase.processAccessToken(accessToken, response);
 
