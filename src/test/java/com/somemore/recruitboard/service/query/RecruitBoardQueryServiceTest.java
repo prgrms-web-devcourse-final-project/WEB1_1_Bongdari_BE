@@ -1,7 +1,9 @@
 package com.somemore.recruitboard.service.query;
 
 import static com.somemore.common.fixture.CenterFixture.createCenter;
+import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.common.fixture.LocationFixture.createLocation;
+import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
@@ -15,6 +17,7 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
@@ -213,6 +216,49 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
             () -> recruitBoardQueryService.getRecruitBoardsByCenterId(wrongCenterId, condition))
             .isInstanceOf(BadRequestException.class)
             .hasMessage(NOT_EXISTS_CENTER.getMessage());
+    }
+
+    @DisplayName("센터 ID로 완료되지 않은 모집 게시글들의 ID를 조회할 수 있다")
+    @Test
+    void findNotCompletedIdsByCenterIds() {
+        // given
+        UUID centerId = UUID.randomUUID();
+
+        RecruitBoard deletedRecruitingBoard = createRecruitBoard(centerId);
+        deletedRecruitingBoard.markAsDeleted();
+        recruitBoardRepository.save(deletedRecruitingBoard);
+
+        RecruitBoard recruitingBoard = createRecruitBoard(centerId);
+        recruitBoardRepository.save(recruitingBoard);
+
+        RecruitBoard deletedClosedBoard = createRecruitBoard(centerId);
+        deletedClosedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
+        deletedClosedBoard.markAsDeleted();
+        recruitBoardRepository.save(deletedClosedBoard);
+
+        RecruitBoard closedBoard = createRecruitBoard(centerId);
+        closedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
+        recruitBoardRepository.save(closedBoard);
+
+        RecruitBoard deletedCompletedRecruitBoard = createCompletedRecruitBoard();
+        deletedCompletedRecruitBoard.markAsDeleted();
+        recruitBoardRepository.save(deletedCompletedRecruitBoard);
+
+        RecruitBoard completedRecruitBoard = createCompletedRecruitBoard();
+        recruitBoardRepository.save(completedRecruitBoard);
+
+        // when
+        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(centerId);
+
+        // then
+        assertThat(notCompletedBoardIds)
+                .hasSize(2);
+
+        assertThat(notCompletedBoardIds)
+                .doesNotContain(deletedRecruitingBoard.getId())
+                .doesNotContain(deletedClosedBoard.getId())
+                .doesNotContain(deletedCompletedRecruitBoard.getId())
+                .doesNotContain(completedRecruitBoard.getId());
     }
 
     private Pageable getPageable() {

@@ -6,7 +6,7 @@ import com.somemore.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.auth.oauth.naver.service.query.ProcessNaverOAuthUserService;
 import com.somemore.auth.redirect.RedirectUseCase;
-import com.somemore.volunteer.usecase.FindVolunteerIdUseCase;
+import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.UUID;
 public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final ProcessNaverOAuthUserService processNaverOAuthService;
-    private final FindVolunteerIdUseCase findVolunteerIdUseCase;
+    private final VolunteerQueryUseCase volunteerQueryUseCase;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
     private final CookieUseCase cookieUseCase;
     private final RedirectUseCase redirectUseCase;
@@ -45,7 +45,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             }
         }
 
-        UUID volunteerId = findVolunteerIdUseCase.findVolunteerIdByOAuthId(oAuthId);
+        UUID volunteerId = volunteerQueryUseCase.getVolunteerIdByOAuthId(oAuthId);
         EncodedToken accessToken = generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(volunteerId);
 
         cookieUseCase.setAccessToken(response, accessToken.value());

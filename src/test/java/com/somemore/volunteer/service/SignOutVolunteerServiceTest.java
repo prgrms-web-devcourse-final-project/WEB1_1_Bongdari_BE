@@ -4,9 +4,9 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.cookie.CookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
+import com.somemore.auth.jwt.domain.UserRole;
 import com.somemore.auth.jwt.exception.JwtErrorType;
 import com.somemore.auth.jwt.exception.JwtException;
-import com.somemore.auth.jwt.filter.UserRole;
 import com.somemore.auth.jwt.generator.JwtGenerator;
 import com.somemore.auth.jwt.refresh.domain.RefreshToken;
 import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
@@ -57,12 +57,12 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
     @DisplayName("로그아웃 시 액세스 토큰 쿠키를 삭제하고 리프레시 토큰을 제거해야 한다.")
     void signOutDeletesTokens() {
         // Given
-        EncodedToken accessToken = jwtGenerator.generateToken(volunteerId, role.name(), TokenType.ACCESS);
+        EncodedToken accessToken = jwtGenerator.generateToken(volunteerId, role.getAuthority(), TokenType.ACCESS);
 
         RefreshToken refreshToken = new RefreshToken(
                 volunteerId,
                 accessToken,
-                jwtGenerator.generateToken(volunteerId, role.name(), TokenType.REFRESH));
+                jwtGenerator.generateToken(volunteerId, role.getAuthority(), TokenType.REFRESH));
 
         refreshTokenManager.save(refreshToken);
         cookieUseCase.setAccessToken(response, accessToken.value());

@@ -11,7 +11,7 @@ import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterJpaRepository;
 import com.somemore.volunteer.domain.Volunteer;
-import com.somemore.volunteer.repository.VolunteerJpaRepository;
+import com.somemore.volunteer.repository.VolunteerRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.util.UUID;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DevAccountSetUpConfig {
 
-    private final VolunteerJpaRepository volunteerRepository;
+    private final VolunteerRepository volunteerRepository;
     private final CenterJpaRepository centerRepository;
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenManager refreshTokenManager;
@@ -88,7 +88,7 @@ public class DevAccountSetUpConfig {
     }
 
     private EncodedToken generateToken(UUID id, UserRole role, TokenType tokenType) {
-        return jwtGenerator.generateToken(id.toString(), role.name(), tokenType);
+        return jwtGenerator.generateToken(id.toString(), role.getAuthority(), tokenType);
     }
 
     private RefreshToken generateRefreshToken(UUID id, UserRole role, EncodedToken accessToken) {

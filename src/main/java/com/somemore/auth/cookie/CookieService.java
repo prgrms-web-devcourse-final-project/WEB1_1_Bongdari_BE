@@ -16,12 +16,14 @@ public class CookieService implements CookieUseCase {
     public void setAccessToken(HttpServletResponse response, String value) {
         ResponseCookie cookie = generateCookie(TokenType.ACCESS, value);
         response.addHeader("Set-Cookie", cookie.toString());
+        log.info("SET_COOKIE_ACCESS_TOKEN = {}", value);
     }
 
     @Override
     public void deleteAccessToken(HttpServletResponse response) {
         ResponseCookie cookie = generateCookie(TokenType.SIGNOUT, TokenType.SIGNOUT.name());
         response.addHeader("Set-Cookie", cookie.toString());
+        log.info("DELETE_COOKIE_ACCESS_TOKEN");
     }
 
     private static ResponseCookie generateCookie(TokenType tokenType, String value) {

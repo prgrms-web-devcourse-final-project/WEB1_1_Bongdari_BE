@@ -39,7 +39,6 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-
     @AfterEach
     void tearDown() {
         redisTemplate.keys("*")
@@ -55,12 +54,12 @@ class JwtServiceTest extends IntegrationTestSupport {
         TokenType tokenType = TokenType.ACCESS;
 
         // when
-        EncodedToken token = jwtService.generateToken(userId, role.name(), tokenType);
+        EncodedToken token = jwtService.generateToken(userId, role.getAuthority(), tokenType);
 
         // then
         Claims claims = jwtService.getClaims(token);
         assertThat(claims.get("id", String.class)).isEqualTo(userId);
-        assertThat(claims.get("role", String.class)).isEqualTo(role.name());
+        assertThat(claims.get("role", String.class)).isEqualTo(role.getAuthority());
         assertThat(claims.getExpiration()).isNotNull();
     }
 
@@ -72,8 +71,8 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
 
         // when
-        EncodedToken accessToken = jwtService.generateToken(userId, role.name(), TokenType.ACCESS);
-        EncodedToken refreshToken = jwtService.generateToken(userId, role.name(), TokenType.REFRESH);
+        EncodedToken accessToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
+        EncodedToken refreshToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.REFRESH);
 
         // then
         Claims accessClaims = jwtService.getClaims(accessToken);
@@ -94,8 +93,8 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
 
         // when
-        EncodedToken token1 = jwtService.generateToken(userId, role.name(), TokenType.ACCESS);
-        EncodedToken token2 = jwtService.generateToken(userId, role.name(), TokenType.ACCESS);
+        EncodedToken token1 = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
+        EncodedToken token2 = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
 
         // then
         assertThat(token1.value()).isNotEqualTo(token2.value());
@@ -189,7 +188,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
         RefreshToken oldRefreshToken = createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
 
-        EncodedToken newAccessToken = jwtService.generateToken(userId, role.name(), TokenType.ACCESS);
+        EncodedToken newAccessToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
         RefreshToken newRefreshToken = createAndSaveRefreshToken(userId, newAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
 
         // when

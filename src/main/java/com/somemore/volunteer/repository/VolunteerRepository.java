@@ -9,7 +9,8 @@ import java.util.UUID;
 @Repository
 public interface VolunteerRepository {
     Volunteer save(Volunteer volunteer);
-    String findNicknameById(UUID id);
+    Optional<Volunteer> findById(UUID id);
     Optional<Volunteer> findByOauthId(String oauthId);
+    String findNicknameById(UUID id);
     void deleteAllInBatch();
 }
