@@ -5,12 +5,12 @@ import com.somemore.global.exception.DuplicateException;
 import com.somemore.global.exception.ImageUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     //예시 코드
     @ExceptionHandler(BadRequestException.class)
@@ -41,6 +41,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("중복 예외");
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ProblemDetail handleMethodArgumentNotValid(final MethodArgumentNotValidException e) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+
+        problemDetail.setTitle("유효성 예외");
+        problemDetail.setDetail("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
 
         return problemDetail;
     }
