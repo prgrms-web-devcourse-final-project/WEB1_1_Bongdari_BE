@@ -9,6 +9,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -16,9 +18,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,12 +28,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return true; // 개발 중 모든 요청 허용
-//        return httpServletRequest.getRequestURI().contains("token");
+        String token = request.getHeader("Authorization");
+        return token == null || token.isEmpty();
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         EncodedToken accessToken = getAccessToken(request);
         jwtUseCase.processAccessToken(accessToken, response);
 
@@ -47,15 +47,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private EncodedToken getAccessToken(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization");
-        if (accessToken == null || accessToken.isEmpty()) {
+        if (!accessToken.startsWith("Bearer ")) {
             throw new JwtException(JwtErrorType.MISSING_TOKEN);
         }
+
+        accessToken = accessToken.substring(7);
+
         return new EncodedToken(accessToken);
     }
 
-    private JwtAuthenticationToken createAuthenticationToken(Claims claims, EncodedToken accessToken) {
+    private JwtAuthenticationToken createAuthenticationToken(Claims claims,
+            EncodedToken accessToken) {
         String userId = claims.get("id", String.class);
-        UserRole role = claims.get("role", UserRole.class);
+        UserRole role = UserRole.valueOf(claims.get("role", String.class));
 
         return new JwtAuthenticationToken(
                 userId,

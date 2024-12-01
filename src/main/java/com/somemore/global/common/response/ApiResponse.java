@@ -15,12 +15,8 @@ public class ApiResponse<T> {
         return new ApiResponse<>(status, message, data);
     }
 
-    public static ApiResponse<?> ok(String message) {
+    public static ApiResponse<String> ok(String message) {
         return new ApiResponse<>(200, message, "");
-    }
-
-    public static ApiResponse<?> error(int code, String message) {
-        return new ApiResponse<>(code, message, "");
     }
 
     public ApiResponse(int code, String message, T data) {
