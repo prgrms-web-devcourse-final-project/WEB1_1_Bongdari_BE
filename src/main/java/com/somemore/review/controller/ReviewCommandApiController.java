@@ -13,7 +13,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -33,19 +33,20 @@ public class ReviewCommandApiController {
     @Operation(summary = "리뷰 등록", description = "리뷰를 등록합니다.")
     @PostMapping(value = "/review", consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Long> createReview(
+            @AuthenticationPrincipal String userId,
             @Valid @RequestPart("data") ReviewCreateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image) {
 
         String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
         return ApiResponse.ok(
                 201,
-                createReviewUseCase.createReview(requestDto, getId(), imgUrl),
+                createReviewUseCase.createReview(requestDto, getId(userId), imgUrl),
                 "리뷰 등록 성공"
         );
     }
 
-    private static UUID getId() {
-        return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+    private static UUID getId(String id) {
+        return UUID.fromString(id);
     }
 
 }
