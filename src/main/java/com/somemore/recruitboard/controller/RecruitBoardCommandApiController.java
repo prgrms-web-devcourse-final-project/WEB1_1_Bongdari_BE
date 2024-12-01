@@ -68,7 +68,7 @@ public class RecruitBoardCommandApiController {
             @AuthenticationPrincipal String userId,
             @PathVariable Long id,
             @Valid @RequestPart("data") RecruitBoardUpdateRequestDto requestDto,
-            @RequestPart("img_file") MultipartFile image
+            @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
         String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
         updateRecruitBoardUseCase.updateRecruitBoard(requestDto, id, getCenterId(userId), imgUrl);
