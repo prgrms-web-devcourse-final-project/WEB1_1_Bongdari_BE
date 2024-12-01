@@ -1,5 +1,7 @@
 package com.somemore.volunteerapply.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
+
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
