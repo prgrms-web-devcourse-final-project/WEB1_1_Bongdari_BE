@@ -51,12 +51,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void saveAndFindById() {
         // Given
-        VolunteerApply newApply = VolunteerApply.builder()
-                .volunteerId(UUID.randomUUID())
-                .recruitBoardId(1L)
-                .status(ApplyStatus.APPROVED)
-                .attended(false)
-                .build();
+        VolunteerApply newApply = createApply(UUID.randomUUID(), 1L);
         VolunteerApply savedApply = volunteerApplyRepository.save(newApply);
 
         // When
@@ -111,12 +106,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         Long recruitId = 1234L;
         UUID volunteerId = UUID.randomUUID();
 
-        VolunteerApply newApply = VolunteerApply.builder()
-                .volunteerId(volunteerId)
-                .recruitBoardId(recruitId)
-                .status(ApplyStatus.APPROVED)
-                .attended(false)
-                .build();
+        VolunteerApply newApply = createApply(volunteerId, recruitId);
         volunteerApplyRepository.save(newApply);
 
         // when
@@ -125,5 +115,14 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(findApply).isPresent();
+    }
+
+    private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
+        return VolunteerApply.builder()
+                .volunteerId(volunteerId)
+                .recruitBoardId(recruitId)
+                .status(ApplyStatus.APPROVED)
+                .attended(false)
+                .build();
     }
 }

@@ -63,12 +63,7 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         Long recruitId = 1234L;
         UUID volunteerId = UUID.randomUUID();
 
-        VolunteerApply newApply = VolunteerApply.builder()
-                .volunteerId(volunteerId)
-                .recruitBoardId(recruitId)
-                .status(ApplyStatus.APPROVED)
-                .attended(false)
-                .build();
+        VolunteerApply newApply = createApply(volunteerId, recruitId);
         volunteerApplyRepository.save(newApply);
 
         // when
@@ -78,5 +73,14 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         // then
         assertThat(apply.getRecruitBoardId()).isEqualTo(recruitId);
         assertThat(apply.getVolunteerId()).isEqualTo(volunteerId);
+    }
+
+    private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
+        return VolunteerApply.builder()
+                .volunteerId(volunteerId)
+                .recruitBoardId(recruitId)
+                .status(ApplyStatus.APPROVED)
+                .attended(false)
+                .build();
     }
 }
