@@ -2,6 +2,7 @@ package com.somemore.volunteer.domain;
 
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.global.common.BaseEntity;
+import com.somemore.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,6 +57,12 @@ public class Volunteer extends BaseEntity {
                 .totalVolunteerHours(0)
                 .totalVolunteerCount(0)
                 .build();
+    }
+
+    public void updateWith(VolunteerProfileUpdateRequestDto dto, String imgUrl) {
+        this.nickname = dto.nickname();
+        this.introduce = dto.introduce();
+        this.imgUrl = imgUrl;
     }
 
     @Builder
