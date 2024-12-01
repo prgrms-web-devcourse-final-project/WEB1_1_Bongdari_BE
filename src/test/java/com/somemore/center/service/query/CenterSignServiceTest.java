@@ -35,8 +35,9 @@ class CenterSignServiceTest extends IntegrationTestSupport {
         UUID centerId = centerSignService.getIdByAccountId("account123");
 
         //then
-        assertThat(centerId).isNotNull();
-        assertThat(centerId).isEqualTo(center.getId());
+        assertThat(centerId)
+                .isNotNull()
+                .isEqualTo(center.getId());
     }
 
     @DisplayName("존재하지 않는 계정 ID로 센터 ID를 조회하면 예외가 발생한다.")
@@ -63,8 +64,9 @@ class CenterSignServiceTest extends IntegrationTestSupport {
         String password = centerSignService.getPasswordByAccountId("account123");
 
         //then
-        assertThat(password).isNotNull();
-        assertThat(password).isEqualTo("password123");
+        assertThat(password)
+                .isNotNull()
+                .isEqualTo("password123");
     }
 
     @DisplayName("존재하지 않는 계정 ID로 비밀번호를 조회하면 예외가 발생한다.")
