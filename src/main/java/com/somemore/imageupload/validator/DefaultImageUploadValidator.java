@@ -12,10 +12,6 @@ public class DefaultImageUploadValidator implements ImageUploadValidator {
     private static final long MAX_FILE_SIZE = 8L * 1024 * 1024; // 8MB
 
     public void validateFileSize(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            throw new ImageUploadException(EMPTY_FILE.getMessage());
-        }
-
         if (file.getSize() > MAX_FILE_SIZE) {
             throw new ImageUploadException(FILE_SIZE_EXCEEDED.getMessage());
         }
@@ -26,6 +22,11 @@ public class DefaultImageUploadValidator implements ImageUploadValidator {
         if (!isAllowedImageType(contentType)) {
             throw new ImageUploadException(INVALID_FILE_TYPE.getMessage());
         }
+    }
+
+    @Override
+    public boolean isEmptyFile(MultipartFile file) {
+        return file == null || file.isEmpty();
     }
 
     private boolean isAllowedImageType(String contentType) {

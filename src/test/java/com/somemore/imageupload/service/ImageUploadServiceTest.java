@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -18,7 +19,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 class ImageUploadServiceTest extends IntegrationTestSupport {
@@ -75,5 +78,20 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
 
         // when, then
         assertThrows(ImageUploadException.class, () -> imageUploadService.uploadImage(requestDto));
+    }
+
+    @DisplayName("이미지 파일이 없다면 기본 이미지 링크를 반환한다.")
+    @Test
+    void uploadImageWithEmptyFile() {
+        // given
+        MultipartFile emptyFile = new MockMultipartFile("file", new byte[0]);
+        given(imageUploadValidator.isEmptyFile(emptyFile)).willReturn(true);
+        ImageUploadRequestDto requestDto = new ImageUploadRequestDto(emptyFile);
+
+        // when
+        String imgUrl = imageUploadService.uploadImage(requestDto);
+
+        // then
+        assertThat(imgUrl).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultImageUploadValidatorTest {
@@ -20,16 +21,16 @@ class DefaultImageUploadValidatorTest {
     }
 
     @Test
-    @DisplayName("파일이 비어있으면 예외가 발생한다.")
+    @DisplayName("파일이 비어있는지 확인할 수 있다.")
     void shouldThrowExceptionWhenFileIsEmpty() {
         //given
         MultipartFile emptyFile = new MockMultipartFile("file", new byte[0]);
 
         //when
-        Throwable exception = assertThrows(ImageUploadException.class, () -> imageUploadValidator.validateFileSize(emptyFile));
+        boolean isEmpty = imageUploadValidator.isEmptyFile(emptyFile);
 
         //then
-        assertEquals(ImageUploadException.class, exception.getClass());
+        assertThat(isEmpty).isTrue();
     }
 
     @Test
