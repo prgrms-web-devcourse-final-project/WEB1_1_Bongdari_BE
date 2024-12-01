@@ -1,4 +1,4 @@
-package com.somemore.auth.jwt.filter;
+package com.somemore.auth.authentication;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
