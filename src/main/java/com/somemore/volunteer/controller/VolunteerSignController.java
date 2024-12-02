@@ -2,7 +2,7 @@ package com.somemore.volunteer.controller;
 
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.volunteer.usecase.SignOutVolunteerUseCase;
+import com.somemore.auth.signout.usecase.SignOutUseCase;
 import com.somemore.volunteer.usecase.GenerateOAuthUrlUseCase;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 public class VolunteerSignController {
 
     private final GenerateOAuthUrlUseCase generateOAuthUrlUseCase;
-    private final SignOutVolunteerUseCase signOutVolunteerUseCase;
+    private final SignOutUseCase signOutUseCase;
 
     @PostMapping("/sign-in/oauth/{oauthProvider}")
     public RedirectView signIn(
@@ -42,11 +42,11 @@ public class VolunteerSignController {
     }
 
     @PostMapping("/sign-out")
-    public ApiResponse<?> signOut(
+    public ApiResponse<String> signOut(
             HttpServletResponse response,
             @AuthenticationPrincipal String userId) {
 
-        signOutVolunteerUseCase.signOut(response, userId);
+        signOutUseCase.signOut(response, userId);
 
         return ApiResponse.ok("로그아웃되었습니다");
     }
