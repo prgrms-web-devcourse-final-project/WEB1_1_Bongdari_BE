@@ -65,6 +65,11 @@ public class Volunteer extends BaseEntity {
         this.imgUrl = imgUrl;
     }
 
+    public void updateVolunteerStats(int hours, int count) {
+        this.totalVolunteerHours += hours;
+        this.totalVolunteerCount += count;
+    }
+
     @Builder
     private Volunteer(
             OAuthProvider oauthProvider,
