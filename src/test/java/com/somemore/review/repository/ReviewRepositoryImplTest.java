@@ -10,7 +10,6 @@ import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
@@ -20,7 +19,6 @@ import com.somemore.review.domain.Review;
 import com.somemore.review.dto.condition.ReviewSearchCondition;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;
-import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.List;
