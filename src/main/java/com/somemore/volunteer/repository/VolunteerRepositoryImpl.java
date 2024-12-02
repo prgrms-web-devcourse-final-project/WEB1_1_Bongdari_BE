@@ -5,11 +5,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteer.domain.QVolunteer;
 import com.somemore.volunteer.domain.Volunteer;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
@@ -44,6 +44,11 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
     @Override
     public void deleteAllInBatch() {
         volunteerJpaRepository.deleteAllInBatch();
+    }
+
+    @Override
+    public List<Volunteer> findAllByIds(List<UUID> volunteerIds) {
+        return volunteerJpaRepository.findAllByIdInAndDeletedFalse(volunteerIds);
     }
 
     private Optional<Volunteer> findOne(BooleanExpression condition) {
