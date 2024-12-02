@@ -3,7 +3,7 @@ package com.somemore.review.controller;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.review.dto.condition.ReviewSearchCondition;
 import com.somemore.review.dto.response.ReviewResponseDto;
 import com.somemore.review.dto.response.ReviewWithNicknameResponseDto;
@@ -45,10 +45,10 @@ public class ReviewQueryApiController {
     public ApiResponse<Page<ReviewWithNicknameResponseDto>> getReviewsByCenterId(
             @PathVariable UUID centerId,
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false) VolunteerType type
+            @RequestParam(required = false) VolunteerCategory category
     ) {
         ReviewSearchCondition condition = ReviewSearchCondition.builder()
-                .volunteerType(type)
+                .category(category)
                 .pageable(pageable)
                 .build();
 
@@ -64,10 +64,10 @@ public class ReviewQueryApiController {
     public ApiResponse<Page<ReviewWithNicknameResponseDto>> getReviewsByVolunteerId(
             @PathVariable UUID volunteerId,
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false) VolunteerType type
+            @RequestParam(required = false) VolunteerCategory category
     ) {
         ReviewSearchCondition condition = ReviewSearchCondition.builder()
-                .volunteerType(type)
+                .category(category)
                 .pageable(pageable)
                 .build();
 

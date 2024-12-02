@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,7 +41,7 @@ public record RecruitBoardResponseDto(
     @Schema(description = "봉사 종료 일시", example = "2024-12-01T13:00:00")
     LocalDateTime volunteerEndDateTime,
     @Schema(description = "봉사 유형", example = "LIVING_SUPPORT")
-    VolunteerType volunteerType,
+    VolunteerCategory volunteerCategory,
     @Schema(description = "봉사 시간", example = "04:00:00")
     LocalTime volunteerTime,
     @Schema(description = "시간 인정 여부", example = "true")
@@ -65,7 +65,7 @@ public record RecruitBoardResponseDto(
             .recruitmentCount(info.getRecruitmentCount())
             .volunteerStartDateTime(info.getVolunteerStartDateTime())
             .volunteerEndDateTime(info.getVolunteerEndDateTime())
-            .volunteerType(info.getVolunteerType())
+            .volunteerCategory(info.getVolunteerCategory())
             .volunteerTime(info.calculateVolunteerTime())
             .admitted(info.getAdmitted())
             .imgUrl(board.getImgUrl())

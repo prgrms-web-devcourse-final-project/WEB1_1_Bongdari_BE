@@ -1,7 +1,7 @@
 package com.somemore.recruitboard.service.command;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -84,7 +84,7 @@ class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
-            .volunteerType(OTHER)
+            .volunteerCategory(OTHER)
             .admitted(true)
             .build();
 

@@ -3,9 +3,9 @@ package com.somemore.review.repository;
 import static com.somemore.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.common.fixture.CenterFixture.createCenter;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.recruitboard.domain.VolunteerType.COUNSELING;
-import static com.somemore.recruitboard.domain.VolunteerType.CULTURAL_EVENT;
-import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.recruitboard.domain.VolunteerCategory.COUNSELING;
+import static com.somemore.recruitboard.domain.VolunteerCategory.CULTURAL_EVENT;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +13,7 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.review.domain.Review;
 import com.somemore.review.dto.condition.ReviewSearchCondition;
@@ -87,8 +87,8 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         // given
         UUID volunteerId = UUID.randomUUID();
 
-        VolunteerType type = CULTURAL_EVENT;
-        RecruitBoard board1 = createCompletedRecruitBoard(type);
+        VolunteerCategory category = CULTURAL_EVENT;
+        RecruitBoard board1 = createCompletedRecruitBoard(category);
         RecruitBoard board2 = createCompletedRecruitBoard(OTHER);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
@@ -101,13 +101,13 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동");
         reviewRepository.saveAll(List.of(review1, review2));
 
-        ReviewSearchCondition conditionWithoutType = ReviewSearchCondition.builder()
+        ReviewSearchCondition conditionWithoutCategory = ReviewSearchCondition.builder()
                 .pageable(getPageable())
                 .build();
 
         // when
         Page<Review> result = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId,
-                conditionWithoutType);
+                conditionWithoutCategory);
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(2);
@@ -124,8 +124,8 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         // given
         UUID volunteerId = UUID.randomUUID();
 
-        VolunteerType type = CULTURAL_EVENT;
-        RecruitBoard board1 = createCompletedRecruitBoard(type);
+        VolunteerCategory category = CULTURAL_EVENT;
+        RecruitBoard board1 = createCompletedRecruitBoard(category);
         RecruitBoard board2 = createCompletedRecruitBoard(OTHER);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
@@ -138,14 +138,14 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동");
         reviewRepository.saveAll(List.of(review1, review2));
 
-        ReviewSearchCondition conditionWithType = ReviewSearchCondition.builder()
-                .volunteerType(type)
+        ReviewSearchCondition conditionWithCategory = ReviewSearchCondition.builder()
+                .category(category)
                 .pageable(getPageable())
                 .build();
 
         // when
         Page<Review> result = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId,
-                conditionWithType);
+                conditionWithCategory);
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(1);
@@ -158,7 +158,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
 
     @DisplayName("기관 ID로 봉사 유형 없이 리뷰 목록을 조회할 수 있다")
     @Test
-    void findAllByCenterIdAndSearchWithoutType() {
+    void findAllByCenterIdAndSearchWithoutCategory() {
         // given
         Center center = createCenter("Test Center");
         centerRepository.save(center);
@@ -198,7 +198,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
 
     @DisplayName("기관 ID와 검색 조건으로 리뷰 목록을 조회할 수 있다.")
     @Test
-    void findAllByCenterIdAndSearchWithType() {
+    void findAllByCenterIdAndSearchWithCategory() {
         // given
         Center center = createCenter("Test Center");
         centerRepository.save(center);
@@ -219,7 +219,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         reviewRepository.saveAll(List.of(review1, review2));
 
         ReviewSearchCondition condition = ReviewSearchCondition.builder()
-                .volunteerType(CULTURAL_EVENT)
+                .category(CULTURAL_EVENT)
                 .pageable(getPageable())
                 .build();
 

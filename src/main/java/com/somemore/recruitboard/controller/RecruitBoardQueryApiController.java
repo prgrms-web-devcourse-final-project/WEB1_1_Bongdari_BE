@@ -4,7 +4,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
@@ -67,14 +67,14 @@ public class RecruitBoardQueryApiController {
     public ApiResponse<Page<RecruitBoardWithCenterResponseDto>> getAllBySearch(
         @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
         @RequestParam(required = false) String keyword,
-        @RequestParam(required = false) VolunteerType type,
+        @RequestParam(required = false) VolunteerCategory category,
         @RequestParam(required = false) String region,
         @RequestParam(required = false) Boolean admitted,
         @RequestParam(required = false) RecruitStatus status
     ) {
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
             .keyword(keyword)
-            .type(type)
+            .category(category)
             .region(region)
             .admitted(admitted)
             .status(status)
@@ -118,14 +118,14 @@ public class RecruitBoardQueryApiController {
         @PathVariable UUID centerId,
         @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
         @RequestParam(required = false) String keyword,
-        @RequestParam(required = false) VolunteerType type,
+        @RequestParam(required = false) VolunteerCategory category,
         @RequestParam(required = false) String region,
         @RequestParam(required = false) Boolean admitted,
         @RequestParam(required = false) RecruitStatus status
     ) {
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
             .keyword(keyword)
-            .type(type)
+            .category(category)
             .region(region)
             .admitted(admitted)
             .status(status)

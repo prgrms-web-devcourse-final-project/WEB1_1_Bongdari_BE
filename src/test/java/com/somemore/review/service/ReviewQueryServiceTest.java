@@ -4,9 +4,9 @@ import static com.somemore.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.common.fixture.CenterFixture.createCenter;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
-import static com.somemore.recruitboard.domain.VolunteerType.COUNSELING;
-import static com.somemore.recruitboard.domain.VolunteerType.CULTURAL_EVENT;
-import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.recruitboard.domain.VolunteerCategory.COUNSELING;
+import static com.somemore.recruitboard.domain.VolunteerCategory.CULTURAL_EVENT;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +17,7 @@ import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.review.domain.Review;
 import com.somemore.review.dto.condition.ReviewSearchCondition;
@@ -100,8 +100,8 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         String nickname = volunteer.getNickname();
         UUID volunteerId = volunteer.getId();
 
-        VolunteerType type = CULTURAL_EVENT;
-        RecruitBoard board1 = createCompletedRecruitBoard(type);
+        VolunteerCategory category = CULTURAL_EVENT;
+        RecruitBoard board1 = createCompletedRecruitBoard(category);
         RecruitBoard board2 = createCompletedRecruitBoard(OTHER);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
@@ -118,14 +118,14 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 "https://image.domain.com/links2");
         reviewRepository.saveAll(List.of(review1, review2));
 
-        ReviewSearchCondition conditionWithoutType = ReviewSearchCondition.builder()
+        ReviewSearchCondition conditionWithoutCategory = ReviewSearchCondition.builder()
                 .pageable(getPageable())
                 .build();
 
         // when
         Page<ReviewWithNicknameResponseDto> result = reviewQueryService.getReviewsByVolunteerId(
                 volunteerId,
-                conditionWithoutType);
+                conditionWithoutCategory);
 
         // then
         assertThat(result.getContent())

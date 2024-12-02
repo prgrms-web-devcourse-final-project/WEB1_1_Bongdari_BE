@@ -5,7 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.recruitboard.domain.QRecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.review.domain.QReview;
 import com.somemore.review.domain.Review;
 import com.somemore.review.dto.condition.ReviewSearchCondition;
@@ -56,7 +56,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             ReviewSearchCondition condition) {
 
         BooleanExpression predicate = review.volunteerId.eq(volunteerId)
-                .and(eqVolunteerType(condition.volunteerType()))
+                .and(eqVolunteerCategory(condition.category()))
                 .and(isNotDeleted());
 
         return getReviews(condition, predicate);
@@ -67,7 +67,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     public Page<Review> findAllByCenterIdAndSearch(UUID centerId, ReviewSearchCondition condition) {
 
         BooleanExpression predicate = recruitBoard.centerId.eq(centerId)
-                .and(eqVolunteerType(condition.volunteerType()))
+                .and(eqVolunteerCategory(condition.category()))
                 .and(isNotDeleted());
 
         return getReviews(condition, predicate);
@@ -99,9 +99,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         return review.deleted.isFalse();
     }
 
-    private BooleanExpression eqVolunteerType(VolunteerType type) {
-        return type != null
-                ? recruitBoard.recruitmentInfo.volunteerType.eq(type) : null;
+    private BooleanExpression eqVolunteerCategory(VolunteerCategory category) {
+        return category != null
+                ? recruitBoard.recruitmentInfo.volunteerCategory.eq(category) : null;
     }
 
     private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {
