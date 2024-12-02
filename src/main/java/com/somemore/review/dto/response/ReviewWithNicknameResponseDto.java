@@ -24,9 +24,9 @@ public record ReviewWithNicknameResponseDto(
         String content,
         @Schema(description = "이미지 링크", example = "https://image.domain.com/links")
         String imgUrl,
-        @Schema(description = "작성 일자", example = "2024-12-01T09:00:00")
+        @Schema(description = "작성 일자", example = "2024-12-01T09:00:00", type = "string")
         LocalDateTime createdAt,
-        @Schema(description = "수정 일자", example = "2024-12-01T09:00:00")
+        @Schema(description = "수정 일자", example = "2024-12-01T09:00:00", type = "string")
         LocalDateTime updateAt
 ) {
 
