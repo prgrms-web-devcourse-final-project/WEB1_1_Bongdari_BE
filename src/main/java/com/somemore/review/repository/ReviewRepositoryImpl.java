@@ -55,9 +55,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     public Page<Review> findAllByVolunteerIdAndSearch(UUID volunteerId,
             ReviewSearchCondition condition) {
 
-        BooleanExpression predicate = isNotDeleted()
-                .and(review.volunteerId.eq(volunteerId))
-                .and(eqVolunteerType(condition.volunteerType()));
+        BooleanExpression predicate = review.volunteerId.eq(volunteerId)
+                .and(eqVolunteerType(condition.volunteerType()))
+                .and(isNotDeleted());
 
         return getReviews(condition, predicate);
 
@@ -66,9 +66,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     @Override
     public Page<Review> findAllByCenterIdAndSearch(UUID centerId, ReviewSearchCondition condition) {
 
-        BooleanExpression predicate = isNotDeleted()
-                .and(recruitBoard.centerId.eq(centerId))
-                .and(eqVolunteerType(condition.volunteerType()));
+        BooleanExpression predicate = recruitBoard.centerId.eq(centerId)
+                .and(eqVolunteerType(condition.volunteerType()))
+                .and(isNotDeleted());
 
         return getReviews(condition, predicate);
     }
@@ -113,13 +113,15 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                         return order.isAscending()
                                 ? review.createdAt.asc()
                                 : review.createdAt.desc();
-                    } else if ("updated_at".equals(property)) {
+                    }
+                    if ("updated_at".equals(property)) {
                         return order.isAscending()
                                 ? review.updatedAt.asc()
                                 : review.updatedAt.desc();
-                    } else {
-                        throw new IllegalStateException("Invalid sort property: " + property);
                     }
+
+                    throw new IllegalStateException("Invalid sort property: " + property);
+
                 })
                 .toArray(OrderSpecifier[]::new);
     }
