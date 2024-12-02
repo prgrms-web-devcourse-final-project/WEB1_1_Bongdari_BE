@@ -21,7 +21,7 @@ public class CenterSignController {
     private final SignOutUseCase signOutUseCase;
 
     @PostMapping("/sign-out")
-    public ApiResponse<?> signOut(
+    public ApiResponse<String> signOut(
             HttpServletResponse response,
             @AuthenticationPrincipal String userId) {
 

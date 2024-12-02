@@ -42,7 +42,7 @@ public class VolunteerSignController {
     }
 
     @PostMapping("/sign-out")
-    public ApiResponse<?> signOut(
+    public ApiResponse<String> signOut(
             HttpServletResponse response,
             @AuthenticationPrincipal String userId) {
 
