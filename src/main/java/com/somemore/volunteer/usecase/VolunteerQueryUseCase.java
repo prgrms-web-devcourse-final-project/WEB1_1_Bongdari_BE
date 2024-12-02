@@ -1,6 +1,7 @@
 package com.somemore.volunteer.usecase;
 
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
+import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 
 import java.util.UUID;
 
@@ -15,4 +16,6 @@ public interface VolunteerQueryUseCase {
     UUID getVolunteerIdByOAuthId(String oAuthId);
 
     String getNicknameById(UUID id);
+
+    VolunteerRankingResponseDto getRankingByHours();
 }

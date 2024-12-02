@@ -5,14 +5,17 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
+import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
+import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
@@ -72,10 +75,15 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
         return nickname;
     }
 
+    @Override
+    public VolunteerRankingResponseDto getRankingByHours() {
+        List<VolunteerOverviewForRankingByHours> rankingByVolunteerHours = volunteerRepository.findRankingByVolunteerHours();
+        return VolunteerRankingResponseDto.from(rankingByVolunteerHours);
+    }
+
     private Volunteer findVolunteer(UUID volunteerId) {
         return volunteerRepository.findById(volunteerId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
-
     }
 
     private VolunteerDetail findVolunteerDetail(UUID volunteerId) {
