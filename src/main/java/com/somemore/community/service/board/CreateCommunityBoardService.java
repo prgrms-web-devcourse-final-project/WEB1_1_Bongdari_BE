@@ -20,7 +20,7 @@ public class CreateCommunityBoardService implements CreateCommunityBoardUseCase 
     @Override
     public Long createCommunityBoard(CommunityBoardCreateRequestDto requestDto, UUID writerId, String imgUrl) {
 
-        CommunityBoard communityBoard = requestDto.to(writerId, imgUrl == null ? "" : imgUrl);
+        CommunityBoard communityBoard = requestDto.toEntity(writerId, imgUrl == null ? "" : imgUrl);
 
         communityBoardRepository.save(communityBoard);
 
