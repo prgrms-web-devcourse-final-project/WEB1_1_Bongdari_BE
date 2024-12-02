@@ -1,9 +1,8 @@
 package com.somemore.community.usecase.comment;
 
 import com.somemore.community.dto.response.CommunityCommentResponseDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface CommunityCommentQueryUseCase {
-    List<CommunityCommentResponseDto> getCommunityCommentsByBoardId(Long boardId);
+    Page<CommunityCommentResponseDto> getCommunityCommentsByBoardId(Long boardId, int page);
 }

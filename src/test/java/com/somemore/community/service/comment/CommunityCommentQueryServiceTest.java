@@ -4,8 +4,6 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
-import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
-import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 import com.somemore.community.dto.response.CommunityCommentResponseDto;
 import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.repository.comment.CommunityCommentRepository;
@@ -17,12 +15,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
+import static com.somemore.common.fixture.CommunityCommentFixture.createCommunityComment;
 
 class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     @Autowired
@@ -37,41 +36,31 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     private DeleteCommunityCommentUseCase deleteCommunityCommentUseCase;
 
     private Long boardId, commentId, replyId;
-    UUID writerId1, writerId2;
+    UUID writerId;
 
     @BeforeEach
     void setUp() {
         String oAuthId1 = "example-oauth-id";
         Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
         volunteerRepository.save(volunteer1);
-        writerId1 = volunteer1.getId();
+        writerId = volunteer1.getId();
 
-        String oAuthId2 = "example-oauth-id";
-        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId2);
-        volunteerRepository.save(volunteer2);
-        writerId2 = volunteer2.getId();
-
-        CommunityBoardCreateRequestDto boardDto = CommunityBoardCreateRequestDto.builder()
-                .title("커뮤니티 테스트 제목")
-                .content("커뮤니티 테스트 내용")
-                .build();
-        CommunityBoard communityBoard = communityBoardRepository.save(boardDto.toEntity(writerId1, "https://test.image/123"));
+        CommunityBoard communityBoard = createCommunityBoard(writerId);
+        communityBoardRepository.save(communityBoard);
         boardId = communityBoard.getId();
 
-        CommunityCommentCreateRequestDto dto1 = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-        CommunityComment communityComment = communityCommentRepository.save(dto1.toEntity(writerId2));
-        commentId = communityComment.getId();
+        CommunityComment communityComment1 = createCommunityComment(boardId, writerId);
+        communityCommentRepository.save(communityComment1);
+        commentId = communityComment1.getId();
 
-        CommunityCommentCreateRequestDto dto2 = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
-                .content("커뮤니티 대댓글 테스트 내용")
-                .parentCommentId(commentId)
-                .build();
-        CommunityComment communityReply = communityCommentRepository.save(dto2.toEntity(writerId1));
+        for (int i = 1; i <= 8; i++) {
+            String content = "제목" + i;
+            CommunityComment communityComment = createCommunityComment(content, boardId, writerId);
+            communityCommentRepository.save(communityComment);
+        }
+
+        CommunityComment communityReply = createCommunityComment(boardId, writerId, commentId);
+        communityCommentRepository.save(communityReply);
         replyId = communityReply.getId();
     }
 
@@ -86,37 +75,29 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        List<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId);
+        Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
 
         //then
-        assertThat(comments).hasSize(1);
-        assertThat(comments.getFirst().id()).isEqualTo(commentId);
-        assertThat(comments.getFirst().replies()).hasSize(1);
-        assertThat(comments.getFirst().replies().getFirst().id()).isEqualTo(replyId);
+        assertThat(comments).isNotNull();
+        assertThat(comments.getTotalElements()).isEqualTo(10);
+        assertThat(comments.getSize()).isEqualTo(4);
+        assertThat(comments.getNumber()).isZero();
     }
 
     @DisplayName("삭제된 댓글의 경우 조회할 수 없다.")
     @Test
     void doesNotFind() {
-
         //given
-        CommunityCommentCreateRequestDto dto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
-                .content("커뮤니티 댓글 테스트 내용")
-                .parentCommentId(null)
-                .build();
-        CommunityComment communityComment = communityCommentRepository.save(dto.toEntity(writerId2));
-
-        deleteCommunityCommentUseCase.deleteCommunityComment(writerId2, communityComment.getId());
-        deleteCommunityCommentUseCase.deleteCommunityComment(writerId1, replyId);
+        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, replyId);
 
         //when
-        List<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId);
+        Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
 
         //then
-        assertThat(comments).hasSize(1);
-        assertThat(comments.getFirst().id()).isEqualTo(commentId);
-        assertThat(comments.getFirst().replies()).isEmpty();
+        assertThat(comments).isNotNull();
+        assertThat(comments.getTotalElements()).isEqualTo(9);
+        assertThat(comments.getSize()).isEqualTo(4);
+        assertThat(comments.getNumber()).isZero();
     }
 
     @DisplayName("대댓글이 있는 댓글의 경우 삭제된 댓글로 조회할 수 있다.")
@@ -124,15 +105,14 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     void getCommentsByCommunityBoardIdWithDeletedComment() {
 
         //given
-        deleteCommunityCommentUseCase.deleteCommunityComment(writerId2, commentId);
+        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, commentId);
         //when
-        List<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId);
+        Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
 
         //then
-        assertThat(comments).hasSize(1);
-        assertThat(comments.getFirst().content()).isEqualTo("삭제된 댓글입니다");
-        assertThat(comments.getFirst().writerNickname()).isEmpty();
-        assertThat(comments.getFirst().replies()).hasSize(1);
-        assertThat(comments.getFirst().replies().getFirst().id()).isEqualTo(replyId);
+        assertThat(comments).isNotNull();
+        assertThat(comments.getTotalElements()).isEqualTo(10);
+        assertThat(comments.getSize()).isEqualTo(4);
+        assertThat(comments.getNumber()).isZero();
     }
 }
