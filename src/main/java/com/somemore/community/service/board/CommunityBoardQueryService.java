@@ -2,18 +2,19 @@ package com.somemore.community.service.board;
 
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.repository.mapper.CommunityBoardView;
-import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
-import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
+import com.somemore.community.dto.response.CommunityBoardDetailResponseDto;
+import com.somemore.community.dto.response.CommunityBoardResponseDto;
 import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.usecase.board.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
 
@@ -23,29 +24,26 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNIT
 public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     private final CommunityBoardRepository communityBoardRepository;
+    private static final int PAGE_SIZE = 10;
 
     @Override
-    public List<CommunityBoardGetResponseDto> getCommunityBoards() {
-        List<CommunityBoardView> boards = communityBoardRepository.getCommunityBoards();
-        return mapEntitiesToDtos(boards, CommunityBoardGetResponseDto::fromEntity);
+    public Page<CommunityBoardResponseDto> getCommunityBoards(int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<CommunityBoardView> boards = communityBoardRepository.findCommunityBoards(pageable);
+        return boards.map(CommunityBoardResponseDto::from);
     }
 
     @Override
-    public List<CommunityBoardGetResponseDto> getCommunityBoardsByWriterId(UUID writerId) {
-        List<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId);
-        return mapEntitiesToDtos(boards, CommunityBoardGetResponseDto::fromEntity);
+    public Page<CommunityBoardResponseDto> getCommunityBoardsByWriterId(UUID writerId, int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId ,pageable);
+        return boards.map(CommunityBoardResponseDto::from);
     }
 
     @Override
-    public CommunityBoardGetDetailResponseDto getCommunityBoardDetail(Long id) {
+    public CommunityBoardDetailResponseDto getCommunityBoardDetail(Long id) {
         CommunityBoard board = communityBoardRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
-        return CommunityBoardGetDetailResponseDto.fromEntity(board);
-    }
-
-    private <T, R> List<R> mapEntitiesToDtos(List<T> entities, Function<T, R> mapper) {
-        return entities.stream()
-                .map(mapper)
-                .toList();
+        return CommunityBoardDetailResponseDto.from(board);
     }
 }
