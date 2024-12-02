@@ -6,6 +6,10 @@ import com.somemore.community.repository.comment.CommunityCommentRepository;
 import com.somemore.community.repository.mapper.CommunityCommentView;
 import com.somemore.community.usecase.comment.CommunityCommentQueryUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +21,16 @@ import java.util.*;
 public class CommunityCommentQueryService implements CommunityCommentQueryUseCase {
 
     private final CommunityCommentRepository communityCommentRepository;
+    private static final int PAGE_SIZE = 4;
 
     @Override
-    public List<CommunityCommentResponseDto> getCommunityCommentsByBoardId(Long boardId) {
-        List<CommunityCommentView> allComments = communityCommentRepository.findCommentsByBoardId(boardId);
-        List<CommunityCommentView> filteredComments = filterValidComments(allComments);
-        return createCommentHierarchy(filteredComments);
+    public Page<CommunityCommentResponseDto> getCommunityCommentsByBoardId(Long boardId, int page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<CommunityCommentView> commentPage = communityCommentRepository.findCommentsByBoardId(boardId, pageable);
+        List<CommunityCommentView> filteredComments = filterValidComments(commentPage.getContent());
+        List<CommunityCommentResponseDto> hierarchicalComments = createCommentHierarchy(filteredComments);
+
+        return new PageImpl<>(hierarchicalComments, pageable, filteredComments.size());
     }
 
     private List<CommunityCommentView> filterValidComments(List<CommunityCommentView> comments) {
@@ -60,7 +68,7 @@ public class CommunityCommentQueryService implements CommunityCommentQueryUseCas
         List<CommunityCommentResponseDto> rootComments = new ArrayList<>();
 
         for (CommunityCommentView comment : comments) {
-            CommunityCommentResponseDto dto = CommunityCommentResponseDto.fromView(comment);
+            CommunityCommentResponseDto dto = CommunityCommentResponseDto.from(comment);
             commentMap.put(dto.id(), dto);
 
             Long parentCommentId = comment.communityComment().getParentCommentId();

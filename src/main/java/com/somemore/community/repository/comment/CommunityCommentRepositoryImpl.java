@@ -1,12 +1,16 @@
 package com.somemore.community.repository.comment;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.domain.QCommunityComment;
 import com.somemore.community.repository.mapper.CommunityCommentView;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,6 +23,9 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
     private final JPAQueryFactory queryFactory;
     private final CommunityCommentJpaRepository communityCommentJpaRepository;
 
+    private static final QCommunityComment communityComment = QCommunityComment.communityComment;
+    private static final QVolunteer volunteer = QVolunteer.volunteer;
+
     @Override
     public CommunityComment save(CommunityComment communityComment) {
         return communityCommentJpaRepository.save(communityComment);
@@ -26,8 +33,6 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
 
     @Override
     public Optional<CommunityComment> findById(Long id) {
-        QCommunityComment communityComment = QCommunityComment.communityComment;
-
         return Optional.ofNullable(queryFactory
                 .selectFrom(communityComment)
                 .where(communityComment.id.eq(id)
@@ -35,11 +40,8 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
                 .fetchOne());
     }
 
-    public List<CommunityCommentView> findCommentsByBoardId(Long boardId) {
-        QCommunityComment communityComment = QCommunityComment.communityComment;
-        QVolunteer volunteer = QVolunteer.volunteer;
-
-        return queryFactory
+    public Page<CommunityCommentView> findCommentsByBoardId(Long boardId, Pageable pageable) {
+        List<CommunityCommentView> content = queryFactory
                 .select(Projections.constructor(CommunityCommentView.class,
                         communityComment,
                         volunteer.nickname))
@@ -48,12 +50,16 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
                 .where(communityComment.communityBoardId.eq(boardId))
                 .orderBy(communityComment.parentCommentId.asc().nullsFirst(), communityComment.createdAt.asc())
                 .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(communityComment.count())
+                .from(communityComment);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override
     public boolean existsById(Long id) {
-        QCommunityComment communityComment = QCommunityComment.communityComment;
-
         return queryFactory
                 .selectOne()
                 .from(communityComment)
