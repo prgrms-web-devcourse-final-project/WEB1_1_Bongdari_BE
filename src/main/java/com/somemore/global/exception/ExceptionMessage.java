@@ -24,7 +24,10 @@ public enum ExceptionMessage {
     NOT_EXISTS_VOLUNTEER("존재하지 않는 봉사자입니다."),
     UNAUTHORIZED_VOLUNTEER_DETAIL("해당 봉사자의 상세 정보 조회 권한이 없습니다."),
     CANNOT_CANCEL_DELETED_INTEREST_CENTER("이미 삭제된 관심 기관은 취소할 수 없습니다."),
-    DUPLICATE_INTEREST_CENTER("이미 관심 표시한 기관입니다.")
+    DUPLICATE_INTEREST_CENTER("이미 관심 표시한 기관입니다."),
+    NOT_EXISTS_VOLUNTEER_APPLY("존재하지 않는 봉사 활동 지원입니다."),
+    REVIEW_ALREADY_EXISTS("이미 작성한 리뷰가 존재합니다."),
+    REVIEW_RESTRICTED_TO_ATTENDED("리뷰는 참석한 봉사에 한해서만 작성할 수 있습니다.")
     ;
 
     private final String message;

@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
         //status와 에러에 대한 자세한 설명
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
 
-        //아래와 같이 필드 확장 가능
-        problemDetail.setTitle("무슨 에러입니다");
+        // 아래와 같이 필드 확장 가능
+        problemDetail.setTitle("잘못된 요청입니다");
 
         return problemDetail;
     }

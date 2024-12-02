@@ -5,16 +5,15 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteerapply.domain.QVolunteerApply;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository
@@ -69,6 +68,14 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
                 pageable,
                 getCount(exp)
         );
+    }
+
+    @Override
+    public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
+            UUID volunteerId) {
+        BooleanExpression exp = volunteerApply.recruitBoardId.eq(recruitId)
+                .and(volunteerApply.volunteerId.eq(volunteerId));
+        return findOne(exp);
     }
 
     private Long getCount(BooleanExpression exp) {
