@@ -16,4 +16,6 @@ public interface VolunteerRepository {
     Optional<Volunteer> findByOauthId(String oauthId);
     String findNicknameById(UUID id);
     List<VolunteerOverviewForRankingByHours> findRankingByVolunteerHours();
+
+    void deleteAllInBatch();
 }

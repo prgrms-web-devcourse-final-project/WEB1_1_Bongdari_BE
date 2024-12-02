@@ -62,6 +62,11 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
                 .fetch();
     }
 
+    @Override
+    public void deleteAllInBatch() {
+        volunteerJpaRepository.deleteAllInBatch();
+    }
+
     private Optional<Volunteer> findOne(BooleanExpression condition) {
 
         return Optional.ofNullable(
