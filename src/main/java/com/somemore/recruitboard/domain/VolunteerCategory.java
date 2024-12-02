@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum VolunteerType {
+public enum VolunteerCategory {
 
     LIVING_SUPPORT("생활편의지원"),
     HOUSING_ENVIRONMENT("주거환경"),

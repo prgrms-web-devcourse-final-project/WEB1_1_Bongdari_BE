@@ -3,8 +3,8 @@ package com.somemore.recruitboard.service.command;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
-import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
-import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -73,7 +73,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             .recruitmentCount(1111)
             .volunteerStartDateTime(newStartDateTime)
             .volunteerEndDateTime(newEndDateTime)
-            .volunteerType(ADMINISTRATIVE_SUPPORT)
+            .volunteerCategory(ADMINISTRATIVE_SUPPORT)
             .admitted(false)
             .build();
 
@@ -91,7 +91,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
         RecruitmentInfo recruitmentInfo = updatedRecruitBoard.getRecruitmentInfo();
         assertThat(recruitmentInfo.getRecruitmentCount()).isEqualTo(dto.recruitmentCount());
-        assertThat(recruitmentInfo.getVolunteerType()).isEqualTo(dto.volunteerType());
+        assertThat(recruitmentInfo.getVolunteerCategory()).isEqualTo(dto.volunteerCategory());
         assertThat(recruitmentInfo.getAdmitted()).isEqualTo(dto.admitted());
 
         assertThat(recruitmentInfo.getVolunteerStartDateTime())
@@ -143,7 +143,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             .recruitmentCount(1111)
             .volunteerStartDateTime(newStartDateTime)
             .volunteerEndDateTime(newEndDateTime)
-            .volunteerType(ADMINISTRATIVE_SUPPORT)
+            .volunteerCategory(ADMINISTRATIVE_SUPPORT)
             .admitted(false)
             .build();
 
@@ -188,7 +188,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
-            .volunteerType(OTHER)
+            .volunteerCategory(OTHER)
             .admitted(true)
             .build();
 

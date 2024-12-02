@@ -1,13 +1,13 @@
 package com.somemore.recruitboard.service.command;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.VolunteerType;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.repository.RecruitBoardJpaRepository;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
@@ -60,7 +60,7 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
             .recruitmentCount(10)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
-            .volunteerType(VolunteerType.OTHER)
+            .volunteerCategory(OTHER)
             .admitted(true)
             .location(locationDto)
             .build();

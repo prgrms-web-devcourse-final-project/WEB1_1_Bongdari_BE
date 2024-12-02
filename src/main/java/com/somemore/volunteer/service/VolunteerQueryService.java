@@ -1,5 +1,7 @@
 package com.somemore.volunteer.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+
 import com.somemore.facade.validator.VolunteerDetailAccessValidator;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.domain.Volunteer;
@@ -10,13 +12,12 @@ import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
 
@@ -48,7 +49,8 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     }
 
     @Override
-    public VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId, UUID centerId) {
+    public VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId,
+            UUID centerId) {
         volunteerDetailAccessValidator.validateByCenterId(centerId, volunteerId);
 
         return VolunteerProfileResponseDto.from(
@@ -79,6 +81,10 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     public VolunteerRankingResponseDto getRankingByHours() {
         List<VolunteerOverviewForRankingByHours> rankingByVolunteerHours = volunteerRepository.findRankingByVolunteerHours();
         return VolunteerRankingResponseDto.from(rankingByVolunteerHours);
+
+    @Override
+    public List<Volunteer> getAllByIds(List<UUID> volunteerIds) {
+        return volunteerRepository.findAllByIds(volunteerIds);
     }
 
     private Volunteer findVolunteer(UUID volunteerId) {

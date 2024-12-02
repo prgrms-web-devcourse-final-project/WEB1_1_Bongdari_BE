@@ -2,7 +2,7 @@ package com.somemore.recruitboard.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +29,7 @@ public record RecruitBoardUpdateRequestDto(
     LocalDateTime volunteerEndDateTime,
     @Schema(description = "봉사 활동 유형", example = "ENVIRONMENTAL_PROTECTION")
     @NotNull(message = "봉사 활동 유형은 필수 값입니다.")
-    VolunteerType volunteerType,
+    VolunteerCategory volunteerCategory,
     @Schema(description = "봉사 시간 인정 여부", example = "true")
     @NotNull(message = "시간 인정 여부는 필수 값입니다.")
     Boolean admitted

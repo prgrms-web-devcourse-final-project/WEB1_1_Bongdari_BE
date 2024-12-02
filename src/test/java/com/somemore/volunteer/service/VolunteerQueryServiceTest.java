@@ -1,5 +1,11 @@
 package com.somemore.volunteer.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
+import static com.somemore.volunteer.domain.Volunteer.createDefault;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
@@ -10,19 +16,12 @@ import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
-import static com.somemore.volunteer.domain.Volunteer.createDefault;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class VolunteerQueryServiceTest extends IntegrationTestSupport {
@@ -125,7 +124,8 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         volunteerDetailRepository.save(volunteerDetail);
 
         // when
-        VolunteerProfileResponseDto response = volunteerQueryService.getVolunteerProfile(volunteerId);
+        VolunteerProfileResponseDto response = volunteerQueryService.getVolunteerProfile(
+                volunteerId);
 
         // then
         assertThat(response).isNotNull();
@@ -149,7 +149,8 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
 
         // when
         // then
-        assertThatThrownBy(() -> volunteerQueryService.getVolunteerDetailedProfile(volunteerId, centerId))
+        assertThatThrownBy(
+                () -> volunteerQueryService.getVolunteerDetailedProfile(volunteerId, centerId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_VOLUNTEER_DETAIL.getMessage());
     }
@@ -186,6 +187,32 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         // then
         assertThat(response).isNotNull();
         assertThat(response.rankings()).isEmpty();
+    }
+
+    @DisplayName("아이디 리스트로 봉사자를 조회할 수있다.")
+    @Test
+    void findAllByIds() {
+        // given
+        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        Volunteer volunteer3 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        Volunteer volunteer4 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        volunteer3.markAsDeleted();
+        volunteer4.markAsDeleted();
+
+        volunteerRepository.save(volunteer1);
+        volunteerRepository.save(volunteer2);
+        volunteerRepository.save(volunteer3);
+        volunteerRepository.save(volunteer4);
+
+        // when
+        List<Volunteer> volunteers = volunteerQueryService.getAllByIds(
+                List.of(volunteer1.getId(), volunteer2.getId(), volunteer3.getId(),
+                        volunteer4.getId(), UUID.randomUUID()
+                ));
+
+        // then
+        assertThat(volunteers).hasSize(2);
     }
 
     private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
