@@ -43,7 +43,7 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
 
         writerId = UUID.randomUUID();
 
-        CommunityBoard communityBoard = communityBoardRepository.save(boardDto.toEntity(writerId, "https://test.image/123"));
+        CommunityBoard communityBoard = communityBoardRepository.save(boardDto.to(writerId, "https://test.image/123"));
 
         CommunityCommentCreateRequestDto dto = CommunityCommentCreateRequestDto.builder()
                 .communityBoardId(communityBoard.getId())
@@ -51,7 +51,7 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
                 .parentCommentId(null)
                 .build();
 
-        CommunityComment communityComment = communityCommentRepository.save(dto.toEntity(writerId));
+        CommunityComment communityComment = communityCommentRepository.save(dto.to(writerId));
 
         commentId = communityComment.getId();}
 

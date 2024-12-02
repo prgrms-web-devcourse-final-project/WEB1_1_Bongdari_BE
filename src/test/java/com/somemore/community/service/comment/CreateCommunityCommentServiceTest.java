@@ -44,7 +44,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         writerId = UUID.randomUUID();
 
-        CommunityBoard communityBoard = communityBoardRepository.save(boardDto.toEntity(writerId, "https://test.image/123"));
+        CommunityBoard communityBoard = communityBoardRepository.save(boardDto.to(writerId, "https://test.image/123"));
         boardId = communityBoard.getId();
     }
 

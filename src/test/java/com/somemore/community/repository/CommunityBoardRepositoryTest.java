@@ -7,12 +7,17 @@ import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,17 +31,37 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private VolunteerRepository volunteerRepository;
 
+    private UUID writerId;
+
+    @BeforeEach
+    void setUp() {
+        String oAuthId1 = "example-oauth-id1";
+        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
+        volunteerRepository.save(volunteer1);
+        writerId = volunteer1.getId();
+
+        String oAuthId2 = "example-oauth-id2";
+        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId2);
+        volunteerRepository.save(volunteer2);
+
+        for (int i = 1; i <= 8; i++) {
+            String title = "제목" + i;
+            CommunityBoard communityBoard = createCommunityBoard(title, writerId);
+            communityBoardRepository.save(communityBoard);
+        }
+
+        for (int i = 1; i <= 20; i++) {
+            String title = "제목" + i;
+            CommunityBoard communityBoard = createCommunityBoard(title, volunteer2.getId());
+            communityBoardRepository.save(communityBoard);
+        }
+    }
+
     @DisplayName("커뮤니티 게시글 id로 커뮤니티 상세 정보를 조회할 수 있다. (Repository)")
     @Test
     void getCommunityBoardById() {
         //given
-        CommunityBoard communityBoard = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목")
-                .content("테스트 커뮤니티 게시글 내용")
-                .imgUrl("http://community.example.com/123")
-                .writerId(UUID.randomUUID())
-                .build();
-
+        CommunityBoard communityBoard = createCommunityBoard(UUID.randomUUID());
         communityBoardRepository.save(communityBoard);
 
         //when
@@ -54,14 +79,9 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
     @Test
     void getCommunityBoardByDeletedId() {
         //given
-        CommunityBoard communityBoard = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목")
-                .content("테스트 커뮤니티 게시글 내용")
-                .imgUrl("http://community.example.com/123")
-                .writerId(UUID.randomUUID())
-                .build();
-
+        CommunityBoard communityBoard = createCommunityBoard(UUID.randomUUID());
         communityBoardRepository.save(communityBoard);
+
         communityBoardRepository.deleteAllInBatch();
 
         //when
@@ -71,114 +91,54 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(foundCommunityBoard).isEmpty();
     }
 
-    @DisplayName("저장된 전체 커뮤니티 게시글을 목록으로 조회할 수 있다. (Repository)")
+    @DisplayName("저장된 전체 커뮤니티 게시글을 페이지로 조회할 수 있다. (Repository)")
     @Test
     void getCommunityBoards() {
+
         //given
-        String oAuthId = "example-oauth-id";
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
-        volunteerRepository.save(volunteer);
-
-        CommunityBoard communityBoard1 = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목1")
-                .content("테스트 커뮤니티 게시글 내용1")
-                .imgUrl("http://community.example.com/123")
-                .writerId(volunteer.getId())
-                .build();
-
-        CommunityBoard communityBoard2 = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목2")
-                .content("테스트 커뮤니티 게시글 내용2")
-                .imgUrl("http://community.example.com/12")
-                .writerId(volunteer.getId())
-                .build();
-
-        communityBoardRepository.save(communityBoard1);
-        communityBoardRepository.save(communityBoard2);
+        Pageable pageable = getPageable();
 
         //when
-        List<CommunityBoardView> communityBoards = communityBoardRepository.getCommunityBoards();
+        Page<CommunityBoardView> communityBoards = communityBoardRepository.findCommunityBoards(pageable);
 
         //then
-        assertThat(communityBoards).hasSize(2);
-        assertThat(communityBoards.getFirst().communityBoard().getId()).isEqualTo(communityBoard2.getId());
-        assertThat(communityBoards.getFirst().communityBoard().getTitle()).isEqualTo(communityBoard2.getTitle());
-        assertThat(communityBoards.getFirst().writerNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getFirst().communityBoard().getCreatedAt()).isEqualTo(communityBoard2.getCreatedAt());
-        assertThat(communityBoards.getLast().communityBoard().getId()).isEqualTo(communityBoard1.getId());
-        assertThat(communityBoards.getLast().communityBoard().getTitle()).isEqualTo(communityBoard1.getTitle());
-        assertThat(communityBoards.getLast().writerNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getLast().communityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
+        assertThat(communityBoards).isNotNull();
+        assertThat(communityBoards.getTotalElements()).isEqualTo(28);
+        assertThat(communityBoards.getSize()).isEqualTo(10);
+        assertThat(communityBoards.getNumber()).isZero();
     }
 
     @DisplayName("저장된 커뮤니티 게시글 리스트를 작성자별로 조회할 수 있다. (Repository)")
     @Test
     void getCommunityBoardsByWriterId() {
         //given
-        String oAuthId = "example-oauth-id";
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
-        volunteerRepository.save(volunteer);
-
-        CommunityBoard communityBoard1 = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목1")
-                .content("테스트 커뮤니티 게시글 내용1")
-                .imgUrl("http://community.example.com/123")
-                .writerId(volunteer.getId())
-                .build();
-
-        CommunityBoard communityBoard2 = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목2")
-                .content("테스트 커뮤니티 게시글 내용2")
-                .imgUrl("http://community.example.com/12")
-                .writerId(volunteer.getId())
-                .build();
-
-        CommunityBoard communityBoard3 = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목3")
-                .content("테스트 커뮤니티 게시글 내용3")
-                .imgUrl("http://community.example.com/1")
-                .writerId(UUID.randomUUID())
-                .build();
-
-        communityBoardRepository.save(communityBoard1);
-        communityBoardRepository.save(communityBoard2);
-        communityBoardRepository.save(communityBoard3);
+        Pageable pageable = getPageable();
 
         //when
-        List<CommunityBoardView> communityBoards = communityBoardRepository.findByWriterId(volunteer.getId());
+        Page<CommunityBoardView> communityBoards = communityBoardRepository.findByWriterId(writerId, pageable);
 
         //then
-        assertThat(communityBoards).hasSize(2);
-        assertThat(communityBoards.getFirst().communityBoard().getId()).isEqualTo(communityBoard2.getId());
-        assertThat(communityBoards.getFirst().communityBoard().getTitle()).isEqualTo(communityBoard2.getTitle());
-        assertThat(communityBoards.getFirst().writerNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getFirst().communityBoard().getCreatedAt()).isEqualTo(communityBoard2.getCreatedAt());
-        assertThat(communityBoards.getLast().communityBoard().getId()).isEqualTo(communityBoard1.getId());
-        assertThat(communityBoards.getLast().communityBoard().getTitle()).isEqualTo(communityBoard1.getTitle());
-        assertThat(communityBoards.getLast().writerNickname()).isEqualTo(volunteer.getNickname());
-        assertThat(communityBoards.getLast().communityBoard().getCreatedAt()).isEqualTo(communityBoard1.getCreatedAt());
+        assertThat(communityBoards).isNotNull();
+        assertThat(communityBoards.getTotalElements()).isEqualTo(8);
+        assertThat(communityBoards.getSize()).isEqualTo(10);
+        assertThat(communityBoards.getNumber()).isZero();
     }
 
     @DisplayName("게시글 id로 게시글이 존재하는지 확인할 수 있다.")
     @Test
     void existsById() {
-
         //given
-        UUID writerId = UUID.randomUUID();
-
-        CommunityBoard communityBoard = CommunityBoard.builder()
-                .title("테스트 커뮤니티 게시글 제목")
-                .content("테스트 커뮤니티 게시글 내용")
-                .imgUrl("http://community.example.com/123")
-                .writerId(writerId)
-                .build();
-
-        CommunityBoard savedComment = communityBoardRepository.save(communityBoard);
+        CommunityBoard communityBoard = createCommunityBoard();
+        communityBoardRepository.save(communityBoard);
 
         //when
-        boolean isExist = communityBoardRepository.existsById(savedComment.getId());
+        boolean isExist = communityBoardRepository.existsById(communityBoard.getId());
 
         //then
         assertThat(isExist).isTrue();
+    }
+
+    private Pageable getPageable() {
+        return PageRequest.of(0, 10);
     }
 }
