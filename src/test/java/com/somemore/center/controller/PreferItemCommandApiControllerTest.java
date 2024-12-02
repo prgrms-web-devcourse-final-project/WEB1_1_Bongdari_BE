@@ -57,7 +57,7 @@ class PreferItemCommandApiControllerTest extends ControllerTestSupport {
         verify(createPreferItemUseCase).createPreferItem(userId, requestDto);
     }
 
-    @DisplayName("존재하지 않는 기관 ID로 선호물품 등록 시 실패한다. (controller)")
+    @DisplayName("존재하지 않는 기관 ID로 선호물품을 등록할 수 없다. (controller)")
     @Test
     @WithMockCustomUser(role = "CENTER")
     void registerPreferItem_Fail_WhenCenterNotExists() throws Exception {
