@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CommunityBoardGetDetailResponseDto(
+public record CommunityBoardDetailResponseDto(
         Long id,
         UUID writerId,
         String title,
@@ -17,8 +17,8 @@ public record CommunityBoardGetDetailResponseDto(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    public static CommunityBoardGetDetailResponseDto fromEntity(CommunityBoard board) {
-        return new CommunityBoardGetDetailResponseDto(
+    public static CommunityBoardDetailResponseDto from(CommunityBoard board) {
+        return new CommunityBoardDetailResponseDto(
                 board.getId(),
                 board.getWriterId(),
                 board.getTitle(),

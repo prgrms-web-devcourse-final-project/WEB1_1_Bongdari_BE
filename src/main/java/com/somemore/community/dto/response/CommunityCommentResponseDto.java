@@ -20,7 +20,7 @@ public record CommunityCommentResponseDto(
         replies = replies == null ? new ArrayList<>() : replies;
     }
 
-    public static CommunityCommentResponseDto fromView(CommunityCommentView comment) {
+    public static CommunityCommentResponseDto from(CommunityCommentView comment) {
         return new CommunityCommentResponseDto(
                 comment.communityComment().getId(),
                 comment.writerNickname(),

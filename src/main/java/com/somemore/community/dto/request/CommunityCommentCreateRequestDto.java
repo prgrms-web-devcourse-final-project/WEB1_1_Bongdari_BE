@@ -24,7 +24,7 @@ public record CommunityCommentCreateRequestDto(
         @Nullable
         Long parentCommentId
 ) {
-    public CommunityComment toEntity(UUID writerId) {
+    public CommunityComment to(UUID writerId) {
         return CommunityComment.builder()
                 .communityBoardId(communityBoardId)
                 .writerId(writerId)
