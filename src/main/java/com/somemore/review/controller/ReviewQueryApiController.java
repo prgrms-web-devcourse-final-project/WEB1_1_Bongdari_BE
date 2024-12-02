@@ -8,6 +8,7 @@ import com.somemore.review.dto.condition.ReviewSearchCondition;
 import com.somemore.review.dto.response.ReviewResponseDto;
 import com.somemore.review.dto.response.ReviewWithNicknameResponseDto;
 import com.somemore.review.usecase.ReviewQueryUseCase;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class ReviewQueryApiController {
 
     private final ReviewQueryUseCase reviewQueryUseCase;
 
+    @Operation(summary = "리뷰 단건 조회", description = "리뷰 ID를 사용하여 단건 리뷰 조회")
     @GetMapping("/review/{id}")
     public ApiResponse<ReviewResponseDto> getById(@PathVariable Long id) {
 
@@ -38,6 +40,7 @@ public class ReviewQueryApiController {
         );
     }
 
+    @Operation(summary = "기관별 리뷰 조회", description = "기관 ID를 사용하여 리뷰 조회")
     @GetMapping("/reviews/center/{centerId}")
     public ApiResponse<Page<ReviewWithNicknameResponseDto>> getReviewsByCenterId(
             @PathVariable UUID centerId,
@@ -56,6 +59,7 @@ public class ReviewQueryApiController {
         );
     }
 
+    @Operation(summary = "봉사자 리뷰 조회", description = "봉사자 ID를 사용하여 리뷰 조회")
     @GetMapping("/reviews/volunteer/{volunteerId}")
     public ApiResponse<Page<ReviewWithNicknameResponseDto>> getReviewsByVolunteerId(
             @PathVariable UUID volunteerId,
