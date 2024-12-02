@@ -24,7 +24,9 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
         } catch (JwtException e) {
@@ -42,8 +44,10 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     }
 
     private ProblemDetail buildUnauthorizedProblemDetail(JwtException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
-        problemDetail.setTitle("Authentication Error");
+        log.error("JwtFilter 예외 발생: {}", e.getMessage());
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "인증에서 오류가 발생했습니다.");
+        problemDetail.setTitle("인증 에러");
         problemDetail.setProperty("timestamp", System.currentTimeMillis());
         return problemDetail;
     }

@@ -24,28 +24,27 @@ public class GenerateTokensOnLoginService implements GenerateTokensOnLoginUseCas
     private final RefreshTokenManager refreshTokenManager;
 
     @Override
-    public EncodedToken saveRefreshTokenAndReturnAccessToken(UUID volunteerId) {
-        EncodedToken accessToken = generateToken(volunteerId, TokenType.ACCESS);
-        RefreshToken refreshToken = generateRefreshToken(volunteerId, accessToken);
+    public EncodedToken saveRefreshTokenAndReturnAccessToken(UUID userId, UserRole role) {
+        EncodedToken accessToken = jwtGenerator.generateToken(
+                userId.toString(),
+                role.getAuthority(),
+                TokenType.ACCESS
+        );
+        RefreshToken refreshToken = generateRefreshToken(userId, role, accessToken);
         saveRefreshToken(refreshToken);
 
         return accessToken;
     }
 
-    private EncodedToken generateToken(UUID volunteerId, TokenType tokenType) {
-        return jwtGenerator.generateToken(
-                volunteerId.toString(),
-                UserRole.VOLUNTEER.getAuthority(),
-                tokenType);
-    }
-
-    private RefreshToken generateRefreshToken(UUID volunteerId, EncodedToken accessToken) {
+    private RefreshToken generateRefreshToken(UUID userId, UserRole role, EncodedToken accessToken) {
         return new RefreshToken(
-                volunteerId.toString(),
+                userId.toString(),
                 accessToken,
-                generateToken(
-                        volunteerId,
-                        TokenType.REFRESH));
+                jwtGenerator.generateToken(
+                        userId.toString(),
+                        role.getAuthority(),
+                        TokenType.REFRESH)
+        );
     }
 
     private void saveRefreshToken(RefreshToken refreshToken) {
