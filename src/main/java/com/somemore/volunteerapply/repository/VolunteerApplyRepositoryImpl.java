@@ -30,6 +30,11 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     }
 
     @Override
+    public List<VolunteerApply> saveAll(List<VolunteerApply> volunteerApplies) {
+        return volunteerApplyJpaRepository.saveAll(volunteerApplies);
+    }
+
+    @Override
     public Optional<VolunteerApply> findById(Long id) {
         return findOne(volunteerApply.id.eq(id));
     }
