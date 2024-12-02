@@ -81,6 +81,7 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     public VolunteerRankingResponseDto getRankingByHours() {
         List<VolunteerOverviewForRankingByHours> rankingByVolunteerHours = volunteerRepository.findRankingByVolunteerHours();
         return VolunteerRankingResponseDto.from(rankingByVolunteerHours);
+    }
 
     @Override
     public List<Volunteer> getAllByIds(List<UUID> volunteerIds) {
