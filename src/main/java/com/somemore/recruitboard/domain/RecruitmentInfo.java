@@ -32,8 +32,8 @@ public class RecruitmentInfo {
     private LocalDateTime volunteerEndDateTime;
 
     @Enumerated(value = STRING)
-    @Column(name = "volunteer_type", nullable = false, length = 30)
-    private VolunteerType volunteerType;
+    @Column(name = "volunteer_category", nullable = false, length = 30)
+    private VolunteerCategory volunteerCategory;
 
     @Column(name = "admitted", nullable = false)
     private Boolean admitted;
@@ -41,7 +41,7 @@ public class RecruitmentInfo {
     @Builder
     public RecruitmentInfo(String region, Integer recruitmentCount,
         LocalDateTime volunteerStartDateTime, LocalDateTime volunteerEndDateTime,
-        VolunteerType volunteerType, Boolean admitted) {
+        VolunteerCategory volunteerCategory, Boolean admitted) {
 
         validateVolunteerDateTime(volunteerStartDateTime, volunteerEndDateTime);
 
@@ -49,7 +49,7 @@ public class RecruitmentInfo {
         this.recruitmentCount = recruitmentCount;
         this.volunteerStartDateTime = volunteerStartDateTime.truncatedTo(MINUTES);
         this.volunteerEndDateTime = volunteerEndDateTime.truncatedTo(MINUTES);
-        this.volunteerType = volunteerType;
+        this.volunteerCategory = volunteerCategory;
         this.admitted = admitted;
     }
 
@@ -62,14 +62,14 @@ public class RecruitmentInfo {
         return LocalTime.of((int) hours, (int) minutes);
     }
 
-    public void updateWith(Integer recruitmentCount, VolunteerType volunteerType,
+    public void updateWith(Integer recruitmentCount, VolunteerCategory volunteerCategory,
         LocalDateTime volunteerStartDateTime, LocalDateTime volunteerEndDateTime,
         Boolean admitted) {
 
         validateVolunteerDateTime(volunteerStartDateTime, volunteerEndDateTime);
 
         this.recruitmentCount = recruitmentCount;
-        this.volunteerType = volunteerType;
+        this.volunteerCategory = volunteerCategory;
         this.volunteerStartDateTime = volunteerStartDateTime.truncatedTo(MINUTES);
         this.volunteerEndDateTime = volunteerEndDateTime.truncatedTo(MINUTES);
         this.admitted = admitted;
