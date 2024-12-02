@@ -1,10 +1,12 @@
 package com.somemore.review.repository;
 
+import static com.somemore.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.common.fixture.CenterFixture.createCenter;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.recruitboard.domain.VolunteerType.COUNSELING;
 import static com.somemore.recruitboard.domain.VolunteerType.CULTURAL_EVENT;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -132,7 +134,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
                 .containsExactlyInAnyOrder("제 인생 최고의 봉사활동");
 
         assertThat(result.getPageable().getPageSize()).isEqualTo(5);
-        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageNumber()).isZero();
     }
 
     @DisplayName("봉사자 ID로 리뷰를 조회할 수 있다")
@@ -173,7 +175,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
                 .containsExactlyInAnyOrder("제 인생 최고의 봉사활동", "보람있는 봉사활동");
 
         assertThat(result.getPageable().getPageSize()).isEqualTo(5);
-        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageNumber()).isZero();
     }
 
     @DisplayName("기관 ID와 검색 조건으로 리뷰 목록을 조회할 수 있다.")
@@ -187,7 +189,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, "naver");
+        Volunteer volunteer = Volunteer.createDefault(NAVER, "naver");
         volunteerRepository.save(volunteer);
 
         VolunteerApply apply1 = createApply(volunteer.getId(), board1.getId());
@@ -229,7 +231,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, "naver");
+        Volunteer volunteer = Volunteer.createDefault(NAVER, "naver");
         volunteerRepository.save(volunteer);
 
         VolunteerApply apply1 = createApply(volunteer.getId(), board1.getId());
@@ -259,16 +261,6 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result.getTotalPages()).isEqualTo(1);
     }
 
-    private Review createReview(Long applyId, UUID volunteerId) {
-        return Review.builder()
-                .volunteerApplyId(applyId)
-                .volunteerId(volunteerId)
-                .title("리뷰 제목")
-                .content("리뷰 내용")
-                .imgUrl("")
-                .build();
-    }
-
     private Review createReview(Long applyId, UUID volunteerId, String title, String content,
             String imgUrl) {
         return Review.builder()
@@ -284,7 +276,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
-                .status(ApplyStatus.APPROVED)
+                .status(APPROVED)
                 .attended(false)
                 .build();
     }

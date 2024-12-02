@@ -7,12 +7,12 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 import static com.somemore.recruitboard.domain.VolunteerType.COUNSELING;
 import static com.somemore.recruitboard.domain.VolunteerType.CULTURAL_EVENT;
 import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
 import com.somemore.global.exception.BadRequestException;
@@ -26,7 +26,6 @@ import com.somemore.review.dto.response.ReviewWithNicknameResponseDto;
 import com.somemore.review.repository.ReviewRepository;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;
-import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.List;
@@ -137,7 +136,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 );
 
         assertThat(result.getPageable().getPageSize()).isEqualTo(5);
-        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageNumber()).isZero();
     }
 
     @DisplayName("센터 ID로 리뷰 리스트를 조회할 수 있다.")
@@ -151,8 +150,8 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, "naver");
-        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, "naver");
+        Volunteer volunteer1 = Volunteer.createDefault(NAVER, "naver");
+        Volunteer volunteer2 = Volunteer.createDefault(NAVER, "naver");
         volunteer2.markAsDeleted();
         volunteerRepository.save(volunteer1);
         volunteerRepository.save(volunteer2);
@@ -187,7 +186,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 );
 
         assertThat(result.getPageable().getPageSize()).isEqualTo(5);
-        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageNumber()).isZero();
     }
 
     private Review createReview(Long applyId, UUID volunteerId) {
@@ -220,7 +219,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
-                .status(ApplyStatus.APPROVED)
+                .status(APPROVED)
                 .attended(false)
                 .build();
     }
