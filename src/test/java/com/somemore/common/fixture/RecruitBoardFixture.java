@@ -1,16 +1,15 @@
 package com.somemore.common.fixture;
 
+import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.RecruitmentInfo;
 import com.somemore.recruitboard.domain.VolunteerType;
-
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
 
 public class RecruitBoardFixture {
 
@@ -267,6 +266,55 @@ public class RecruitBoardFixture {
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
                 .volunteerType(VOLUNTEER_TYPE)
+                .admitted(ADMITTED)
+                .build();
+
+        RecruitBoard recruitBoard = RecruitBoard.builder()
+                .centerId(UUID.randomUUID())
+                .locationId(LOCATION_ID)
+                .title(TITLE)
+                .content(CONTENT)
+                .imgUrl(IMG_URL)
+                .recruitmentInfo(recruitmentInfo)
+                .build();
+
+        setRecruitStatusCompleted(recruitBoard);
+
+        return recruitBoard;
+    }
+
+    public static RecruitBoard createCompletedRecruitBoard(UUID centerId, VolunteerType type) {
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region(REGION)
+                .recruitmentCount(RECRUITMENT_COUNT)
+                .volunteerStartDateTime(START_DATE_TIME)
+                .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerType(type)
+                .admitted(ADMITTED)
+                .build();
+
+        RecruitBoard recruitBoard = RecruitBoard.builder()
+                .centerId(centerId)
+                .locationId(LOCATION_ID)
+                .title(TITLE)
+                .content(CONTENT)
+                .imgUrl(IMG_URL)
+                .recruitmentInfo(recruitmentInfo)
+                .build();
+
+        setRecruitStatusCompleted(recruitBoard);
+
+        return recruitBoard;
+    }
+
+    public static RecruitBoard createCompletedRecruitBoard(VolunteerType type) {
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region(REGION)
+                .recruitmentCount(RECRUITMENT_COUNT)
+                .volunteerStartDateTime(START_DATE_TIME)
+                .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerType(type)
                 .admitted(ADMITTED)
                 .build();
 
