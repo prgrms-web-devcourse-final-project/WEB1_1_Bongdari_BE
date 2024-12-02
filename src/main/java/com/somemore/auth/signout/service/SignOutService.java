@@ -1,8 +1,8 @@
-package com.somemore.volunteer.service;
+package com.somemore.auth.signout.service;
 
 import com.somemore.auth.cookie.CookieUseCase;
 import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
-import com.somemore.volunteer.usecase.SignOutVolunteerUseCase;
+import com.somemore.auth.signout.usecase.SignOutUseCase;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class SignOutVolunteerService implements SignOutVolunteerUseCase {
+public class SignOutService implements SignOutUseCase {
 
     private final CookieUseCase cookieUseCase;
     private final RefreshTokenManager refreshTokenManager;

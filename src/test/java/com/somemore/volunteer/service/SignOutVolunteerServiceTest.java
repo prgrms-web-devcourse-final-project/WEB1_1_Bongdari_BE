@@ -10,6 +10,7 @@ import com.somemore.auth.jwt.exception.JwtException;
 import com.somemore.auth.jwt.generator.JwtGenerator;
 import com.somemore.auth.jwt.refresh.domain.RefreshToken;
 import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.auth.signout.service.SignOutService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +26,7 @@ import static org.assertj.core.api.Assertions.*;
 class SignOutVolunteerServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private SignOutVolunteerService signOutVolunteerService;
+    private SignOutService signOutVolunteerService;
     @Autowired
     private CookieUseCase cookieUseCase;
     @Autowired
