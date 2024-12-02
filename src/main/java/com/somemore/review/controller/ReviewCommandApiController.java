@@ -2,6 +2,7 @@ package com.somemore.review.controller;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
+import com.somemore.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.imageupload.usecase.ImageUploadUseCase;
@@ -13,7 +14,6 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -33,20 +33,16 @@ public class ReviewCommandApiController {
     @Operation(summary = "리뷰 등록", description = "리뷰를 등록합니다.")
     @PostMapping(value = "/review", consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Long> createReview(
-            @AuthenticationPrincipal String userId,
+            @CurrentUser UUID userId,
             @Valid @RequestPart("data") ReviewCreateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image) {
 
         String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
         return ApiResponse.ok(
                 201,
-                createReviewUseCase.createReview(requestDto, getId(userId), imgUrl),
+                createReviewUseCase.createReview(requestDto, userId, imgUrl),
                 "리뷰 등록 성공"
         );
-    }
-
-    private static UUID getId(String id) {
-        return UUID.fromString(id);
     }
 
 }
