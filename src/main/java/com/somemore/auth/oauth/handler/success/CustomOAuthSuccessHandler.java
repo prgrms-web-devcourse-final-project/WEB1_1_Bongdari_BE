@@ -2,6 +2,7 @@ package com.somemore.auth.oauth.handler.success;
 
 import com.somemore.auth.cookie.CookieUseCase;
 import com.somemore.auth.jwt.domain.EncodedToken;
+import com.somemore.auth.jwt.domain.UserRole;
 import com.somemore.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.auth.oauth.naver.service.query.ProcessNaverOAuthUserService;
@@ -46,7 +47,10 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
 
         UUID volunteerId = volunteerQueryUseCase.getVolunteerIdByOAuthId(oAuthId);
-        EncodedToken accessToken = generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(volunteerId);
+        EncodedToken accessToken =
+                generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(
+                        volunteerId, UserRole.VOLUNTEER
+                );
 
         cookieUseCase.setAccessToken(response, accessToken.value());
         redirectUseCase.redirect(request, response, frontendRootUrl);

@@ -10,4 +10,5 @@ public interface CenterJpaRepository extends JpaRepository<Center, Long> {
     boolean existsById(UUID id);
     Optional<Center> findCenterById(UUID id);
     Optional<Center> findByName(String name);
+    boolean existsByIdAndDeletedIsFalse(UUID id);
 }
