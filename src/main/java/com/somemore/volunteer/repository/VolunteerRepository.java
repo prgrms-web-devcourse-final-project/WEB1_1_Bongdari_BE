@@ -1,8 +1,11 @@
 package com.somemore.volunteer.repository;
 
 import com.somemore.volunteer.domain.Volunteer;
+import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
+import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,5 +15,5 @@ public interface VolunteerRepository {
     Optional<Volunteer> findById(UUID id);
     Optional<Volunteer> findByOauthId(String oauthId);
     String findNicknameById(UUID id);
-    void deleteAllInBatch();
+    List<VolunteerOverviewForRankingByHours> findRankingByVolunteerHours();
 }
