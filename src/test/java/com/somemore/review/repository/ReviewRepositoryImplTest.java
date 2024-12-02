@@ -51,17 +51,11 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
     @Autowired
     private VolunteerRepository volunteerRepository;
 
-    @DisplayName("리뷰 생성 및 조회")
+    @DisplayName("리뷰를 저장하고 조회할 수 있다")
     @Test
     void saveAndFind() {
         // given
-        Review review = Review.builder()
-                .volunteerApplyId(1L)
-                .volunteerId(UUID.randomUUID())
-                .title("리뷰 제목")
-                .content("리뷰 내용")
-                .imgUrl("")
-                .build();
+        Review review = createReview(1L, UUID.randomUUID(), "리뷰 내용");
         reviewRepository.save(review);
 
         // when
@@ -77,13 +71,7 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
     void existsByVolunteerApplyId() {
         // given
         Long volunteerApplyId = 1L;
-        Review review = Review.builder()
-                .volunteerApplyId(volunteerApplyId)
-                .volunteerId(UUID.randomUUID())
-                .title("리뷰 제목")
-                .content("리뷰 내용")
-                .imgUrl("")
-                .build();
+        Review review = createReview(volunteerApplyId, UUID.randomUUID(), "리뷰 내용");
         reviewRepository.save(review);
 
         // when
@@ -93,7 +81,44 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isTrue();
     }
 
-    @DisplayName("봉사자 ID로 검색 조건으로 리뷰를 조회할 수 있다.")
+    @DisplayName("봉사자 ID로 조건 없이 리뷰를 조회할 수 있다")
+    @Test
+    void findAllByVolunteerIdAndSearchWithoutCondition() {
+        // given
+        UUID volunteerId = UUID.randomUUID();
+
+        VolunteerType type = CULTURAL_EVENT;
+        RecruitBoard board1 = createCompletedRecruitBoard(type);
+        RecruitBoard board2 = createCompletedRecruitBoard(OTHER);
+        recruitBoardRepository.saveAll(List.of(board1, board2));
+
+        VolunteerApply apply1 = createApply(volunteerId, board1.getId());
+        VolunteerApply apply2 = createApply(volunteerId, board2.getId());
+
+        volunteerApplyRepository.saveAll(List.of(apply1, apply2));
+
+        Review review1 = createReview(apply1.getId(), volunteerId, "제 인생 최고의 봉사활동");
+        Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동");
+        reviewRepository.saveAll(List.of(review1, review2));
+
+        ReviewSearchCondition conditionWithoutType = ReviewSearchCondition.builder()
+                .pageable(getPageable())
+                .build();
+
+        // when
+        Page<Review> result = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId,
+                conditionWithoutType);
+
+        // then
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getContent()).extracting("title")
+                .containsExactlyInAnyOrder("제 인생 최고의 봉사활동", "보람있는 봉사활동");
+
+        assertThat(result.getPageable().getPageSize()).isEqualTo(5);
+        assertThat(result.getPageable().getPageNumber()).isZero();
+    }
+
+    @DisplayName("기관 ID와 봉사 유형으로 리뷰 목록을 조회할 수 있다")
     @Test
     void findAllByVolunteerIdAndSearchWithCondition() {
         // given
@@ -109,12 +134,8 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
 
         volunteerApplyRepository.saveAll(List.of(apply1, apply2));
 
-        Review review1 = createReview(apply1.getId(), volunteerId, "제 인생 최고의 봉사활동",
-                "정말 유익했습니다. 더보기..",
-                "https://image.domain.com/links1");
-        Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동",
-                "많은 사람들에게 도움을 주었어요.",
-                "https://image.domain.com/links2");
+        Review review1 = createReview(apply1.getId(), volunteerId, "제 인생 최고의 봉사활동");
+        Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동");
         reviewRepository.saveAll(List.of(review1, review2));
 
         ReviewSearchCondition conditionWithType = ReviewSearchCondition.builder()
@@ -135,45 +156,44 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result.getPageable().getPageNumber()).isZero();
     }
 
-    @DisplayName("봉사자 ID로 리뷰를 조회할 수 있다")
+    @DisplayName("기관 ID로 봉사 유형 없이 리뷰 목록을 조회할 수 있다")
     @Test
-    void findAllByVolunteerIdAndSearchWithoutCondition() {
+    void findAllByCenterIdAndSearchWithoutType() {
         // given
-        UUID volunteerId = UUID.randomUUID();
+        Center center = createCenter("Test Center");
+        centerRepository.save(center);
 
-        VolunteerType type = CULTURAL_EVENT;
-        RecruitBoard board1 = createCompletedRecruitBoard(type);
-        RecruitBoard board2 = createCompletedRecruitBoard(OTHER);
+        RecruitBoard board1 = createCompletedRecruitBoard(center.getId(), COUNSELING);
+        RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
-        VolunteerApply apply1 = createApply(volunteerId, board1.getId());
-        VolunteerApply apply2 = createApply(volunteerId, board2.getId());
+        Volunteer volunteer = createVolunteer();
+        volunteerRepository.save(volunteer);
 
+        VolunteerApply apply1 = createApply(volunteer.getId(), board1.getId());
+        VolunteerApply apply2 = createApply(volunteer.getId(), board2.getId());
         volunteerApplyRepository.saveAll(List.of(apply1, apply2));
 
-        Review review1 = createReview(apply1.getId(), volunteerId, "제 인생 최고의 봉사활동",
-                "정말 유익했습니다. 더보기..",
-                "https://image.domain.com/links1");
-        Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동",
-                "많은 사람들에게 도움을 주었어요.",
-                "https://image.domain.com/links2");
+        Review review1 = createReview(apply1.getId(), volunteer.getId(), "제목제목");
+        Review review2 = createReview(apply2.getId(), volunteer.getId(), "제목제목제목");
         reviewRepository.saveAll(List.of(review1, review2));
 
-        ReviewSearchCondition conditionWithoutType = ReviewSearchCondition.builder()
+        ReviewSearchCondition condition = ReviewSearchCondition.builder()
                 .pageable(getPageable())
                 .build();
 
         // when
-        Page<Review> result = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId,
-                conditionWithoutType);
+        Page<Review> result = reviewRepository.findAllByCenterIdAndSearch(center.getId(),
+                condition);
 
-        // then
+        assertThat(result.getContent()).hasSize(2);
+
+        assertThat(result.getContent())
+                .extracting("title")
+                .containsExactlyInAnyOrder("제목제목", "제목제목제목");
+
         assertThat(result.getTotalElements()).isEqualTo(2);
-        assertThat(result.getContent()).extracting("title")
-                .containsExactlyInAnyOrder("제 인생 최고의 봉사활동", "보람있는 봉사활동");
-
-        assertThat(result.getPageable().getPageSize()).isEqualTo(5);
-        assertThat(result.getPageable().getPageNumber()).isZero();
+        assertThat(result.getTotalPages()).isEqualTo(1);
     }
 
     @DisplayName("기관 ID와 검색 조건으로 리뷰 목록을 조회할 수 있다.")
@@ -187,16 +207,15 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
-        Volunteer volunteer = Volunteer.createDefault(NAVER, "naver");
+        Volunteer volunteer = createVolunteer();
         volunteerRepository.save(volunteer);
 
         VolunteerApply apply1 = createApply(volunteer.getId(), board1.getId());
         VolunteerApply apply2 = createApply(volunteer.getId(), board2.getId());
         volunteerApplyRepository.saveAll(List.of(apply1, apply2));
 
-        Review review1 = createReview(apply1.getId(), volunteer.getId(), "제목제목", "내용내용", "이미지링크");
-        Review review2 = createReview(apply2.getId(), volunteer.getId(), "제목제목제목", "내용내용내용",
-                "이미지링크링크");
+        Review review1 = createReview(apply1.getId(), volunteer.getId(), "제목제목");
+        Review review2 = createReview(apply2.getId(), volunteer.getId(), "제목제목제목");
         reviewRepository.saveAll(List.of(review1, review2));
 
         ReviewSearchCondition condition = ReviewSearchCondition.builder()
@@ -218,55 +237,17 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result.getTotalPages()).isEqualTo(1);
     }
 
-    @DisplayName("기관 ID으로 리뷰 목록을 조회할 수 있다.")
-    @Test
-    void findAllByCenterIdAndSearchWithoutType() {
-        // given
-        Center center = createCenter("Test Center");
-        centerRepository.save(center);
-
-        RecruitBoard board1 = createCompletedRecruitBoard(center.getId(), COUNSELING);
-        RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
-        recruitBoardRepository.saveAll(List.of(board1, board2));
-
-        Volunteer volunteer = Volunteer.createDefault(NAVER, "naver");
-        volunteerRepository.save(volunteer);
-
-        VolunteerApply apply1 = createApply(volunteer.getId(), board1.getId());
-        VolunteerApply apply2 = createApply(volunteer.getId(), board2.getId());
-        volunteerApplyRepository.saveAll(List.of(apply1, apply2));
-
-        Review review1 = createReview(apply1.getId(), volunteer.getId(), "제목제목", "내용내용", "이미지링크");
-        Review review2 = createReview(apply2.getId(), volunteer.getId(), "제목제목제목", "내용내용내용",
-                "이미지링크링크");
-        reviewRepository.saveAll(List.of(review1, review2));
-
-        ReviewSearchCondition condition = ReviewSearchCondition.builder()
-                .pageable(getPageable())
-                .build();
-
-        // when
-        Page<Review> result = reviewRepository.findAllByCenterIdAndSearch(center.getId(),
-                condition);
-
-        assertThat(result.getContent()).hasSize(2);
-
-        assertThat(result.getContent())
-                .extracting("title")
-                .containsExactlyInAnyOrder("제목제목", "제목제목제목");
-
-        assertThat(result.getTotalElements()).isEqualTo(2);
-        assertThat(result.getTotalPages()).isEqualTo(1);
+    private static Volunteer createVolunteer() {
+        return Volunteer.createDefault(NAVER, "naver");
     }
 
-    private Review createReview(Long applyId, UUID volunteerId, String title, String content,
-            String imgUrl) {
+    private Review createReview(Long applyId, UUID volunteerId, String title) {
         return Review.builder()
                 .volunteerApplyId(applyId)
                 .volunteerId(volunteerId)
                 .title(title)
-                .content(content)
-                .imgUrl(imgUrl)
+                .content("내용내용")
+                .imgUrl("이미지링크")
                 .build();
     }
 
