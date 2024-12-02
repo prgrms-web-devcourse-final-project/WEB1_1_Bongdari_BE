@@ -1,7 +1,7 @@
 package com.somemore.community.service.board;
 
 import com.somemore.community.domain.CommunityBoard;
-import com.somemore.community.domain.CommunityBoardView;
+import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.dto.response.CommunityBoardGetDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardGetResponseDto;
 import com.somemore.community.repository.board.CommunityBoardRepository;

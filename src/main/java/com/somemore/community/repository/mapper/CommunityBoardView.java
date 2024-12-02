@@ -1,4 +1,6 @@
-package com.somemore.community.domain;
+package com.somemore.community.repository.mapper;
+
+import com.somemore.community.domain.CommunityBoard;
 
 public record CommunityBoardView(
         CommunityBoard communityBoard,
