@@ -22,7 +22,7 @@ public class RecruitBoardFixture {
     public static final String TITLE = "봉사모집제목";
     public static final String CONTENT = "봉사모집내용";
     public static final String IMG_URL = "https://image.domain.com/links";
-    public static final VolunteerCategory VOLUNTEER_VOLUNTEER_CATEGORY = OTHER;
+    public static final VolunteerCategory VOLUNTEER_CATEGORY = OTHER;
 
     private RecruitBoardFixture() {
     }
@@ -34,7 +34,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -55,7 +55,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -76,7 +76,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -97,7 +97,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -139,7 +139,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(admitted)
                 .build();
 
@@ -160,7 +160,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -181,7 +181,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -202,7 +202,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -244,7 +244,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerCategory(VOLUNTEER_VOLUNTEER_CATEGORY)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
 
@@ -290,7 +290,7 @@ public class RecruitBoardFixture {
 
     public static RecruitBoard createCompletedRecruitBoard() {
         RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
-                VOLUNTEER_VOLUNTEER_CATEGORY);
+                VOLUNTEER_CATEGORY);
         setRecruitStatusCompleted(recruitBoard);
         return recruitBoard;
     }
