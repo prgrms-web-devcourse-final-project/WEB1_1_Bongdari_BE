@@ -2,6 +2,7 @@ package com.somemore.recruitboard.controller;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.recruitboard.domain.VolunteerCategory.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -21,7 +22,7 @@ import com.somemore.WithMockCustomUser;
 import com.somemore.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardStatusUpdateRequestDto;
@@ -84,7 +85,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)
-                .volunteerType(VolunteerType.OTHER)
+                .volunteerCategory(OTHER)
                 .admitted(true)
                 .location(location)
                 .build();
@@ -137,7 +138,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)
-                .volunteerType(VolunteerType.OTHER)
+                .volunteerCategory(OTHER)
                 .admitted(true)
                 .build();
 

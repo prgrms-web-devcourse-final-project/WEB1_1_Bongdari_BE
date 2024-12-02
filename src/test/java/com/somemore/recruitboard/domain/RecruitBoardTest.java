@@ -6,7 +6,7 @@ import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStart
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
-import static com.somemore.recruitboard.domain.VolunteerType.OTHER;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -70,7 +70,7 @@ class RecruitBoardTest {
             .recruitmentCount(10)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
-            .volunteerType(OTHER)
+            .volunteerCategory(OTHER)
             .admitted(true).build();
 
         // when
@@ -206,7 +206,7 @@ class RecruitBoardTest {
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
-            .volunteerType(OTHER)
+            .volunteerCategory(OTHER)
             .admitted(true)
             .build();
 

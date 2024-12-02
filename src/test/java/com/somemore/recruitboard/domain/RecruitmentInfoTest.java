@@ -2,8 +2,9 @@ package com.somemore.recruitboard.domain;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
-import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
-import static com.somemore.recruitboard.domain.VolunteerType.SAFETY_PREVENTION;
+import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.recruitboard.domain.VolunteerCategory.SAFETY_PREVENTION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -55,18 +56,18 @@ class RecruitmentInfoTest {
         RecruitmentInfo recruitmentInfo = createRecruitmentInfo();
 
         Integer count = 2;
-        VolunteerType volunteerType = SAFETY_PREVENTION;
+        VolunteerCategory volunteerCategory = SAFETY_PREVENTION;
         LocalDateTime startDateTime = createUpdateStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(2);
         Boolean admitted = false;
 
         // when
-        recruitmentInfo.updateWith(count, volunteerType, startDateTime,
+        recruitmentInfo.updateWith(count, volunteerCategory, startDateTime,
             endDateTime, admitted);
 
         // then
         assertThat(recruitmentInfo.getRecruitmentCount()).isEqualTo(count);
-        assertThat(recruitmentInfo.getVolunteerType()).isEqualTo(volunteerType);
+        assertThat(recruitmentInfo.getVolunteerCategory()).isEqualTo(volunteerCategory);
         assertThat(recruitmentInfo.getVolunteerStartDateTime().compareTo(startDateTime)).isZero();
         assertThat(recruitmentInfo.getVolunteerEndDateTime().compareTo(endDateTime)).isZero();
         assertThat(recruitmentInfo.getAdmitted()).isEqualTo(admitted);
@@ -111,7 +112,7 @@ class RecruitmentInfoTest {
             .recruitmentCount(1)
             .volunteerStartDateTime(startDateTime)
             .volunteerEndDateTime(endDateTime)
-            .volunteerType(VolunteerType.OTHER)
+            .volunteerCategory(OTHER)
             .admitted(true)
             .build();
     }

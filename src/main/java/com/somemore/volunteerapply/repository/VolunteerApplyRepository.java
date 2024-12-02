@@ -10,8 +10,14 @@ import org.springframework.data.domain.Pageable;
 public interface VolunteerApplyRepository {
 
     VolunteerApply save(VolunteerApply volunteerApply);
+
+    List<VolunteerApply> saveAll(List<VolunteerApply> volunteerApplies);
+
     Optional<VolunteerApply> findById(Long id);
+
     List<UUID> findVolunteerIdsByRecruitIds(List<Long> recruitIds);
+
     Page<VolunteerApply> findAllByRecruitId(Long recruitId, Pageable pageable);
+
     Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
 }

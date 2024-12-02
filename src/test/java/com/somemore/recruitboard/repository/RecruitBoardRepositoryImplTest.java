@@ -7,7 +7,7 @@ import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
@@ -35,7 +35,7 @@ import static com.somemore.common.fixture.LocationFixture.createLocation;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
+import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -160,7 +160,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
     @DisplayName("봉사활동 유형으로 조회할 수 있다")
     @Test
-    void findAllWithCenterByType() {
+    void findAllWithCenterByCategory() {
         // given
         Center center = createCenter();
         centerRepository.save(center);
@@ -169,9 +169,9 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
-        VolunteerType type = ADMINISTRATIVE_SUPPORT;
+        VolunteerCategory category = ADMINISTRATIVE_SUPPORT;
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-                .type(type)
+                .category(category)
                 .pageable(pageable)
                 .build();
 
@@ -186,7 +186,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getRecruitmentInfo()
-                .getVolunteerType()).isEqualTo(type);
+                .getVolunteerCategory()).isEqualTo(category);
     }
 
     @DisplayName("지역으로 조회할 수 있다")

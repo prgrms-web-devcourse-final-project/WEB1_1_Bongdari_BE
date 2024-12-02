@@ -18,7 +18,7 @@ import com.somemore.recruitboard.domain.RecruitBoard;
 import java.util.List;
 
 import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerType;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
@@ -102,7 +102,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         Pageable pageable = condition.pageable();
         BooleanExpression predicate = isNotDeleted()
                 .and(keywordEq(condition.keyword()))
-                .and(volunteerTypeEq(condition.type()))
+                .and(volunteerCategoryEq(condition.category()))
                 .and(regionEq(condition.region()))
                 .and(admittedEq(condition.admitted()))
                 .and(statusEq(condition.status()));
@@ -167,7 +167,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         BooleanExpression predicate = isNotDeleted()
                 .and(centerIdEq(centerId))
                 .and(keywordEq(condition.keyword()))
-                .and(volunteerTypeEq(condition.type()))
+                .and(volunteerCategoryEq(condition.category()))
                 .and(regionEq(condition.region()))
                 .and(admittedEq(condition.admitted()))
                 .and(statusEq(condition.status()));
@@ -211,8 +211,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 keyword) : null;
     }
 
-    private BooleanExpression volunteerTypeEq(VolunteerType type) {
-        return type != null ? recruitBoard.recruitmentInfo.volunteerType.eq(type)
+    private BooleanExpression volunteerCategoryEq(VolunteerCategory category) {
+        return category != null ? recruitBoard.recruitmentInfo.volunteerCategory.eq(category)
                 : null;
     }
 

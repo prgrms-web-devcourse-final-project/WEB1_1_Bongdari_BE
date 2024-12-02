@@ -1,6 +1,6 @@
 package com.somemore.recruitboard.controller;
 
-import static com.somemore.recruitboard.domain.VolunteerType.ADMINISTRATIVE_SUPPORT;
+import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
@@ -92,7 +92,7 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // then
         mockMvc.perform(get("/api/recruit-boards/search")
                 .param("keyword", "volunteer")
-                .param("type", ADMINISTRATIVE_SUPPORT.name())
+                .param("category", ADMINISTRATIVE_SUPPORT.name())
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value(200))
@@ -143,7 +143,7 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // then
         mockMvc.perform(get("/api/recruit-boards/center/{centerId}", centerId)
                 .param("keyword", "volunteer")
-                .param("type", ADMINISTRATIVE_SUPPORT.name())
+                .param("category", ADMINISTRATIVE_SUPPORT.name())
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data").exists())

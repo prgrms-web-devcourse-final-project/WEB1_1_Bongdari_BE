@@ -27,7 +27,8 @@ public enum ExceptionMessage {
     DUPLICATE_INTEREST_CENTER("이미 관심 표시한 기관입니다."),
     NOT_EXISTS_VOLUNTEER_APPLY("존재하지 않는 봉사 활동 지원입니다."),
     REVIEW_ALREADY_EXISTS("이미 작성한 리뷰가 존재합니다."),
-    REVIEW_RESTRICTED_TO_ATTENDED("리뷰는 참석한 봉사에 한해서만 작성할 수 있습니다.")
+    REVIEW_RESTRICTED_TO_ATTENDED("리뷰는 참석한 봉사에 한해서만 작성할 수 있습니다."),
+    NOT_EXISTS_REVIEW("존재하지 않는 리뷰입니다."),
     ;
 
     private final String message;
