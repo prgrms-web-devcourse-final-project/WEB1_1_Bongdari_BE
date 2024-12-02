@@ -28,8 +28,6 @@ public class DeleteCommunityCommentService implements DeleteCommunityCommentUseC
 
         communityComment.markAsDeleted();
 
-        communityComment.replaceComment();
-
         communityCommentRepository.save(communityComment);
     }
 

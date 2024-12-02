@@ -52,7 +52,9 @@ public class CommunityComment extends BaseEntity {
         this.content = dto.content();
     }
 
-    public void replaceComment() {
+    @Override
+    public void markAsDeleted() {
+        super.markAsDeleted();
         this.content = "삭제된 댓글입니다";
     }
 
