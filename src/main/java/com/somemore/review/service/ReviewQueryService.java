@@ -32,12 +32,14 @@ public class ReviewQueryService implements ReviewQueryUseCase {
 
     @Override
     public Review getById(Long id) {
-        return getReview(id);
+        return reviewRepository.findById(id).orElseThrow(
+                () -> new BadRequestException(NOT_EXISTS_REVIEW)
+        );
     }
 
     @Override
     public ReviewResponseDto getReviewById(Long id) {
-        Review review = getReview(id);
+        Review review = getById(id);
         return ReviewResponseDto.from(review);
     }
 
@@ -72,12 +74,6 @@ public class ReviewQueryService implements ReviewQueryUseCase {
                             "삭제된 아이디");
                     return ReviewWithNicknameResponseDto.from(review, nickname);
                 });
-    }
-
-    private Review getReview(Long id) {
-        return reviewRepository.findById(id).orElseThrow(
-                () -> new BadRequestException(NOT_EXISTS_REVIEW)
-        );
     }
 
     private Map<UUID, String> getVolunteerNicknames(List<UUID> volunteerIds) {

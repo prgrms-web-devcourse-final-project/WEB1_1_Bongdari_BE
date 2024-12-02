@@ -258,31 +258,6 @@ public class RecruitBoardFixture {
                 .build();
     }
 
-    public static RecruitBoard createCompletedRecruitBoard() {
-
-        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
-                .region(REGION)
-                .recruitmentCount(RECRUITMENT_COUNT)
-                .volunteerStartDateTime(START_DATE_TIME)
-                .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerType(VOLUNTEER_TYPE)
-                .admitted(ADMITTED)
-                .build();
-
-        RecruitBoard recruitBoard = RecruitBoard.builder()
-                .centerId(UUID.randomUUID())
-                .locationId(LOCATION_ID)
-                .title(TITLE)
-                .content(CONTENT)
-                .imgUrl(IMG_URL)
-                .recruitmentInfo(recruitmentInfo)
-                .build();
-
-        setRecruitStatusCompleted(recruitBoard);
-
-        return recruitBoard;
-    }
-
     public static RecruitBoard createCompletedRecruitBoard(UUID centerId, VolunteerType type) {
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(REGION)
@@ -308,27 +283,15 @@ public class RecruitBoardFixture {
     }
 
     public static RecruitBoard createCompletedRecruitBoard(VolunteerType type) {
-
-        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
-                .region(REGION)
-                .recruitmentCount(RECRUITMENT_COUNT)
-                .volunteerStartDateTime(START_DATE_TIME)
-                .volunteerEndDateTime(END_DATE_TIME)
-                .volunteerType(type)
-                .admitted(ADMITTED)
-                .build();
-
-        RecruitBoard recruitBoard = RecruitBoard.builder()
-                .centerId(UUID.randomUUID())
-                .locationId(LOCATION_ID)
-                .title(TITLE)
-                .content(CONTENT)
-                .imgUrl(IMG_URL)
-                .recruitmentInfo(recruitmentInfo)
-                .build();
-
+        RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(), type);
         setRecruitStatusCompleted(recruitBoard);
+        return recruitBoard;
+    }
 
+    public static RecruitBoard createCompletedRecruitBoard() {
+        RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
+                VOLUNTEER_TYPE);
+        setRecruitStatusCompleted(recruitBoard);
         return recruitBoard;
     }
 
