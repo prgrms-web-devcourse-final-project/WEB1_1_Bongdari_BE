@@ -1,8 +1,8 @@
-package com.somemore.volunteer.usecase;
+package com.somemore.auth.signout.usecase;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-public interface SignOutVolunteerUseCase {
+public interface SignOutUseCase {
 
     void signOut(HttpServletResponse response, String volunteerId);
 }
