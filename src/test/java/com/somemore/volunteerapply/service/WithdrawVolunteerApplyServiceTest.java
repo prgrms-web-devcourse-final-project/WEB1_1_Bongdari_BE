@@ -46,15 +46,15 @@ class WithdrawVolunteerApplyServiceTest extends IntegrationTestSupport {
     @Test
     void withdrawWhenWrongVolunteerId() {
         // given
-        UUID wrongId = UUID.randomUUID();
-
         VolunteerApply apply = createApply(UUID.randomUUID(), APPROVED, false);
         volunteerApplyRepository.save(apply);
 
+        UUID wrongId = UUID.randomUUID();
+        Long applyId = apply.getId();
         // when
         // then
         assertThatThrownBy(
-                () -> withdrawVolunteerApplyService.withdraw(apply.getId(), wrongId)
+                () -> withdrawVolunteerApplyService.withdraw(applyId, wrongId)
         ).isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_VOLUNTEER_APPLY.getMessage());
     }

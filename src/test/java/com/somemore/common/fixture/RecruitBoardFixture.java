@@ -1,6 +1,7 @@
 package com.somemore.common.fixture;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 
@@ -322,7 +323,7 @@ public class RecruitBoardFixture {
     public static RecruitBoard createCloseRecruitBoard() {
         RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
                 VOLUNTEER_CATEGORY);
-        setRecruitStatus(recruitBoard, COMPLETED);
+        setRecruitStatus(recruitBoard, CLOSED);
         return recruitBoard;
     }
 
