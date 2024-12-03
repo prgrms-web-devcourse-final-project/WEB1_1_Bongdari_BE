@@ -29,7 +29,7 @@ public class RejectVolunteerApplyService implements RejectVolunteerApplyUseCase 
         VolunteerApply apply = getApply(id);
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(apply.getRecruitBoardId());
 
-        validateRejectConditions(recruitBoard, centerId);
+        validateWriter(recruitBoard, centerId);
         validateBoardStatus(recruitBoard);
 
         apply.changeStatus(REJECTED);
@@ -42,7 +42,7 @@ public class RejectVolunteerApplyService implements RejectVolunteerApplyUseCase 
         );
     }
 
-    private void validateRejectConditions(RecruitBoard recruitBoard, UUID centerId) {
+    private void validateWriter(RecruitBoard recruitBoard, UUID centerId) {
         if (recruitBoard.isWriter(centerId)) {
             return;
         }
