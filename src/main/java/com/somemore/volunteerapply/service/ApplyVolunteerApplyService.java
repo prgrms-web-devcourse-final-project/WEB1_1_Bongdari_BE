@@ -37,7 +37,7 @@ public class ApplyVolunteerApplyService implements ApplyVolunteerApplyUseCase {
     }
 
     private void validateCanApply(RecruitBoard board) {
-        if (board.isApplicationOpen()) {
+        if (board.isRecruitOpen()) {
             return;
         }
         throw new BadRequestException(RECRUITMENT_NOT_OPEN);

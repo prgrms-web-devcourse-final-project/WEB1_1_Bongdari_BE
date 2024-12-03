@@ -92,7 +92,7 @@ public class RecruitBoard extends BaseEntity {
         this.recruitStatus = newStatus;
     }
 
-    public boolean isApplicationOpen() {
+    public boolean isRecruitOpen() {
         return this.recruitStatus == RECRUITING;
     }
 
