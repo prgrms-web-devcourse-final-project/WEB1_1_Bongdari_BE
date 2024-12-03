@@ -30,7 +30,7 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         VolunteerApply apply = getVolunteerApply(id);
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(apply.getRecruitBoardId());
 
-        validateApprovalConditions(recruitBoard, centerId);
+        validateWriter(recruitBoard, centerId);
         validateBoardStatus(recruitBoard);
 
         apply.changeStatus(APPROVED);
@@ -43,7 +43,7 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         );
     }
 
-    private void validateApprovalConditions(RecruitBoard recruitBoard, UUID centerId) {
+    private void validateWriter(RecruitBoard recruitBoard, UUID centerId) {
         if (recruitBoard.isWriter(centerId)) {
             return;
         }
