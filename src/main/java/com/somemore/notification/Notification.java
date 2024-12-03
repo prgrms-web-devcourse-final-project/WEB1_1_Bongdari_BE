@@ -29,4 +29,9 @@ public class Notification extends BaseEntity {
 
     @Column(name = "read", nullable = false)
     private boolean read;
+
+    void markAsRead() {
+        this.read = true;
+        markAsDeleted();
+    }
 }
