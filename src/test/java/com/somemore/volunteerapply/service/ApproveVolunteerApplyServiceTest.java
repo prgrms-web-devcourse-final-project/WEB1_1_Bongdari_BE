@@ -1,4 +1,4 @@
-package com.somemore.volunteerapply.usecase;
+package com.somemore.volunteerapply.service;
 
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
@@ -16,6 +16,7 @@ import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.volunteerapply.service.ApproveVolunteerApplyService;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
