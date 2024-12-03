@@ -32,7 +32,7 @@ public class CommunityCommentCommandApiController {
     public ApiResponse<Long> createCommunityComment(
             @CurrentUser UUID userId,
             @PathVariable Long boardId,
-            @Valid @RequestPart("data") CommunityCommentCreateRequestDto requestDto) {
+            @Valid @RequestBody CommunityCommentCreateRequestDto requestDto) {
 
         return ApiResponse.ok(
                 201,
@@ -47,7 +47,7 @@ public class CommunityCommentCommandApiController {
             @CurrentUser UUID userId,
             @PathVariable Long boardId,
             @PathVariable Long id,
-            @Valid @RequestPart("data") CommunityCommentUpdateRequestDto requestDto
+            @Valid @RequestBody CommunityCommentUpdateRequestDto requestDto
     ) {
         updateCommunityCommentUseCase.updateCommunityComment(requestDto, id, userId, boardId);
 

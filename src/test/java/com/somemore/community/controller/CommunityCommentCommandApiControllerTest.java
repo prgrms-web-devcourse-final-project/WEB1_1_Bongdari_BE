@@ -3,9 +3,7 @@ package com.somemore.community.controller;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,11 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 public class CommunityCommentCommandApiControllerTest extends ControllerTestSupport {
 
@@ -60,20 +54,13 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
                 .parentCommentId(null)
                 .build();
 
-        MockMultipartFile requestData = new MockMultipartFile(
-                "data",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(requestDto)
-        );
-
         given(createCommunityCommentUseCase.createCommunityComment(any(), any(UUID.class),
                 eq(communityBoardId))).willReturn(communityCommentId);
 
         //when
-        mockMvc.perform(multipart("/api/community-board/{boardId}/comment", communityBoardId)
-                        .file(requestData)
-                        .contentType(MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/api/community-board/{boardId}/comment", communityBoardId)
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
 
                 //then
@@ -92,32 +79,14 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
                 .content("감사합니다.")
                 .build();
 
-        MockMultipartFile requestData = new MockMultipartFile(
-                "data",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(requestDto)
-        );
-
         willDoNothing().given(updateCommunityCommentUseCase)
-                .updateCommunityComment(any(), any(),
-                        any(UUID.class), any());
-
-        MockMultipartHttpServletRequestBuilder builder =
-                multipart("/api/community-board/{boardId}/comment/{id}", communityBoardId, communityCommentId);
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
+                .updateCommunityComment(any(), any(), any(UUID.class), any());
 
         //when
-        mockMvc.perform(builder
-                .file(requestData)
-                .contentType(MULTIPART_FORM_DATA)
-                .header("Authorization", "Bearer access-token"))
+        mockMvc.perform(put("/api/community-board/{boardId}/comment/{id}", communityBoardId, communityCommentId)
+                        .content(objectMapper.writeValueAsString(requestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer access-token"))
 
                 //then
                 .andExpect(status().isOk())
