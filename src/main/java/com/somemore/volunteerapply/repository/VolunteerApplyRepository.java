@@ -15,9 +15,12 @@ public interface VolunteerApplyRepository {
 
     Optional<VolunteerApply> findById(Long id);
 
+    Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
+
+    boolean existsByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
+
     List<UUID> findVolunteerIdsByRecruitIds(List<Long> recruitIds);
 
     Page<VolunteerApply> findAllByRecruitId(Long recruitId, Pageable pageable);
 
-    Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
 }
