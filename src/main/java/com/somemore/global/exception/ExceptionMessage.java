@@ -31,6 +31,7 @@ public enum ExceptionMessage {
     NOT_EXISTS_REVIEW("존재하지 않는 리뷰입니다."),
     RECRUITMENT_NOT_OPEN("현재 모집 진행 중이 아닙니다."),
     DUPLICATE_APPLICATION("이미 신청한 봉사 모집 공고입니다."),
+    UNAUTHORIZED_VOLUNTEER_APPLY("해당 지원에 권한이 없습니다."),
 
     ;
     private final String message;
