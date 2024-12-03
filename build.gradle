@@ -64,6 +64,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.3.3'
+
 
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
