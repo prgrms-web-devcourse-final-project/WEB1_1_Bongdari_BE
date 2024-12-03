@@ -19,8 +19,8 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/profile")
-@Tag(name = "GET Volunteer", description = "봉사자 조회")
+@RequestMapping("/api/volunteer/profile")
+@Tag(name = "GET Volunteer Profile", description = "봉사자 조회")
 public class VolunteerProfileQueryController {
 
     private final VolunteerQueryUseCase volunteerQueryUseCase;
