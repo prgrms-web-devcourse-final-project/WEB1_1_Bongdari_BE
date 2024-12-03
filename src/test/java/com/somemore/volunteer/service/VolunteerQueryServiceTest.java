@@ -1,11 +1,5 @@
 package com.somemore.volunteer.service;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
-import static com.somemore.volunteer.domain.Volunteer.createDefault;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
@@ -16,12 +10,19 @@ import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
+import static com.somemore.volunteer.domain.Volunteer.createDefault;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class VolunteerQueryServiceTest extends IntegrationTestSupport {

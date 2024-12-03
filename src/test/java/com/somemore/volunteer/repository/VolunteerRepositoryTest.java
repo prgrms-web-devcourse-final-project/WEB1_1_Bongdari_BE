@@ -1,12 +1,9 @@
 package com.somemore.volunteer.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -130,9 +127,9 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
     }
 
     private void createVolunteerAndUpdateVolunteerStats(int i) {
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, "oauth-id-" + i);
-        volunteer.updateVolunteerStats(i * 10, i);
-        volunteerRepository.save(volunteer);
+        Volunteer newVolunteer = Volunteer.createDefault(OAuthProvider.NAVER, "oauth-id-" + i);
+        newVolunteer.updateVolunteerStats(i * 10, i);
+        volunteerRepository.save(newVolunteer);
     }
 
     @DisplayName("아이디 리스트로 봉사자를 조회할 수있다.")
