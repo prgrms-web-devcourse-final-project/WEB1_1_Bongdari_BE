@@ -1,5 +1,6 @@
 package com.somemore.recruitboard.usecase.query;
 
+import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
@@ -13,7 +14,8 @@ import java.util.UUID;
 
 public interface RecruitBoardQueryUseCase {
 
-    RecruitBoardResponseDto getById(Long id);
+    RecruitBoard getById(Long id);
+    RecruitBoardResponseDto getRecruitBoardById(Long id);
 
     RecruitBoardWithLocationResponseDto getWithLocationById(Long id);
 
