@@ -117,6 +117,24 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         assertThat(findApply).isPresent();
     }
 
+    @DisplayName("모집글 아이디와 봉사자 아이디로 봉사 지원 존재 유무를 확인 할 수 있다.")
+    @Test
+    void existsByRecruitIdAndVolunteerId() {
+        // given
+        Long recruitId = 1234L;
+        UUID volunteerId = UUID.randomUUID();
+
+        VolunteerApply newApply = createApply(volunteerId, recruitId);
+        volunteerApplyRepository.save(newApply);
+
+        // when
+        boolean result = volunteerApplyRepository.existsByRecruitIdAndVolunteerId(recruitId,
+                volunteerId);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
