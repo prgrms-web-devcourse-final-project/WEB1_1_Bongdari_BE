@@ -42,7 +42,7 @@ public class CommunityCommentQueryApiControllerTest extends ControllerTestSuppor
 
         //when
         //then
-        mockMvc.perform(get("/api/community-board/{board_id}/comments", communityBoardId)
+        mockMvc.perform(get("/api/community-board/{boardId}/comments", communityBoardId)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))

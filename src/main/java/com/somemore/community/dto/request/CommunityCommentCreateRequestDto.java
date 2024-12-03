@@ -6,7 +6,6 @@ import com.somemore.community.domain.CommunityComment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.util.UUID;

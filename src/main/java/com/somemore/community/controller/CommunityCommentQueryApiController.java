@@ -21,15 +21,15 @@ public class CommunityCommentQueryApiController {
 
     private final CommunityCommentQueryUseCase communityCommentQueryUseCase;
 
-    @GetMapping("/{board_id}/comments")
+    @GetMapping("/{boardId}/comments")
     @Operation(summary = "커뮤니티 댓글 조회", description = "커뮤니티 게시글의 댓글 목록을 조회합니다.")
     public ApiResponse<Page<CommunityCommentResponseDto>> getByBoardId(
-            @PathVariable Long board_id,
+            @PathVariable Long boardId,
             Pageable pageable
     ) {
         return ApiResponse.ok(
                 200,
-                communityCommentQueryUseCase.getCommunityCommentsByBoardId(board_id, pageable.getPageNumber()),
+                communityCommentQueryUseCase.getCommunityCommentsByBoardId(boardId, pageable.getPageNumber()),
                 "커뮤니티 게시글의 댓글 리스트 조회 성공"
         );
     }

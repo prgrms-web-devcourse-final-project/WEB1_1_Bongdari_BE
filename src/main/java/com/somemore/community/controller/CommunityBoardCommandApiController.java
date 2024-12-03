@@ -36,7 +36,7 @@ public class CommunityBoardCommandApiController {
     @Operation(summary = "커뮤니티 게시글 등록", description = "커뮤니티 게시글을 등록합니다.")
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Long> createCommunityBoard(
-            @CurrentUser UUID user_id,
+            @CurrentUser UUID userId,
             @Valid @RequestPart("data") CommunityBoardCreateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
@@ -44,7 +44,7 @@ public class CommunityBoardCommandApiController {
 
         return ApiResponse.ok(
                 201,
-                createCommunityBoardUseCase.createCommunityBoard(requestDto, user_id, imgUrl),
+                createCommunityBoardUseCase.createCommunityBoard(requestDto, userId, imgUrl),
                 "커뮤니티 게시글 등록 성공"
         );
     }
@@ -53,13 +53,13 @@ public class CommunityBoardCommandApiController {
     @Operation(summary = "커뮤니티 게시글 수정", description = "커뮤니티 게시글을 수정합니다.")
     @PutMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<String> updateCommunityBoard(
-            @CurrentUser UUID user_id,
+            @CurrentUser UUID userId,
             @PathVariable Long id,
             @Valid @RequestPart("data") CommunityBoardUpdateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
         String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
-        updateCommunityBoardUseCase.updateCommunityBoard(requestDto, id, user_id, imgUrl);
+        updateCommunityBoardUseCase.updateCommunityBoard(requestDto, id, userId, imgUrl);
 
         return ApiResponse.ok("커뮤니티 게시글 수정 성공");
     }
@@ -68,10 +68,10 @@ public class CommunityBoardCommandApiController {
     @Operation(summary = "커뮤니티 게시글 삭제", description = "커뮤니티 게시글을 삭제합니다.")
     @DeleteMapping(value = "/{id}")
     public ApiResponse<String> deleteCommunityBoard(
-            @CurrentUser UUID user_id,
+            @CurrentUser UUID userId,
             @PathVariable Long id
     ) {
-        deleteCommunityBoardUseCase.deleteCommunityBoard(user_id, id);
+        deleteCommunityBoardUseCase.deleteCommunityBoard(userId, id);
 
         return ApiResponse.ok("커뮤니티 게시글 삭제 성공");
     }

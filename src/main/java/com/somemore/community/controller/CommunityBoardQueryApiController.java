@@ -34,15 +34,15 @@ public class CommunityBoardQueryApiController {
         );
     }
 
-    @GetMapping("/community-boards/{writer_id}")
+    @GetMapping("/community-boards/{writerId}")
     @Operation(summary = "작성자별 커뮤니티 게시글 조회", description = "작성자별 커뮤니티 게시글 목록을 조회합니다.")
     public ApiResponse<Page<CommunityBoardResponseDto>> getByWriterId(
-            @PathVariable @CurrentUser UUID writer_id,
+            @PathVariable @CurrentUser UUID writerId,
             Pageable pageable
     ) {
         return ApiResponse.ok(
                 200,
-                communityBoardQueryUseCase.getCommunityBoardsByWriterId(writer_id, pageable.getPageNumber()),
+                communityBoardQueryUseCase.getCommunityBoardsByWriterId(writerId, pageable.getPageNumber()),
                 "작성자별 커뮤니티 게시글 리스트 조회 성공"
         );
     }

@@ -71,7 +71,7 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
                 eq(communityBoardId))).willReturn(communityCommentId);
 
         //when
-        mockMvc.perform(multipart("/api/community-board/{board_id}/comment", communityBoardId)
+        mockMvc.perform(multipart("/api/community-board/{boardId}/comment", communityBoardId)
                         .file(requestData)
                         .contentType(MULTIPART_FORM_DATA)
                         .header("Authorization", "Bearer access-token"))
@@ -104,7 +104,7 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
                         any(UUID.class), any());
 
         MockMultipartHttpServletRequestBuilder builder =
-                multipart("/api/community-board/{board_id}/comment/{id}", communityBoardId, communityCommentId);
+                multipart("/api/community-board/{boardId}/comment/{id}", communityBoardId, communityCommentId);
         builder.with(new RequestPostProcessor() {
             @Override
             public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
@@ -134,7 +134,7 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
         willDoNothing().given(deleteCommunityCommentUseCase).deleteCommunityComment(any(UUID.class), any(), any());
 
         //when
-        mockMvc.perform(delete("/api/community-board/{board_id}/comment/{id}", communityBoardId, communityCommentId)
+        mockMvc.perform(delete("/api/community-board/{boardId}/comment/{id}", communityBoardId, communityCommentId)
                         .header("Authorization", "Bearer access-token"))
                 //then
                 .andDo(print())

@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Tag(name = "Community Comment Command API", description = "커뮤니티 댓글 생성 수정 삭제 API")
 @RequiredArgsConstructor
-@RequestMapping("/api/community-board/{board_id}")
+@RequestMapping("/api/community-board/{boardId}")
 @RestController
 public class CommunityCommentCommandApiController {
 
@@ -30,13 +30,13 @@ public class CommunityCommentCommandApiController {
     @Operation(summary = "커뮤니티 댓글 등록", description = "커뮤니티 게시글에 댓글을 등록합니다.")
     @PostMapping(value = "/comment")
     public ApiResponse<Long> createCommunityComment(
-            @CurrentUser UUID user_id,
-            @PathVariable Long board_id,
+            @CurrentUser UUID userId,
+            @PathVariable Long boardId,
             @Valid @RequestPart("data") CommunityCommentCreateRequestDto requestDto) {
 
         return ApiResponse.ok(
                 201,
-                createCommunityCommentUseCase.createCommunityComment(requestDto, user_id, board_id),
+                createCommunityCommentUseCase.createCommunityComment(requestDto, userId, boardId),
                 "커뮤니티 댓글 등록 성공");
     }
 
@@ -44,12 +44,12 @@ public class CommunityCommentCommandApiController {
     @Operation(summary = "커뮤니티 댓글 수정", description = "커뮤니티 댓글을 수정합니다.")
     @PutMapping(value = "/comment/{id}")
     public ApiResponse<String> updateCommunityComment(
-            @CurrentUser UUID user_id,
-            @PathVariable Long board_id,
+            @CurrentUser UUID userId,
+            @PathVariable Long boardId,
             @PathVariable Long id,
             @Valid @RequestPart("data") CommunityCommentUpdateRequestDto requestDto
     ) {
-        updateCommunityCommentUseCase.updateCommunityComment(requestDto, id, user_id, board_id);
+        updateCommunityCommentUseCase.updateCommunityComment(requestDto, id, userId, boardId);
 
         return ApiResponse.ok("커뮤니티 댓글 수정 성공");
     }
@@ -58,11 +58,11 @@ public class CommunityCommentCommandApiController {
     @Operation(summary = "커뮤니티 댓글 삭제", description = "커뮤니티 댓글을 삭제합니다.")
     @DeleteMapping(value = "/comment/{id}")
     public ApiResponse<String> deleteCommunityComment(
-            @CurrentUser UUID user_id,
-            @PathVariable Long board_id,
+            @CurrentUser UUID userId,
+            @PathVariable Long boardId,
             @PathVariable Long id
     ) {
-        deleteCommunityCommentUseCase.deleteCommunityComment(user_id, id, board_id);
+        deleteCommunityCommentUseCase.deleteCommunityComment(userId, id, boardId);
 
         return ApiResponse.ok("커뮤니티 댓글 삭제 성공");
     }
