@@ -1,6 +1,7 @@
 package com.somemore.common.fixture;
 
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 
 import com.somemore.recruitboard.domain.RecruitBoard;
@@ -216,7 +217,8 @@ public class RecruitBoardFixture {
                 .build();
     }
 
-    public static RecruitBoard createRecruitBoard(String region, VolunteerCategory volunteerCategory) {
+    public static RecruitBoard createRecruitBoard(String region,
+            VolunteerCategory volunteerCategory) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(region)
@@ -258,7 +260,29 @@ public class RecruitBoardFixture {
                 .build();
     }
 
-    public static RecruitBoard createCompletedRecruitBoard(UUID centerId, VolunteerCategory category) {
+    public static RecruitBoard createRecruitBoard(LocalDateTime start, LocalDateTime end) {
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region(REGION)
+                .recruitmentCount(RECRUITMENT_COUNT)
+                .volunteerStartDateTime(start)
+                .volunteerEndDateTime(end)
+                .volunteerCategory(VOLUNTEER_CATEGORY)
+                .admitted(ADMITTED)
+                .build();
+
+        return RecruitBoard.builder()
+                .centerId(UUID.randomUUID())
+                .locationId(LOCATION_ID)
+                .title(TITLE)
+                .content(CONTENT)
+                .imgUrl(IMG_URL)
+                .recruitmentInfo(recruitmentInfo)
+                .build();
+    }
+
+    public static RecruitBoard createCompletedRecruitBoard(UUID centerId,
+            VolunteerCategory category) {
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(REGION)
                 .recruitmentCount(RECRUITMENT_COUNT)
@@ -277,29 +301,36 @@ public class RecruitBoardFixture {
                 .recruitmentInfo(recruitmentInfo)
                 .build();
 
-        setRecruitStatusCompleted(recruitBoard);
+        setRecruitStatus(recruitBoard, COMPLETED);
 
         return recruitBoard;
     }
 
     public static RecruitBoard createCompletedRecruitBoard(VolunteerCategory category) {
         RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(), category);
-        setRecruitStatusCompleted(recruitBoard);
+        setRecruitStatus(recruitBoard, COMPLETED);
         return recruitBoard;
     }
 
     public static RecruitBoard createCompletedRecruitBoard() {
         RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
                 VOLUNTEER_CATEGORY);
-        setRecruitStatusCompleted(recruitBoard);
+        setRecruitStatus(recruitBoard, COMPLETED);
         return recruitBoard;
     }
 
-    private static void setRecruitStatusCompleted(RecruitBoard recruitBoard) {
+    public static RecruitBoard createCloseRecruitBoard() {
+        RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
+                VOLUNTEER_CATEGORY);
+        setRecruitStatus(recruitBoard, COMPLETED);
+        return recruitBoard;
+    }
+
+    private static void setRecruitStatus(RecruitBoard recruitBoard, RecruitStatus status) {
         try {
             Field recruitStatusField = RecruitBoard.class.getDeclaredField("recruitStatus");
             recruitStatusField.setAccessible(true); // private 필드 접근 가능 설정
-            recruitStatusField.set(recruitBoard, RecruitStatus.COMPLETED); // 필드 값 설정
+            recruitStatusField.set(recruitBoard, status); // 필드 값 설정
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("리플렉션으로 recruitStatus를 설정하는 것에 실패했습니다", e);
         }
