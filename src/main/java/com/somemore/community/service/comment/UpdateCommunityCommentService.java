@@ -23,11 +23,11 @@ public class UpdateCommunityCommentService implements UpdateCommunityCommentUseC
     private final CommunityBoardRepository communityBoardRepository;
 
     @Override
-    public void updateCommunityComment(CommunityCommentUpdateRequestDto requestDto, Long communityCommentId, UUID writerId) {
+    public void updateCommunityComment(CommunityCommentUpdateRequestDto requestDto, Long communityCommentId, UUID writerId, Long communityBoardId) {
 
         CommunityComment communityComment = getCommunityCommentById(communityCommentId);
 
-        validateCommunityBoardExists(communityComment.getCommunityBoardId());
+        validateCommunityBoardExists(communityBoardId);
 
         validateWriter(communityComment, writerId);
 

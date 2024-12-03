@@ -14,9 +14,6 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 public record CommunityCommentCreateRequestDto(
-        @Schema(description = "커뮤니티 게시글 ID", example = "33")
-        @NotNull(message = "게시글 ID는 필수 값입니다.")
-        Long communityBoardId,
         @Schema(description = "커뮤니티 댓글 내용", example = "저도 함께 하고 싶습니다.")
         @NotBlank(message = "댓글 내용은 필수 값입니다.")
         String content,
@@ -24,7 +21,7 @@ public record CommunityCommentCreateRequestDto(
         @Nullable
         Long parentCommentId
 ) {
-    public CommunityComment toEntity(UUID writerId) {
+    public CommunityComment toEntity(UUID writerId, Long communityBoardId) {
         return CommunityComment.builder()
                 .communityBoardId(communityBoardId)
                 .writerId(writerId)

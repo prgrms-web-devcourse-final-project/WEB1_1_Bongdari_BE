@@ -59,13 +59,12 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         CommunityCommentCreateRequestDto dto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
 
         //when
-        Long commentId = createCommunityCommentService.createCommunityComment(dto, writerId);
+        Long commentId = createCommunityCommentService.createCommunityComment(dto, writerId, boardId);
 
         //then
         Optional<CommunityComment> communityComment = communityCommentRepository.findById(commentId);
@@ -83,21 +82,19 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         CommunityCommentCreateRequestDto commentDto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
 
-        Long commentId = createCommunityCommentService.createCommunityComment(commentDto, writerId);
+        Long commentId = createCommunityCommentService.createCommunityComment(commentDto, writerId, boardId);
 
         CommunityCommentCreateRequestDto replyDto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
                 .content("커뮤니티 대댓글 테스트 내용")
                 .parentCommentId(commentId)
                 .build();
 
         //when
-        Long replyCommentId = createCommunityCommentService.createCommunityComment(replyDto, writerId);
+        Long replyCommentId = createCommunityCommentService.createCommunityComment(replyDto, writerId, boardId);
 
         //then
         Optional<CommunityComment> communityCommentReply = communityCommentRepository.findById(replyCommentId);
@@ -115,13 +112,12 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         CommunityCommentCreateRequestDto replyDto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
                 .content("커뮤니티 대댓글 테스트 내용")
                 .parentCommentId(2L)
                 .build();
 
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> createCommunityCommentService.createCommunityComment(replyDto, UUID.randomUUID());
+        ThrowableAssert.ThrowingCallable callable = () -> createCommunityCommentService.createCommunityComment(replyDto, UUID.randomUUID(), boardId);
 
         //then
         assertThatExceptionOfType(BadRequestException.class)
@@ -135,7 +131,6 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         CommunityCommentCreateRequestDto commentDto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(boardId)
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
@@ -143,7 +138,7 @@ class CreateCommunityCommentServiceTest extends IntegrationTestSupport {
         communityBoardRepository.deleteAllInBatch();
 
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> createCommunityCommentService.createCommunityComment(commentDto, UUID.randomUUID());
+        ThrowableAssert.ThrowingCallable callable = () -> createCommunityCommentService.createCommunityComment(commentDto, UUID.randomUUID(), boardId);
 
         //then
         assertThatExceptionOfType(BadRequestException.class)
