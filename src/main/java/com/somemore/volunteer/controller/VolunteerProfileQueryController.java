@@ -1,26 +1,25 @@
 package com.somemore.volunteer.controller;
 
+import com.somemore.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/profile")
-@Tag(name = "GET Volunteer", description = "봉사자 조회")
+@RequestMapping("/api/volunteer/profile")
+@Tag(name = "GET Volunteer Profile", description = "봉사자 조회")
 public class VolunteerProfileQueryController {
 
     private final VolunteerQueryUseCase volunteerQueryUseCase;
@@ -29,11 +28,11 @@ public class VolunteerProfileQueryController {
     @Secured("ROLE_VOLUNTEER")
     @GetMapping("/me")
     public ApiResponse<VolunteerProfileResponseDto> getMyProfile(
-            @AuthenticationPrincipal String volunteerId) {
+            @CurrentUser UUID volunteerId) {
 
         return ApiResponse.ok(
                 200,
-                volunteerQueryUseCase.getMyProfile(UUID.fromString(volunteerId)),
+                volunteerQueryUseCase.getMyProfile(volunteerId),
                 "본인 상세 프로필 조회 성공");
     }
 
@@ -54,11 +53,11 @@ public class VolunteerProfileQueryController {
     @Operation(summary = "지원자 상세 프로필 조회", description = "기관이 작성한 모집 글에 지원한 봉사자의 상세 프로필을 조회합니다.")
     public ApiResponse<VolunteerProfileResponseDto> getVolunteerDetailedProfile(
             @PathVariable UUID volunteerId,
-            @AuthenticationPrincipal String centerId) {
+            @CurrentUser UUID centerId) {
 
         return ApiResponse.ok(
                 200,
-                volunteerQueryUseCase.getVolunteerDetailedProfile(volunteerId, UUID.fromString(centerId)),
+                volunteerQueryUseCase.getVolunteerDetailedProfile(volunteerId, centerId),
                 "지원자 상세 프로필 조회 성공"
         );
     }

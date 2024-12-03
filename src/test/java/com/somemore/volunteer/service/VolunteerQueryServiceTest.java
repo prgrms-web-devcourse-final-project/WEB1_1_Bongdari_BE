@@ -1,11 +1,5 @@
 package com.somemore.volunteer.service;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
-import static com.somemore.volunteer.domain.Volunteer.createDefault;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
@@ -13,14 +7,22 @@ import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
+import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
+import static com.somemore.volunteer.domain.Volunteer.createDefault;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class VolunteerQueryServiceTest extends IntegrationTestSupport {
@@ -152,6 +154,43 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
                 () -> volunteerQueryService.getVolunteerDetailedProfile(volunteerId, centerId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_VOLUNTEER_DETAIL.getMessage());
+    }
+
+    @DisplayName("봉사 시간 기준 상위 4명의 랭킹을 조회한다.")
+    @Test
+    void getRankingByHours() {
+        // given
+        for (int i = 1; i <= 5; i++) {
+            Volunteer volunteer = Volunteer.createDefault(oAuthProvider, "oauth-id-" + i);
+            volunteer.updateVolunteerStats(i * 10, i);
+            volunteerRepository.save(volunteer);
+        }
+
+        // when
+        VolunteerRankingResponseDto response = volunteerQueryService.getRankingByHours();
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.rankings()).hasSize(4);
+
+        List<Integer> hours = response.rankings().stream()
+                .map(VolunteerRankingResponseDto.VolunteerOverview::totalVolunteerHours)
+                .toList();
+        assertThat(hours).isSortedAccordingTo((a, b) -> b - a);
+    }
+
+    @DisplayName("등록된 봉사자가 없는 경우 빈 랭킹 리스트를 반환한다.")
+    @Test
+    void getRankingByHours_noVolunteers() {
+        // given
+        volunteerRepository.deleteAllInBatch();
+
+        // when
+        VolunteerRankingResponseDto response = volunteerQueryService.getRankingByHours();
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.rankings()).isEmpty();
     }
 
     @DisplayName("아이디 리스트로 봉사자를 조회할 수있다.")

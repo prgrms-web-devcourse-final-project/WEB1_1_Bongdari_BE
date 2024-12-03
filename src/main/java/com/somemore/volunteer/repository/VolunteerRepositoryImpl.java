@@ -1,15 +1,18 @@
 package com.somemore.volunteer.repository;
 
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteer.domain.QVolunteer;
 import com.somemore.volunteer.domain.Volunteer;
+import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
@@ -39,6 +42,24 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
     public String findNicknameById(UUID id) {
         return findDynamicField(id, volunteer.nickname)
                 .orElse(null);
+    }
+
+    @Override
+    public List<VolunteerOverviewForRankingByHours> findRankingByVolunteerHours() {
+        return queryFactory
+                .select(Projections.constructor(VolunteerOverviewForRankingByHours.class,
+                        volunteer.id,
+                        volunteer.nickname,
+                        volunteer.imgUrl,
+                        volunteer.introduce,
+                        volunteer.tier,
+                        volunteer.totalVolunteerHours
+                ))
+                .from(volunteer)
+                .where(isNotDeleted())
+                .orderBy(volunteer.totalVolunteerHours.desc())
+                .limit(4)
+                .fetch();
     }
 
     @Override
