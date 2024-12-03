@@ -63,6 +63,11 @@ public class VolunteerApply extends BaseEntity {
         this.attended = attended;
     }
 
+    public boolean isOwnApplication(UUID volunteerId) {
+        return this.volunteerId.equals(volunteerId);
+    }
+
+
     public boolean isVolunteerActivityCompleted() {
         return this.attended && this.status == APPROVED;
     }

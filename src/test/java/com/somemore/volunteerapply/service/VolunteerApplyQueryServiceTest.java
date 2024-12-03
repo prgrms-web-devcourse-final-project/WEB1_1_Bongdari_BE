@@ -26,8 +26,8 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getVolunteerIdsByRecruitIds() {
         // Given
-        Long recruitId1 = 1L;
-        Long recruitId2 = 2L;
+        Long recruitId1 = 10L;
+        Long recruitId2 = 20L;
         UUID volunteerId1 = UUID.randomUUID();
         UUID volunteerId2 = UUID.randomUUID();
 

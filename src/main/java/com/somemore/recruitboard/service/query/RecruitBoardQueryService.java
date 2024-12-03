@@ -33,8 +33,15 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
     private final CenterQueryUseCase centerQueryUseCase;
 
     @Override
-    public RecruitBoardResponseDto getById(Long id) {
-        RecruitBoard recruitBoard = getRecruitBoard(id);
+    public RecruitBoard getById(Long id) {
+        return recruitBoardRepository.findById(id).orElseThrow(
+                () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
+        );
+    }
+
+    @Override
+    public RecruitBoardResponseDto getRecruitBoardById(Long id) {
+        RecruitBoard recruitBoard = getById(id);
         return RecruitBoardResponseDto.from(recruitBoard);
     }
 
@@ -75,9 +82,4 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
         return recruitBoardRepository.findNotCompletedIdsByCenterId(centerId);
     }
 
-    private RecruitBoard getRecruitBoard(Long id) {
-        return recruitBoardRepository.findById(id).orElseThrow(
-                () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
-        );
-    }
 }
