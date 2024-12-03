@@ -3,6 +3,8 @@ package com.somemore.recruitboard.domain;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
+import static com.somemore.common.fixture.RecruitBoardFixture.createCloseRecruitBoard;
+import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
@@ -41,11 +43,10 @@ class RecruitBoardTest {
     void testCalculateVolunteerTime() {
         // given
         int hours = 3;
-        UUID centerId = UUID.randomUUID();
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(hours);
 
-        RecruitBoard board = createRecruitBoard(centerId, startDateTime, endDateTime);
+        RecruitBoard board = createRecruitBoard(startDateTime, endDateTime);
 
         // when
         LocalTime volunteerTime = board.getVolunteerHours();
@@ -65,13 +66,13 @@ class RecruitBoardTest {
         LocalDateTime endDateTime = startDateTime.plusHours(2);
 
         RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
-            .title("봉사 모집글 작성 수정")
-            .content("봉사 하실분을 모집합니다. 수정 <br>")
-            .recruitmentCount(10)
-            .volunteerStartDateTime(startDateTime)
-            .volunteerEndDateTime(endDateTime)
-            .volunteerCategory(OTHER)
-            .admitted(true).build();
+                .title("봉사 모집글 작성 수정")
+                .content("봉사 하실분을 모집합니다. 수정 <br>")
+                .recruitmentCount(10)
+                .volunteerStartDateTime(startDateTime)
+                .volunteerEndDateTime(endDateTime)
+                .volunteerCategory(OTHER)
+                .admitted(true).build();
 
         // when
         board.updateWith(dto, imgUrl);
@@ -169,7 +170,7 @@ class RecruitBoardTest {
 
         // when & then
         assertThatThrownBy(() -> recruitBoard.changeRecruitStatus(COMPLETED, currentDateTime))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("봉사 시작일 자정 이후 모집 상태를 변경할 경우 에러가 발생한다")
@@ -180,44 +181,40 @@ class RecruitBoardTest {
         UUID centerId = UUID.randomUUID();
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
         LocalDateTime deadLineDateTime = recruitBoard.getRecruitmentInfo()
-            .getVolunteerStartDateTime().toLocalDate().atStartOfDay();
+                .getVolunteerStartDateTime().toLocalDate().atStartOfDay();
         LocalDateTime currentDateTime = deadLineDateTime.plusSeconds(secondsOffset);
 
         // when
         // then
         assertThatThrownBy(
-            () -> recruitBoard.changeRecruitStatus(CLOSED, currentDateTime)
+                () -> recruitBoard.changeRecruitStatus(CLOSED, currentDateTime)
         ).isInstanceOf(IllegalStateException.class);
 
     }
 
-    private static RecruitBoard createRecruitBoard(UUID centerId) {
-        LocalDateTime startDateTime = createStartDateTime();
-        LocalDateTime endDateTime = startDateTime.plusHours(1);
+    @DisplayName("모집중일 경우 지원이 가능하다")
+    @Test
+    void isApplicationOpen() {
+        // given
+        RecruitBoard board = createRecruitBoard();
 
-        return createRecruitBoard(centerId, startDateTime, endDateTime);
+        // when
+        boolean result = board.isApplicationOpen();
+
+        // then
+        assertThat(result).isTrue();
     }
 
-    private static RecruitBoard createRecruitBoard(UUID centerId, LocalDateTime startDateTime,
-        LocalDateTime endDateTime) {
+    @DisplayName("모집중이 아닐 경우 지원이 불가능하다")
+    @Test
+    void isApplicationOpenWhenNotRECRUTING() {
+        // given
+        RecruitBoard board = createCloseRecruitBoard();
 
-        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
-            .region("경기")
-            .recruitmentCount(1)
-            .volunteerStartDateTime(startDateTime)
-            .volunteerEndDateTime(endDateTime)
-            .volunteerCategory(OTHER)
-            .admitted(true)
-            .build();
+        // when
+        boolean result = board.isApplicationOpen();
 
-        return RecruitBoard.builder()
-            .centerId(centerId)
-            .locationId(1L)
-            .title("봉사모집제목")
-            .content("봉사모집내용")
-            .imgUrl("https://image.domain.com/links")
-            .recruitmentInfo(recruitmentInfo)
-            .build();
+        // then
+        assertThat(result).isFalse();
     }
-
 }
