@@ -8,5 +8,6 @@ public interface UpdateCommunityCommentUseCase {
     void updateCommunityComment(
             CommunityCommentUpdateRequestDto requestDto,
             Long communityCommentId,
-            UUID writerId);
+            UUID writerId,
+            Long communityBoardId);
 }

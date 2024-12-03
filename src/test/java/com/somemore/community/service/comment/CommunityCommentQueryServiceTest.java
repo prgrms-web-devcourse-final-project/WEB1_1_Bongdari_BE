@@ -88,7 +88,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     @Test
     void doesNotFind() {
         //given
-        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, replyId);
+        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, replyId, boardId);
 
         //when
         Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
@@ -105,7 +105,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     void getCommentsByCommunityBoardIdWithDeletedComment() {
 
         //given
-        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, commentId);
+        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, commentId, boardId);
         //when
         Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
 

@@ -24,10 +24,10 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
     private final CommunityCommentRepository communityCommentRepository;
 
     @Override
-    public Long createCommunityComment(CommunityCommentCreateRequestDto requestDto, UUID writerId) {
-        CommunityComment communityComment = requestDto.toEntity(writerId);
+    public Long createCommunityComment(CommunityCommentCreateRequestDto requestDto, UUID writerId, Long communityBoardId) {
+        CommunityComment communityComment = requestDto.toEntity(writerId, communityBoardId);
 
-        validateCommunityBoardExists(communityComment.getCommunityBoardId());
+        validateCommunityBoardExists(communityBoardId);
 
         if (requestDto.parentCommentId() != null) {
             validateParentCommentExists(communityComment.getParentCommentId());

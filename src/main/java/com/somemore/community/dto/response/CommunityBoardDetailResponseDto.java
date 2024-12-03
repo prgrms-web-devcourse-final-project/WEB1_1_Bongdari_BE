@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.community.domain.CommunityBoard;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "커뮤니티 게시글 상세 조회 응답 DTO")
 public record CommunityBoardDetailResponseDto(

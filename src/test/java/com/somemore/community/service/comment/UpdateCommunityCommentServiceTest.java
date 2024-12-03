@@ -34,7 +34,7 @@ class UpdateCommunityCommentServiceTest extends IntegrationTestSupport {
     private CommunityBoardRepository communityBoardRepository;
 
     private UUID writerId;
-    private Long commentId;
+    private Long commentId, boardId;
     private CommunityCommentUpdateRequestDto updateRequestDto;
 
     @BeforeEach
@@ -47,14 +47,14 @@ class UpdateCommunityCommentServiceTest extends IntegrationTestSupport {
         writerId = UUID.randomUUID();
 
         CommunityBoard communityBoard = communityBoardRepository.save(boardDto.toEntity(writerId, "https://test.image/123"));
+        boardId = communityBoard.getId();
 
         CommunityCommentCreateRequestDto commentDto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(communityBoard.getId())
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
 
-        CommunityComment communityComment = communityCommentRepository.save(commentDto.toEntity(writerId));
+        CommunityComment communityComment = communityCommentRepository.save(commentDto.toEntity(writerId, boardId));
 
         commentId = communityComment.getId();
 
@@ -74,7 +74,7 @@ class UpdateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        updateCommunityCommentService.updateCommunityComment(updateRequestDto, commentId, writerId);
+        updateCommunityCommentService.updateCommunityComment(updateRequestDto, commentId, writerId, boardId);
 
         //then
         Optional<CommunityComment> communityComment = communityCommentRepository.findById(commentId);
@@ -89,7 +89,9 @@ class UpdateCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> updateCommunityCommentService.updateCommunityComment(updateRequestDto, commentId, UUID.randomUUID());
+        ThrowableAssert.ThrowingCallable callable = () ->
+                updateCommunityCommentService.updateCommunityComment(updateRequestDto, commentId,
+                        UUID.randomUUID(), boardId);
 
         //then
         assertThatExceptionOfType(BadRequestException.class)
@@ -104,7 +106,9 @@ class UpdateCommunityCommentServiceTest extends IntegrationTestSupport {
         //given
         communityBoardRepository.deleteAllInBatch();
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> updateCommunityCommentService.updateCommunityComment(updateRequestDto, commentId, writerId);
+        ThrowableAssert.ThrowingCallable callable = () ->
+                updateCommunityCommentService.updateCommunityComment(updateRequestDto, commentId,
+                        writerId, boardId);
 
         //then
         assertThatExceptionOfType(BadRequestException.class)
