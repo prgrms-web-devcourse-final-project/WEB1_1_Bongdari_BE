@@ -3,7 +3,6 @@ package com.somemore.recruitboard.domain;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
-import static com.somemore.common.fixture.RecruitBoardFixture.createCloseRecruitBoard;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
@@ -192,29 +191,17 @@ class RecruitBoardTest {
 
     }
 
-    @DisplayName("모집중일 경우 지원이 가능하다")
+    @DisplayName("모집중일 경우 True 반환한다.")
     @Test
-    void isApplicationOpen() {
+    void isRecruitOpen() {
         // given
         RecruitBoard board = createRecruitBoard();
 
         // when
-        boolean result = board.isApplicationOpen();
+        boolean result = board.isRecruitOpen();
 
         // then
         assertThat(result).isTrue();
     }
 
-    @DisplayName("모집중이 아닐 경우 지원이 불가능하다")
-    @Test
-    void isApplicationOpenWhenNotRECRUTING() {
-        // given
-        RecruitBoard board = createCloseRecruitBoard();
-
-        // when
-        boolean result = board.isApplicationOpen();
-
-        // then
-        assertThat(result).isFalse();
-    }
 }
