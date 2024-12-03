@@ -1,6 +1,8 @@
 package com.somemore.community.repository.board;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityBoard;
@@ -37,7 +39,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         return Optional.ofNullable(queryFactory
                 .selectFrom(communityBoard)
                 .where(communityBoard.id.eq(id)
-                        .and(communityBoard.deleted.eq(false)))
+                        .and(isNotDeleted()))
                 .fetchOne());
     }
 
@@ -49,7 +51,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityBoard.count())
-                .from(communityBoard);
+                .from(communityBoard)
+                .where(isNotDeleted());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -63,7 +66,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityBoard.count())
-                .from(communityBoard);
+                .from(communityBoard)
+                .where(isNotDeleted());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -87,5 +91,9 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     @Override
     public void deleteAllInBatch() {
         communityBoardJpaRepository.deleteAllInBatch();
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return communityBoard.deleted.eq(false);
     }
 }
