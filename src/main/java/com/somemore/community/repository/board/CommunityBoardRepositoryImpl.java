@@ -1,6 +1,7 @@
 package com.somemore.community.repository.board;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.community.domain.CommunityBoard;
@@ -8,6 +9,9 @@ import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.domain.QCommunityBoard;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,6 +25,9 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     private final JPAQueryFactory queryFactory;
     private final CommunityBoardJpaRepository communityBoardJpaRepository;
 
+    private static final QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
+    private static final QVolunteer volunteer = QVolunteer.volunteer;
+
     @Override
     public CommunityBoard save(CommunityBoard communityBoard) {
         return communityBoardJpaRepository.save(communityBoard);
@@ -28,28 +35,40 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
     @Override
     public Optional<CommunityBoard> findById(Long id) {
-        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
-
         return Optional.ofNullable(queryFactory
                 .selectFrom(communityBoard)
                 .where(communityBoard.id.eq(id)
-                        .and(communityBoard.deleted.eq(false)))
+                        .and(isNotDeleted()))
                 .fetchOne());
     }
 
     @Override
-    public List<CommunityBoardView> getCommunityBoards() {
-        return getCommunityBoardsQuery()
+    public Page<CommunityBoardView> findCommunityBoards(Pageable pageable) {
+        List<CommunityBoardView> content = getCommunityBoardsQuery()
                 .where(QCommunityBoard.communityBoard.deleted.eq(false))
                 .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(communityBoard.count())
+                .from(communityBoard)
+                .where(isNotDeleted());
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override
-    public List<CommunityBoardView> findByWriterId(UUID writerId) {
-        return getCommunityBoardsQuery()
+    public Page<CommunityBoardView> findByWriterId(UUID writerId, Pageable pageable) {
+        List<CommunityBoardView> content = getCommunityBoardsQuery()
                 .where(QCommunityBoard.communityBoard.writerId.eq(writerId)
                         .and(QCommunityBoard.communityBoard.deleted.eq(false)))
                 .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(communityBoard.count())
+                .from(communityBoard)
+                .where(isNotDeleted());
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override
@@ -58,9 +77,6 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     }
 
     private JPAQuery<CommunityBoardView> getCommunityBoardsQuery() {
-        QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
-        QVolunteer volunteer = QVolunteer.volunteer;
-
         return queryFactory
                 .select(Projections.constructor(CommunityBoardView.class,
                         communityBoard,
@@ -74,5 +90,9 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     @Override
     public void deleteAllInBatch() {
         communityBoardJpaRepository.deleteAllInBatch();
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return communityBoard.deleted.eq(false);
     }
 }
