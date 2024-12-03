@@ -1,4 +1,4 @@
-package com.somemore.volunteerapply.usecase;
+package com.somemore.volunteerapply.service;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
 import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED;
@@ -10,6 +10,7 @@ import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
