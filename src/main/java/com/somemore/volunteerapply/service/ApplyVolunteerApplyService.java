@@ -9,8 +9,7 @@ import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.VolunteerApplyCreateRequestDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
-import com.somemore.volunteerapply.usecase.VolunteerApplyCommandUseCase;
-import java.time.LocalDateTime;
+import com.somemore.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class VolunteerApplyCommandService implements VolunteerApplyCommandUseCase {
+public class ApplyVolunteerApplyService implements ApplyVolunteerApplyUseCase {
 
     private final VolunteerApplyRepository volunteerApplyRepository;
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;

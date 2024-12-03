@@ -1,13 +1,8 @@
 package com.somemore.volunteerapply.controller;
 
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,19 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
-import com.somemore.location.dto.request.LocationCreateRequestDto;
-import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.volunteerapply.dto.VolunteerApplyCreateRequestDto;
-import com.somemore.volunteerapply.usecase.VolunteerApplyCommandUseCase;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import com.somemore.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
@@ -39,11 +28,11 @@ class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private VolunteerApplyCommandUseCase volunteerApplyCommandUseCase;
+    private ApplyVolunteerApplyUseCase applyVolunteerApplyUseCase;
 
     @Test
     @DisplayName("봉사 활동 지원 성공 테스트")
-    @WithMockCustomUser(role = "VOLUNTEER")
+    @WithMockCustomUser
     void apply() throws Exception {
         // given
         VolunteerApplyCreateRequestDto dto = VolunteerApplyCreateRequestDto.builder()
@@ -52,7 +41,7 @@ class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
 
         Long applyId = 1L;
 
-        given(volunteerApplyCommandUseCase.apply(any(), any(UUID.class)))
+        given(applyVolunteerApplyUseCase.apply(any(), any(UUID.class)))
                 .willReturn(applyId);
 
         String requestBody = objectMapper.writeValueAsString(dto);

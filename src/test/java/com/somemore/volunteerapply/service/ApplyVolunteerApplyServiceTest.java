@@ -20,10 +20,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class VolunteerApplyCommandServiceTest extends IntegrationTestSupport {
+class ApplyVolunteerApplyServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private VolunteerApplyCommandService volunteerApplyCommandService;
+    private ApplyVolunteerApplyService volunteerApplyCommandService;
 
     @Autowired
     private VolunteerApplyRepository volunteerApplyRepository;
