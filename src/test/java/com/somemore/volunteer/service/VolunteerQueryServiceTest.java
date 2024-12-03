@@ -181,6 +181,9 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
     @DisplayName("등록된 봉사자가 없는 경우 빈 랭킹 리스트를 반환한다.")
     @Test
     void getRankingByHours_noVolunteers() {
+        // given
+        volunteerRepository.deleteAllInBatch();
+
         // when
         VolunteerRankingResponseDto response = volunteerQueryService.getRankingByHours();
 
