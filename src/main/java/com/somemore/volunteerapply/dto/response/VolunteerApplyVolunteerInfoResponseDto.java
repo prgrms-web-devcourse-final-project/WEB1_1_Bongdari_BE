@@ -12,7 +12,7 @@ import lombok.Builder;
 @Schema(description = "봉사 지원자 상세 정보 응답 DTO")
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
-public record VolunteerApplyDetailResponseDto(
+public record VolunteerApplyVolunteerInfoResponseDto(
         @Schema(description = "봉사 지원 ID", example = "123")
         Long id,
         @Schema(description = "모집글 ID", example = "2")
@@ -30,11 +30,11 @@ public record VolunteerApplyDetailResponseDto(
         VolunteerSimpleInfoResponseDto volunteer
 ) {
 
-    public static VolunteerApplyDetailResponseDto of(
+    public static VolunteerApplyVolunteerInfoResponseDto of(
             VolunteerApply volunteerApply,
             VolunteerSimpleInfoResponseDto volunteer
     ) {
-        return VolunteerApplyDetailResponseDto.builder()
+        return VolunteerApplyVolunteerInfoResponseDto.builder()
                 .id(volunteerApply.getId())
                 .recruitBoardId(volunteerApply.getRecruitBoardId())
                 .status(volunteerApply.getStatus())
