@@ -2,7 +2,7 @@ package com.somemore.volunteerapply.domain;
 
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

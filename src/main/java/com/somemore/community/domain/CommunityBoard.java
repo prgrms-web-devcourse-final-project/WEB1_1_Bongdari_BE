@@ -1,7 +1,7 @@
 package com.somemore.community.domain;
 
 import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Column;
