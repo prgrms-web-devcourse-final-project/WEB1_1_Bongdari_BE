@@ -20,7 +20,7 @@ public class DeleteCommunityCommentService implements DeleteCommunityCommentUseC
     private final CommunityCommentRepository communityCommentRepository;
 
     @Override
-    public void deleteCommunityComment(UUID writerId, Long id) {
+    public void deleteCommunityComment(UUID writerId, Long id, Long communityBoardId) {
 
         CommunityComment communityComment = getCommunityCommentById(id);
 

@@ -32,7 +32,7 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
     private CommunityBoardRepository communityBoardRepository;
 
     private UUID writerId;
-    private Long commentId;
+    private Long commentId, boardId;
 
     @BeforeEach
     void setUp() {
@@ -44,14 +44,14 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
         writerId = UUID.randomUUID();
 
         CommunityBoard communityBoard = communityBoardRepository.save(boardDto.toEntity(writerId, "https://test.image/123"));
+        boardId = communityBoard.getId();
 
         CommunityCommentCreateRequestDto dto = CommunityCommentCreateRequestDto.builder()
-                .communityBoardId(communityBoard.getId())
                 .content("커뮤니티 댓글 테스트 내용")
                 .parentCommentId(null)
                 .build();
 
-        CommunityComment communityComment = communityCommentRepository.save(dto.toEntity(writerId));
+        CommunityComment communityComment = communityCommentRepository.save(dto.toEntity(writerId, communityBoard.getId()));
 
         commentId = communityComment.getId();}
 
@@ -66,7 +66,7 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        deleteCommunityCommentService.deleteCommunityComment(writerId, commentId);
+        deleteCommunityCommentService.deleteCommunityComment(writerId, commentId, boardId);
 
         //then
         assertThat(communityCommentRepository.existsById(commentId)).isFalse();
@@ -77,10 +77,10 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
     void deleteCommunityCommentWithDeletedId() {
 
         //given
-        deleteCommunityCommentService.deleteCommunityComment(writerId, commentId);
+        deleteCommunityCommentService.deleteCommunityComment(writerId, commentId, boardId);
 
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> deleteCommunityCommentService.deleteCommunityComment(writerId, commentId);
+        ThrowableAssert.ThrowingCallable callable = () -> deleteCommunityCommentService.deleteCommunityComment(writerId, commentId, boardId);
 
         //then
         assertThatExceptionOfType(BadRequestException.class)
@@ -94,7 +94,7 @@ class DeleteCommunityCommentServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> deleteCommunityCommentService.deleteCommunityComment(UUID.randomUUID(), commentId);
+        ThrowableAssert.ThrowingCallable callable = () -> deleteCommunityCommentService.deleteCommunityComment(UUID.randomUUID(), commentId, boardId);
 
         //then
         assertThatExceptionOfType(BadRequestException.class)

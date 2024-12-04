@@ -7,5 +7,6 @@ import java.util.UUID;
 public interface CreateCommunityCommentUseCase {
     Long createCommunityComment(
             CommunityCommentCreateRequestDto requestDto,
-            UUID writerId);
+            UUID writerId,
+            Long communityBoardId);
 }
