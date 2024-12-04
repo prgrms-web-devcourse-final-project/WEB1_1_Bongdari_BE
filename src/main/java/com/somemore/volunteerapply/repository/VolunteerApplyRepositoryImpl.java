@@ -83,6 +83,16 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
         return findOne(exp);
     }
 
+    @Override
+    public boolean existsByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
+        return queryFactory
+                .selectFrom(volunteerApply)
+                .where(volunteerApply.recruitBoardId.eq(recruitId)
+                        .and(volunteerApply.volunteerId.eq(volunteerId))
+                        .and(isNotDeleted()))
+                .fetchFirst() != null;
+    }
+
     private Long getCount(BooleanExpression exp) {
         return queryFactory
                 .select(volunteerApply.count())

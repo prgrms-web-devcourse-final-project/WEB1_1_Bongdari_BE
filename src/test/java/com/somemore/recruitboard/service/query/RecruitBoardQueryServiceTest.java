@@ -67,7 +67,7 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         Long id = recruitBoard.getId();
 
         // when
-        RecruitBoardResponseDto dto = recruitBoardQueryService.getById(id);
+        RecruitBoardResponseDto dto = recruitBoardQueryService.getRecruitBoardById(id);
 
         // then
         assertThat(dto.id()).isEqualTo(recruitBoard.getId());
@@ -82,7 +82,7 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-            () -> recruitBoardQueryService.getById(wrongId)
+            () -> recruitBoardQueryService.getRecruitBoardById(wrongId)
         ).isInstanceOf(BadRequestException.class)
             .hasMessage(NOT_EXISTS_RECRUIT_BOARD.getMessage());
     }

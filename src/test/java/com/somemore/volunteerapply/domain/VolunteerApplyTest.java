@@ -16,12 +16,7 @@ class VolunteerApplyTest {
     @Test
     void changeStatus() {
         // given
-        VolunteerApply apply = VolunteerApply.builder()
-                .volunteerId(UUID.randomUUID())
-                .recruitBoardId(1L)
-                .status(WAITING)
-                .attended(false)
-                .build();
+        VolunteerApply apply = createApply(UUID.randomUUID(), WAITING, false);
 
         // when
         apply.changeStatus(APPROVED);
@@ -34,12 +29,7 @@ class VolunteerApplyTest {
     @DisplayName("지원 상태 변경 실패 - 이미 완료된 봉사활동")
     void changeStatusWhenCompletedActivity() {
         // given
-        VolunteerApply apply = VolunteerApply.builder()
-                .volunteerId(UUID.randomUUID())
-                .recruitBoardId(1L)
-                .status(APPROVED)
-                .attended(true)
-                .build();
+        VolunteerApply apply = createApply(UUID.randomUUID(), APPROVED, true);
 
         // when
         // then
@@ -52,12 +42,7 @@ class VolunteerApplyTest {
     @Test
     void markAsAttended() {
         // given
-        VolunteerApply volunteerApply = VolunteerApply.builder()
-                .volunteerId(UUID.randomUUID())
-                .recruitBoardId(1L)
-                .status(APPROVED)
-                .attended(false)
-                .build();
+        VolunteerApply volunteerApply = createApply(UUID.randomUUID(), APPROVED, false);
 
         // when
         volunteerApply.changeAttended(true);
@@ -70,12 +55,7 @@ class VolunteerApplyTest {
     @DisplayName("참석 처리 실패 - 승인되지 않은 상태")
     void changeAttendedWhenNotApproved() {
         // given
-        VolunteerApply apply = VolunteerApply.builder()
-                .volunteerId(UUID.randomUUID())
-                .recruitBoardId(1L)
-                .status(WAITING)
-                .attended(false)
-                .build();
+        VolunteerApply apply = createApply(UUID.randomUUID(), WAITING, false);
 
         // when & then
         assertThatThrownBy(
@@ -87,12 +67,7 @@ class VolunteerApplyTest {
     @Test
     void isCompleted() {
         // given
-        VolunteerApply apply = VolunteerApply.builder()
-                .volunteerId(UUID.randomUUID())
-                .recruitBoardId(1L)
-                .status(APPROVED)
-                .attended(true)
-                .build();
+        VolunteerApply apply = createApply(UUID.randomUUID(), APPROVED, true);
 
         // when
         boolean res = apply.isVolunteerActivityCompleted();
@@ -100,5 +75,27 @@ class VolunteerApplyTest {
         // then
         assertThat(res).isTrue();
     }
-}
 
+    @DisplayName("지원자 아이디로 본인이 작성한 지원인지 확인할 수있다.")
+    @Test
+    void isOwnApplication() {
+        // given
+        UUID volunteerId = UUID.randomUUID();
+        VolunteerApply apply = createApply(volunteerId, APPROVED, false);
+
+        // when
+        boolean result = apply.isOwnApplication(volunteerId);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    private VolunteerApply createApply(UUID volunteerId, ApplyStatus status, boolean attended) {
+        return VolunteerApply.builder()
+                .volunteerId(volunteerId)
+                .recruitBoardId(1L)
+                .status(status)
+                .attended(attended)
+                .build();
+    }
+}

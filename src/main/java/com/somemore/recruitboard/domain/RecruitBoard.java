@@ -1,5 +1,6 @@
 package com.somemore.recruitboard.domain;
 
+import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -57,7 +58,7 @@ public class RecruitBoard extends BaseEntity {
 
     @Builder
     public RecruitBoard(UUID centerId, Long locationId, String title, String content,
-        RecruitmentInfo recruitmentInfo, String imgUrl) {
+            RecruitmentInfo recruitmentInfo, String imgUrl) {
         this.centerId = centerId;
         this.locationId = locationId;
         this.title = title;
@@ -92,14 +93,22 @@ public class RecruitBoard extends BaseEntity {
         this.recruitStatus = newStatus;
     }
 
+    public boolean isRecruitOpen() {
+        return this.recruitStatus == RECRUITING;
+    }
+
     private void updateRecruitmentInfo(RecruitBoardUpdateRequestDto dto) {
         recruitmentInfo.updateWith(
-            dto.recruitmentCount(),
-            dto.volunteerCategory(),
-            dto.volunteerStartDateTime(),
-            dto.volunteerEndDateTime(),
-            dto.admitted()
+                dto.recruitmentCount(),
+                dto.volunteerCategory(),
+                dto.volunteerStartDateTime(),
+                dto.volunteerEndDateTime(),
+                dto.admitted()
         );
+    }
+
+    public boolean isCompleted() {
+        return this.recruitStatus == COMPLETED;
     }
 
     private void validateStatusChange(RecruitStatus newStatus) {
