@@ -37,7 +37,7 @@ public class CommunityBoardQueryApiController {
     @GetMapping("/community-boards/{writerId}")
     @Operation(summary = "작성자별 커뮤니티 게시글 조회", description = "작성자별 커뮤니티 게시글 목록을 조회합니다.")
     public ApiResponse<Page<CommunityBoardResponseDto>> getByWriterId(
-            @PathVariable @CurrentUser UUID writerId,
+            @PathVariable UUID writerId,
             Pageable pageable
     ) {
         return ApiResponse.ok(
