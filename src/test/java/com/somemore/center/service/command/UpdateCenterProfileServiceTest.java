@@ -18,7 +18,7 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
-public class UpdateCenterProfileServiceTest extends IntegrationTestSupport {
+class UpdateCenterProfileServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UpdateCenterProfileService updateCenterProfileService;
