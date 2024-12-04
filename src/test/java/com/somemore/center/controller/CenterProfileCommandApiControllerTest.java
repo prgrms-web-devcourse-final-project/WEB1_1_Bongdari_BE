@@ -75,7 +75,7 @@ class CenterProfileCommandApiControllerTest extends ControllerTestSupport {
         willDoNothing().given(updateCenterProfileUseCase)
                 .updateCenterProfile(any(UUID.class), any(), anyString());
 
-        MockMultipartHttpServletRequestBuilder builder = multipart("/api/center/profile/{centerId}", UUID.randomUUID());
+        MockMultipartHttpServletRequestBuilder builder = multipart("/api/center/profile");
         builder.with(new RequestPostProcessor() {
             @Override
             public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {

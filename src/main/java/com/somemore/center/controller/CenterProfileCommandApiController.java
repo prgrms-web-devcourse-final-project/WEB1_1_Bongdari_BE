@@ -29,9 +29,9 @@ public class CenterProfileCommandApiController {
 
     @Secured("ROLE_CENTER")
     @Operation(summary = "센터 프로필 수정", description = "센터 프로필을 수정합니다.")
-    @PutMapping(value = "/{centerId}", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<String> updateCenterProfile(
-            @CurrentUser @PathVariable UUID centerId,
+            @CurrentUser UUID centerId,
             @Valid @RequestPart("data") CenterProfileUpdateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
