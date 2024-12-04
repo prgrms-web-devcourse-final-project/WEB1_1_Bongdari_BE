@@ -6,9 +6,10 @@ import com.somemore.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
-import com.somemore.volunteerapply.dto.response.VolunteerApplyDetailResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,10 +61,32 @@ public class VolunteerApplyQueryApiController {
         );
     }
 
+    @Operation(summary = "특정 봉사자 봉사 지원 리스트 조회", description = "특정 봉사자의 봉사 지원 리스트를 조회합니다.")
+    @GetMapping("/volunteer-applies/volunteer/{volunteerId}")
+    public ApiResponse<Page<VolunteerApplyRecruitInfoResponseDto>> getVolunteerAppliesByVolunteerId(
+            @PathVariable UUID volunteerId,
+            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
+            @RequestParam(required = false) Boolean attended,
+            @RequestParam(required = false) ApplyStatus status
+    ) {
+        VolunteerApplySearchCondition condition = VolunteerApplySearchCondition.builder()
+                .attended(attended)
+                .status(status)
+                .pageable(pageable)
+                .build();
+
+        return ApiResponse.ok(
+                200,
+                volunteerApplyQueryFacadeUseCase.getVolunteerAppliesByVolunteerId(volunteerId,
+                        condition),
+                "봉사 지원 리스트 조회 성공"
+        );
+    }
+
     @Secured("ROLE_CENTER")
     @Operation(summary = "지원자 리스트 조회", description = "특정 모집글에 대한 지원자 리스트를 조회합니다.")
     @GetMapping("/volunteer-applies/recruit-board/{recruitBoardId}")
-    public ApiResponse<Page<VolunteerApplyDetailResponseDto>> getVolunteerApplies(
+    public ApiResponse<Page<VolunteerApplyVolunteerInfoResponseDto>> getVolunteerApplies(
             @CurrentUser UUID centerId,
             @PathVariable Long recruitBoardId,
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
