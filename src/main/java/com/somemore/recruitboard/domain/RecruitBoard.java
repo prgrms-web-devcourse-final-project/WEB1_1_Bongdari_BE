@@ -1,5 +1,6 @@
 package com.somemore.recruitboard.domain;
 
+import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -104,6 +105,10 @@ public class RecruitBoard extends BaseEntity {
                 dto.volunteerEndDateTime(),
                 dto.admitted()
         );
+    }
+
+    public boolean isCompleted() {
+        return this.recruitStatus == COMPLETED;
     }
 
     private void validateStatusChange(RecruitStatus newStatus) {
