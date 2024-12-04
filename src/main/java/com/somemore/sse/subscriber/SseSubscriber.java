@@ -1,4 +1,4 @@
-package com.somemore.notification.sse.usecase;
+package com.somemore.sse.subscriber;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
