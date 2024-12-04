@@ -9,7 +9,8 @@ import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
-import com.somemore.volunteerapply.dto.response.VolunteerApplyDetailResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import java.util.List;
@@ -31,7 +32,7 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
     private final VolunteerQueryUseCase volunteerQueryUseCase;
 
     @Override
-    public Page<VolunteerApplyDetailResponseDto> getVolunteerAppliesByRecruitIdAndCenterId(
+    public Page<VolunteerApplyVolunteerInfoResponseDto> getVolunteerAppliesByRecruitIdAndCenterId(
             Long recruitId, UUID centerId, VolunteerApplySearchCondition condition) {
         validateAuthorization(recruitId, centerId);
 
@@ -44,8 +45,44 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
         return applies.map(apply -> {
             VolunteerSimpleInfoResponseDto volunteerInfo = volunteerMap.getOrDefault(
                     apply.getVolunteerId(), null);
-            return VolunteerApplyDetailResponseDto.of(apply, volunteerInfo);
+            return VolunteerApplyVolunteerInfoResponseDto.of(apply, volunteerInfo);
         });
+    }
+
+    @Override
+    public Page<VolunteerApplyRecruitInfoResponseDto> getVolunteerAppliesByVolunteerId(
+            UUID volunteerId, VolunteerApplySearchCondition condition) {
+
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(volunteerId,
+                condition);
+
+        Map<Long, RecruitBoard> boardMap = getRecruitBoardMap(applies);
+
+        return applies.map(
+                apply -> VolunteerApplyRecruitInfoResponseDto.of(
+                        apply,
+                        boardMap.getOrDefault(apply.getRecruitBoardId(), null)
+                ));
+    }
+
+    private void validateAuthorization(Long recruitId, UUID centerId) {
+        RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(recruitId);
+        if (recruitBoard.isWriter(centerId)) {
+            return;
+        }
+
+        throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD);
+    }
+
+    private Map<Long, RecruitBoard> getRecruitBoardMap(Page<VolunteerApply> applies) {
+        List<Long> boardIds = applies.getContent().stream().map(VolunteerApply::getRecruitBoardId)
+                .toList();
+        List<RecruitBoard> boards = recruitBoardQueryUseCase.getAllByIds(boardIds);
+
+        Map<Long, RecruitBoard> boardMap = boards.stream()
+                .collect(Collectors.toMap(RecruitBoard::getId,
+                        board -> board));
+        return boardMap;
     }
 
     private Map<UUID, VolunteerSimpleInfoResponseDto> getVolunteerInfoMap(
@@ -61,15 +98,6 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
         return volunteers.stream()
                 .collect(Collectors.toMap(VolunteerSimpleInfoResponseDto::id,
                         volunteer -> volunteer));
-    }
-
-    private void validateAuthorization(Long recruitId, UUID centerId) {
-        RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(recruitId);
-        if (recruitBoard.isWriter(centerId)) {
-            return;
-        }
-
-        throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD);
     }
 
 }

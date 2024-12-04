@@ -115,6 +115,32 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     }
 
     @Override
+    public Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
+            VolunteerApplySearchCondition condition) {
+
+        BooleanExpression exp = volunteerIdEq(volunteerId)
+                .and(attendedEq(condition.attended()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
+
+        Pageable pageable = condition.pageable();
+
+        List<VolunteerApply> content = queryFactory
+                .selectFrom(volunteerApply)
+                .where(exp)
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(
+                content,
+                pageable,
+                getCount(exp)
+        );
+    }
+
+    @Override
     public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
             UUID volunteerId) {
         BooleanExpression exp = recruitIdEq(recruitId)
