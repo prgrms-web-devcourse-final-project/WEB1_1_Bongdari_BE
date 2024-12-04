@@ -1,4 +1,4 @@
-package com.somemore.volunteerapply.dto;
+package com.somemore.volunteerapply.dto.request;
 
 import static com.somemore.volunteerapply.domain.ApplyStatus.WAITING;
 

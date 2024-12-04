@@ -12,7 +12,7 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.volunteerapply.domain.VolunteerApply;
-import com.somemore.volunteerapply.dto.VolunteerApplyCreateRequestDto;
+import com.somemore.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.Optional;
 import java.util.UUID;

@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
-import com.somemore.volunteerapply.dto.VolunteerApplyCreateRequestDto;
+import com.somemore.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import com.somemore.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
 import java.util.UUID;
