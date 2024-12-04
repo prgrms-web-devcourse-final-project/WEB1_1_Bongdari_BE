@@ -1,6 +1,7 @@
 package com.somemore.volunteerapply.usecase;
 
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import java.util.List;
 import java.util.UUID;
@@ -11,5 +12,8 @@ public interface VolunteerApplyQueryUseCase {
 
     VolunteerApply getByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
 
-    VolunteerApplySummaryResponseDto getSummaryByRecruitBoardId(Long recruitBoardId);
+    VolunteerApplySummaryResponseDto getSummaryByRecruitId(Long recruitId);
+
+    VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId,
+            UUID volunteerId);
 }
