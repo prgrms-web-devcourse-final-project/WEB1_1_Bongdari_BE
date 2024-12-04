@@ -14,7 +14,6 @@ jobs:
         ports:
           - 6379:6379
 
-
     env:
       DB_URL: ${{ secrets.DB_URL }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -89,7 +88,4 @@ jobs:
           port: 22
           script: |                     
             cd somemore
-            sudo docker-compose stop
-            sudo docker-compose rm -f
-            sudo docker rmi 7zrv/somemore:latest
-            sudo docker-compose up -d
+            sudo ./deploy.sh
