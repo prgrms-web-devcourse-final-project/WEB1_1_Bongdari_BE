@@ -10,7 +10,6 @@ import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
-import com.somemore.volunteerapply.repository.VolunteerApplyJpaRepository;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.List;
 import java.util.UUID;

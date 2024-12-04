@@ -134,12 +134,6 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
                 rankings.get(1).totalVolunteerHours());
     }
 
-    private void createVolunteerAndUpdateVolunteerStats(int i) {
-        Volunteer newVolunteer = Volunteer.createDefault(NAVER, "oauth-id-" + i);
-        newVolunteer.updateVolunteerStats(i * 10, i);
-        volunteerRepository.save(newVolunteer);
-    }
-
     @DisplayName("아이디 리스트로 봉사자를 조회할 수있다.")
     @Test
     void findAllByIds() {
@@ -172,11 +166,11 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
         List<UUID> ids = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            Volunteer volunteer = volunteerRepository.save(Volunteer.createDefault(NAVER, "naver"));
+            Volunteer volunteerTest = volunteerRepository.save(Volunteer.createDefault(NAVER, "naver"));
             String name = "name" + i;
             VolunteerRegisterRequestDto dto = createVolunteerRegisterRequestDto(name);
-            volunteerDetailRepository.save(VolunteerDetail.of(dto, volunteer.getId()));
-            ids.add(volunteer.getId());
+            volunteerDetailRepository.save(VolunteerDetail.of(dto, volunteerTest.getId()));
+            ids.add(volunteerTest.getId());
         }
 
         // when
@@ -186,11 +180,16 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
         assertThat(simpleInfo).hasSize(4);
     }
 
+    private void createVolunteerAndUpdateVolunteerStats(int i) {
+        Volunteer newVolunteer = Volunteer.createDefault(NAVER, "oauth-id-" + i);
+        newVolunteer.updateVolunteerStats(i * 10, i);
+        volunteerRepository.save(newVolunteer);
+    }
+
     private static VolunteerRegisterRequestDto createVolunteerRegisterRequestDto(String name) {
         return new VolunteerRegisterRequestDto(
                 NAVER, "naver", name, "email", "M", "1111", "1111",
                 "010-0000-0000");
     }
-
 
 }

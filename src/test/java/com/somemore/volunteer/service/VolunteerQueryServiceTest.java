@@ -14,7 +14,6 @@ import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
-import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;

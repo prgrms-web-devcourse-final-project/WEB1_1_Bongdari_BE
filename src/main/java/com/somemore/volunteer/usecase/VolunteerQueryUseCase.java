@@ -3,7 +3,6 @@ package com.somemore.volunteer.usecase;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
-import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
 import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;
 import java.util.List;
 import java.util.UUID;
