@@ -23,4 +23,6 @@ public interface VolunteerApplyRepository {
 
     Page<VolunteerApply> findAllByRecruitId(Long recruitId, Pageable pageable);
 
+    List<VolunteerApply> findAllByRecruitId(Long recruitId);
+
 }

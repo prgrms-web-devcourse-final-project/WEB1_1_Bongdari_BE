@@ -4,6 +4,7 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEE
 
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import java.util.List;
@@ -29,6 +30,15 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
     @Override
     public VolunteerApply getByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
         return getVolunteerApplyBy(recruitId, volunteerId);
+    }
+
+    @Override
+    public VolunteerApplySummaryResponseDto getSummaryByRecruitBoardId(Long recruitBoardId) {
+
+        List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(
+                recruitBoardId);
+
+        return VolunteerApplySummaryResponseDto.from(applies);
     }
 
     private VolunteerApply getVolunteerApplyBy(Long recruitBoardId, UUID volunteerId) {

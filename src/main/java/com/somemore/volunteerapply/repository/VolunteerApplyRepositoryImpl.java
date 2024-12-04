@@ -56,8 +56,7 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     @Override
     public Page<VolunteerApply> findAllByRecruitId(Long recruitId, Pageable pageable) {
 
-        BooleanExpression exp = volunteerApply.recruitBoardId
-                .eq(recruitId)
+        BooleanExpression exp = recruitIdEq(recruitId)
                 .and(isNotDeleted());
 
         List<VolunteerApply> content = queryFactory
@@ -76,9 +75,21 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     }
 
     @Override
+    public List<VolunteerApply> findAllByRecruitId(Long recruitId) {
+        BooleanExpression exp = recruitIdEq(recruitId)
+                .and(isNotDeleted());
+
+        return queryFactory
+                .select(volunteerApply)
+                .from(volunteerApply)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
     public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
             UUID volunteerId) {
-        BooleanExpression exp = volunteerApply.recruitBoardId.eq(recruitId)
+        BooleanExpression exp = recruitIdEq(recruitId)
                 .and(volunteerApply.volunteerId.eq(volunteerId));
         return findOne(exp);
     }
@@ -87,8 +98,8 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     public boolean existsByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
         return queryFactory
                 .selectFrom(volunteerApply)
-                .where(volunteerApply.recruitBoardId.eq(recruitId)
-                        .and(volunteerApply.volunteerId.eq(volunteerId))
+                .where(recruitIdEq(recruitId)
+                        .and(volunteerIdEq(volunteerId))
                         .and(isNotDeleted()))
                 .fetchFirst() != null;
     }
@@ -112,6 +123,14 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
                         )
                         .fetchOne()
         );
+    }
+
+    private static BooleanExpression recruitIdEq(Long recruitId) {
+        return volunteerApply.recruitBoardId.eq(recruitId);
+    }
+
+    private static BooleanExpression volunteerIdEq(UUID volunteerId) {
+        return volunteerApply.volunteerId.eq(volunteerId);
     }
 
     private BooleanExpression isNotDeleted() {
