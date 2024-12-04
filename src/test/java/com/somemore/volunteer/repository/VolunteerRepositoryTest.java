@@ -1,20 +1,23 @@
 package com.somemore.volunteer.repository;
 
+import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.volunteer.domain.Volunteer;
+import com.somemore.volunteer.domain.VolunteerDetail;
+import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
+import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class VolunteerRepositoryTest extends IntegrationTestSupport {
@@ -22,13 +25,16 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private VolunteerRepository volunteerRepository;
 
+    @Autowired
+    private VolunteerDetailRepository volunteerDetailRepository;
+
     String oAuthId;
     Volunteer volunteer;
 
     @BeforeEach
     void setup() {
         oAuthId = "example-oauth-id";
-        volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
+        volunteer = Volunteer.createDefault(NAVER, oAuthId);
         volunteerRepository.save(volunteer);
     }
 
@@ -92,7 +98,8 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(rankings).hasSize(4);
-        assertThat(rankings.get(0).totalVolunteerHours()).isGreaterThan(rankings.get(1).totalVolunteerHours());
+        assertThat(rankings.get(0).totalVolunteerHours()).isGreaterThan(
+                rankings.get(1).totalVolunteerHours());
     }
 
     @DisplayName("등록된 봉사자가 없는 경우 빈 리스트를 반환한다.")
@@ -123,11 +130,12 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(rankings).hasSize(3);
-        assertThat(rankings.get(0).totalVolunteerHours()).isGreaterThan(rankings.get(1).totalVolunteerHours());
+        assertThat(rankings.get(0).totalVolunteerHours()).isGreaterThan(
+                rankings.get(1).totalVolunteerHours());
     }
 
     private void createVolunteerAndUpdateVolunteerStats(int i) {
-        Volunteer newVolunteer = Volunteer.createDefault(OAuthProvider.NAVER, "oauth-id-" + i);
+        Volunteer newVolunteer = Volunteer.createDefault(NAVER, "oauth-id-" + i);
         newVolunteer.updateVolunteerStats(i * 10, i);
         volunteerRepository.save(newVolunteer);
     }
@@ -136,10 +144,10 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
     @Test
     void findAllByIds() {
         // given
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
-        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
-        Volunteer volunteer3 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
-        Volunteer volunteer4 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        Volunteer volunteer1 = Volunteer.createDefault(NAVER, "1234");
+        Volunteer volunteer2 = Volunteer.createDefault(NAVER, "1234");
+        Volunteer volunteer3 = Volunteer.createDefault(NAVER, "1234");
+        Volunteer volunteer4 = Volunteer.createDefault(NAVER, "1234");
         volunteer4.markAsDeleted();
 
         volunteerRepository.save(volunteer1);
@@ -156,4 +164,33 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
         // then
         assertThat(volunteers).hasSize(3);
     }
+
+    @DisplayName("아이디 리스트로 봉사자 간단 정보를 조회할 수 있다.")
+    @Test
+    void findSimpleInfoByIds() {
+        // given
+        List<UUID> ids = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            Volunteer volunteer = volunteerRepository.save(Volunteer.createDefault(NAVER, "naver"));
+            String name = "name" + i;
+            VolunteerRegisterRequestDto dto = createVolunteerRegisterRequestDto(name);
+            volunteerDetailRepository.save(VolunteerDetail.of(dto, volunteer.getId()));
+            ids.add(volunteer.getId());
+        }
+
+        // when
+        List<VolunteerSimpleInfo> simpleInfo = volunteerRepository.findSimpleInfoByIds(ids);
+
+        // then
+        assertThat(simpleInfo).hasSize(4);
+    }
+
+    private static VolunteerRegisterRequestDto createVolunteerRegisterRequestDto(String name) {
+        return new VolunteerRegisterRequestDto(
+                NAVER, "naver", name, "email", "M", "1111", "1111",
+                "010-0000-0000");
+    }
+
+
 }
