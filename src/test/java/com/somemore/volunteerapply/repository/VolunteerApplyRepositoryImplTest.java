@@ -182,6 +182,36 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("봉사자 아이디와 조건 - 지원 상태, 참석 여부로 페이징 조회할 수 있다.")
+    @Test
+    void findAllByVolunteerId() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        ApplyStatus status = APPROVED;
+        Boolean attended = false;
+
+        volunteerApplyRepository.save(createApply(centerId, status, attended));
+        volunteerApplyRepository.save(createApply(centerId, status, attended));
+        volunteerApplyRepository.save(createApply(centerId, status, attended));
+        volunteerApplyRepository.save(createApply(centerId, REJECTED, !attended));
+
+        VolunteerApplySearchCondition condition = VolunteerApplySearchCondition.builder()
+                .status(status)
+                .attended(attended)
+                .pageable(getPageable())
+                .build();
+
+        // when
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(centerId,
+                condition);
+
+        // then
+        assertThat(applies.getTotalElements()).isEqualTo(3);
+        assertThat(applies.getContent())
+                .allMatch(apply -> apply.getStatus() == APPROVED && !apply.getAttended());
+
+    }
+
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
@@ -196,6 +226,16 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         return VolunteerApply.builder()
                 .volunteerId(UUID.randomUUID())
                 .recruitBoardId(recruitId)
+                .status(status)
+                .attended(attended)
+                .build();
+    }
+
+    private static VolunteerApply createApply(UUID centerId, ApplyStatus status,
+            Boolean attended) {
+        return VolunteerApply.builder()
+                .volunteerId(centerId)
+                .recruitBoardId(101L)
                 .status(status)
                 .attended(attended)
                 .build();

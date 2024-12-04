@@ -1,11 +1,11 @@
 package com.somemore.volunteerapply.service;
 
 import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.common.fixture.RecruitBoardFixture;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.volunteer.domain.Volunteer;
@@ -15,7 +15,8 @@ import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
-import com.somemore.volunteerapply.dto.response.VolunteerApplyDetailResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +46,7 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
     void getVolunteerAppliesByRecruitIdAndCenterId() {
         // given
         UUID centerId = UUID.randomUUID();
-        RecruitBoard board = RecruitBoardFixture.createRecruitBoard(centerId);
+        RecruitBoard board = createRecruitBoard(centerId);
         recruitBoardRepository.save(board);
 
         Volunteer volunteer1 = Volunteer.createDefault(NAVER, "naver");
@@ -67,13 +68,41 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApplyDetailResponseDto> result = volunteerApplyQueryFacadeService.getVolunteerAppliesByRecruitIdAndCenterId(
+        Page<VolunteerApplyVolunteerInfoResponseDto> result = volunteerApplyQueryFacadeService.getVolunteerAppliesByRecruitIdAndCenterId(
                 board.getId(),
                 centerId, condition);
 
         // then
         assertThat(result).hasSize(2);
 
+    }
+
+    @DisplayName("봉사자 아이디로 봉사 지원 리스트를 페이징 조회할 수 있다.")
+    @Test
+    void getVolunteerAppliesByVolunteerId() {
+        // given
+        UUID volunteerId = UUID.randomUUID();
+
+        RecruitBoard board1 = createRecruitBoard();
+        RecruitBoard board2 = createRecruitBoard();
+        RecruitBoard board3 = createRecruitBoard();
+        recruitBoardRepository.saveAll(List.of(board1, board2, board3));
+
+        VolunteerApply apply1 = createApply(volunteerId, board1.getId());
+        VolunteerApply apply2 = createApply(volunteerId, board2.getId());
+        VolunteerApply apply3 = createApply(volunteerId, board3.getId());
+        VolunteerApply apply4 = createApply(UUID.randomUUID(), board3.getId());
+        volunteerApplyRepository.saveAll(List.of(apply1, apply2, apply3, apply4));
+
+        VolunteerApplySearchCondition condition = VolunteerApplySearchCondition.builder()
+                .pageable(getPageable())
+                .build();
+        // when
+        Page<VolunteerApplyRecruitInfoResponseDto> result = volunteerApplyQueryFacadeService
+                .getVolunteerAppliesByVolunteerId(volunteerId, condition);
+
+        // then
+        assertThat(result).hasSize(3);
     }
 
     private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
