@@ -1,17 +1,19 @@
 package com.somemore.sse.domain;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
 public class SseEvent<T> {
     private final UUID receiverId;
     private final SseEventType type;
     private final T data;
+
+    @Builder.Default
     private final LocalDateTime timestamp = LocalDateTime.now();
 
     public String getId() {
