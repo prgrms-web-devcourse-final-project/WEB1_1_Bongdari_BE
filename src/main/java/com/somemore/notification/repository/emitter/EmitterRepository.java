@@ -8,9 +8,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public interface EmitterRepository {
     SseEmitter save(String emitterId, SseEmitter sseEmitter);
 
-    Map<String, SseEmitter> findAllByUserId(UUID userId);
+    Map<String, SseEmitter> findAllByReceiverId(UUID userId);
 
     void deleteById(String emitterId);
 
-    void deleteAllByUserId(UUID userId);
+    void deleteAllByReceiverId(UUID userId);
 }

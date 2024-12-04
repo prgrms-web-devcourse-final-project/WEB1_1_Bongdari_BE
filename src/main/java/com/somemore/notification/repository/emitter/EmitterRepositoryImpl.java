@@ -19,9 +19,9 @@ public class EmitterRepositoryImpl implements EmitterRepository {
     }
 
     @Override
-    public Map<String, SseEmitter> findAllByUserId(UUID userId) {
+    public Map<String, SseEmitter> findAllByReceiverId(UUID receiverId) {
         return emitters.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(userId.toString()))
+                .filter(entry -> entry.getKey().startsWith(receiverId.toString()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -31,9 +31,9 @@ public class EmitterRepositoryImpl implements EmitterRepository {
     }
 
     @Override
-    public void deleteAllByUserId(UUID userId) {
+    public void deleteAllByReceiverId(UUID receiverId) {
         emitters.keySet().stream()
-                .filter(key -> key.startsWith(userId.toString()))
+                .filter(key -> key.startsWith(receiverId.toString()))
                 .forEach(emitters::remove);
     }
 }
