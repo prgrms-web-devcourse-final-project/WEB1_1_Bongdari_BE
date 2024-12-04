@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.List;
@@ -90,12 +91,31 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         }
 
         // when
-        VolunteerApplySummaryResponseDto dto = volunteerApplyQueryService.getSummaryByRecruitBoardId(
+        VolunteerApplySummaryResponseDto dto = volunteerApplyQueryService.getSummaryByRecruitId(
                 recruitBoardId);
         // then
         assertThat(dto.waiting()).isEqualTo(waitingCount);
         assertThat(dto.approve()).isEqualTo(approveCount);
         assertThat(dto.reject()).isEqualTo(rejectCount);
+    }
+
+    @DisplayName("모집글 아이디와 봉사자 아이디로 지원 응답 값을 조회할 수 있다.")
+    @Test
+    void getVolunteerApplyByRecruitIdAndVolunteerId() {
+        // given
+        Long recruitId = 1234L;
+        UUID volunteerId = UUID.randomUUID();
+
+        VolunteerApply newApply = createApply(volunteerId, recruitId);
+        volunteerApplyRepository.save(newApply);
+
+        // when
+        VolunteerApplyResponseDto dto = volunteerApplyQueryService.getVolunteerApplyByRecruitIdAndVolunteerId(
+                recruitId, volunteerId);
+
+        // then
+        assertThat(dto.recruitBoardId()).isEqualTo(recruitId);
+        assertThat(dto.volunteerId()).isEqualTo(volunteerId);
     }
 
     private VolunteerApply createApply(UUID volunteerId, Long recruitId) {
