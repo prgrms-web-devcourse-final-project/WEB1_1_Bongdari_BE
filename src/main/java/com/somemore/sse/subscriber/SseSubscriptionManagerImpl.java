@@ -1,6 +1,6 @@
 package com.somemore.sse.subscriber;
 
-import com.somemore.sse.repository.emitter.EmitterRepository;
+import com.somemore.sse.repository.EmitterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,21 +11,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 @Component
-public class SseSubscriberImpl implements SseSubscriber {
+public class SseSubscriptionManagerImpl implements SseSubscriptionManager {
 
     private final EmitterRepository emitterRepository;
     private static final Long timeoutMillis = 600_000L;
 
-    public SseEmitter subscribe(UUID userId) {
-        return initEmitter(createEmitterId(userId));
+    public void subscribe(UUID userId) {
+        initEmitter(createEmitterId(userId));
     }
 
-    private SseEmitter initEmitter(String emitterId) {
+    private void initEmitter(String emitterId) {
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeoutMillis));
         setupLifeCycle(emitter, emitterId);
-
-        // TODO 초기화 메시지 sendNotification(emitter, emitterId, emitterId, String.format("EventStream connected [EMITTER_ID=%s]", emitterId));
-        return emitter;
     }
 
     private String createEmitterId(UUID id) {
