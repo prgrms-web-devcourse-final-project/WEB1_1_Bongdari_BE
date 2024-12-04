@@ -1,7 +1,7 @@
 package com.somemore.community.domain;
 
 import com.somemore.community.dto.request.CommunityCommentUpdateRequestDto;
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
