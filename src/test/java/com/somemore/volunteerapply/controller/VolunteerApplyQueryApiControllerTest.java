@@ -1,6 +1,7 @@
 package com.somemore.volunteerapply.controller;
 
 import static com.somemore.volunteerapply.domain.ApplyStatus.WAITING;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,14 +9,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.somemore.ControllerTestSupport;
+import com.somemore.WithMockCustomUser;
+import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyDetailResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
+import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
 
 class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
@@ -25,6 +33,10 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
+
+    @MockBean
+    private VolunteerApplyQueryFacadeUseCase volunteerApplyQueryFacadeUseCase;
+
 
     @DisplayName("특정 모집글 봉사자 지원 단건 조회 성공 테스트")
     @Test
@@ -85,5 +97,29 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data.waiting").value(5))
                 .andExpect(jsonPath("$.data.approve").value(10))
                 .andExpect(jsonPath("$.data.reject").value(2));
+    }
+
+    @Test
+    @DisplayName("지원자 리스트를 조회 성공 테스트")
+    @WithMockCustomUser(role = "CENTER")
+    void getVolunteerApplies() throws Exception {
+        // given
+        Long recruitBoardId = 1L;
+        Page<VolunteerApplyDetailResponseDto> page = new PageImpl<>(Collections.emptyList());
+
+        given(volunteerApplyQueryFacadeUseCase.getVolunteerAppliesByRecruitIdAndCenterId(
+                any(), any(UUID.class), any(VolunteerApplySearchCondition.class)))
+                .willReturn(page);
+
+        // when
+        // then
+        mockMvc.perform(get("/api/volunteer-applies//recruit-board/{id}", recruitBoardId)
+                        .param("attended", "false")
+                        .param("status", WAITING.toString())
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("지원자 리스트 조회 성공"));
     }
 }
