@@ -1,4 +1,4 @@
-package com.somemore.notification.sse.domain;
+package com.somemore.sse.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

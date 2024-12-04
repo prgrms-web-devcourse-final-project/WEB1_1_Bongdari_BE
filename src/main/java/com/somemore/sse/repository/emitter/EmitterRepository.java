@@ -1,4 +1,4 @@
-package com.somemore.notification.repository.emitter;
+package com.somemore.sse.repository.emitter;
 
 import java.util.Map;
 import java.util.UUID;
