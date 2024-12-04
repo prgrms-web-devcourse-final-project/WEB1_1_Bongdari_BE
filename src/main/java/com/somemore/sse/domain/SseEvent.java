@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
-public class Event<T> {
+public class SseEvent<T> {
     private final UUID receiverId;
-    private final EventType type;
+    private final SseEventType type;
     private final T data;
     private final LocalDateTime timestamp = LocalDateTime.now();
 

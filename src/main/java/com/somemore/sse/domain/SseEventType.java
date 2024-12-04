@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum EventType {
+public enum SseEventType {
     NOTIFICATION("알림")
     ;
 
