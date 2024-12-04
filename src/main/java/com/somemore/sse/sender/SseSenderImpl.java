@@ -1,8 +1,7 @@
-package com.somemore.notification.sse.service;
+package com.somemore.sse.sender;
 
-import com.somemore.notification.repository.emitter.EmitterRepository;
-import com.somemore.notification.sse.domain.Event;
-import com.somemore.notification.sse.usecase.SseSender;
+import com.somemore.sse.repository.emitter.EmitterRepository;
+import com.somemore.sse.domain.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
