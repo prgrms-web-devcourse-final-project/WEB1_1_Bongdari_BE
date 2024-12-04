@@ -17,6 +17,7 @@ import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
+import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -236,11 +237,11 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         volunteerDetailRepository.save(detail2);
 
         // when
-        List<VolunteerSimpleInfoResponseDto> dtos = volunteerQueryService.getVolunteerSimpleInfosByIds(
+        List<VolunteerSimpleInfo> volunteers = volunteerQueryService.getVolunteerSimpleInfosByIds(
                 List.of(volunteer1.getId(), volunteer2.getId(), UUID.randomUUID()));
 
         // then
-        assertThat(dtos).hasSize(2);
+        assertThat(volunteers).hasSize(2);
     }
 
     private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
