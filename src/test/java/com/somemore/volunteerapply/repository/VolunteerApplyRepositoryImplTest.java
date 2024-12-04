@@ -1,10 +1,13 @@
 package com.somemore.volunteerapply.repository;
 
+import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +44,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
             VolunteerApply apply = VolunteerApply.builder()
                     .volunteerId(UUID.randomUUID())
                     .recruitBoardId(2L)
-                    .status(ApplyStatus.APPROVED)
+                    .status(APPROVED)
                     .attended(true)
                     .build();
             volunteerApplyRepository.save(apply);
@@ -60,7 +64,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         // Then
         assertThat(foundApply).isPresent();
         assertThat(foundApply.get().getId()).isEqualTo(savedApply.getId());
-        assertThat(foundApply.get().getStatus()).isEqualTo(ApplyStatus.APPROVED);
+        assertThat(foundApply.get().getStatus()).isEqualTo(APPROVED);
     }
 
     @DisplayName("모집글 ID 리스트로 봉사자 ID 리스트 조회")
@@ -148,12 +152,56 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         assertThat(applies).hasSize(15);
     }
 
+    @DisplayName("모집글 아이디와 조건 - 지원 상태, 참석여부으로 페이징 조회 할 수 있다.")
+    @Test
+    void findAllByRecruitIdWithCondition() {
+        // given
+        Long recruitBoardId = 101L;
+        ApplyStatus status = APPROVED;
+        Boolean attended = false;
+
+        volunteerApplyRepository.save(createApply(recruitBoardId, status, attended));
+        volunteerApplyRepository.save(createApply(recruitBoardId, status, attended));
+        volunteerApplyRepository.save(createApply(recruitBoardId, status, attended));
+        volunteerApplyRepository.save(createApply(recruitBoardId, REJECTED, !attended));
+
+        VolunteerApplySearchCondition condition = VolunteerApplySearchCondition.builder()
+                .status(status)
+                .attended(attended)
+                .pageable(getPageable())
+                .build();
+
+        // when
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitBoardId,
+                condition);
+
+        // then
+        assertThat(applies.getTotalElements()).isEqualTo(3);
+        assertThat(applies.getContent())
+                .allMatch(apply -> apply.getStatus() == APPROVED && !apply.getAttended());
+
+    }
+
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
-                .status(ApplyStatus.APPROVED)
+                .status(APPROVED)
                 .attended(false)
                 .build();
+    }
+
+    private static VolunteerApply createApply(Long recruitId, ApplyStatus status,
+            Boolean attended) {
+        return VolunteerApply.builder()
+                .volunteerId(UUID.randomUUID())
+                .recruitBoardId(recruitId)
+                .status(status)
+                .attended(attended)
+                .build();
+    }
+
+    private Pageable getPageable() {
+        return PageRequest.of(0, 10);
     }
 }
