@@ -8,7 +8,6 @@ import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
-import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
@@ -89,15 +88,8 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     }
 
     @Override
-    public List<VolunteerSimpleInfoResponseDto> getVolunteerSimpleInfosByIds(
-            List<UUID> volunteerIds) {
-
-        List<VolunteerSimpleInfo> volunteerSimpleInfos = volunteerRepository.findSimpleInfoByIds(
-                volunteerIds);
-
-        return volunteerSimpleInfos.stream()
-                .map(VolunteerSimpleInfoResponseDto::from)
-                .toList();
+    public List<VolunteerSimpleInfo> getVolunteerSimpleInfosByIds(List<UUID> ids) {
+        return volunteerRepository.findSimpleInfoByIds(ids);
     }
 
     private Volunteer findVolunteer(UUID volunteerId) {

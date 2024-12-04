@@ -5,7 +5,7 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUI
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
+import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
@@ -39,14 +39,14 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
         Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitId,
                 condition);
 
-        Map<UUID, VolunteerSimpleInfoResponseDto> volunteerMap = getVolunteerInfoMap(
+        Map<UUID, VolunteerSimpleInfo> volunteerMap = getVolunteerInfoMap(
                 applies);
 
-        return applies.map(apply -> {
-            VolunteerSimpleInfoResponseDto volunteerInfo = volunteerMap.getOrDefault(
-                    apply.getVolunteerId(), null);
-            return VolunteerApplyVolunteerInfoResponseDto.of(apply, volunteerInfo);
-        });
+        return applies.map(
+                apply -> VolunteerApplyVolunteerInfoResponseDto.of(
+                        apply,
+                        volunteerMap.getOrDefault(apply.getVolunteerId(), null)
+                ));
     }
 
     @Override
@@ -79,24 +79,20 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
                 .toList();
         List<RecruitBoard> boards = recruitBoardQueryUseCase.getAllByIds(boardIds);
 
-        Map<Long, RecruitBoard> boardMap = boards.stream()
+        return boards.stream()
                 .collect(Collectors.toMap(RecruitBoard::getId,
                         board -> board));
-        return boardMap;
     }
 
-    private Map<UUID, VolunteerSimpleInfoResponseDto> getVolunteerInfoMap(
-            Page<VolunteerApply> applies) {
+    private Map<UUID, VolunteerSimpleInfo> getVolunteerInfoMap(Page<VolunteerApply> applies) {
+        List<UUID> volunteerIds = applies.getContent().stream().map(VolunteerApply::getVolunteerId)
+                .toList();
 
-        List<UUID> volunteerIds = applies.getContent().stream()
-                .map(VolunteerApply::getVolunteerId)
-                .collect(Collectors.toList());
-
-        List<VolunteerSimpleInfoResponseDto> volunteers = volunteerQueryUseCase.getVolunteerSimpleInfosByIds(
+        List<VolunteerSimpleInfo> volunteers = volunteerQueryUseCase.getVolunteerSimpleInfosByIds(
                 volunteerIds);
 
         return volunteers.stream()
-                .collect(Collectors.toMap(VolunteerSimpleInfoResponseDto::id,
+                .collect(Collectors.toMap(VolunteerSimpleInfo::id,
                         volunteer -> volunteer));
     }
 

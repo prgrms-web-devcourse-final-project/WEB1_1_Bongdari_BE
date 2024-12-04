@@ -3,6 +3,7 @@ package com.somemore.volunteerapply.dto.response;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
+import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,8 +33,10 @@ public record VolunteerApplyVolunteerInfoResponseDto(
 
     public static VolunteerApplyVolunteerInfoResponseDto of(
             VolunteerApply volunteerApply,
-            VolunteerSimpleInfoResponseDto volunteer
+            VolunteerSimpleInfo volunteerSimpleInfo
     ) {
+        VolunteerSimpleInfoResponseDto volunteer = VolunteerSimpleInfoResponseDto.from(
+                volunteerSimpleInfo);
         return VolunteerApplyVolunteerInfoResponseDto.builder()
                 .id(volunteerApply.getId())
                 .recruitBoardId(volunteerApply.getRecruitBoardId())
