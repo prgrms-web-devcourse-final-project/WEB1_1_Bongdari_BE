@@ -135,6 +135,19 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isTrue();
     }
 
+    @DisplayName("모집글 아이디로 지원 리스트를 조회할 수 있다.")
+    @Test
+    void findAllByRecruitIdNotPaging() {
+        // given
+        Long recruitBoardId = 1L;
+
+        // when
+        List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitBoardId);
+
+        // then
+        assertThat(applies).hasSize(15);
+    }
+
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)

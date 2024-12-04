@@ -1,10 +1,14 @@
 package com.somemore.volunteerapply.service;
 
+import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;
+import static com.somemore.volunteerapply.domain.ApplyStatus.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.List;
 import java.util.UUID;
@@ -31,8 +35,8 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         UUID volunteerId1 = UUID.randomUUID();
         UUID volunteerId2 = UUID.randomUUID();
 
-        VolunteerApply apply1 = createVolunteerApply(recruitId1, volunteerId1);
-        VolunteerApply apply2 = createVolunteerApply(recruitId2, volunteerId2);
+        VolunteerApply apply1 = createApply(volunteerId1, recruitId1);
+        VolunteerApply apply2 = createApply(volunteerId2, recruitId2);
 
         volunteerApplyRepository.save(apply1);
         volunteerApplyRepository.save(apply2);
@@ -45,15 +49,6 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         assertThat(volunteerIds)
                 .hasSize(2)
                 .containsExactlyInAnyOrder(volunteerId1, volunteerId2);
-    }
-
-    private VolunteerApply createVolunteerApply(Long recruitId, UUID volunteerId) {
-        return VolunteerApply.builder()
-                .volunteerId(volunteerId)
-                .recruitBoardId(recruitId)
-                .status(ApplyStatus.WAITING)
-                .attended(false)
-                .build();
     }
 
     @DisplayName("모집글 아이디와 봉사자 아이디로 조회할 수 있다")
@@ -75,11 +70,43 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         assertThat(apply.getVolunteerId()).isEqualTo(volunteerId);
     }
 
-    private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
+    @DisplayName("모집글 아이디로 지원 현황을 조회할 수 있다.")
+    @Test
+    void getSummaryByRecruitBoardId() {
+        // given
+        long approveCount = 10;
+        long rejectCount = 2;
+        long waitingCount = 5;
+        long recruitBoardId = 100L;
+
+        for (int i = 0; i < waitingCount; i++) {
+            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitBoardId, WAITING));
+        }
+        for (int i = 0; i < approveCount; i++) {
+            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitBoardId, APPROVED));
+        }
+        for (int i = 0; i < rejectCount; i++) {
+            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitBoardId, REJECTED));
+        }
+
+        // when
+        VolunteerApplySummaryResponseDto dto = volunteerApplyQueryService.getSummaryByRecruitBoardId(
+                recruitBoardId);
+        // then
+        assertThat(dto.waiting()).isEqualTo(waitingCount);
+        assertThat(dto.approve()).isEqualTo(approveCount);
+        assertThat(dto.reject()).isEqualTo(rejectCount);
+    }
+
+    private VolunteerApply createApply(UUID volunteerId, Long recruitId) {
+        return createApply(volunteerId, recruitId, WAITING);
+    }
+
+    private VolunteerApply createApply(UUID volunteerId, Long recruitId, ApplyStatus status) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
-                .status(ApplyStatus.APPROVED)
+                .status(status)
                 .attended(false)
                 .build();
     }
