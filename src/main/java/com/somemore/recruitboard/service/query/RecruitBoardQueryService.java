@@ -1,5 +1,7 @@
 package com.somemore.recruitboard.service.query;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
+
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
@@ -14,15 +16,12 @@ import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -70,7 +69,7 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     @Override
     public Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
-                                                                    RecruitBoardSearchCondition condition) {
+            RecruitBoardSearchCondition condition) {
         centerQueryUseCase.validateCenterExists(centerId);
 
         Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(centerId, condition);
@@ -80,6 +79,11 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
     @Override
     public List<Long> getNotCompletedIdsByCenterIds(UUID centerId) {
         return recruitBoardRepository.findNotCompletedIdsByCenterId(centerId);
+    }
+
+    @Override
+    public List<RecruitBoard> getAllByIds(List<Long> ids) {
+        return recruitBoardRepository.findAllByIds(ids);
     }
 
 }
