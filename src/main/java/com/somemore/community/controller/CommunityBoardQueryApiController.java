@@ -1,6 +1,5 @@
 package com.somemore.community.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
 import com.somemore.community.dto.response.CommunityBoardDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardResponseDto;
 import com.somemore.community.usecase.board.CommunityBoardQueryUseCase;
