@@ -1,5 +1,6 @@
 package com.somemore.center.domain;
 
+import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
 import com.somemore.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -63,4 +64,11 @@ public class Center extends BaseEntity {
                 .build();
     }
 
+    public void updateWith(CenterProfileUpdateRequestDto dto, String imgUrl) {
+        this.name = dto.name();
+        this.contactNumber = dto.contactNumber();
+        this.homepageLink = dto.homepageLink();
+        this.introduce = dto.introduce();
+        this.imgUrl = imgUrl;
+    }
 }
