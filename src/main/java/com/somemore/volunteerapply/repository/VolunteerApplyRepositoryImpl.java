@@ -3,8 +3,10 @@ package com.somemore.volunteerapply.repository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.QVolunteerApply;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -87,6 +89,32 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     }
 
     @Override
+    public Page<VolunteerApply> findAllByRecruitId(Long recruitId,
+            VolunteerApplySearchCondition condition) {
+
+        BooleanExpression exp = recruitIdEq(recruitId)
+                .and(attendedEq(condition.attended()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
+
+        Pageable pageable = condition.pageable();
+
+        List<VolunteerApply> content = queryFactory
+                .selectFrom(volunteerApply)
+                .where(exp)
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(
+                content,
+                pageable,
+                getCount(exp)
+        );
+    }
+
+    @Override
     public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
             UUID volunteerId) {
         BooleanExpression exp = recruitIdEq(recruitId)
@@ -131,6 +159,14 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
 
     private static BooleanExpression volunteerIdEq(UUID volunteerId) {
         return volunteerApply.volunteerId.eq(volunteerId);
+    }
+
+    private BooleanExpression attendedEq(Boolean attended) {
+        return attended != null ? volunteerApply.attended.eq(attended) : null;
+    }
+
+    private BooleanExpression statusEq(ApplyStatus status) {
+        return status != null ? volunteerApply.status.eq(status) : null;
     }
 
     private BooleanExpression isNotDeleted() {
