@@ -34,7 +34,7 @@ public class Note extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "`is_read`", nullable = false)
+    @Column(name = "is_read", nullable = false)
     private Boolean isRead = false;
 
     @Builder

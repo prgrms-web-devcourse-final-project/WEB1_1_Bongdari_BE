@@ -26,7 +26,7 @@ public class NoteCommandApiController {
 
     @Secured("ROLE_VOLUNTEER")
     @Operation(summary = "봉사자 to 기관 쪽지 송신")
-    @PostMapping(value = "/volunteer-to-center")
+    @PostMapping("/volunteer-to-center")
     public ApiResponse<Long> sendNoteToCenter(@CurrentUser UUID userId, @Valid @RequestBody SendNoteToCenterRequestDto requestDto) {
 
         Long noteId = sendNoteToCenterUseCase.sendNoteToCenter(userId, requestDto);

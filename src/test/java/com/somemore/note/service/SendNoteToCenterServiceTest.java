@@ -74,9 +74,6 @@ class SendNoteToCenterServiceTest extends IntegrationTestSupport {
         assertEquals(NOT_EXISTS_CENTER.getMessage(), exception.getMessage(), "예외 메시지가 올바르지 않습니다.");
     }
 
-
-
-
     private Center createCenter() {
         Center center = Center.create(
                 "기본 기관 이름",
