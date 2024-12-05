@@ -14,7 +14,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "http://localhost:5173",
                         "http://front-deploy.s3-website.ap-northeast-2.amazonaws.com",
-                        "http://somemore-front.s3-website.ap-northeast-2.amazonaws.com/"
+                        "http://somemore-front.s3-website.ap-northeast-2.amazonaws.com/",
+                        "https://www.somemore.site/",
+                        "https://api.somemore.site/"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
