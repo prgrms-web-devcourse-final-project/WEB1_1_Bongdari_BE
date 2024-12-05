@@ -5,37 +5,30 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Builder
+@Schema(description = "알림 응답 전송 DTO")
 public record NotificationResponseDto(
-        @Schema(description = "알림을 받을 사용자 ID", example = "123e4567-e89b-12d3-a456-426614174000")
-        UUID receiverId,
+        @Schema(description = "알림 제목", example = "봉사 활동 신청이 승인되었습니다.")
+        String title,
 
-        @Schema(description = "알림 유형", example = "NOTE(쪽지), RECRUIT_APPLY(신청)")
+        @Schema(description = "알림 유형", example = "RECRUIT")
         NotificationType type,
 
-        @Schema(description = "관련된 엔티티 ID", example = "101")
+        @Schema(description = "알림과 관련된 리소스 ID", example = "12345")
         Long relatedId,
 
-        @Schema(description = "알림 읽음 여부", example = "false")
-        boolean read,
-
-        @Schema(description = "알림 생성 시간", example = "2024-12-03T10:15:30")
-        LocalDateTime createdAt
-) {
+        @Schema(description = "알림 생성 시간", example = "2024-12-04T10:15:30")
+        LocalDateTime createdAt) {
 
     public static NotificationResponseDto from(Notification notification) {
-        return NotificationResponseDto.builder()
-                .receiverId(notification.getReceiverId())
-                .type(notification.getType())
-                .relatedId(notification.getRelatedId())
-                .read(notification.isRead())
-                .createdAt(notification.getCreatedAt())
-                .build();
+        return new NotificationResponseDto(
+                notification.getTitle(),
+                notification.getType(),
+                notification.getRelatedId(),
+                notification.getCreatedAt()
+        );
     }
 }
