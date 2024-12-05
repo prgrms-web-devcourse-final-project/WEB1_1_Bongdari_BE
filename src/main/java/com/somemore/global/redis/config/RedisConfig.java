@@ -1,4 +1,4 @@
-package com.somemore.global.configure;
+package com.somemore.global.redis.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
