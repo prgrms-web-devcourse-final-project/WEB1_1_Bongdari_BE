@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SseSubscriptionManagerImplTest extends IntegrationTestSupport {
+class SseSubscriptionManagerTest extends IntegrationTestSupport {
 
     @Autowired
     private SseSubscriptionManagerImpl sseSubscriptionManager;
