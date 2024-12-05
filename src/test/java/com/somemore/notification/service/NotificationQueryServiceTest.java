@@ -2,7 +2,7 @@ package com.somemore.notification.service;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.notification.domain.Notification;
-import com.somemore.notification.domain.NotificationType;
+import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.notification.dto.NotificationResponseDto;
 import com.somemore.notification.repository.NotificationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class NotificationQueryServiceIntegrationTest extends IntegrationTestSupport {
+class NotificationQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private NotificationQueryService notificationQueryService;
@@ -32,7 +32,7 @@ class NotificationQueryServiceIntegrationTest extends IntegrationTestSupport {
 
         Notification unreadNotification = Notification.builder()
                 .title("Unread Notification")
-                .type(NotificationType.NOTE_BLAH_BLAH)
+                .type(NotificationSubType.NOTE_BLAH_BLAH)
                 .receiverId(receiverId)
                 .relatedId(1L)
                 .build();
@@ -55,7 +55,7 @@ class NotificationQueryServiceIntegrationTest extends IntegrationTestSupport {
 
         Notification readNotification = Notification.builder()
                 .title("Read Notification")
-                .type(NotificationType.REVIEW_BLAH_BLAH)
+                .type(NotificationSubType.REVIEW_BLAH_BLAH)
                 .receiverId(receiverId)
                 .relatedId(2L)
                 .build();
