@@ -3,7 +3,7 @@ package com.somemore.notification.dto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.notification.domain.Notification;
-import com.somemore.notification.domain.NotificationType;
+import com.somemore.notification.domain.NotificationSubType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ public record NotificationResponseDto(
         String title,
 
         @Schema(description = "알림 유형", example = "RECRUIT")
-        NotificationType type,
+        NotificationSubType type,
 
         @Schema(description = "알림과 관련된 리소스 ID", example = "12345")
         Long relatedId,
