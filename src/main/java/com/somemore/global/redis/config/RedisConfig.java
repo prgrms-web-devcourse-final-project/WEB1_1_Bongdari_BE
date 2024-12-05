@@ -1,14 +1,20 @@
 package com.somemore.global.redis.config;
 
+import com.somemore.global.common.event.ServerEventType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.Map;
 
 @Configuration
 @EnableRedisRepositories
@@ -40,5 +46,24 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         return redisTemplate;
+    }
+
+    @Bean
+    public ChannelTopic notificationTopic() {
+        return new ChannelTopic("notifications");
+    }
+
+    @Bean
+    public Map<ServerEventType, ChannelTopic> eventTopicMap(ChannelTopic notificationTopic) {
+        return Map.of(
+                ServerEventType.NOTIFICATION, notificationTopic
+        );
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        return container;
     }
 }
