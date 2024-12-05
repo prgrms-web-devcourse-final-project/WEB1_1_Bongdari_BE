@@ -20,19 +20,20 @@ public class Notification {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "receiver_id", nullable = false, length = 16)
+    @Column(name = "receiver_id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID receiverId;
 
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private NotificationType type;
 
     @Column(name = "related_id", nullable = false)
     private Long relatedId;
 
-    @Column(name = "read", nullable = false)
+    @Column(name = "is_read", nullable = false)
     private boolean read;
 
     @CreatedDate
