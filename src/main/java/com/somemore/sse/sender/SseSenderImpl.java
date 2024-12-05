@@ -1,7 +1,7 @@
 package com.somemore.sse.sender;
 
-import com.somemore.sse.repository.emitter.EmitterRepository;
-import com.somemore.sse.domain.Event;
+import com.somemore.sse.repository.EmitterRepository;
+import com.somemore.sse.domain.SseEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,25 +17,25 @@ public class SseSenderImpl implements SseSender {
 
     private final EmitterRepository emitterRepository;
 
-    public <T> void send(Event<T> event) {
-        UUID receiverId = event.getReceiverId();
+    public <T> void send(SseEvent<T> sseEvent) {
+        UUID receiverId = sseEvent.getReceiverId();
         emitterRepository.findAllByReceiverId(receiverId)
-                .forEach((emitterId, emitter) -> sendEvent(emitterId, emitter, event));
+                .forEach((emitterId, emitter) -> sendEvent(emitterId, emitter, sseEvent));
     }
 
     private <T> void sendEvent(String emitterId,
                                SseEmitter emitter,
-                               Event<T> event) {
+                               SseEvent<T> sseEvent) {
         try {
-            emitter.send(buildEvent(event));
+            emitter.send(buildEvent(sseEvent));
         } catch (IOException e) {
             emitterRepository.deleteById(emitterId);
         }
     }
 
-    private <T> SseEmitter.SseEventBuilder buildEvent(Event<T> event) {
+    private <T> SseEmitter.SseEventBuilder buildEvent(SseEvent<T> sseEvent) {
         return SseEmitter.event()
-                .id(event.getId())
-                .data(event.getData());
+                .id(sseEvent.getId())
+                .data(sseEvent.getData());
     }
 }
