@@ -30,7 +30,7 @@ public class Notification {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private NotificationType type;
+    private NotificationSubType type;
 
     @Column(name = "related_id", nullable = false)
     private Long relatedId;
@@ -50,7 +50,7 @@ public class Notification {
     public Notification(
             UUID receiverId,
             String title,
-            NotificationType type,
+            NotificationSubType type,
             Long relatedId
     ) {
         this.receiverId = receiverId;
