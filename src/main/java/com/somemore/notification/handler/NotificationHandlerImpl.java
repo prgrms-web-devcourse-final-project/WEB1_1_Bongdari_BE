@@ -1,6 +1,5 @@
 package com.somemore.notification.handler;
 
-import com.somemore.notification.converter.MessageConverter;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.dto.NotificationResponseDto;
 import com.somemore.notification.repository.NotificationRepository;
@@ -18,8 +17,7 @@ public class NotificationHandlerImpl implements NotificationHandler {
     private final SseSender sseSender;
 
     @Override
-    public void handle(String message) {
-        Notification notification = MessageConverter.ToNotification(message);
+    public void handle(Notification notification) {
         notificationRepository.save(notification);
 
         sseSender.send(createSseEvent(notification));

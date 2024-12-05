@@ -1,6 +1,8 @@
 package com.somemore.notification.handler;
 
+import com.somemore.notification.domain.Notification;
+
 public interface NotificationHandler {
 
-    void handle(String message);
+    void handle(Notification notification);
 }
