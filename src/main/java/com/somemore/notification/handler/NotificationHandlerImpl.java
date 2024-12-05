@@ -2,7 +2,7 @@ package com.somemore.notification.handler;
 
 import com.somemore.notification.converter.MessageConverter;
 import com.somemore.notification.domain.Notification;
-import com.somemore.notification.domain.NotificationResponseDto;
+import com.somemore.notification.dto.NotificationResponseDto;
 import com.somemore.notification.repository.NotificationRepository;
 import com.somemore.sse.domain.SseEvent;
 import com.somemore.sse.domain.SseEventType;
