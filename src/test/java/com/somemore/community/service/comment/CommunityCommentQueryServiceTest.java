@@ -35,7 +35,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private DeleteCommunityCommentUseCase deleteCommunityCommentUseCase;
 
-    private Long boardId, commentId, replyId;
+    private Long boardId, commentId, replyId, commentId2;
     UUID writerId;
 
     @BeforeEach
@@ -53,7 +53,11 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
         communityCommentRepository.save(communityComment1);
         commentId = communityComment1.getId();
 
-        for (int i = 1; i <= 8; i++) {
+        CommunityComment communityComment2 = createCommunityComment(boardId, writerId);
+        communityCommentRepository.save(communityComment2);
+        commentId2 = communityComment2.getId();
+
+        for (int i = 1; i <= 12; i++) {
             String content = "제목" + i;
             CommunityComment communityComment = createCommunityComment(content, boardId, writerId);
             communityCommentRepository.save(communityComment);
@@ -79,14 +83,15 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(comments).isNotNull();
-        assertThat(comments.getTotalElements()).isEqualTo(10);
+        assertThat(comments.getTotalElements()).isEqualTo(15);
         assertThat(comments.getSize()).isEqualTo(4);
-        assertThat(comments.getNumber()).isZero();
+        assertThat(comments.getTotalPages()).isEqualTo(4);
     }
 
-    @DisplayName("삭제된 댓글의 경우 조회할 수 없다.")
+    @DisplayName("삭제된 대댓글의 경우 조회할 수 없다.")
     @Test
-    void doesNotFind() {
+    void doesNotFindReply() {
+
         //given
         deleteCommunityCommentUseCase.deleteCommunityComment(writerId, replyId, boardId);
 
@@ -95,9 +100,24 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(comments).isNotNull();
-        assertThat(comments.getTotalElements()).isEqualTo(9);
+        assertThat(comments.getTotalElements()).isEqualTo(14);
         assertThat(comments.getSize()).isEqualTo(4);
-        assertThat(comments.getNumber()).isZero();
+    }
+
+    @DisplayName("대댓글이 없는 삭제된 댓글의 경우 조회할 수 없다.")
+    @Test
+    void doesNotFindCommennt() {
+
+        //given
+        deleteCommunityCommentUseCase.deleteCommunityComment(writerId, commentId2, boardId);
+
+        //when
+        Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
+
+        //then
+        assertThat(comments).isNotNull();
+        assertThat(comments.getTotalElements()).isEqualTo(14);
+        assertThat(comments.getSize()).isEqualTo(4);
     }
 
     @DisplayName("대댓글이 있는 댓글의 경우 삭제된 댓글로 조회할 수 있다.")
@@ -106,13 +126,13 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
 
         //given
         deleteCommunityCommentUseCase.deleteCommunityComment(writerId, commentId, boardId);
+
         //when
         Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
 
         //then
         assertThat(comments).isNotNull();
-        assertThat(comments.getTotalElements()).isEqualTo(10);
+        assertThat(comments.getTotalElements()).isEqualTo(15);
         assertThat(comments.getSize()).isEqualTo(4);
-        assertThat(comments.getNumber()).isZero();
     }
 }

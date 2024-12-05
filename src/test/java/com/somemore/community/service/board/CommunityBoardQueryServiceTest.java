@@ -65,6 +65,18 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         communityBoardRepository.save(createCommunityBoard(writerId2));
 
         communityId1 = communityBoard1.getId();
+
+        for (int i = 1; i <= 11; i++) {
+            String title = "제목" + i;
+            CommunityBoard communityBoard = createCommunityBoard(title, writerId1);
+            communityBoardRepository.save(communityBoard);
+        }
+
+        for (int i = 1; i <= 20; i++) {
+            String title = "제목" + i;
+            CommunityBoard communityBoard = createCommunityBoard(title, writerId2);
+            communityBoardRepository.save(communityBoard);
+        }
     }
 
     @AfterEach
@@ -82,8 +94,9 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(dtos).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(2);
+        assertThat(dtos.getTotalElements()).isEqualTo(33);
         assertThat(dtos.getSize()).isEqualTo(10);
+        assertThat(dtos.getTotalPages()).isEqualTo(4);
         assertThat(dtos.getNumber()).isZero();
     }
 
@@ -97,8 +110,9 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(dtos).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(1);
+        assertThat(dtos.getTotalElements()).isEqualTo(12);
         assertThat(dtos.getSize()).isEqualTo(10);
+        assertThat(dtos.getTotalPages()).isEqualTo(2);
         assertThat(dtos.getNumber()).isZero();
     }
 
