@@ -2,7 +2,7 @@ package com.somemore.notification.repository;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.notification.domain.Notification;
-import com.somemore.notification.domain.NotificationType;
+import com.somemore.notification.domain.NotificationSubType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,14 +29,14 @@ class NotificationRepositoryTest extends IntegrationTestSupport {
         for (int i = 0; i < 10; i++) {
             Notification unreadNotification = Notification.builder()
                     .title("Unread Notification")
-                    .type(NotificationType.NOTE_BLAH_BLAH)
+                    .type(NotificationSubType.NOTE_BLAH_BLAH)
                     .receiverId(receiverId)
                     .relatedId(1L)
                     .build();
 
             Notification readNotification = Notification.builder()
                     .title("Read Notification")
-                    .type(NotificationType.REVIEW_BLAH_BLAH)
+                    .type(NotificationSubType.REVIEW_BLAH_BLAH)
                     .receiverId(receiverId)
                     .relatedId(2L)
                     .build();
