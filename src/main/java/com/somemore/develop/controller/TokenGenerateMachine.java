@@ -1,4 +1,4 @@
-package com.somemore.develop;
+package com.somemore.develop.controller;
 
 import com.somemore.auth.jwt.domain.EncodedToken;
 import com.somemore.auth.jwt.domain.TokenType;
