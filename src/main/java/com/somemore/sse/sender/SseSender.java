@@ -1,7 +1,7 @@
 package com.somemore.sse.sender;
 
-import com.somemore.sse.domain.Event;
+import com.somemore.sse.domain.SseEvent;
 
 public interface SseSender {
-    <T> void send(Event<T> event);
+    <T> void send(SseEvent<T> sseEvent);
 }
