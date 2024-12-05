@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SseSenderImplTest extends IntegrationTestSupport {
+class SseSenderTest extends IntegrationTestSupport {
 
     @Autowired
     private EmitterRepository emitterRepository;
