@@ -1,4 +1,4 @@
-package com.somemore.sse.repository.emitter;
+package com.somemore.sse.repository;
 
 import java.util.Map;
 import java.util.UUID;

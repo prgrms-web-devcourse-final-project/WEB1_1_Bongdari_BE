@@ -1,4 +1,4 @@
-package com.somemore.sse.repository.emitter;
+package com.somemore.sse.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
