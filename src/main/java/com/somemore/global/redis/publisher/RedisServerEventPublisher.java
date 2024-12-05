@@ -19,7 +19,7 @@ public class RedisServerEventPublisher implements ServerEventPublisher {
     private final RedisTemplate<String, Object> redisTemplate;
     private final Map<ServerEventType, ChannelTopic> eventTopics;
 
-    public void publish(ServerEvent event) {
+    public <T extends Enum<T>> void publish(ServerEvent<T> event) {
         ServerEventType type = event.getType();
         ChannelTopic topic = eventTopics.get(type);
 

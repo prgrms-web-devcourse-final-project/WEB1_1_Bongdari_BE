@@ -2,5 +2,5 @@ package com.somemore.global.common.event;
 
 public interface ServerEventPublisher {
 
-    void publish(ServerEvent event);
+    <T extends Enum<T>> void publish(ServerEvent<T> event);
 }

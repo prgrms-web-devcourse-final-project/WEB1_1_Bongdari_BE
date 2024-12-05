@@ -17,7 +17,7 @@ public class MessageConverter {
 
     private final ObjectMapper objectMapper;
 
-    public Notification ToNotification(String message) {
+    public Notification from(String message) {
         try {
             JsonNode rootNode = objectMapper.readTree(message);
             String eventType = rootNode.get("subType").asText();

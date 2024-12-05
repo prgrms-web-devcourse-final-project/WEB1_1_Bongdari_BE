@@ -32,7 +32,7 @@ class EmitterRepositoryTest {
 
         // then
         assertThat(savedEmitter).isEqualTo(sseEmitter);
-        assertThat(emitterRepository.findAllByReceiverId(UUID.fromString(emitterId)).size()).isEqualTo(1);
+        assertThat(emitterRepository.findAllByReceiverId(UUID.fromString(emitterId))).hasSize(1);
     }
 
     @DisplayName("Receiver ID로 관련된 모든 Emitter를 조회한다.")
@@ -51,7 +51,7 @@ class EmitterRepositoryTest {
 
         // then
         assertThat(emitters).hasSize(2);
-        assertThat(emitters.keySet()).contains(emitterId1, emitterId2);
+        assertThat(emitters).containsKeys(emitterId1, emitterId2);
     }
 
     @DisplayName("Emitter ID로 특정 Emitter를 삭제한다.")

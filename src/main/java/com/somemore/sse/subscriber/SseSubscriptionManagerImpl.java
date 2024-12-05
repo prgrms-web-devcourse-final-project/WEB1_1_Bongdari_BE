@@ -14,14 +14,14 @@ import java.util.UUID;
 public class SseSubscriptionManagerImpl implements SseSubscriptionManager {
 
     private final EmitterRepository emitterRepository;
-    private static final Long timeoutMillis = 600_000L;
+    private static final Long TIMEOUT_MILLI_SEC = 600_000L;
 
     public void subscribe(UUID userId) {
         initEmitter(createEmitterId(userId));
     }
 
     private void initEmitter(String emitterId) {
-        SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeoutMillis));
+        SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(TIMEOUT_MILLI_SEC));
         setupLifeCycle(emitter, emitterId);
     }
 

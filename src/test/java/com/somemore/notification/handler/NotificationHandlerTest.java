@@ -46,7 +46,7 @@ class NotificationHandlerTest extends IntegrationTestSupport {
 
         UUID receiverId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
-        Notification notification = messageConverter.ToNotification(message);
+        Notification notification = messageConverter.from(message);
         // when
         notificationHandler.handle(notification);
 
