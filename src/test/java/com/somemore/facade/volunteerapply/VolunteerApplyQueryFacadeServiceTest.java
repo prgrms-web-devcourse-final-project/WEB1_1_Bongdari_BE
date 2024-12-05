@@ -1,4 +1,4 @@
-package com.somemore.volunteerapply.service;
+package com.somemore.facade.volunteerapply;
 
 import static com.somemore.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;

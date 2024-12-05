@@ -10,7 +10,7 @@ import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoRespons
 import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
-import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
+import com.somemore.facade.volunteerapply.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

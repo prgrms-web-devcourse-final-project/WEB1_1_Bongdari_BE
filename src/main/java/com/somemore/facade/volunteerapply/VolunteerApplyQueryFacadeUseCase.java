@@ -1,4 +1,4 @@
-package com.somemore.volunteerapply.usecase;
+package com.somemore.facade.volunteerapply;
 
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
