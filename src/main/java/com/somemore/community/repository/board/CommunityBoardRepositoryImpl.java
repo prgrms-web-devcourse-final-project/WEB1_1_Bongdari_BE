@@ -46,6 +46,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     public Page<CommunityBoardView> findCommunityBoards(Pageable pageable) {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
                 .where(QCommunityBoard.communityBoard.deleted.eq(false))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -61,6 +63,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
                 .where(QCommunityBoard.communityBoard.writerId.eq(writerId)
                         .and(QCommunityBoard.communityBoard.deleted.eq(false)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
