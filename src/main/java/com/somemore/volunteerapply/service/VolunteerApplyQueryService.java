@@ -4,12 +4,16 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEE
 
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
+import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
+import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +32,38 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
 
     @Override
     public VolunteerApply getByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
-        return getVolunteerApplyBy(recruitId, volunteerId);
+        return volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitId, volunteerId)
+                .orElseThrow(
+                        () -> new BadRequestException(NOT_EXISTS_VOLUNTEER_APPLY));
     }
 
-    private VolunteerApply getVolunteerApplyBy(Long recruitBoardId, UUID volunteerId) {
-        return volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitBoardId,
-                volunteerId).orElseThrow(
-                () -> new BadRequestException(NOT_EXISTS_VOLUNTEER_APPLY.getMessage()));
+    @Override
+    public VolunteerApplySummaryResponseDto getSummaryByRecruitId(Long recruitId) {
+
+        List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(
+                recruitId);
+
+        return VolunteerApplySummaryResponseDto.from(applies);
     }
+
+    @Override
+    public VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId,
+            UUID volunteerId) {
+        VolunteerApply apply = getByRecruitIdAndVolunteerId(recruitId, volunteerId);
+
+        return VolunteerApplyResponseDto.from(apply);
+    }
+
+    @Override
+    public Page<VolunteerApply> getAllByRecruitId(Long recruitId,
+            VolunteerApplySearchCondition condition) {
+        return volunteerApplyRepository.findAllByRecruitId(recruitId, condition);
+    }
+
+    @Override
+    public Page<VolunteerApply> getAllByVolunteerId(UUID volunteerId,
+            VolunteerApplySearchCondition condition) {
+        return volunteerApplyRepository.findAllByVolunteerId(volunteerId, condition);
+    }
+
 }

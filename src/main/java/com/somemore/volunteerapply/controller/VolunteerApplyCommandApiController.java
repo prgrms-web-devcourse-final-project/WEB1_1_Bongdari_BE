@@ -2,7 +2,7 @@ package com.somemore.volunteerapply.controller;
 
 import com.somemore.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.volunteerapply.dto.VolunteerApplyCreateRequestDto;
+import com.somemore.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import com.somemore.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
 import io.swagger.v3.oas.annotations.Operation;

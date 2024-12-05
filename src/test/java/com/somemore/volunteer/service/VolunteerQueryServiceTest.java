@@ -1,5 +1,11 @@
 package com.somemore.volunteer.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
+import static com.somemore.volunteer.domain.Volunteer.createDefault;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
@@ -10,19 +16,13 @@ import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.volunteer.repository.VolunteerRepository;
+import com.somemore.volunteer.repository.mapper.VolunteerSimpleInfo;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
-import static com.somemore.volunteer.domain.Volunteer.createDefault;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class VolunteerQueryServiceTest extends IntegrationTestSupport {
@@ -214,6 +214,30 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
                 List.of(volunteer1.getId(), volunteer2.getId(), volunteer3.getId(),
                         volunteer4.getId(), UUID.randomUUID()
                 ));
+
+        // then
+        assertThat(volunteers).hasSize(2);
+    }
+
+    @DisplayName("아이디 리스트로 봉사자 간단 정보를 조회할 수 있다")
+    @Test
+    void getVolunteerSimpleInfosByIds() {
+        // given
+        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+
+        volunteerRepository.save(volunteer1);
+        volunteerRepository.save(volunteer2);
+
+        VolunteerDetail detail1 = createVolunteerDetail(volunteer1.getId());
+        VolunteerDetail detail2 = createVolunteerDetail(volunteer1.getId());
+
+        volunteerDetailRepository.save(detail1);
+        volunteerDetailRepository.save(detail2);
+
+        // when
+        List<VolunteerSimpleInfo> volunteers = volunteerQueryService.getVolunteerSimpleInfosByIds(
+                List.of(volunteer1.getId(), volunteer2.getId(), UUID.randomUUID()));
 
         // then
         assertThat(volunteers).hasSize(2);

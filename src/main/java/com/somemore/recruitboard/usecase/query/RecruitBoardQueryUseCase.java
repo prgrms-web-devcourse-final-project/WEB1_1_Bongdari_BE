@@ -29,4 +29,5 @@ public interface RecruitBoardQueryUseCase {
 
     List<Long> getNotCompletedIdsByCenterIds(UUID centerId);
 
+    List<RecruitBoard> getAllByIds(List<Long> ids);
 }

@@ -1,5 +1,14 @@
 package com.somemore.recruitboard.repository;
 
+import static com.somemore.common.fixture.CenterFixture.createCenter;
+import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.common.fixture.LocationFixture.createLocation;
+import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterRepository;
@@ -13,6 +22,11 @@ import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,21 +36,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.common.fixture.CenterFixture.createCenter;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.common.fixture.LocationFixture.createLocation;
-import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
-import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
@@ -243,7 +242,8 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.save(completedRecruitBoard);
 
         // when
-        List<Long> notCompletedBoardIds = recruitBoardRepository.findNotCompletedIdsByCenterId(centerId);
+        List<Long> notCompletedBoardIds = recruitBoardRepository.findNotCompletedIdsByCenterId(
+                centerId);
 
         // then
         assertThat(notCompletedBoardIds)
@@ -406,6 +406,24 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(results).isEmpty();
+    }
+
+    @DisplayName("아이디 리스트로 모집글을 조회할 수 있다.")
+    @Test
+    void findAllByIds() {
+        // given
+        RecruitBoard board1 = createRecruitBoard();
+        RecruitBoard board2 = createRecruitBoard();
+        RecruitBoard board3 = createRecruitBoard();
+
+        recruitBoardRepository.saveAll(List.of(board1, board2, board3));
+        List<Long> ids = List.of(board1.getId(), board2.getId(), board3.getId(), 100000L);
+
+        // when
+        List<RecruitBoard> all = recruitBoardRepository.findAllByIds(ids);
+
+        // then
+        assertThat(all).hasSize(3);
     }
 
     private Pageable getPageable() {

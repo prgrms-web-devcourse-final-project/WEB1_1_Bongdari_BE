@@ -3,8 +3,10 @@ package com.somemore.volunteerapply.repository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.QVolunteerApply;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,9 +58,72 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     @Override
     public Page<VolunteerApply> findAllByRecruitId(Long recruitId, Pageable pageable) {
 
-        BooleanExpression exp = volunteerApply.recruitBoardId
-                .eq(recruitId)
+        BooleanExpression exp = recruitIdEq(recruitId)
                 .and(isNotDeleted());
+
+        List<VolunteerApply> content = queryFactory
+                .selectFrom(volunteerApply)
+                .where(exp)
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(
+                content,
+                pageable,
+                getCount(exp)
+        );
+    }
+
+    @Override
+    public List<VolunteerApply> findAllByRecruitId(Long recruitId) {
+        BooleanExpression exp = recruitIdEq(recruitId)
+                .and(isNotDeleted());
+
+        return queryFactory
+                .select(volunteerApply)
+                .from(volunteerApply)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
+    public Page<VolunteerApply> findAllByRecruitId(Long recruitId,
+            VolunteerApplySearchCondition condition) {
+
+        BooleanExpression exp = recruitIdEq(recruitId)
+                .and(attendedEq(condition.attended()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
+
+        Pageable pageable = condition.pageable();
+
+        List<VolunteerApply> content = queryFactory
+                .selectFrom(volunteerApply)
+                .where(exp)
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(
+                content,
+                pageable,
+                getCount(exp)
+        );
+    }
+
+    @Override
+    public Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
+            VolunteerApplySearchCondition condition) {
+
+        BooleanExpression exp = volunteerIdEq(volunteerId)
+                .and(attendedEq(condition.attended()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
+
+        Pageable pageable = condition.pageable();
 
         List<VolunteerApply> content = queryFactory
                 .selectFrom(volunteerApply)
@@ -78,7 +143,7 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     @Override
     public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
             UUID volunteerId) {
-        BooleanExpression exp = volunteerApply.recruitBoardId.eq(recruitId)
+        BooleanExpression exp = recruitIdEq(recruitId)
                 .and(volunteerApply.volunteerId.eq(volunteerId));
         return findOne(exp);
     }
@@ -87,8 +152,8 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     public boolean existsByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
         return queryFactory
                 .selectFrom(volunteerApply)
-                .where(volunteerApply.recruitBoardId.eq(recruitId)
-                        .and(volunteerApply.volunteerId.eq(volunteerId))
+                .where(recruitIdEq(recruitId)
+                        .and(volunteerIdEq(volunteerId))
                         .and(isNotDeleted()))
                 .fetchFirst() != null;
     }
@@ -112,6 +177,22 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
                         )
                         .fetchOne()
         );
+    }
+
+    private static BooleanExpression recruitIdEq(Long recruitId) {
+        return volunteerApply.recruitBoardId.eq(recruitId);
+    }
+
+    private static BooleanExpression volunteerIdEq(UUID volunteerId) {
+        return volunteerApply.volunteerId.eq(volunteerId);
+    }
+
+    private BooleanExpression attendedEq(Boolean attended) {
+        return attended != null ? volunteerApply.attended.eq(attended) : null;
+    }
+
+    private BooleanExpression statusEq(ApplyStatus status) {
+        return status != null ? volunteerApply.status.eq(status) : null;
     }
 
     private BooleanExpression isNotDeleted() {

@@ -82,9 +82,9 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-            () -> recruitBoardQueryService.getRecruitBoardById(wrongId)
+                () -> recruitBoardQueryService.getRecruitBoardById(wrongId)
         ).isInstanceOf(BadRequestException.class)
-            .hasMessage(NOT_EXISTS_RECRUIT_BOARD.getMessage());
+                .hasMessage(NOT_EXISTS_RECRUIT_BOARD.getMessage());
     }
 
     @DisplayName("아이디로 모집글과 기관를 조회할 수 있다.")
@@ -99,7 +99,7 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
 
         // when
         RecruitBoardWithLocationResponseDto responseDto = recruitBoardQueryService.getWithLocationById(
-            board.getId());
+                board.getId());
 
         // then
         assertThat(responseDto.id()).isEqualTo(board.getId());
@@ -115,9 +115,9 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-            () -> recruitBoardQueryService.getWithLocationById(wrongId)
+                () -> recruitBoardQueryService.getWithLocationById(wrongId)
         ).isInstanceOf(BadRequestException.class)
-            .hasMessage(NOT_EXISTS_RECRUIT_BOARD.getMessage());
+                .hasMessage(NOT_EXISTS_RECRUIT_BOARD.getMessage());
     }
 
     @DisplayName("모집글과 기관 정보 리스트를 페이징 처리하여 받을 수 있다")
@@ -133,12 +133,12 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
 
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-            .pageable(pageable)
-            .build();
+                .pageable(pageable)
+                .build();
 
         // when
         Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardQueryService.getAllWithCenter(
-            condition);
+                condition);
 
         // then
         assertThat(dtos).isNotEmpty();
@@ -160,15 +160,15 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
 
         Pageable pageable = getPageable();
         RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
-            .latitude(location.getLatitude().doubleValue())
-            .longitude(location.getLongitude().doubleValue())
-            .radius(3.0)
-            .pageable(pageable)
-            .build();
+                .latitude(location.getLatitude().doubleValue())
+                .longitude(location.getLongitude().doubleValue())
+                .radius(3.0)
+                .pageable(pageable)
+                .build();
 
         // when
         Page<RecruitBoardDetailResponseDto> result = recruitBoardQueryService.getRecruitBoardsNearby(
-            condition);
+                condition);
 
         // then
         assertThat(result).isNotEmpty();
@@ -190,12 +190,12 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         UUID centerId = center.getId();
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-            .pageable(pageable)
-            .build();
+                .pageable(pageable)
+                .build();
 
         // when
         Page<RecruitBoardResponseDto> result = recruitBoardQueryService.getRecruitBoardsByCenterId(
-            centerId, condition);
+                centerId, condition);
 
         // then
         assertThat(result).isNotEmpty();
@@ -208,14 +208,14 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         // given
         UUID wrongCenterId = UUID.randomUUID();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-            .build();
+                .build();
 
         // when
         // then
         assertThatThrownBy(
-            () -> recruitBoardQueryService.getRecruitBoardsByCenterId(wrongCenterId, condition))
-            .isInstanceOf(BadRequestException.class)
-            .hasMessage(NOT_EXISTS_CENTER.getMessage());
+                () -> recruitBoardQueryService.getRecruitBoardsByCenterId(wrongCenterId, condition))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(NOT_EXISTS_CENTER.getMessage());
     }
 
     @DisplayName("센터 ID로 완료되지 않은 모집 게시글들의 ID를 조회할 수 있다")
@@ -248,7 +248,8 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         recruitBoardRepository.save(completedRecruitBoard);
 
         // when
-        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(centerId);
+        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(
+                centerId);
 
         // then
         assertThat(notCompletedBoardIds)
@@ -259,6 +260,24 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
                 .doesNotContain(deletedClosedBoard.getId())
                 .doesNotContain(deletedCompletedRecruitBoard.getId())
                 .doesNotContain(completedRecruitBoard.getId());
+    }
+
+    @DisplayName("아이디리스트로 모집글 리스트를 조회할 수 있다.")
+    @Test
+    void getAllByIds() {
+        // given
+        RecruitBoard board1 = createRecruitBoard();
+        RecruitBoard board2 = createRecruitBoard();
+        RecruitBoard board3 = createRecruitBoard();
+
+        recruitBoardRepository.saveAll(List.of(board1, board2, board3));
+        List<Long> ids = List.of(board1.getId(), board2.getId(), board3.getId(), 100000L);
+
+        // when
+        List<RecruitBoard> all = recruitBoardQueryService.getAllByIds(ids);
+
+        // then
+        assertThat(all).hasSize(3);
     }
 
     private Pageable getPageable() {

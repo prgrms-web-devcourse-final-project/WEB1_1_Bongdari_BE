@@ -12,14 +12,16 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.volunteerapply.domain.VolunteerApply;
-import com.somemore.volunteerapply.dto.VolunteerApplyCreateRequestDto;
+import com.somemore.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 class ApplyVolunteerApplyServiceTest extends IntegrationTestSupport {
 
     @Autowired

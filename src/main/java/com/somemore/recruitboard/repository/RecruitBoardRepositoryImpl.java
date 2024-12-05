@@ -14,20 +14,16 @@ import com.somemore.location.domain.QLocation;
 import com.somemore.location.utils.GeoUtils;
 import com.somemore.recruitboard.domain.QRecruitBoard;
 import com.somemore.recruitboard.domain.RecruitBoard;
-
-import java.util.List;
-
 import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.domain.VolunteerCategory;
+import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
+import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
-import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
-import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
-
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -77,6 +73,17 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                                 .and(isNotCompleted())
                                 .and(isNotDeleted())
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<RecruitBoard> findAllByIds(List<Long> ids) {
+        BooleanExpression exp = recruitBoard.id.in(ids)
+                .and(isNotCompleted());
+
+        return queryFactory
+                .selectFrom(recruitBoard)
+                .where(exp)
                 .fetch();
     }
 
@@ -160,7 +167,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     @Override
     public Page<RecruitBoard> findAllByCenterId(UUID centerId,
-                                                RecruitBoardSearchCondition condition) {
+            RecruitBoardSearchCondition condition) {
         QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
 
         Pageable pageable = condition.pageable();

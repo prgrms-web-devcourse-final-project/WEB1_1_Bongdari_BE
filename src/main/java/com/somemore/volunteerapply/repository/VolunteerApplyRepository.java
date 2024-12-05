@@ -1,6 +1,7 @@
 package com.somemore.volunteerapply.repository;
 
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,4 +24,11 @@ public interface VolunteerApplyRepository {
 
     Page<VolunteerApply> findAllByRecruitId(Long recruitId, Pageable pageable);
 
+    List<VolunteerApply> findAllByRecruitId(Long recruitId);
+
+    Page<VolunteerApply> findAllByRecruitId(Long recruitId,
+            VolunteerApplySearchCondition condition);
+
+    Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
+            VolunteerApplySearchCondition condition);
 }
