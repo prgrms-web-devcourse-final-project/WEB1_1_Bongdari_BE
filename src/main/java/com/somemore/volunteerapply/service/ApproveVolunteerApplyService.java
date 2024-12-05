@@ -3,6 +3,7 @@ package com.somemore.volunteerapply.service;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
+import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
@@ -65,6 +66,7 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
     private void publishVolunteerApplyStatusChangeEvent(UUID receiverId, Long id, RecruitBoard recruitBoard, VolunteerApply apply) {
         VolunteerApplyStatusChangeEvent event = VolunteerApplyStatusChangeEvent.builder()
                 .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
                 .receiverId(receiverId)
                 .volunteerApplyId(id)
                 .centerId(recruitBoard.getCenterId())
