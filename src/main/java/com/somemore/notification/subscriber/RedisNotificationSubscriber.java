@@ -17,7 +17,7 @@ public class RedisNotificationSubscriber implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        Notification notification = messageConverter.ToNotification(
+        Notification notification = messageConverter.from(
                 new String(message.getBody())
         );
 
