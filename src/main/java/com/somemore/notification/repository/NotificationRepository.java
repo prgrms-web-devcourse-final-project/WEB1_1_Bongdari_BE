@@ -1,4 +1,4 @@
-package com.somemore.notification.repository.notification;
+package com.somemore.notification.repository;
 
 import com.somemore.notification.domain.Notification;
 import org.springframework.stereotype.Repository;
