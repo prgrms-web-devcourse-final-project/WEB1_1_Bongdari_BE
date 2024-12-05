@@ -70,7 +70,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityBoard.count())
                 .from(communityBoard)
-                .where(isNotDeleted());
+                .where(QCommunityBoard.communityBoard.writerId.eq(writerId)
+                        .and(isNotDeleted()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }

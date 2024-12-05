@@ -49,13 +49,12 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
                 .join(volunteer).on(communityComment.writerId.eq(volunteer.id))
                 .where(communityComment.communityBoardId.eq(boardId))
                 .orderBy(communityComment.parentCommentId.asc().nullsFirst(), communityComment.createdAt.asc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityComment.count())
-                .from(communityComment);
+                .from(communityComment)
+                .where(communityComment.communityBoardId.eq(boardId));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
