@@ -11,7 +11,7 @@ import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
-import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFacadeUseCase {
 
-    private final VolunteerApplyRepository volunteerApplyRepository;
+    private final VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final VolunteerQueryUseCase volunteerQueryUseCase;
 
@@ -35,7 +35,7 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
             Long recruitId, UUID centerId, VolunteerApplySearchCondition condition) {
         validateAuthorization(recruitId, centerId);
 
-        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitId,
+        Page<VolunteerApply> applies = volunteerApplyQueryUseCase.getAllByRecruitId(recruitId,
                 condition);
 
         Map<UUID, VolunteerSimpleInfo> volunteerMap = getVolunteerInfoMap(
@@ -52,7 +52,7 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
     public Page<VolunteerApplyRecruitInfoResponseDto> getVolunteerAppliesByVolunteerId(
             UUID volunteerId, VolunteerApplySearchCondition condition) {
 
-        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(volunteerId,
+        Page<VolunteerApply> applies = volunteerApplyQueryUseCase.getAllByVolunteerId(volunteerId,
                 condition);
 
         Map<Long, RecruitBoard> boardMap = getRecruitBoardMap(applies);
