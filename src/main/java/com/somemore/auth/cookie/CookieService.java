@@ -12,19 +12,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CookieService implements CookieUseCase {
 
-    private static final String ACCESS_TOKEN_PREFIX = "Bearer ";
-
     @Override
     public void setAccessToken(HttpServletResponse response, String value) {
         ResponseCookie cookie = generateCookie(TokenType.ACCESS, value);
-        response.addHeader("Set-Cookie", ACCESS_TOKEN_PREFIX + cookie);
+        response.addHeader("Set-Cookie", cookie.toString());
         log.info("SET_COOKIE_ACCESS_TOKEN = {}", value);
     }
 
     @Override
     public void deleteAccessToken(HttpServletResponse response) {
         ResponseCookie cookie = generateCookie(TokenType.SIGNOUT, TokenType.SIGNOUT.name());
-        response.addHeader("Set-Cookie", ACCESS_TOKEN_PREFIX + cookie);
+        response.addHeader("Set-Cookie", cookie.toString());
         log.info("DELETE_COOKIE_ACCESS_TOKEN");
     }
 
