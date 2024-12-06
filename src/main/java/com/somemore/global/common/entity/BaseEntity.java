@@ -24,7 +24,7 @@ public class BaseEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted", nullable = false)
     private Boolean deleted;
 
     @PrePersist
