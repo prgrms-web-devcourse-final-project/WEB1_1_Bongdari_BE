@@ -55,13 +55,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private EncodedToken getAccessToken(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization");
+        if (accessToken == null || accessToken.isEmpty()) {
+            throw new JwtException(JwtErrorType.MISSING_TOKEN);
+        }
 
         String tokenPrefix = "Bearer ";
         if (accessToken.startsWith(tokenPrefix)) {
             return new EncodedToken(accessToken.substring(tokenPrefix.length()));
         }
 
-        throw new JwtException(JwtErrorType.MISSING_TOKEN);
+        return new EncodedToken(accessToken);
     }
 
     private JwtAuthenticationToken createAuthenticationToken(Claims claims,
