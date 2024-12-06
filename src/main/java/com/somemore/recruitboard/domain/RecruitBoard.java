@@ -6,7 +6,7 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import com.somemore.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

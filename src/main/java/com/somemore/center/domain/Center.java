@@ -1,7 +1,7 @@
 package com.somemore.center.domain;
 
 import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

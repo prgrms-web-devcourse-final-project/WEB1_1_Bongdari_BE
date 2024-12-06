@@ -3,7 +3,7 @@ package com.somemore.location.domain;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import com.somemore.location.dto.request.LocationUpdateRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
