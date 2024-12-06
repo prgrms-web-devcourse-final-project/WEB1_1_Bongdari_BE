@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ExceptionMessage {
 
+    INVALID_TOKEN("잘못된 엑세스 토큰입니다"),
     NOT_EXISTS_CENTER("존재하지 않는 기관입니다."),
     NOT_EXISTS_COMMUNITY_BOARD("존재하지 않는 게시글입니다."),
     UNAUTHORIZED_COMMUNITY_BOARD("해당 게시글에 권한이 없습니다."),
