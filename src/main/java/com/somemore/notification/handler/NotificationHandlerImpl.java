@@ -5,7 +5,7 @@ import com.somemore.notification.dto.NotificationResponseDto;
 import com.somemore.notification.repository.NotificationRepository;
 import com.somemore.sse.domain.SseEvent;
 import com.somemore.sse.domain.SseEventType;
-import com.somemore.sse.sender.SseSender;
+import com.somemore.sse.usecase.SseUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 public class NotificationHandlerImpl implements NotificationHandler {
 
     private final NotificationRepository notificationRepository;
-    private final SseSender sseSender;
+    private final SseUseCase sseUseCase;
 
     @Override
     public void handle(Notification notification) {
         notificationRepository.save(notification);
 
-        sseSender.send(createSseEvent(notification));
+        sseUseCase.send(createSseEvent(notification));
     }
 
     private static SseEvent<NotificationResponseDto> createSseEvent(Notification notification) {
