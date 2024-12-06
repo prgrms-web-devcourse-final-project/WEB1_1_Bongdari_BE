@@ -120,6 +120,11 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
         );
     }
 
+    @Override
+    public boolean existsByVolunteerId(UUID volunteerId) {
+        return volunteerJpaRepository.existsByIdAndDeletedIsFalse(volunteerId);
+    }
+
     private BooleanExpression isNotDeleted() {
         return volunteer.deleted.isFalse();
     }

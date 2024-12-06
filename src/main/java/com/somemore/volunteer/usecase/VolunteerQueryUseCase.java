@@ -24,4 +24,6 @@ public interface VolunteerQueryUseCase {
     List<Volunteer> getAllByIds(List<UUID> volunteerIds);
 
     List<VolunteerSimpleInfo> getVolunteerSimpleInfosByIds(List<UUID> ids);
+
+    void validateVolunteerExists(UUID volunteerId);
 }

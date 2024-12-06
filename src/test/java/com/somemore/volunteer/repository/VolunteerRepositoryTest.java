@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -178,6 +180,33 @@ class VolunteerRepositoryTest extends IntegrationTestSupport {
 
         // then
         assertThat(simpleInfo).hasSize(4);
+    }
+
+    @DisplayName("봉사자 ID로 봉사자가 존재하는지 확인할 수 있다.")
+    @Test
+    void existsVolunteerById() {
+        //given
+        Volunteer existsVolunteer = volunteerRepository.save(Volunteer.createDefault(NAVER, "naver"));
+        volunteerRepository.save(existsVolunteer);
+
+        //when
+        Boolean isExist = volunteerRepository.existsByVolunteerId(existsVolunteer.getId());
+
+        //then
+        AssertionsForClassTypes.assertThat(isExist).isTrue();
+    }
+
+    @DisplayName("존재하지 않는 봉사자 ID를 검증할 수 있다.")
+    @Test
+    void notExistsVolunteerById() {
+        //given
+        UUID nonExistentId = UUID.randomUUID();
+
+        //when
+        Boolean isExist = volunteerRepository.existsByVolunteerId(nonExistentId);
+
+        //then
+        AssertionsForClassTypes.assertThat(isExist).isFalse();
     }
 
     private void createVolunteerAndUpdateVolunteerStats(int i) {

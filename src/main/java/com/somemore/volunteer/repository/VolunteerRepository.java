@@ -26,4 +26,8 @@ public interface VolunteerRepository {
     List<Volunteer> findAllByIds(List<UUID> volunteerIds);
 
     List<VolunteerSimpleInfo> findSimpleInfoByIds(List<UUID> ids);
+
+    boolean existsByVolunteerId(UUID volunteerId);
+
+    default boolean doesNotExistsByVolunteerId(UUID volunteerId) { return !existsByVolunteerId(volunteerId); }
 }
