@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VolunteerJpaRepository extends JpaRepository<Volunteer, Long> {
 
     List<Volunteer> findAllByIdInAndDeletedFalse(List<UUID> ids);
-
+    boolean existsByIdAndDeletedIsFalse(UUID id);
 }
