@@ -51,6 +51,11 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                 .fetch();
     }
 
+    @Override
+    public void deleteAllInBatch() {
+        notificationJpaRepository.deleteAllInBatch();
+    }
+
     private static BooleanExpression eqReceiverId(UUID userId) {
         return notification.receiverId.eq(userId);
     }

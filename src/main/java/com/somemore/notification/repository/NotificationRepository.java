@@ -18,4 +18,6 @@ public interface NotificationRepository {
 
     List<Notification> findByReceiverIdAndUnread(UUID userId);
     List<Notification> findByReceiverIdAndRead(UUID userId);
+
+    void deleteAllInBatch();
 }

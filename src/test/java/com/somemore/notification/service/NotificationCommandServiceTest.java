@@ -1,6 +1,7 @@
 package com.somemore.notification.service;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTIFICATION;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_NOTIFICATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -69,7 +70,7 @@ class NotificationCommandServiceTest extends IntegrationTestSupport {
         // when / then
         assertThatThrownBy(() -> notificationCommandService.markSingleNotificationAsRead(receiverId, notification.getId()))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("권한이 없습니다");
+                .hasMessageContaining(UNAUTHORIZED_NOTIFICATION.getMessage());
     }
 
     @DisplayName("알림 N개를 읽음 처리한다.")
@@ -118,7 +119,7 @@ class NotificationCommandServiceTest extends IntegrationTestSupport {
         // when / then
         assertThatThrownBy(() -> notificationCommandService.markMultipleNotificationsAsRead(receiverId, requestDto))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("권한이 없습니다");
+                .hasMessageContaining(UNAUTHORIZED_NOTIFICATION.getMessage());
     }
 
     private Notification createNotification(UUID receiverId) {
