@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ExceptionMessage {
 
-    INVALID_TOKEN("잘못된 엑세스 토큰입니다"),
     NOT_EXISTS_CENTER("존재하지 않는 기관입니다."),
     NOT_EXISTS_COMMUNITY_BOARD("존재하지 않는 게시글입니다."),
     UNAUTHORIZED_COMMUNITY_BOARD("해당 게시글에 권한이 없습니다."),
@@ -34,6 +33,8 @@ public enum ExceptionMessage {
     DUPLICATE_APPLICATION("이미 신청한 봉사 모집 공고입니다."),
     UNAUTHORIZED_VOLUNTEER_APPLY("해당 지원에 권한이 없습니다."),
     RECRUIT_BOARD_ALREADY_COMPLETED("이미 종료된 봉사 활동입니다."),
+    NOT_EXISTS_NOTIFICATION("존재하지 않는 알림입니다."),
+    UNAUTHORIZED_NOTIFICATION("해당 알림에 권한이 없습니다."),
     VOLUNTEER_APPLY_LIST_MISMATCH("봉사 지원 목록과 요청된 봉사 지원 목록이 일치하지 않습니다."),
     RECRUIT_BOARD_ID_MISMATCH("모든 봉사 신청이 동일한 모집글 ID를 가져야 합니다."),
 
