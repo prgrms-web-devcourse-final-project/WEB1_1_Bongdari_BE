@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://www.somemore.site/",
                         "https://api.somemore.site/"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);
