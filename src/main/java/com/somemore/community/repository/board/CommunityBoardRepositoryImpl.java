@@ -45,7 +45,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     @Override
     public Page<CommunityBoardView> findCommunityBoards(Pageable pageable) {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
-                .where(QCommunityBoard.communityBoard.deleted.eq(false))
+                .where(isNotDeleted())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -61,8 +61,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     @Override
     public Page<CommunityBoardView> findByWriterId(UUID writerId, Pageable pageable) {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
-                .where(QCommunityBoard.communityBoard.writerId.eq(writerId)
-                        .and(QCommunityBoard.communityBoard.deleted.eq(false)))
+                .where(isWriter(writerId)
+                        .and(isNotDeleted()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -70,7 +70,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityBoard.count())
                 .from(communityBoard)
-                .where(QCommunityBoard.communityBoard.writerId.eq(writerId)
+                .where(isWriter(writerId)
                         .and(isNotDeleted()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
@@ -100,4 +100,6 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     private BooleanExpression isNotDeleted() {
         return communityBoard.deleted.eq(false);
     }
+
+    private BooleanExpression isWriter(UUID writerId) {return communityBoard.writerId.eq(writerId); }
 }
