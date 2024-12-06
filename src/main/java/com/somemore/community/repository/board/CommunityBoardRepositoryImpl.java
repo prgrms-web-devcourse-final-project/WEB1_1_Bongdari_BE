@@ -53,6 +53,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityBoard.count())
                 .from(communityBoard)
+                .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
                 .where(isNotDeleted());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
@@ -70,6 +71,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityBoard.count())
                 .from(communityBoard)
+                .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
                 .where(isWriter(writerId)
                         .and(isNotDeleted()));
 
