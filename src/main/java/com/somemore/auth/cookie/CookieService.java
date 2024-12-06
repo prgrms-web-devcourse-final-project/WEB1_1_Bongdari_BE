@@ -28,11 +28,12 @@ public class CookieService implements CookieUseCase {
 
     private static ResponseCookie generateCookie(TokenType tokenType, String value) {
         return ResponseCookie.from(TokenType.ACCESS.name(), value) // 덮어쓰기 위해서 고정 값
+                .domain(".somemore.site")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(tokenType.getPeriodInSeconds())
-                .sameSite("Lax")
+                .sameSite("None")
                 .build();
     }
 }
