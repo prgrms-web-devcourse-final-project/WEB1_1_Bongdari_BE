@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,29 +24,34 @@ class NotificationRepositoryTest extends IntegrationTestSupport {
 
     private UUID receiverId;
 
+    private List<Long> savedNotificationIds;
+
     @BeforeEach
     void setup() {
         receiverId = UUID.randomUUID();
+        savedNotificationIds = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (long i = 1; i <= 10; i++) {
             Notification unreadNotification = Notification.builder()
                     .title("Unread Notification")
                     .type(NotificationSubType.NOTE_BLAH_BLAH)
                     .receiverId(receiverId)
-                    .relatedId(1L)
+                    .relatedId(i + 1)
                     .build();
 
             Notification readNotification = Notification.builder()
                     .title("Read Notification")
                     .type(NotificationSubType.REVIEW_BLAH_BLAH)
                     .receiverId(receiverId)
-                    .relatedId(2L)
+                    .relatedId(i + 100)
                     .build();
 
             readNotification.markAsRead();
 
             notificationRepository.save(unreadNotification);
             notificationRepository.save(readNotification);
+
+            savedNotificationIds.add(unreadNotification.getId()); // 저장된 ID 캡처
         }
     }
 
@@ -85,16 +92,25 @@ class NotificationRepositoryTest extends IntegrationTestSupport {
         assertThat(notifications).isEmpty();
     }
 
-    @DisplayName("알림이 없는 사용자의 읽은 알림을 조회하면 빈 리스트를 반환한다.")
+    @DisplayName("알림 아이디로 알림을 조회한다.")
     @Test
-    void findByReceiverIdAndRead_noNotifications() {
+    void findById() {
         // given
-        UUID unknownReceiverId = UUID.randomUUID();
-
         // when
-        List<Notification> notifications = notificationRepository.findByReceiverIdAndRead(unknownReceiverId);
+        Optional<Notification> notifications = notificationRepository.findById(savedNotificationIds.getFirst());
 
         // then
-        assertThat(notifications).isEmpty();
+        assertThat(notifications).isNotEmpty();
+    }
+
+    @DisplayName("알림이 없는 사용자의 읽은 알림을 조회하면 빈 리스트를 반환한다.")
+    @Test
+    void findAllByIds() {
+        // given
+        // when
+        List<Notification> notifications = notificationRepository.findAllByIds(savedNotificationIds);
+
+        // then
+        assertThat(notifications).hasSize(10);
     }
 }
