@@ -16,13 +16,14 @@ public class SseSubscriptionManagerImpl implements SseSubscriptionManager {
     private final EmitterRepository emitterRepository;
     private static final Long TIMEOUT_MILLI_SEC = 600_000L;
 
-    public void subscribe(UUID userId) {
-        initEmitter(createEmitterId(userId));
+    public SseEmitter subscribe(UUID userId) {
+        return initEmitter(createEmitterId(userId));
     }
 
-    private void initEmitter(String emitterId) {
+    private SseEmitter initEmitter(String emitterId) {
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(TIMEOUT_MILLI_SEC));
         setupLifeCycle(emitter, emitterId);
+        return emitter;
     }
 
     private String createEmitterId(UUID id) {

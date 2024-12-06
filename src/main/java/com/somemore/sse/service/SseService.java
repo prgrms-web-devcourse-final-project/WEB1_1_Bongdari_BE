@@ -8,6 +8,7 @@ import com.somemore.sse.usecase.SseUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.UUID;
 
@@ -20,9 +21,11 @@ public class SseService implements SseUseCase {
     private final SseSender sender;
 
     @Override
-    public void subscribe(UUID userId) {
-        subscriptionManager.subscribe(userId);
+    public SseEmitter subscribe(UUID userId) {
+        SseEmitter sseEmitter = subscriptionManager.subscribe(userId);
         sendInitMessage(userId);
+
+        return sseEmitter;
     }
 
     @Override

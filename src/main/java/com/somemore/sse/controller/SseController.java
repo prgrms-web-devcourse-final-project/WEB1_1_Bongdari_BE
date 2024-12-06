@@ -1,7 +1,6 @@
 package com.somemore.sse.controller;
 
 import com.somemore.auth.annotation.CurrentUser;
-import com.somemore.global.common.response.ApiResponse;
 import com.somemore.sse.usecase.SseUseCase;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.UUID;
 
@@ -22,10 +22,9 @@ public class SseController {
 
     @Secured({"ROLE_VOLUNTEER", "ROLE_CENTER"})
     @GetMapping("/subscribe")
-    public ApiResponse<String> subscribe(
+    public SseEmitter subscribe(
             @CurrentUser UUID userId) {
 
-        sseUseCase.subscribe(userId);
-        return ApiResponse.ok("SSE 연결 성공");
+        return sseUseCase.subscribe(userId);
     }
 }
