@@ -1,6 +1,6 @@
 package com.somemore.volunteer.domain;
 
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

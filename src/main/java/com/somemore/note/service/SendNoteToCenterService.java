@@ -16,12 +16,11 @@ import java.util.UUID;
 @Transactional
 public class SendNoteToCenterService implements SendNoteToCenterUseCase {
 
-    private final NoteRepository noteRepository;
     private final CenterQueryUseCase centerQueryUseCase;
+    private final NoteRepository noteRepository;
 
     @Override
     public Long sendNoteToCenter(UUID senderId, SendNoteToCenterRequestDto requestDto) {
-
         centerQueryUseCase.validateCenterExists(requestDto.receiverId());
 
         Note note = requestDto.toEntity(senderId);

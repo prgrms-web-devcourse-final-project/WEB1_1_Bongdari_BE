@@ -1,20 +1,25 @@
 package com.somemore.volunteerapply.service;
 
+import com.somemore.global.common.event.ServerEventPublisher;
+import com.somemore.global.common.event.ServerEventType;
+import com.somemore.global.exception.BadRequestException;
+import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.domain.VolunteerApplyStatusChangeEvent;
+import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
 import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
-
-import com.somemore.global.exception.BadRequestException;
-import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.volunteerapply.domain.VolunteerApply;
-import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
-import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
-import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCase {
 
     private final VolunteerApplyRepository volunteerApplyRepository;
-
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
+    private final ServerEventPublisher serverEventPublisher;
 
     @Override
     public void approve(Long id, UUID centerId) {
@@ -35,6 +40,8 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
 
         apply.changeStatus(APPROVED);
         volunteerApplyRepository.save(apply);
+
+        publishVolunteerApplyStatusChangeEvent(apply.getVolunteerId(), id, recruitBoard, apply);
     }
 
     private VolunteerApply getVolunteerApply(Long id) {
@@ -54,5 +61,19 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         if (recruitBoard.isCompleted()) {
             throw new BadRequestException(RECRUIT_BOARD_ALREADY_COMPLETED);
         }
+    }
+
+    private void publishVolunteerApplyStatusChangeEvent(UUID receiverId, Long id, RecruitBoard recruitBoard, VolunteerApply apply) {
+        VolunteerApplyStatusChangeEvent event = VolunteerApplyStatusChangeEvent.builder()
+                .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
+                .receiverId(receiverId)
+                .volunteerApplyId(id)
+                .centerId(recruitBoard.getCenterId())
+                .recruitBoardId(recruitBoard.getId())
+                .newStatus(apply.getStatus())
+                .build();
+
+        serverEventPublisher.publish(event);
     }
 }

@@ -3,14 +3,14 @@ package com.somemore.volunteerapply.controller;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.facade.volunteerapply.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.global.common.response.ApiResponse;
+import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
-import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
-import com.somemore.facade.volunteerapply.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,16 +37,20 @@ public class VolunteerApplyQueryApiController {
 
     @Operation(summary = "특정 모집글 봉사자 지원 단건 조회", description = "특정 모집글에 대한 봉사자 지원을 조회합니다.")
     @GetMapping("/volunteer-apply/recruit-board/{recruitBoardId}/volunteer/{volunteerId}")
-    public ApiResponse<VolunteerApplyResponseDto> getVolunteerApplyByRecruitIdAndVolunteerId(
+    public ApiResponse<?> getVolunteerApplyByRecruitIdAndVolunteerId(
             @PathVariable Long recruitBoardId,
             @PathVariable UUID volunteerId
     ) {
-        return ApiResponse.ok(
-                200,
-                volunteerApplyQueryUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(
-                        recruitBoardId, volunteerId),
-                "특정 모집글에 대한 봉사자 지원 단건 조회 성공"
-        );
+        try {
+            return ApiResponse.ok(
+                    200,
+                    volunteerApplyQueryUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(
+                            recruitBoardId, volunteerId),
+                    "특정 모집글에 대한 봉사자 지원 단건 조회 성공"
+            );
+        } catch (BadRequestException e) {
+            return ApiResponse.ok(210, "지원 내역이 없습니다.");
+        }
     }
 
     @Operation(summary = "지원자 통계 조회", description = "특정 모집글에 대한 지원자 통계를 조회합니다.")

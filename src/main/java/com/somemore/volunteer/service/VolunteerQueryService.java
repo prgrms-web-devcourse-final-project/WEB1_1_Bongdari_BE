@@ -92,6 +92,13 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
         return volunteerRepository.findSimpleInfoByIds(ids);
     }
 
+    @Override
+    public void validateVolunteerExists(UUID volunteerId) {
+        if (volunteerRepository.doesNotExistsByVolunteerId(volunteerId)) {
+            throw new BadRequestException(NOT_EXISTS_VOLUNTEER.getMessage());
+        }
+    }
+
     private Volunteer findVolunteer(UUID volunteerId) {
         return volunteerRepository.findById(volunteerId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
@@ -101,4 +108,5 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
         return volunteerDetailRepository.findByVolunteerId(volunteerId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
     }
+
 }

@@ -1,7 +1,6 @@
 package com.somemore.note.domain;
 
-import com.somemore.global.common.BaseEntity;
-import com.somemore.interestcenter.domain.InterestCenter;
+import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

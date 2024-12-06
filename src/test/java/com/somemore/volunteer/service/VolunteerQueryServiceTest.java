@@ -5,6 +5,7 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNT
 import static com.somemore.volunteer.domain.Volunteer.createDefault;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
@@ -243,6 +244,33 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         assertThat(volunteers).hasSize(2);
     }
 
+    @DisplayName("봉사자 ID로 봉사자가 존재하는지 확인할 수 있다 (service)")
+    @Test
+    void validateVolunteerExists() {
+        //given
+        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
+        volunteerRepository.save(volunteer);
+
+        //when & then
+        assertDoesNotThrow(() ->
+                volunteerQueryService.validateVolunteerExists(volunteer.getId())
+        );
+    }
+
+    @DisplayName("존재하지 않는 봉사자 ID를 검증할 수 있다. (service)")
+    @Test
+    void validateNonExistentVolunteer() {
+        //given
+        UUID nonExistsVolunteerId = UUID.randomUUID();
+
+        //when & then
+        BadRequestException exception = assertThrows(BadRequestException.class, () ->
+                volunteerQueryService.validateVolunteerExists(nonExistsVolunteerId)
+        );
+
+        assertEquals(NOT_EXISTS_VOLUNTEER.getMessage(), exception.getMessage());
+    }
+
     private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
 
         VolunteerRegisterRequestDto volunteerRegisterRequestDto =
@@ -259,4 +287,5 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
 
         return VolunteerDetail.of(volunteerRegisterRequestDto, volunteerId);
     }
+
 }

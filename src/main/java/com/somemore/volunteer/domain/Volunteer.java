@@ -1,7 +1,7 @@
 package com.somemore.volunteer.domain;
 
 import com.somemore.auth.oauth.OAuthProvider;
-import com.somemore.global.common.BaseEntity;
+import com.somemore.global.common.entity.BaseEntity;
 import com.somemore.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
