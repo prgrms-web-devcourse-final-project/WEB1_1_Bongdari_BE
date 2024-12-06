@@ -66,23 +66,4 @@ public class RedisConfig {
         container.setConnectionFactory(connectionFactory);
         return container;
     }
-
-    @Bean
-    public ChannelTopic notificationTopic() {
-        return new ChannelTopic("notifications");
-    }
-
-    @Bean
-    public Map<ServerEventType, ChannelTopic> eventTopicMap(ChannelTopic notificationTopic) {
-        return Map.of(
-                ServerEventType.NOTIFICATION, notificationTopic
-        );
-    }
-
-    @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        return container;
-    }
 }
