@@ -140,9 +140,10 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
         Pageable pageable = condition.pageable();
 
-        BooleanExpression predicate = isNotDeleted()
-                .and(locationBetween(condition))
-                .and(keywordEq(condition.keyword()));
+        BooleanExpression predicate = locationBetween(condition)
+                .and(keywordEq(condition.keyword()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
 
         List<RecruitBoardDetail> content = queryFactory
                 .select(getRecruitBoardDetailConstructorExpression(recruitBoard, location, center))
