@@ -2,6 +2,9 @@ package com.somemore.note.controller;
 
 import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
+import com.somemore.global.exception.NoSuchElementException;
+import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
+import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.note.usecase.NoteQueryUseCase;
@@ -14,9 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -122,4 +127,106 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data.pageable.pageSize").value(6))
                 .andExpect(jsonPath("$.data.totalElements").value(2));
     }
+
+    @DisplayName("기관은 특정 쪽지의 상세 내용을 조회할 수 있다. (Controller)")
+    @Test
+    @WithMockCustomUser(role = "CENTER")
+    void getNoteDetailForCenter() throws Exception {
+        // given
+        Long noteId = 1L;
+        NoteDetailViewForCenter mockResponse = new NoteDetailViewForCenter(
+                noteId,
+                "문의 드립니다.",
+                "상세 내용입니다.",
+                UUID.randomUUID(),
+                "봉사왕",
+                "profileImgLinkHere",
+                LocalDateTime.now()
+        );
+
+        when(noteQueryUseCase.getNoteDetailForCenter(noteId))
+                .thenReturn(mockResponse);
+
+        // When & Then
+        mockMvc.perform(get("/api/note/center/{noteId}", noteId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("쪽지 상세 조회 성공"))
+                .andExpect(jsonPath("$.data.note_id").value(noteId))
+                .andExpect(jsonPath("$.data.title").value("문의 드립니다."))
+                .andExpect(jsonPath("$.data.content").value("상세 내용입니다."))
+                .andExpect(jsonPath("$.data.sender_name").value("봉사왕"))
+                .andExpect(jsonPath("$.data.sender_profile_img_link").value("profileImgLinkHere"));
+    }
+
+    @DisplayName("봉사자는 특정 쪽지의 상세 내용을 조회할 수 있다. (Controller)")
+    @Test
+    @WithMockCustomUser
+    void getNoteDetailForVolunteer() throws Exception {
+        // given
+        Long noteId = 1L;
+        NoteDetailViewForVolunteer mockResponse = new NoteDetailViewForVolunteer(
+                noteId,
+                "답변 드립니다.",
+                "상세 내용입니다.",
+                UUID.randomUUID(),
+                "서울 도서관",
+                "profileImgLinkHere",
+                LocalDateTime.now()
+        );
+
+        when(noteQueryUseCase.getNoteDetailForVolunteer(noteId))
+                .thenReturn(mockResponse);
+
+        // When & Then
+        mockMvc.perform(get("/api/note/volunteer/{noteId}", noteId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("쪽지 상세 조회 성공"))
+                .andExpect(jsonPath("$.data.note_id").value(noteId))
+                .andExpect(jsonPath("$.data.title").value("답변 드립니다."))
+                .andExpect(jsonPath("$.data.content").value("상세 내용입니다."))
+                .andExpect(jsonPath("$.data.sender_name").value("서울 도서관"))
+                .andExpect(jsonPath("$.data.sender_profile_img_link").value("profileImgLinkHere"));
+    }
+
+    @DisplayName("존재하지 않는 쪽지를 기관이 조회할 경우 예외를 반환한다.")
+    @Test
+    @WithMockCustomUser(role = "CENTER")
+    void getNoteDetailForCenter_NotFound() throws Exception {
+        // given
+        Long nonExistentNoteId = 9999L;
+
+        when(noteQueryUseCase.getNoteDetailForCenter(nonExistentNoteId))
+                .thenThrow(new NoSuchElementException(NOT_EXISTS_NOTE));
+
+        // When & Then
+        mockMvc.perform(get("/api/note/center/{noteId}", nonExistentNoteId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.title").value("데이터가 존재하지 않음"))
+                .andExpect(jsonPath("$.detail").value("존재하지 않는 쪽지입니다."));
+    }
+
+    @DisplayName("존재하지 않는 쪽지를 봉사자가 조회할 경우 예외를 반환한다.")
+    @Test
+    @WithMockCustomUser
+    void getNoteDetailForVolunteer_NotFound() throws Exception {
+        // given
+        Long nonExistentNoteId = 9999L;
+
+        when(noteQueryUseCase.getNoteDetailForVolunteer(nonExistentNoteId))
+                .thenThrow(new NoSuchElementException(NOT_EXISTS_NOTE));
+
+        // When & Then
+        mockMvc.perform(get("/api/note/volunteer/{noteId}", nonExistentNoteId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.title").value("데이터가 존재하지 않음"))
+                .andExpect(jsonPath("$.detail").value("존재하지 않는 쪽지입니다."));
+    }
+
 }
