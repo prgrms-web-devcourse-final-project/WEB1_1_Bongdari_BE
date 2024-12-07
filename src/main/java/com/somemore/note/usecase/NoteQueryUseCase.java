@@ -1,5 +1,7 @@
 package com.somemore.note.usecase;
 
+import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
+import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import org.springframework.data.domain.Page;
@@ -10,4 +12,6 @@ import java.util.UUID;
 public interface NoteQueryUseCase {
     Page<NoteReceiverViewForCenter> getNotesForCenter(UUID centerId, Pageable pageable);
     Page<NoteReceiverViewForVolunteer> getNotesForVolunteer(UUID volunteerId, Pageable pageable);
+    NoteDetailViewForCenter getNoteDetailForCenter(Long noteId);
+    NoteDetailViewForVolunteer getNoteDetailForVolunteer(Long noteId);
 }

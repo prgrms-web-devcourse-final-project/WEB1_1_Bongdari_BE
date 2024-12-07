@@ -4,6 +4,8 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterJpaRepository;
 import com.somemore.note.domain.Note;
+import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
+import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.volunteer.domain.Volunteer;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.somemore.auth.oauth.OAuthProvider.NAVER;
@@ -69,26 +72,67 @@ class NoteRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result.getContent().getFirst().title()).isEqualTo("Note 9");
     }
 
+    @DisplayName("기관은 자신에게 온 쪽지의 상세 내용을 확인할 수 있다 (Repository)")
+    @Test
+    void findNoteDetailViewReceiverIsCenter() {
+        // given
+        Center center = createCenter();
+        Volunteer volunteer = createVolunteer();
+        Note note = createNote(center.getId(), volunteer.getId());
+
+        // when
+        Optional<NoteDetailViewForCenter> result = noteRepository.findNoteDetailViewReceiverIsCenter(note.getId());
+
+        // then
+        assertThat(result).isPresent();
+
+        NoteDetailViewForCenter detailView = result.get();
+
+        assertThat(detailView.noteId()).isEqualTo(note.getId());
+        assertThat(detailView.title()).isEqualTo(note.getTitle());
+        assertThat(detailView.content()).isEqualTo(note.getContent());
+        assertThat(detailView.senderId()).isEqualTo(volunteer.getId());
+        assertThat(detailView.senderName()).isEqualTo(volunteer.getNickname());
+        assertThat(detailView.senderProfileImgLink()).isEqualTo(volunteer.getImgUrl());
+    }
+
+    @DisplayName("봉사자는 자신에게 온 쪽지의 상세 내용을 확인할 수 있다 (Repository)")
+    @Test
+    void findNoteDetailViewReceiverIsVolunteer() {
+        //given
+        Center center = createCenter();
+        Volunteer volunteer = createVolunteer();
+        Note note = createNote(volunteer.getId(), center.getId());
+
+        //when
+        Optional<NoteDetailViewForVolunteer> result = noteRepository.findNoteDetailViewReceiverIsVolunteer(note.getId());
+
+        //then
+        assertThat(result).isPresent();
+
+        NoteDetailViewForVolunteer detailView = result.get();
+
+        assertThat(detailView.noteId()).isEqualTo(note.getId());
+        assertThat(detailView.title()).isEqualTo(note.getTitle());
+        assertThat(detailView.content()).isEqualTo(note.getContent());
+        assertThat(detailView.senderId()).isEqualTo(center.getId());
+        assertThat(detailView.senderName()).isEqualTo(center.getName());
+        assertThat(detailView.senderProfileImgLink()).isEqualTo(center.getImgUrl());
+    }
+
+    private Note createNote(UUID receiverId, UUID senderId){
+        Note note = Note.create(senderId, receiverId, "제목", "내용");
+        noteRepository.save(note);
+
+        return note;
+    }
+
     private void createTestNotesForCenter(UUID centerId) {
         for (int i = 1; i <= 15; i++) {
             Volunteer volunteer = createVolunteer();
             volunteerJpaRepository.save(volunteer);
 
             Note note = Note.create(volunteer.getId(), centerId, "Note " + i, "내용");
-            noteRepository.save(note);
-        }
-    }
-
-    private Volunteer createVolunteer() {
-        Volunteer volunteer = Volunteer.createDefault(NAVER, UUID.randomUUID().toString());
-        return volunteerJpaRepository.save(volunteer);
-    }
-
-    private void createTestNotesForVolunteer(UUID volunteerId) {
-        for (int i = 1; i <= 15; i++) {
-            Center center = createCenter();
-
-            Note note = Note.create(center.getId(), volunteerId, "Note " + i, "내용");
             noteRepository.save(note);
         }
     }
@@ -107,6 +151,20 @@ class NoteRepositoryImplTest extends IntegrationTestSupport {
         centerJpaRepository.save(center);
 
         return center;
+    }
+
+    private Volunteer createVolunteer() {
+        Volunteer volunteer = Volunteer.createDefault(NAVER, UUID.randomUUID().toString());
+        return volunteerJpaRepository.save(volunteer);
+    }
+
+    private void createTestNotesForVolunteer(UUID volunteerId) {
+        for (int i = 1; i <= 15; i++) {
+            Center center = createCenter();
+
+            Note note = Note.create(center.getId(), volunteerId, "Note " + i, "내용");
+            noteRepository.save(note);
+        }
     }
 
 }

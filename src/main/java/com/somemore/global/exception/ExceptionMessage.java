@@ -37,6 +37,7 @@ public enum ExceptionMessage {
     UNAUTHORIZED_NOTIFICATION("해당 알림에 권한이 없습니다."),
     VOLUNTEER_APPLY_LIST_MISMATCH("봉사 지원 목록과 요청된 봉사 지원 목록이 일치하지 않습니다."),
     RECRUIT_BOARD_ID_MISMATCH("모든 봉사 신청이 동일한 모집글 ID를 가져야 합니다."),
+    NOT_EXISTS_NOTE("존재하지 않는 쪽지입니다.")
 
     ;
     private final String message;

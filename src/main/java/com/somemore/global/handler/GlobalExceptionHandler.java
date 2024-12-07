@@ -3,6 +3,7 @@ package com.somemore.global.handler;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.DuplicateException;
 import com.somemore.global.exception.ImageUploadException;
+import com.somemore.global.exception.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,6 +53,15 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("유효성 예외");
         problemDetail.setDetail("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    ProblemDetail handleNoSuchElementException(final NoSuchElementException e) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("데이터가 존재하지 않음");
 
         return problemDetail;
     }
