@@ -8,18 +8,21 @@ public class LocalDateTimeFixture {
     }
 
     public static LocalDateTime createStartDateTime() {
-        // 2024-11-25 T:13:00:00
-        return LocalDateTime.of(2024, 11, 25, 13, 0);
+        // 내일 날짜로 13:00:00으로 설정
+        LocalDateTime today = LocalDateTime.now();
+        return today.plusDays(1).withHour(13).withMinute(0).withSecond(0).withNano(0);
     }
 
     public static LocalDateTime createUpdateStartDateTime() {
-        // 2024-11-25 T:16:00:00
-        return LocalDateTime.of(2024, 11, 25, 16, 0);
+        // 내일 날짜로 16:00:00으로 설정
+        LocalDateTime today = LocalDateTime.now();
+        return today.plusDays(1).withHour(16).withMinute(0).withSecond(0).withNano(0);
     }
 
     public static LocalDateTime createCurrentDateTime() {
-        // 2024-11-24 T:18:00:00
-        return LocalDateTime.of(2024, 11, 24, 18, 0);
+        // 오늘 날짜로 16:00:00으로 설정
+        LocalDateTime today = LocalDateTime.now();
+        return today.withHour(16).withMinute(0).withSecond(0).withNano(0);
     }
 
 }
