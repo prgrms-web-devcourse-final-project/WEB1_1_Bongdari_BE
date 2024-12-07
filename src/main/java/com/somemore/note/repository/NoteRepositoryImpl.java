@@ -44,6 +44,7 @@ public class NoteRepositoryImpl implements NoteRepository {
                         NoteReceiverViewForCenter.class,
                         note.id,
                         note.title,
+                        volunteer.id.as("senderId"),
                         volunteer.nickname.as("senderName"),
                         note.isRead
                 ))
