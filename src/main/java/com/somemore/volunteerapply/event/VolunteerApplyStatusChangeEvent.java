@@ -1,10 +1,11 @@
-package com.somemore.volunteerapply.domain;
+package com.somemore.volunteerapply.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.somemore.global.common.event.ServerEvent;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.volunteerapply.domain.ApplyStatus;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

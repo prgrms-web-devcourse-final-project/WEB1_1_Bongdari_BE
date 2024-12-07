@@ -7,7 +7,7 @@ import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
-import com.somemore.volunteerapply.domain.VolunteerApplyStatusChangeEvent;
+import com.somemore.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
 import lombok.RequiredArgsConstructor;
