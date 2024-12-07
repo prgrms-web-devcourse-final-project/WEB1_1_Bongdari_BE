@@ -34,12 +34,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        EncodedToken accessToken = getAccessToken(request);
-        String path = request.getRequestURI();
-
-        return accessToken == null
-                || accessToken.isUninitialized()
-                || path.equals("/api/center/sign-in");
+        try {
+            EncodedToken accessToken = getAccessToken(request);
+            return accessToken == null || accessToken.isUninitialized();
+        } catch (JwtException e) {
+            return true;
+        }
     }
 
     @Override
