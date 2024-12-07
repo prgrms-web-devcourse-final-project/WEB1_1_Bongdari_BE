@@ -2,6 +2,7 @@ package com.somemore.note.service;
 
 import com.somemore.note.repository.NoteRepository;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
+import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.note.usecase.NoteQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,5 +22,10 @@ public class NoteQueryService implements NoteQueryUseCase {
     @Override
     public Page<NoteReceiverViewForCenter> getNotesForCenter(UUID centerId, Pageable pageable) {
         return noteRepository.findNotesByReceiverIsCenter(centerId, pageable);
+    }
+
+    @Override
+    public Page<NoteReceiverViewForVolunteer> getNotesForVolunteer(UUID volunteerId, Pageable pageable) {
+        return noteRepository.findNotesByReceiverIsVolunteer(volunteerId, pageable);
     }
 }

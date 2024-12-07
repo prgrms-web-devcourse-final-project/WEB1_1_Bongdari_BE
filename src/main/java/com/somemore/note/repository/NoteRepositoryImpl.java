@@ -4,9 +4,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.somemore.center.domain.QCenter;
 import com.somemore.note.domain.Note;
 import com.somemore.note.domain.QNote;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
+import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ public class NoteRepositoryImpl implements NoteRepository {
 
     private static final QNote note = QNote.note;
     private static final QVolunteer volunteer = QVolunteer.volunteer;
+    private static final QCenter center = QCenter.center;
 
     @Override
     public Note save(Note note) {
@@ -50,6 +53,37 @@ public class NoteRepositoryImpl implements NoteRepository {
                 ))
                 .from(note)
                 .join(volunteer).on(note.senderId.eq(volunteer.id).and(activeVolunteer))
+                .where(condition)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(note.createdAt.desc())
+                .fetch();
+
+        JPAQuery<Long> count = queryFactory
+                .select(note.count())
+                .from(note)
+                .where(condition);
+
+        return PageableExecutionUtils.getPage(results, pageable, count::fetchOne);
+    }
+
+    @Override
+    public Page<NoteReceiverViewForVolunteer> findNotesByReceiverIsVolunteer(UUID volunteerId, Pageable pageable) {
+        BooleanExpression activeCenter = center.deleted.eq(false);
+        BooleanExpression condition = note.receiverId.eq(volunteerId)
+                .and(note.deleted.eq(false));
+
+        List<NoteReceiverViewForVolunteer> results = queryFactory
+                .select(Projections.constructor(
+                        NoteReceiverViewForVolunteer.class,
+                        note.id,
+                        note.title,
+                        center.id.as("senderId"),
+                        center.name.as("senderName"),
+                        note.isRead
+                ))
+                .from(note)
+                .join(center).on(note.senderId.eq(center.id).and(activeCenter))
                 .where(condition)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
