@@ -8,6 +8,7 @@ import com.somemore.center.domain.QCenter;
 import com.somemore.note.domain.Note;
 import com.somemore.note.domain.QNote;
 import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
+import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.volunteer.domain.QVolunteer;
@@ -73,7 +74,7 @@ public class NoteRepositoryImpl implements NoteRepository {
 
     @Override
     public Page<NoteReceiverViewForVolunteer> findNotesByReceiverIsVolunteer(UUID volunteerId, Pageable pageable) {
-        BooleanExpression activeCenter = center.deleted.eq(false);
+        BooleanExpression activeCenter = isActiveCenter();
         BooleanExpression condition = isReceiver(volunteerId);
 
         List<NoteReceiverViewForVolunteer> results = queryFactory
@@ -125,6 +126,30 @@ public class NoteRepositoryImpl implements NoteRepository {
         return Optional.ofNullable(result);
     }
 
+    @Override
+    public Optional<NoteDetailViewForVolunteer> findNoteDetailViewReceiverIsVolunteer(Long noteId) {
+
+        BooleanExpression activeCenter = isActiveCenter();
+
+        NoteDetailViewForVolunteer result = queryFactory
+                .select(Projections.constructor(
+                        NoteDetailViewForVolunteer.class,
+                        note.id,
+                        note.title,
+                        note.content,
+                        center.id.as(SENDER_ID),
+                        center.name.as(SENDER_NAME),
+                        center.imgUrl.as("senderProfileImgLink"),
+                        note.createdAt
+                ))
+                .from(note)
+                .join(center).on(note.senderId.eq(center.id).and(activeCenter))
+                .where(note.id.eq(noteId).and(note.deleted.eq(false)))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
     private static BooleanExpression isReceiver(UUID receiverId) {
         return note.receiverId.eq(receiverId)
                 .and(note.deleted.eq(false));
@@ -132,6 +157,10 @@ public class NoteRepositoryImpl implements NoteRepository {
 
     private BooleanExpression isActiveVolunteer() {
         return volunteer.deleted.eq(false);
+    }
+
+    private static BooleanExpression isActiveCenter() {
+        return center.deleted.eq(false);
     }
 
 }

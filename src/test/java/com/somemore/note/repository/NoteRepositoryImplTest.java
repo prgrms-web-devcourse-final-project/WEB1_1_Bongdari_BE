@@ -5,6 +5,7 @@ import com.somemore.center.domain.Center;
 import com.somemore.center.repository.CenterJpaRepository;
 import com.somemore.note.domain.Note;
 import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
+import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.volunteer.domain.Volunteer;
@@ -93,6 +94,30 @@ class NoteRepositoryImplTest extends IntegrationTestSupport {
         assertThat(detailView.senderId()).isEqualTo(volunteer.getId());
         assertThat(detailView.senderName()).isEqualTo(volunteer.getNickname());
         assertThat(detailView.senderProfileImgLink()).isEqualTo(volunteer.getImgUrl());
+        assertThat(detailView.createdAt()).isEqualTo(note.getCreatedAt());
+    }
+
+    @DisplayName("봉사자는 자신에게 온 쪽지의 상세 내용을 확인할 수 있다 (Repository)")
+    @Test
+    void findNoteDetailViewReceiverIsVolunteer() {
+        //given
+        Center center = createCenter();
+        Volunteer volunteer = createVolunteer();
+        Note note = createNote(volunteer.getId(), center.getId());
+
+        //when
+        Optional<NoteDetailViewForVolunteer> result = noteRepository.findNoteDetailViewReceiverIsVolunteer(note.getId());
+
+        //then
+        assertThat(result).isPresent();
+
+        NoteDetailViewForVolunteer detailView = result.get();
+        assertThat(detailView.noteId()).isEqualTo(note.getId());
+        assertThat(detailView.title()).isEqualTo(note.getTitle());
+        assertThat(detailView.content()).isEqualTo(note.getContent());
+        assertThat(detailView.senderId()).isEqualTo(center.getId());
+        assertThat(detailView.senderName()).isEqualTo(center.getName());
+        assertThat(detailView.senderProfileImgLink()).isEqualTo(center.getImgUrl());
         assertThat(detailView.createdAt()).isEqualTo(note.getCreatedAt());
     }
 
