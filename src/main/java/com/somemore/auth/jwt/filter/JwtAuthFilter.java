@@ -61,7 +61,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         EncodedToken accessToken = findAccessTokenFromCookie(request);
 
         if (accessToken.isUninitialized()) {
-            accessToken = new EncodedToken(request.getHeader("Authorization"));
+            accessToken = findAccessTokenFromHeader(request);
         }
 
         if (accessToken.isUninitialized()) {
@@ -70,6 +70,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String prefix = "Bearer ";
         return accessToken.removePrefix(prefix);
+    }
+
+    private static EncodedToken findAccessTokenFromHeader(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || authorizationHeader.isEmpty()) {
+            return new EncodedToken("UNINITIALIZED");
+        }
+
+        return new EncodedToken(authorizationHeader);
     }
 
     private EncodedToken findAccessTokenFromCookie(HttpServletRequest request) {
