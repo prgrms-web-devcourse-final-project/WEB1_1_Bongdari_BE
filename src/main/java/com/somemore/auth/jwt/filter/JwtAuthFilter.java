@@ -2,12 +2,14 @@ package com.somemore.auth.jwt.filter;
 
 import com.somemore.auth.authentication.JwtAuthenticationToken;
 import com.somemore.auth.jwt.domain.EncodedToken;
+import com.somemore.auth.jwt.domain.TokenType;
 import com.somemore.auth.jwt.exception.JwtErrorType;
 import com.somemore.auth.jwt.exception.JwtException;
 import com.somemore.auth.jwt.usecase.JwtUseCase;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -30,11 +34,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+        EncodedToken accessToken = getAccessToken(request);
         String path = request.getRequestURI();
 
-        return token == null
-                || token.isEmpty()
+        return accessToken == null
+                || accessToken.isUninitialized()
                 || path.equals("/api/center/sign-in");
     }
 
@@ -54,17 +58,33 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private EncodedToken getAccessToken(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        if (accessToken == null || accessToken.isEmpty()) {
+        EncodedToken accessToken = findAccessTokenFromCookie(request);
+
+        if (accessToken.isUninitialized()) {
+            accessToken = new EncodedToken(request.getHeader("Authorization"));
+        }
+
+        if (accessToken.isUninitialized()) {
             throw new JwtException(JwtErrorType.MISSING_TOKEN);
         }
 
-        String tokenPrefix = "Bearer ";
-        if (accessToken.startsWith(tokenPrefix)) {
-            return new EncodedToken(accessToken.substring(tokenPrefix.length()));
+        String prefix = "Bearer ";
+        return accessToken.removePrefix(prefix);
+    }
+
+    private EncodedToken findAccessTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return new EncodedToken("UNINITIALIZED");
         }
 
-        return new EncodedToken(accessToken);
+        return Arrays.stream(cookies)
+                .filter(Objects::nonNull)
+                .filter(cookie -> cookie.getName().equals(TokenType.ACCESS.name()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .map(EncodedToken::new)
+                .orElse(new EncodedToken("UNINITIALIZED"));
     }
 
     private JwtAuthenticationToken createAuthenticationToken(Claims claims,
