@@ -31,4 +31,6 @@ public interface VolunteerApplyRepository {
 
     Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
             VolunteerApplySearchCondition condition);
+
+    List<VolunteerApply> findAllByIds(List<Long> ids);
 }

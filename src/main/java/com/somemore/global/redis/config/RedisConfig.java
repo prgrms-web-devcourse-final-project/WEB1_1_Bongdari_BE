@@ -1,7 +1,12 @@
 package com.somemore.global.redis.config;
 
 import com.somemore.global.common.event.ServerEventType;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +18,6 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import java.util.Map;
 
 @Configuration
 @EnableRedisRepositories
@@ -29,6 +32,8 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.password}")
     private String password;
+
+    private static final String REDISSON_HOST_PREFIX = "redis://";
 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
@@ -61,9 +66,21 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
+    public RedisMessageListenerContainer redisMessageListenerContainer(
+            RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         return container;
+    }
+
+    @Bean
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        password = StringUtils.isBlank(password) ? null : password;
+
+        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + host + ":" + port)
+                .setPassword(password);
+
+        return Redisson.create(config);
     }
 }

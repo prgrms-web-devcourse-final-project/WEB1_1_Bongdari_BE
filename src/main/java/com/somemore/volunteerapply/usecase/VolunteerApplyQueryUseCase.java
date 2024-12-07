@@ -23,4 +23,7 @@ public interface VolunteerApplyQueryUseCase {
 
     Page<VolunteerApply> getAllByVolunteerId(UUID volunteerId,
             VolunteerApplySearchCondition condition);
+
+    List<VolunteerApply> getAllByIds(List<Long> ids);
+
 }

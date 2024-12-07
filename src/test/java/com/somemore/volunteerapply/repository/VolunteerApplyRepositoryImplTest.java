@@ -212,6 +212,34 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("아이디 리스트로 지원 리스트를 조회할 수 있다.")
+    @Test
+    void findAllByIds() {
+        // given
+        Long recruitBoardId = 1L;
+
+        VolunteerApply apply1 = volunteerApplyRepository.save(
+                createApply(UUID.randomUUID(), recruitBoardId));
+        VolunteerApply apply2 = volunteerApplyRepository.save(
+                createApply(UUID.randomUUID(), recruitBoardId));
+        VolunteerApply apply3 = volunteerApplyRepository.save(
+                createApply(UUID.randomUUID(), recruitBoardId));
+        VolunteerApply apply4 = volunteerApplyRepository.save(
+                createApply(UUID.randomUUID(), recruitBoardId));
+
+        List<Long> ids = List.of(apply1.getId(), apply2.getId(), apply3.getId(), apply4.getId());
+
+        // when
+        List<VolunteerApply> applies = volunteerApplyRepository.findAllByIds(ids);
+
+        // then
+        assertThat(applies).hasSize(ids.size());
+        assertThat(applies)
+                .extracting(VolunteerApply::getId)
+                .containsExactlyInAnyOrderElementsOf(ids);
+
+    }
+
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
