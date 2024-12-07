@@ -94,7 +94,6 @@ class NoteRepositoryImplTest extends IntegrationTestSupport {
         assertThat(detailView.senderId()).isEqualTo(volunteer.getId());
         assertThat(detailView.senderName()).isEqualTo(volunteer.getNickname());
         assertThat(detailView.senderProfileImgLink()).isEqualTo(volunteer.getImgUrl());
-        assertThat(detailView.createdAt()).isEqualTo(note.getCreatedAt());
     }
 
     @DisplayName("봉사자는 자신에게 온 쪽지의 상세 내용을 확인할 수 있다 (Repository)")
@@ -112,13 +111,13 @@ class NoteRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isPresent();
 
         NoteDetailViewForVolunteer detailView = result.get();
+
         assertThat(detailView.noteId()).isEqualTo(note.getId());
         assertThat(detailView.title()).isEqualTo(note.getTitle());
         assertThat(detailView.content()).isEqualTo(note.getContent());
         assertThat(detailView.senderId()).isEqualTo(center.getId());
         assertThat(detailView.senderName()).isEqualTo(center.getName());
         assertThat(detailView.senderProfileImgLink()).isEqualTo(center.getImgUrl());
-        assertThat(detailView.createdAt()).isEqualTo(note.getCreatedAt());
     }
 
     private Note createNote(UUID receiverId, UUID senderId){

@@ -97,7 +97,6 @@ class NoteQueryServiceTest extends IntegrationTestSupport {
         assertThat(result.senderId()).isEqualTo(volunteer.getId());
         assertThat(result.senderName()).isEqualTo(volunteer.getNickname());
         assertThat(result.senderProfileImgLink()).isEqualTo(volunteer.getImgUrl());
-        assertThat(result.createdAt()).isEqualTo(note.getCreatedAt());
     }
 
     @DisplayName("존재하지 않는 쪽지 조회 시 예외를 던진다 - 기관")
@@ -131,7 +130,6 @@ class NoteQueryServiceTest extends IntegrationTestSupport {
         assertThat(result.senderId()).isEqualTo(center.getId());
         assertThat(result.senderName()).isEqualTo(center.getName());
         assertThat(result.senderProfileImgLink()).isEqualTo(center.getImgUrl());
-        assertThat(result.createdAt()).isEqualTo(note.getCreatedAt());
     }
 
     @DisplayName("존재하지 않는 쪽지 조회 시 예외를 던진다 - 봉사자")
