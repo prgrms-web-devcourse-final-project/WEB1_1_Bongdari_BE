@@ -79,7 +79,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 0);
+        Page<CommunityCommentResponseDto> comments = communityCommentQueryService.getCommunityCommentsByBoardId(boardId, 1);
 
         //then
         assertThat(comments).isNotNull();

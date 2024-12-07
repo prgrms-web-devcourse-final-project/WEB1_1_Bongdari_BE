@@ -54,6 +54,7 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
         JPAQuery<Long> countQuery = queryFactory
                 .select(communityComment.count())
                 .from(communityComment)
+                .join(volunteer).on(communityComment.writerId.eq(volunteer.id))
                 .where(communityComment.communityBoardId.eq(boardId));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);

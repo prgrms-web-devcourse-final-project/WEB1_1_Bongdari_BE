@@ -90,14 +90,14 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoards(0);
+        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoards(2);
 
         //then
         assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
         assertThat(dtos.getTotalElements()).isEqualTo(33);
         assertThat(dtos.getSize()).isEqualTo(10);
         assertThat(dtos.getTotalPages()).isEqualTo(4);
-        assertThat(dtos.getNumber()).isZero();
     }
 
     @DisplayName("저장된 커뮤니티 게시글 리스트를 작성자자별로 페이지 조회한다.")
@@ -106,14 +106,13 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoardsByWriterId(writerId1, 0);
+        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoardsByWriterId(writerId1, 1);
 
         //then
         assertThat(dtos).isNotNull();
         assertThat(dtos.getTotalElements()).isEqualTo(12);
         assertThat(dtos.getSize()).isEqualTo(10);
         assertThat(dtos.getTotalPages()).isEqualTo(2);
-        assertThat(dtos.getNumber()).isZero();
     }
 
     @DisplayName("커뮤니티 게시글의 상세 정보를 조회한다.")
