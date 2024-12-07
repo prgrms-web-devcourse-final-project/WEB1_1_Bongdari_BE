@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -25,6 +26,16 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
+    public Optional<Notification> findById(Long id) {
+        return notificationJpaRepository.findById(id);
+    }
+
+    @Override
+    public List<Notification> findAllByIds(List<Long> ids) {
+        return notificationJpaRepository.findAllById(ids);
+    }
+
+    @Override
     public List<Notification> findByReceiverIdAndUnread(UUID receiverId) {
         return queryFactory.selectFrom(notification)
                 .where(eqReceiverId(receiverId),
@@ -38,6 +49,11 @@ public class NotificationRepositoryImpl implements NotificationRepository {
                 .where(eqReceiverId(receiverId),
                         isRead())
                 .fetch();
+    }
+
+    @Override
+    public void deleteAllInBatch() {
+        notificationJpaRepository.deleteAllInBatch();
     }
 
     private static BooleanExpression eqReceiverId(UUID userId) {

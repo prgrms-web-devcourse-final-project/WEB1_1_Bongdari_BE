@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
-@Tag(name = "Notification API", description = "알림 API")
+@Tag(name = "Notification Query API", description = "알림 조회 API")
 @RequiredArgsConstructor
 @RequestMapping("/api/notification")
 @RestController
-public class NotificationController {
+public class NotificationQueryController {
 
     private final NotificationQueryUseCase notificationQueryUseCase;
 

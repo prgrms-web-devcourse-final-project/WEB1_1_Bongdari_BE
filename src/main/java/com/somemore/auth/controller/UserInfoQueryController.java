@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.somemore.global.exception.ExceptionMessage.INVALID_TOKEN;
+import static com.somemore.auth.jwt.exception.JwtErrorType.INVALID_TOKEN;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class UserInfoQueryController {
         String role = authentication.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
-                .orElseThrow(() -> new BadRequestException(INVALID_TOKEN));
+                .orElseThrow(() -> new BadRequestException(INVALID_TOKEN.getMessage()));
 
         return ApiResponse.ok(200,
                 new UserInfoResponseDto(userId, role),
