@@ -66,4 +66,9 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
         return volunteerApplyRepository.findAllByVolunteerId(volunteerId, condition);
     }
 
+    @Override
+    public List<VolunteerApply> getAllByIds(List<Long> ids) {
+        return volunteerApplyRepository.findAllByIds(ids);
+    }
+
 }

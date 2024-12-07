@@ -141,6 +141,17 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
     }
 
     @Override
+    public List<VolunteerApply> findAllByIds(List<Long> ids) {
+        BooleanExpression exp = volunteerApply.id.in(ids)
+                .and(isNotDeleted());
+
+        return queryFactory
+                .selectFrom(volunteerApply)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
     public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
             UUID volunteerId) {
         BooleanExpression exp = recruitIdEq(recruitId)
