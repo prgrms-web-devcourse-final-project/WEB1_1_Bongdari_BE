@@ -18,5 +18,6 @@ public record EncodedToken(String value) {
     }
 
     public static EncodedToken createUninitialized() {
-        return new EncodedToken("UNINITIALIZED");
-    }}
+        return new EncodedToken(UNINITIALIZED);
+    }
+}
