@@ -34,12 +34,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        EncodedToken accessToken = getAccessToken(request);
-        String path = request.getRequestURI();
-
-        return accessToken == null
-                || accessToken.isUninitialized()
-                || path.equals("/api/center/sign-in");
+        try {
+            EncodedToken accessToken = getAccessToken(request);
+            return accessToken == null || accessToken.isUninitialized();
+        } catch (JwtException e) {
+            return true;
+        }
     }
 
     @Override
@@ -75,7 +75,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private static EncodedToken findAccessTokenFromHeader(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || authorizationHeader.isEmpty()) {
-            return new EncodedToken("UNINITIALIZED");
+            return EncodedToken.createUninitialized();
         }
 
         return new EncodedToken(authorizationHeader);
@@ -84,7 +84,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private EncodedToken findAccessTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            return new EncodedToken("UNINITIALIZED");
+            return EncodedToken.createUninitialized();
         }
 
         return Arrays.stream(cookies)
@@ -93,7 +93,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .map(Cookie::getValue)
                 .findFirst()
                 .map(EncodedToken::new)
-                .orElse(new EncodedToken("UNINITIALIZED"));
+                .orElse(EncodedToken.createUninitialized());
     }
 
     private JwtAuthenticationToken createAuthenticationToken(Claims claims,

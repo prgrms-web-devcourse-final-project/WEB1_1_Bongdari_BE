@@ -79,7 +79,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     @Override
     public List<RecruitBoard> findAllByIds(List<Long> ids) {
         BooleanExpression exp = recruitBoard.id.in(ids)
-                .and(isNotCompleted());
+                .and(isNotDeleted());
 
         return queryFactory
                 .selectFrom(recruitBoard)
