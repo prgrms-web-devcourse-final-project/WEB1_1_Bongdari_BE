@@ -8,21 +8,23 @@ import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
 import com.somemore.center.repository.preferitem.PreferItemRepository;
 import com.somemore.global.exception.BadRequestException;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.UUID;
+import java.util.List;
 
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_PREFER_ITEM;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
 
-@Transactional
-class CreatePreferItemServiceTest extends IntegrationTestSupport {
+class DeletePreferItemServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private CreatePreferItemService createPreferItemService;
+
+    @Autowired
+    private DeletePreferItemService deletePreferItemService;
 
     @Autowired
     private PreferItemRepository preferItemRepository;
@@ -33,47 +35,55 @@ class CreatePreferItemServiceTest extends IntegrationTestSupport {
     @Autowired
     private CenterRepository centerRepository;
 
-    @DisplayName("기관 아이디와 선호물품 이름을 받아 선호물품을 생성한다.")
+    @DisplayName("기관은 자신의 선호 물품을 삭제할 수 있다.")
     @Test
-    void createPreferItem() {
+    void deletePreferItem() {
         //given
         Center center = createCenter();
-        centerRepository.save(center);
         String itemName = "어린이 도서";
+        PreferItemCreateRequestDto createRequestDto = new PreferItemCreateRequestDto(itemName);
+        createPreferItemService.createPreferItem(center.getId(), createRequestDto);
 
-        PreferItemCreateRequestDto requestDto = new PreferItemCreateRequestDto(
-                itemName
-        );
-
-        //when
-        createPreferItemService.createPreferItem(center.getId(), requestDto);
-
-        //then
         PreferItem savedItem = preferItemJpaRepository.findAll().stream()
                 .filter(item -> item.getCenterId().equals(center.getId())
                         && item.getItemName().equals(itemName))
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("저장된 선호물품을 찾을 수 없습니다."));
 
-        assertThat(savedItem.getCenterId()).isEqualTo(center.getId());
-        assertThat(savedItem.getItemName()).isEqualTo(itemName);
+        //when
+        deletePreferItemService.deletePreferItem(center.getId(), savedItem.getId());
+
+        //then
+        List<PreferItem> remainingItems = preferItemJpaRepository.findAll().stream()
+                .filter(item -> item.getCenterId().equals(center.getId()))
+                .toList();
+
+        assertThat(remainingItems).isEmpty();
     }
 
-    @DisplayName("존재하지 않는 기관 아이디로 선호물품을 등록하려고 하면 예외를 발생시킨다.")
+    @DisplayName("선호 물품을 등록한 기관이 아니라면 선호 물품을 삭제할 수 없다")
     @Test
-    void createPreferItemThrowsExceptionWhenCenterDoesNotExist() {
-        // given
-        UUID invalidCenterId = UUID.randomUUID();
+    void deletePreferItemUnauthorized() {
+        //given
+        Center center1 = createCenter();
+        Center center2 = createCenter();
         String itemName = "어린이 도서";
+        PreferItemCreateRequestDto createRequestDto = new PreferItemCreateRequestDto(itemName);
+        createPreferItemService.createPreferItem(center1.getId(), createRequestDto);
 
-        PreferItemCreateRequestDto requestDto = new PreferItemCreateRequestDto(
-                itemName
-        );
+        PreferItem savedItem = preferItemJpaRepository.findAll().stream()
+                .filter(item -> item.getCenterId().equals(center1.getId())
+                        && item.getItemName().equals(itemName))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("저장된 선호물품을 찾을 수 없습니다."));
 
-        // when & then
-        assertThatThrownBy(() -> createPreferItemService.createPreferItem(invalidCenterId, requestDto))
+        // when
+        Throwable thrown = catchThrowable(() -> deletePreferItemService.deletePreferItem(center2.getId(), savedItem.getId()));
+
+        // then
+        assertThat(thrown)
                 .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("존재하지 않는 기관입니다.");
+                .hasMessage(UNAUTHORIZED_PREFER_ITEM.getMessage());
     }
 
     private Center createCenter() {

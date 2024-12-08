@@ -2,6 +2,8 @@ package com.somemore.center.repository;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.PreferItem;
+import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ class PreferItemRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private PreferItemRepository preferItemRepository;
 
+    @Autowired
+    private PreferItemJpaRepository preferItemJpaRepository;
 
     private UUID centerId = UUID.fromString("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a1");
     private UUID centerId1 = UUID.fromString("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a1");
@@ -32,7 +36,7 @@ class PreferItemRepositoryTest extends IntegrationTestSupport {
         PreferItem preferItem1 = PreferItem.create(centerId1, "간식");
         PreferItem preferItem2 = PreferItem.create(centerId2, "수건");
         PreferItem preferItem3 = PreferItem.create(centerId3, "식재료");
-        preferItemRepository.saveAll(List.of(preferItem, preferItem1, preferItem2, preferItem3));
+        preferItemJpaRepository.saveAll(List.of(preferItem, preferItem1, preferItem2, preferItem3));
 
         //when
         List<PreferItem> preferItems = preferItemRepository.findByCenterId(UUID.fromString("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a2"));

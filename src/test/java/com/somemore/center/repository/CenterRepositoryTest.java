@@ -2,6 +2,7 @@ package com.somemore.center.repository;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
+import com.somemore.center.repository.center.CenterRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

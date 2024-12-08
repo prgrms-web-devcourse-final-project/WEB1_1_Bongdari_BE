@@ -2,7 +2,7 @@ package com.somemore.center.service.query;
 
 import com.somemore.center.domain.PreferItem;
 import com.somemore.center.dto.response.PreferItemResponseDto;
-import com.somemore.center.repository.PreferItemRepository;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
 import com.somemore.center.usecase.query.PreferItemQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

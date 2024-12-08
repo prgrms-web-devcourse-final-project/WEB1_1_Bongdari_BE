@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
-import com.somemore.center.repository.CenterRepository;
+import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.VolunteerCategory;

@@ -2,8 +2,10 @@ package com.somemore.center.service.query;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
-import com.somemore.center.repository.CenterRepository;
+import com.somemore.center.repository.center.CenterJpaRepository;
+import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.global.exception.BadRequestException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,14 @@ class CenterSignServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private CenterRepository centerRepository;
+
+    @Autowired
+    private CenterJpaRepository centerJpaRepository;
+
+    @BeforeEach
+    void cleanUp() {
+        centerJpaRepository.deleteAll();
+    }
 
     @DisplayName("계정 ID로 센터 ID를 조회할 수 있다.")
     @Test

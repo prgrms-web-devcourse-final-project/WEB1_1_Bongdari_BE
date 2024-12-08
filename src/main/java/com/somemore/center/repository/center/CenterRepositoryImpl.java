@@ -1,4 +1,4 @@
-package com.somemore.center.repository;
+package com.somemore.center.repository.center;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;

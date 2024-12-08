@@ -4,7 +4,7 @@ import com.somemore.center.domain.Center;
 import com.somemore.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.dto.response.PreferItemResponseDto;
-import com.somemore.center.repository.CenterRepository;
+import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.center.usecase.query.PreferItemQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
