@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
+
+    @AfterEach
+    void tearDown() {
+        volunteerRepository.deleteAllInBatch();
+    }
 
     @DisplayName("봉사자 아이디와 봉사 시간으로 봉사 스탯을 업데이트할 수 있다.")
     @Test
