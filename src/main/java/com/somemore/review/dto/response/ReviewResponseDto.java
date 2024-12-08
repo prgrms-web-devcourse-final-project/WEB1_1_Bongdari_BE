@@ -25,7 +25,7 @@ public record ReviewResponseDto(
         @Schema(description = "작성 일자", example = "2024-12-01T09:00:00", type = "string")
         LocalDateTime createdAt,
         @Schema(description = "수정 일자", example = "2024-12-01T09:00:00", type = "string")
-        LocalDateTime updateAt
+        LocalDateTime updatedAt
 ) {
 
     public static ReviewResponseDto from(Review review) {
@@ -35,6 +35,8 @@ public record ReviewResponseDto(
                 .title(review.getTitle())
                 .content(review.getContent())
                 .imgUrl(review.getImgUrl())
+                .createdAt(review.getCreatedAt())
+                .updatedAt(review.getUpdatedAt())
                 .build();
     }
 
