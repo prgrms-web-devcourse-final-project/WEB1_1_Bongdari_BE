@@ -56,7 +56,7 @@ public class NoteQueryApiController {
     }
 
     @Secured("ROLE_VOLUNTEER")
-    @Operation(summary = "기관의 자신에게 온 쪽지 상세 조회")
+    @Operation(summary = "봉사자의 자신에게 온 쪽지 상세 조회")
     @GetMapping("/volunteer/{noteId}")
     public ApiResponse<NoteDetailViewForVolunteer> getNoteDetailForVolunteer(@PathVariable Long noteId) {
 

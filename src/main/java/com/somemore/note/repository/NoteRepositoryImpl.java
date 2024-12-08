@@ -35,6 +35,7 @@ public class NoteRepositoryImpl implements NoteRepository {
 
     private static final String SENDER_ID = "senderId";
     private static final String SENDER_NAME = "senderName";
+    private static final String SENDER_PROFILE_IMG_LINK = "senderProfileImgLink";
 
     @Override
     public Note save(Note note) {
@@ -115,7 +116,7 @@ public class NoteRepositoryImpl implements NoteRepository {
                         note.content,
                         volunteer.id.as(SENDER_ID),
                         volunteer.nickname.as(SENDER_NAME),
-                        volunteer.imgUrl.as("senderProfileImgLink"),
+                        volunteer.imgUrl.as(SENDER_PROFILE_IMG_LINK),
                         note.createdAt
                 ))
                 .from(note)
@@ -139,7 +140,7 @@ public class NoteRepositoryImpl implements NoteRepository {
                         note.content,
                         center.id.as(SENDER_ID),
                         center.name.as(SENDER_NAME),
-                        center.imgUrl.as("senderProfileImgLink"),
+                        center.imgUrl.as(SENDER_PROFILE_IMG_LINK),
                         note.createdAt
                 ))
                 .from(note)
