@@ -38,6 +38,8 @@ public record ReviewWithNicknameResponseDto(
                 .title(review.getTitle())
                 .content(review.getContent())
                 .imgUrl(review.getImgUrl())
+                .createdAt(review.getCreatedAt())
+                .updateAt(review.getUpdatedAt())
                 .build();
     }
 
