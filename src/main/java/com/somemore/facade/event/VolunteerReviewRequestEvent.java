@@ -21,7 +21,7 @@ public class VolunteerReviewRequestEvent extends ServerEvent<NotificationSubType
 
     @JsonCreator
     public VolunteerReviewRequestEvent(
-            @JsonProperty("receiverId") UUID volunteerId,
+            @JsonProperty("volunteerId") UUID volunteerId,
             @JsonProperty("volunteerApplyId") Long volunteerApplyId,
             @JsonProperty("centerId") UUID centerId,
             @JsonProperty("recruitBoardId") Long recruitBoardId
