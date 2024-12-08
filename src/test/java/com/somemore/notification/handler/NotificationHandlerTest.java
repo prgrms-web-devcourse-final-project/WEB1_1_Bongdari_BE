@@ -61,5 +61,7 @@ class NotificationHandlerTest extends IntegrationTestSupport {
         assertThat(savedNotification.getRelatedId()).isEqualTo(456L); // 프론트 요구사항: 123L(봉사신청아이디), 456L(모집글아이디)
         assertThat(savedNotification.isRead()).isFalse();
         assertThat(savedNotification.getCreatedAt()).isEqualTo(notification.getCreatedAt());
+        assertThat(savedNotification.getCreatedAt()).isNotNull();
     }
+
 }
