@@ -16,7 +16,7 @@ import java.util.UUID;
 @SuperBuilder
 public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSubType> {
 
-    private final UUID receiverId;
+    private final UUID volunteerId;
     private final Long volunteerApplyId;
     private final UUID centerId;
     private final Long recruitBoardId;
@@ -25,7 +25,7 @@ public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSub
 
     @JsonCreator
     public VolunteerApplyStatusChangeEvent(
-            @JsonProperty("receiverId") UUID receiverId,
+            @JsonProperty("receiverId") UUID volunteerId,
             @JsonProperty("volunteerApplyId") Long volunteerApplyId,
             @JsonProperty("centerId") UUID centerId,
             @JsonProperty("recruitBoardId") Long recruitBoardId,
@@ -33,7 +33,7 @@ public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSub
             @JsonProperty("newStatus") ApplyStatus newStatus
     ) {
         super(ServerEventType.NOTIFICATION, NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE, LocalDateTime.now());
-        this.receiverId = receiverId;
+        this.volunteerId = volunteerId;
         this.volunteerApplyId = volunteerApplyId;
         this.centerId = centerId;
         this.recruitBoardId = recruitBoardId;
