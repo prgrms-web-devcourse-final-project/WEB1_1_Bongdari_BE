@@ -68,14 +68,15 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
         String newImgUrl = "https://image.domain.com/updates";
         RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
-            .title("업데이트 제목")
-            .content("업데이트 내용")
-            .recruitmentCount(1111)
-            .volunteerStartDateTime(newStartDateTime)
-            .volunteerEndDateTime(newEndDateTime)
-            .volunteerCategory(ADMINISTRATIVE_SUPPORT)
-            .admitted(false)
-            .build();
+                .title("업데이트 제목")
+                .content("업데이트 내용")
+                .recruitmentCount(1111)
+                .region("서울특별시")
+                .volunteerStartDateTime(newStartDateTime)
+                .volunteerEndDateTime(newEndDateTime)
+                .volunteerCategory(ADMINISTRATIVE_SUPPORT)
+                .admitted(false)
+                .build();
 
         // when
         updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId,
