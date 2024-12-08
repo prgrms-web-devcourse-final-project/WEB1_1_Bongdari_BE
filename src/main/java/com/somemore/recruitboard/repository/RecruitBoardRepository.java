@@ -1,11 +1,13 @@
 package com.somemore.recruitboard.repository;
 
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.RecruitStatus;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,4 +32,8 @@ public interface RecruitBoardRepository {
     List<Long> findNotCompletedIdsByCenterId(UUID centerId);
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
+
+    List<RecruitBoard> findByStartDateTimeBetweenAndStatus(LocalDateTime from, LocalDateTime to, RecruitStatus status);
+
+    List<RecruitBoard> findByEndDateTimeBeforeAndStatus(LocalDateTime current, RecruitStatus status);
 }

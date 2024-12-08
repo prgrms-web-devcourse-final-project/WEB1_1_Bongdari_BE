@@ -6,7 +6,9 @@ import static com.somemore.common.fixture.LocationFixture.createLocation;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;
@@ -22,6 +24,7 @@ import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -424,6 +427,49 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(all).hasSize(3);
+    }
+
+    @DisplayName("주어진 날짜 범위와 모집글 상태로 모집글을 조회할 수 있다.")
+    @Test
+    void findByStartDateTimeBetweenAndStatus() {
+        // given
+        LocalDateTime from = LocalDate.now().plusDays(2).atStartOfDay();
+        LocalDateTime to = from.plusDays(1);
+
+        LocalDateTime startDateTime = from.plusHours(12);
+        LocalDateTime endDateTime = startDateTime.plusHours(1);
+
+        RecruitBoard board = createRecruitBoard(startDateTime, endDateTime);
+        recruitBoardRepository.save(board);
+
+        // when
+        List<RecruitBoard> result = recruitBoardRepository.findByStartDateTimeBetweenAndStatus(
+                from, to, RECRUITING);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().getRecruitStatus()).isEqualTo(RECRUITING);
+
+    }
+
+    @DisplayName("봉사 모집글 상태가 같고 봉사 종료 시간이 지난 모집글 리스트를 조회할 수 있다.")
+    @Test
+    void findByEndDateTimeBeforeAndStatus() {
+        // given
+        LocalDateTime current = LocalDate.now().atStartOfDay();
+        LocalDateTime startDateTime = current.minusHours(12);
+        LocalDateTime endDateTime = startDateTime.plusHours(1);
+
+        RecruitBoard board = createRecruitBoard(startDateTime, endDateTime, CLOSED);
+        recruitBoardRepository.save(board);
+
+        // when
+        List<RecruitBoard> result = recruitBoardRepository.findByEndDateTimeBeforeAndStatus(
+                current, CLOSED);
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().getRecruitStatus()).isEqualTo(CLOSED);
     }
 
     private Pageable getPageable() {
