@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Schema(description = "알림 응답 전송 DTO")
+@Schema(description = "알림 응답 DTO")
 public record NotificationResponseDto(
+        @Schema(description = "알림 ID", example = "1")
+        Long id,
         @Schema(description = "알림 제목", example = "봉사 활동 신청이 승인되었습니다.")
         String title,
 
@@ -25,6 +27,7 @@ public record NotificationResponseDto(
 
     public static NotificationResponseDto from(Notification notification) {
         return new NotificationResponseDto(
+                notification.getId(),
                 notification.getTitle(),
                 notification.getType(),
                 notification.getRelatedId(),
