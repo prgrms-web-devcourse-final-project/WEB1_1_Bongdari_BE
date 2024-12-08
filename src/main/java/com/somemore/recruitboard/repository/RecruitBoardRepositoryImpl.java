@@ -12,15 +12,14 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.QCenter;
 import com.somemore.location.domain.QLocation;
 import com.somemore.location.utils.GeoUtils;
-import com.somemore.recruitboard.domain.QRecruitBoard;
-import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerCategory;
+import com.somemore.recruitboard.domain.*;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,6 +36,7 @@ import org.springframework.stereotype.Repository;
 public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private final RecruitBoardJpaRepository recruitBoardJpaRepository;
+    private final RecruitBoardDocumentRepository documentRepository;
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -196,6 +196,60 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(String keyword, RecruitBoardSearchCondition condition) {
+        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+        QCenter center = QCenter.center;
+
+        List<RecruitBoardDocument> boardDocuments = documentRepository.findIdsByTitleOrContentContaining(keyword);
+
+        List<Long> boardIds = boardDocuments.stream()
+                .map(RecruitBoardDocument::getId)
+                .toList();
+
+        Pageable pageable = condition.pageable();
+        BooleanExpression predicate = isNotDeleted()
+                .and(volunteerCategoryEq(condition.category()))
+                .and(regionEq(condition.region()))
+                .and(admittedEq(condition.admitted()))
+                .and(statusEq(condition.status()));
+
+        List<RecruitBoardWithCenter> content = queryFactory
+                .select(getRecruitBoardWithCenterConstructorExpression(recruitBoard, center))
+                .from(recruitBoard)
+                .where(recruitBoard.id.in(boardIds)
+                    .and(predicate))
+                .join(center).on(recruitBoard.centerId.eq(center.id))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(recruitBoard.count())
+                .from(recruitBoard)
+                .join(center).on(recruitBoard.centerId.eq(center.id))
+                .where(predicate);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public void saveDocuments(List<RecruitBoard> recruitBoards) {
+        List<RecruitBoardDocument> recruitBoardDocuments = convertEntityToDocuments(recruitBoards);
+        documentRepository.saveAll(recruitBoardDocuments);
+    }
+
+    @Override
+    public List<RecruitBoard> findAll() {
+        return recruitBoardJpaRepository.findAll();
+    }
+
+    @Override
+    public void deleteDocument(Long id) {
+        documentRepository.deleteById(id);
+    }
+
     private static BooleanExpression idEq(Long id) {
         return recruitBoard.id.eq(id);
     }
@@ -294,4 +348,17 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 recruitBoard, location.address, location.latitude, location.longitude, center.name);
     }
 
+    private List<RecruitBoardDocument> convertEntityToDocuments(List<RecruitBoard> recruitBoards) {
+        List<RecruitBoardDocument> communityBoardDocuments = new ArrayList<>();
+
+        for (RecruitBoard recruitBoard : recruitBoards) {
+            RecruitBoardDocument document = RecruitBoardDocument.builder()
+                    .id(recruitBoard.getId())
+                    .title(recruitBoard.getTitle())
+                    .content(recruitBoard.getContent())
+                    .build();
+            communityBoardDocuments.add(document);
+        }
+        return communityBoardDocuments;
+    }
 }

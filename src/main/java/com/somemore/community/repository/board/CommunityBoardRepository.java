@@ -5,6 +5,7 @@ import com.somemore.community.repository.mapper.CommunityBoardView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,4 +19,9 @@ public interface CommunityBoardRepository {
         return !existsById(id);
     }
     void deleteAllInBatch();
+
+    Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable);
+    void saveDocuments(List<CommunityBoard> communityBoards);
+    List<CommunityBoard> findAll();
+    void deleteDocument(Long id);
 }

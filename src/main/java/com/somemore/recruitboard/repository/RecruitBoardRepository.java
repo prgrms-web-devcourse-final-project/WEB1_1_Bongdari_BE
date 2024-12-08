@@ -30,4 +30,9 @@ public interface RecruitBoardRepository {
     List<Long> findNotCompletedIdsByCenterId(UUID centerId);
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
+
+    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(String keyword, RecruitBoardSearchCondition condition);
+    void saveDocuments(List<RecruitBoard> recruitBoards);
+    List<RecruitBoard> findAll();
+    void deleteDocument(Long id);
 }
