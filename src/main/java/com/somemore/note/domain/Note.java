@@ -53,4 +53,8 @@ public class Note extends BaseEntity {
                 .build();
     }
 
+    public void markAsRead() {
+        this.isRead = true;
+    }
+
 }

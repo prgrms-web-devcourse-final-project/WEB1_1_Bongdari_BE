@@ -1,6 +1,7 @@
 package com.somemore.note.service;
 
 import com.somemore.global.exception.NoSuchElementException;
+import com.somemore.note.domain.Note;
 import com.somemore.note.repository.NoteRepository;
 import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
@@ -36,13 +37,26 @@ public class NoteQueryService implements NoteQueryUseCase {
 
     @Override
     public NoteDetailViewForCenter getNoteDetailForCenter(Long noteId) {
+        Note note = getNote(noteId);
+
+        note.markAsRead();
+
         return noteRepository.findNoteDetailViewReceiverIsCenter(noteId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
     }
 
     @Override
     public NoteDetailViewForVolunteer getNoteDetailForVolunteer(Long noteId) {
+        Note note = getNote(noteId);
+
+        note.markAsRead();
+
         return noteRepository.findNoteDetailViewReceiverIsVolunteer(noteId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
+    }
+
+    private Note getNote(Long noteId) {
+        return noteRepository.findById(noteId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
     }
 
