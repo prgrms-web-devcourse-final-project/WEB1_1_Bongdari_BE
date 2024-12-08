@@ -60,7 +60,7 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: somemore
-      base-url: https://somemore-images.s3.ap-northeast-2.amazonaws.com/
+      base-url: https://somemore-image.s3.ap-northeast-2.amazonaws.com
     stack:
       auto: false
 
@@ -70,7 +70,7 @@ default:
 
 elastic:
   search:
-    uris: localhost:9200
+    uri: localhost:9200
     username: elastic
     password: somemore
 

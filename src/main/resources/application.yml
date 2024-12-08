@@ -112,7 +112,7 @@ default:
 
 elastic:
   search:
-    uris: ${ELASTIC_URI}
+    uri: ${ELASTIC_URI}
     username: ${ELASTIC_USERNAME}
     password: ${ELASTIC_PASSWORD}
 

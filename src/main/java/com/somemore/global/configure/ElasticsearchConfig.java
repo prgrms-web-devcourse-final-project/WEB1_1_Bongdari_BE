@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 
 @Configuration
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
-    @Value("${elastic.search.uris}")
+    @Value("${elastic.search.uri}")
     private String uri;
     @Value("${elastic.search.username}")
     private String username;
