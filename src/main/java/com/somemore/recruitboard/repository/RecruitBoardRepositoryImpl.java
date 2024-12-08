@@ -21,6 +21,7 @@ import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -79,6 +80,32 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     @Override
     public List<RecruitBoard> findAllByIds(List<Long> ids) {
         BooleanExpression exp = recruitBoard.id.in(ids)
+                .and(isNotDeleted());
+
+        return queryFactory
+                .selectFrom(recruitBoard)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
+    public List<RecruitBoard> findByStartDateTimeBetweenAndStatus(LocalDateTime from,
+            LocalDateTime to, RecruitStatus status) {
+        BooleanExpression exp = startDateTimeBetween(from, to)
+                .and(statusEq(status))
+                .and(isNotDeleted());
+
+        return queryFactory
+                .selectFrom(recruitBoard)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
+    public List<RecruitBoard> findByEndDateTimeBeforeAndStatus(LocalDateTime current,
+            RecruitStatus status) {
+        BooleanExpression exp = endDateTimeBefore(current)
+                .and(statusEq(status))
                 .and(isNotDeleted());
 
         return queryFactory
@@ -252,6 +279,14 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
         return location.latitude.between(minLatitude, maxLatitude)
                 .and(location.longitude.between(minLongitude, maxLongitude));
+    }
+
+    private static BooleanExpression startDateTimeBetween(LocalDateTime from, LocalDateTime to) {
+        return recruitBoard.recruitmentInfo.volunteerStartDateTime.between(from, to);
+    }
+
+    private static BooleanExpression endDateTimeBefore(LocalDateTime current) {
+        return recruitBoard.recruitmentInfo.volunteerEndDateTime.before(current);
     }
 
     private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {
