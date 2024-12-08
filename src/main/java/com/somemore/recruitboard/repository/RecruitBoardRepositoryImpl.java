@@ -138,10 +138,15 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         QLocation location = QLocation.location;
         QCenter center = QCenter.center;
 
+        List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
+
+        List<Long> boardIds = boardDocuments.stream()
+                .map(RecruitBoardDocument::getId)
+                .toList();
+
         Pageable pageable = condition.pageable();
 
         BooleanExpression predicate = locationBetween(condition)
-                .and(keywordEq(condition.keyword()))
                 .and(statusEq(condition.status()))
                 .and(isNotDeleted());
 
@@ -150,7 +155,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
                 .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(predicate)
+                .where(recruitBoard.id.in(boardIds)
+                        .and(predicate))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(toOrderSpecifiers(pageable.getSort()))
@@ -161,7 +167,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
                 .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(predicate);
+                .where(recruitBoard.id.in(boardIds)
+                        .and(predicate));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -197,11 +204,12 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(String keyword, RecruitBoardSearchCondition condition) {
+    public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition) {
         QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
         QCenter center = QCenter.center;
 
-        List<RecruitBoardDocument> boardDocuments = documentRepository.findIdsByTitleOrContentContaining(keyword);
+
+        List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
 
         List<Long> boardIds = boardDocuments.stream()
                 .map(RecruitBoardDocument::getId)
@@ -229,7 +237,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .select(recruitBoard.count())
                 .from(recruitBoard)
                 .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(predicate);
+                .where(recruitBoard.id.in(boardIds)
+                        .and(predicate));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -360,5 +369,13 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
             communityBoardDocuments.add(document);
         }
         return communityBoardDocuments;
+    }
+
+    private List<RecruitBoardDocument> getBoardDocuments(String keyword) {
+
+        if (keyword == null || keyword.isEmpty()) {
+            return documentRepository.findAll();
+        }
+        return documentRepository.findIdsByTitleOrContentContaining(keyword);
     }
 }

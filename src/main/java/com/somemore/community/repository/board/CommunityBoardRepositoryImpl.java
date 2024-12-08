@@ -88,7 +88,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
     @Override
     public Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable) {
-        List<CommunityBoardDocument> boardDocuments = documentRepository.findIdsByTitleOrContentContaining(keyword);
+        List<CommunityBoardDocument> boardDocuments = getBoardDocuments(keyword);
 
         List<Long> boardIds = boardDocuments.stream()
                 .map(CommunityBoardDocument::getId)
@@ -105,7 +105,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
                 .select(communityBoard.count())
                 .from(communityBoard)
                 .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-                .where(communityBoard.id.in(boardIds));
+                .where(communityBoard.id.in(boardIds)
+                    .and(isNotDeleted()));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -160,4 +161,12 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     }
 
     private BooleanExpression isWriter(UUID writerId) {return communityBoard.writerId.eq(writerId); }
+
+    private List<CommunityBoardDocument> getBoardDocuments(String keyword) {
+
+        if (keyword == null || keyword.isEmpty()) {
+            return documentRepository.findAll();
+        }
+        return documentRepository.findIdsByTitleOrContentContaining(keyword);
+    }
 }
