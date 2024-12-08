@@ -55,7 +55,7 @@ class NotificationQueryServiceTest extends IntegrationTestSupport {
 
         Notification readNotification = Notification.builder()
                 .title("Read Notification")
-                .type(NotificationSubType.REVIEW_BLAH_BLAH)
+                .type(NotificationSubType.VOLUNTEER_REVIEW_REQUEST)
                 .receiverId(receiverId)
                 .relatedId(2L)
                 .build();

@@ -126,7 +126,7 @@ class NotificationCommandServiceTest extends IntegrationTestSupport {
         return Notification.builder()
                 .receiverId(receiverId)
                 .title("Unread")
-                .type(NotificationSubType.REVIEW_BLAH_BLAH)
+                .type(NotificationSubType.VOLUNTEER_REVIEW_REQUEST)
                 .relatedId(1L)
                 .build();
     }

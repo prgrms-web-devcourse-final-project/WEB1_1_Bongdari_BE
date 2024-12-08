@@ -4,7 +4,11 @@ import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MI
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
 
+import com.somemore.facade.event.VolunteerReviewRequestEvent;
+import com.somemore.global.common.event.ServerEventPublisher;
+import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
+import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteer.usecase.UpdateVolunteerUseCase;
@@ -25,6 +29,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
     private final VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final UpdateVolunteerUseCase updateVolunteerUseCase;
+    private final ServerEventPublisher serverEventPublisher;
 
     @Override
     public void settleVolunteerApplies(VolunteerApplySettleRequestDto dto, UUID centerId) {
@@ -41,6 +46,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
         applies.forEach(apply -> {
             apply.changeAttended(true);
             updateVolunteerUseCase.updateVolunteerStats(apply.getVolunteerId(), hours);
+            publishVolunteerReviewRequestEvent(apply, recruitBoard);
         });
 
     }
@@ -67,5 +73,18 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
         if (anyMismatch) {
             throw new BadRequestException(RECRUIT_BOARD_ID_MISMATCH);
         }
+    }
+
+    private void publishVolunteerReviewRequestEvent(VolunteerApply apply, RecruitBoard recruitBoard) {
+        VolunteerReviewRequestEvent event = VolunteerReviewRequestEvent.builder()
+                .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.VOLUNTEER_REVIEW_REQUEST)
+                .volunteerId(apply.getVolunteerId())
+                .volunteerApplyId(apply.getId())
+                .centerId(recruitBoard.getCenterId())
+                .recruitBoardId(recruitBoard.getId())
+                .build();
+
+        serverEventPublisher.publish(event);
     }
 }
