@@ -21,6 +21,7 @@ public class NoteMarkAsReadService implements NoteMarkAsReadUseCase {
     public void noteMarkAsRead(Long noteId) {
         Note note = getNote(noteId);
         note.markAsRead();
+        noteRepository.save(note);
     }
 
     private Note getNote(Long noteId) {
