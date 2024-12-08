@@ -89,7 +89,7 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // given
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        given(documentUseCase.getRecruitBoardBySearch(any(), any(RecruitBoardSearchCondition.class)))
+        given(documentUseCase.getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class)))
             .willReturn(page);
 
         // when
@@ -103,8 +103,7 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.message").value("봉사 활동 모집글 검색 조회 성공"));
 
-        verify(documentUseCase, times(1)).getRecruitBoardBySearch(
-            any(), any(RecruitBoardSearchCondition.class));
+        verify(documentUseCase, times(1)).getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class));
     }
 
     @Test

@@ -62,11 +62,12 @@ public class RecruitBoardDocumentRepositoryTest extends IntegrationTestSupport {
         //given
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("노인")
                 .pageable(pageable)
                 .build();
 
         //when
-        Page<RecruitBoardWithCenter> findBoards = recruitBoardRepository.findByRecruitBoardsContaining("없음", condition);
+        Page<RecruitBoardWithCenter> findBoards = recruitBoardRepository.findByRecruitBoardsContaining(condition);
 
         //then
         assertThat(findBoards).isNotNull();
@@ -74,6 +75,26 @@ public class RecruitBoardDocumentRepositoryTest extends IntegrationTestSupport {
         assertThat(findBoards.getSize()).isEqualTo(5);
         assertThat(findBoards.getTotalPages()).isEqualTo(1);
     }
+
+//    @DisplayName("키워드 없이 검색시 전체 모집글을 조회할 수 있다.")
+//    @Test
+//    void findByRecruitBoardsContainingWithNull() {
+//        //given
+//        Pageable pageable = getPageable();
+//        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+//                .keyword("")
+//                .pageable(pageable)
+//                .build();
+//
+//        //when
+//        Page<RecruitBoardWithCenter> findBoards = recruitBoardRepository.findByRecruitBoardsContaining(condition);
+//
+//        //then
+//        assertThat(findBoards).isNotNull();
+//        assertThat(findBoards.getTotalElements()).isEqualTo(23);
+//        assertThat(findBoards.getSize()).isEqualTo(5);
+//        assertThat(findBoards.getTotalPages()).isEqualTo(5);
+//    }
 
     private Pageable getPageable() {
         Sort sort = Sort.by(Sort.Order.desc("created_at"));

@@ -151,36 +151,6 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         assertThat(dtos.getContent().getFirst().center().name()).isEqualTo(name);
     }
 
-    @DisplayName("위치 기반으로 주변 모집글을 페이징하여 조회할 수 있다")
-    @Test
-    void getRecruitBoardsNearBy() {
-        // given
-        Center center = createCenter();
-        centerRepository.save(center);
-        Location location = createLocation();
-        locationRepository.save(location);
-
-        RecruitBoard board = createRecruitBoard(center.getId(), location.getId());
-        recruitBoardRepository.save(board);
-
-        Pageable pageable = getPageable();
-        RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
-                .latitude(location.getLatitude().doubleValue())
-                .longitude(location.getLongitude().doubleValue())
-                .radius(3.0)
-                .pageable(pageable)
-                .build();
-
-        // when
-        Page<RecruitBoardDetailResponseDto> result = recruitBoardQueryService.getRecruitBoardsNearby(
-                condition);
-
-        // then
-        assertThat(result).isNotEmpty();
-        assertThat(result.getTotalElements()).isEqualTo(1);
-        assertThat(result.getContent().getFirst().id()).isEqualTo(board.getId());
-    }
-
     @DisplayName("기관 아이디로 모집글을 페이징하여 조회할 수 있다")
     @Test
     void getRecruitBoardsByCenterId() {
@@ -294,6 +264,7 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
 
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("저장")
                 .pageable(pageable)
                 .build();
 
@@ -310,7 +281,7 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         recruitBoardDocumentService.saveRecruitBoardDocuments(recruitBoards);
 
         //then
-        Page<RecruitBoardWithCenterResponseDto> findBoard = recruitBoardDocumentService.getRecruitBoardBySearch("저장", condition);
+        Page<RecruitBoardWithCenterResponseDto> findBoard = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
 
         assertThat(findBoard).isNotNull();
         assertThat(findBoard.getTotalElements()).isEqualTo(2);

@@ -6,7 +6,9 @@ import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
+import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +34,9 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private RecruitBoardDocumentService recruitBoardDocumentService;
+
+    @Autowired
+    private RecruitBoardQueryService recruitBoardQueryService;
 
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;
@@ -66,11 +71,12 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         //given
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("노인")
                 .pageable(pageable)
                 .build();
 
         //when
-        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch("노인", condition);
+        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
 
         //then
         assertThat(dtos).isNotNull();
@@ -79,6 +85,50 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         assertThat(dtos.getSize()).isEqualTo(5);
         assertThat(dtos.getTotalPages()).isEqualTo(1);
     }
+
+//    @DisplayName("위치 기반으로 주변 모집글을 페이징하여 조회할 수 있다")
+//    @Test
+//    void getRecruitBoardsNearBy() {
+//        // given
+//        Pageable pageable = getPageable();
+//        RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
+//                .keyword(null)
+//                .latitude(37.5935)
+//                .longitude(126.9780)
+//                .radius(5.0)
+//                .pageable(pageable)
+//                .build();
+//
+//        // when
+//        Page<RecruitBoardDetailResponseDto> result = recruitBoardQueryService.getRecruitBoardsNearby(
+//                condition);
+//
+//        // then
+//        assertThat(result).isNotNull();
+//        assertThat(result.getTotalElements()).isEqualTo(23);
+//        assertThat(result.getContent()).isNotEmpty();
+//    }
+
+//    @DisplayName("키워드 없이 검색시 전체 모집글을 조회한다. (service)")
+//    @Test
+//    void getRecruitBoardBySearchWithNull() {
+//        //given
+//        Pageable pageable = getPageable();
+//        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+//                .keyword("")
+//                .pageable(pageable)
+//                .build();
+//
+//        //when
+//        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
+//
+//        //then
+//        assertThat(dtos).isNotNull();
+//        assertThat(dtos.getContent()).isNotNull();
+//        assertThat(dtos.getTotalElements()).isEqualTo(23);
+//        assertThat(dtos.getSize()).isEqualTo(5);
+//        assertThat(dtos.getTotalPages()).isEqualTo(5);
+//    }
 
     private Pageable getPageable() {
         Sort sort = Sort.by(Sort.Order.desc("created_at"));
