@@ -87,9 +87,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(review.count())
+                .from(review)
                 .join(volunteerApply).on(review.volunteerApplyId.eq(volunteerApply.id))
                 .join(recruitBoard).on(recruitBoard.id.eq(volunteerApply.recruitBoardId))
-                .from(review)
                 .where(predicate);
 
         return PageableExecutionUtils.getPage(content, condition.pageable(), countQuery::fetchOne);
