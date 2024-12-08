@@ -1,6 +1,6 @@
 package com.somemore.center.service.query;
 
-import com.somemore.center.repository.CenterRepository;
+import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.center.usecase.query.CenterSignUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;

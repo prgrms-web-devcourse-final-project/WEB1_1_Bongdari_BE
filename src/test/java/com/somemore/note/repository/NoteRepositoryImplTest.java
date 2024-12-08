@@ -2,7 +2,7 @@ package com.somemore.note.repository;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
-import com.somemore.center.repository.CenterJpaRepository;
+import com.somemore.center.repository.center.CenterJpaRepository;
 import com.somemore.note.domain.Note;
 import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;

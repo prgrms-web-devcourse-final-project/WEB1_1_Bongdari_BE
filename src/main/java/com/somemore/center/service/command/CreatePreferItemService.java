@@ -3,7 +3,7 @@ package com.somemore.center.service.command;
 import com.somemore.center.domain.PreferItem;
 import com.somemore.center.dto.request.PreferItemCreateRequestDto;
 import com.somemore.center.dto.response.PreferItemCreateResponseDto;
-import com.somemore.center.repository.PreferItemRepository;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
 import com.somemore.center.usecase.command.CreatePreferItemUseCase;
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.somemore.interestcenter.service;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
-import com.somemore.center.repository.CenterJpaRepository;
+import com.somemore.center.repository.center.CenterJpaRepository;
 import com.somemore.interestcenter.domain.InterestCenter;
 import com.somemore.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.interestcenter.repository.InterestCenterJpaRepository;

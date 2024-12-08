@@ -3,7 +3,7 @@ package com.somemore.center.service.command;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
-import com.somemore.center.repository.CenterRepository;
+import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.global.exception.BadRequestException;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;

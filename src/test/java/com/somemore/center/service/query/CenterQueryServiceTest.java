@@ -5,9 +5,9 @@ import com.somemore.center.domain.Center;
 import com.somemore.center.domain.PreferItem;
 import com.somemore.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
-import com.somemore.center.repository.CenterJpaRepository;
-import com.somemore.center.repository.CenterRepository;
-import com.somemore.center.repository.PreferItemRepository;
+import com.somemore.center.repository.center.CenterJpaRepository;
+import com.somemore.center.repository.center.CenterRepository;
+import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import jakarta.transaction.Transactional;
@@ -34,7 +34,7 @@ class CenterQueryServiceTest extends IntegrationTestSupport {
     private CenterJpaRepository centerJpaRepository;
     
     @Autowired
-    private PreferItemRepository preferItemRepository;
+    private PreferItemJpaRepository preferItemRepository;
 
     @DisplayName("기관 Id로 기관 프로필을 조회할 수 있다. (service)")
     @Test

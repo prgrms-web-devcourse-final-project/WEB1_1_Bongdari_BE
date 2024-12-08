@@ -4,8 +4,9 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.domain.PreferItem;
 import com.somemore.center.dto.request.PreferItemCreateRequestDto;
-import com.somemore.center.repository.CenterRepository;
-import com.somemore.center.repository.PreferItemRepository;
+import com.somemore.center.repository.center.CenterRepository;
+import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
 import com.somemore.global.exception.BadRequestException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +28,9 @@ class CreatePreferItemServiceTest extends IntegrationTestSupport {
     private PreferItemRepository preferItemRepository;
 
     @Autowired
+    private PreferItemJpaRepository preferItemJpaRepository;
+
+    @Autowired
     private CenterRepository centerRepository;
 
     @DisplayName("기관 아이디와 선호물품 이름을 받아 선호물품을 생성한다.")
@@ -45,7 +49,7 @@ class CreatePreferItemServiceTest extends IntegrationTestSupport {
         createPreferItemService.createPreferItem(center.getId(), requestDto);
 
         //then
-        PreferItem savedItem = preferItemRepository.findAll().stream()
+        PreferItem savedItem = preferItemJpaRepository.findAll().stream()
                 .filter(item -> item.getCenterId().equals(center.getId())
                         && item.getItemName().equals(itemName))
                 .findFirst()

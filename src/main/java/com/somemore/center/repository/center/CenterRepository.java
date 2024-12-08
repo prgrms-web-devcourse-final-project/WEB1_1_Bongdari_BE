@@ -1,4 +1,4 @@
-package com.somemore.center.repository;
+package com.somemore.center.repository.center;
 
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.mapper.CenterOverviewInfo;

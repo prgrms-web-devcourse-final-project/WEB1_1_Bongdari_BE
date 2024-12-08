@@ -2,7 +2,7 @@ package com.somemore.community.service.board;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.auth.oauth.OAuthProvider;
-import com.somemore.center.repository.CenterRepository;
+import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.dto.response.CommunityBoardDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardResponseDto;
