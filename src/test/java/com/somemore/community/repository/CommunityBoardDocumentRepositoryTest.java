@@ -43,7 +43,7 @@ public class CommunityBoardDocumentRepositoryTest extends IntegrationTestSupport
 
     @DisplayName("검색 키워드가 포함된 게시글을 조회할 수 있다. (repository)")
     @Test
-    void findByCommunityBoardsContaining() throws InterruptedException {
+    void findByCommunityBoardsContaining() {
         //given
         Pageable pageable = getPageable();
 
@@ -56,6 +56,22 @@ public class CommunityBoardDocumentRepositoryTest extends IntegrationTestSupport
         assertThat(findBoards.getSize()).isEqualTo(10);
         assertThat(findBoards.getTotalPages()).isEqualTo(1);
     }
+
+//    @DisplayName("키워드 없이 검색시 전체 게시글을 조회할 수 있다. (repository)")
+//    @Test
+//    void findByCommunityBoardsContainingWithNull() {
+//        //given
+//        Pageable pageable = getPageable();
+//
+//        //when
+//        Page<CommunityBoardView> findBoards = communityBoardRepository.findByCommunityBoardsContaining(null, pageable);
+//
+//        //then
+//        assertThat(findBoards).isNotNull();
+//        assertThat(findBoards.getTotalElements()).isEqualTo(16);
+//        assertThat(findBoards.getSize()).isEqualTo(10);
+//        assertThat(findBoards.getTotalPages()).isEqualTo(2);
+//    }
 
     private Pageable getPageable() {
         return PageRequest.of(0, 10);

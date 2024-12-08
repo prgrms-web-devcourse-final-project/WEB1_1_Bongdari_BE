@@ -165,13 +165,13 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         communityBoardDocumentService.saveCommunityBoardDocuments(communityBoards);
 
         //then
-        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("저장", 0);
+        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("", 0);
 
         assertThat(dtos).isNotNull();
         assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(1);
+        assertThat(dtos.getTotalElements()).isEqualTo(15);
         assertThat(dtos.getSize()).isEqualTo(10);
-        assertThat(dtos.getTotalPages()).isEqualTo(1);
+        assertThat(dtos.getTotalPages()).isEqualTo(2);
 
         communityBoardRepository.deleteDocument(savedBoard.getId());
     }
