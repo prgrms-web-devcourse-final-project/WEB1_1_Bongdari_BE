@@ -33,6 +33,10 @@ spring:
       port: 6379
       password:  # 테스트에서는 비밀번호 없이 연결
 
+    elasticsearch:
+      repositories:
+        enabled: true
+
   web:
     locale: ko_KR
     locale-resolver: fixed
@@ -56,10 +60,21 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: somemore
-      base-url: https://somemore-image.s3.ap-northeast-2.amazonaws.com
+      base-url: https://somemore-images.s3.ap-northeast-2.amazonaws.com/
     stack:
       auto: false
 
 default:
   image:
     url: ""
+
+elastic:
+  search:
+    uris: localhost:9200
+    username: elastic
+    password: somemore
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
