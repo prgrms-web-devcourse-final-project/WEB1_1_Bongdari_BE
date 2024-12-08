@@ -8,6 +8,6 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface RecruitBoardDocumentUseCase {
-    Page<RecruitBoardWithCenterResponseDto> getRecruitBoardBySearch(String keyword, RecruitBoardSearchCondition condition);
+    Page<RecruitBoardWithCenterResponseDto> getRecruitBoardBySearch(RecruitBoardSearchCondition condition);
     void saveRecruitBoardDocuments(List<RecruitBoard> recruitBoards);
 }

@@ -21,8 +21,8 @@ public class RecruitBoardDocumentService implements RecruitBoardDocumentUseCase 
 
     @Transactional(readOnly = true)
     @Override
-    public Page<RecruitBoardWithCenterResponseDto> getRecruitBoardBySearch(String keyword, RecruitBoardSearchCondition condition) {
-        Page<RecruitBoardWithCenter> boards = recruitBoardRepository.findByRecruitBoardsContaining(keyword, condition);
+    public Page<RecruitBoardWithCenterResponseDto> getRecruitBoardBySearch(RecruitBoardSearchCondition condition) {
+        Page<RecruitBoardWithCenter> boards = recruitBoardRepository.findByRecruitBoardsContaining(condition);
         return boards.map(RecruitBoardWithCenterResponseDto::from);
     }
 

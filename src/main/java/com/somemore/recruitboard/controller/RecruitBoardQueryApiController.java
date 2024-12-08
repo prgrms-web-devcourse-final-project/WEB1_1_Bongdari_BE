@@ -85,7 +85,7 @@ public class RecruitBoardQueryApiController {
 
         return ApiResponse.ok(
                 200,
-                recruitBoardDocumentUseCase.getRecruitBoardBySearch(keyword, condition),
+                recruitBoardDocumentUseCase.getRecruitBoardBySearch(condition),
                 "봉사 활동 모집글 검색 조회 성공"
         );
     }

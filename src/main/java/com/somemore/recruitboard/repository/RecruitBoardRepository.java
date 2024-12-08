@@ -31,7 +31,7 @@ public interface RecruitBoardRepository {
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
 
-    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(String keyword, RecruitBoardSearchCondition condition);
+    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition);
     void saveDocuments(List<RecruitBoard> recruitBoards);
     List<RecruitBoard> findAll();
     void deleteDocument(Long id);
