@@ -68,6 +68,11 @@ spring:
       max-file-size: 8MB
       max-request-size: 8MB
 
+  schedules:
+    cron:
+      updateBoardsToClosed: "0 0 0 * * ?"  # updateBoardsToClosed 스케줄링 cron 표현식
+      updateBoardsToCompleted: "0 0 0 * * ?"  # updateBoardsToCompleted 스케줄링 cron 표현식
+
 
 #swagger
 springdoc:
