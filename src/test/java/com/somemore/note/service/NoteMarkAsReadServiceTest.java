@@ -25,16 +25,14 @@ class NoteMarkAsReadServiceTest extends IntegrationTestSupport {
     @Test
     void noteMarkAsRead() {
         // given
-        Long noteId = 1L;
-
         Note note = Note.create(UUID.randomUUID(), UUID.randomUUID(), "제목", "내용");
         noteRepository.save(note);
 
         // when
-        noteMarkAsReadService.noteMarkAsRead(noteId);
+        noteMarkAsReadService.noteMarkAsRead(note.getId());
 
         // then
-        Note updatedNote = noteRepository.findById(noteId)
+        Note updatedNote = noteRepository.findById(note.getId())
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
 
         assertTrue(updatedNote.getIsRead(), "노트가 읽음 상태로 변경되어야 한다.");
