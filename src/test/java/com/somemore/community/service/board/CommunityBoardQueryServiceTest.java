@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,6 +45,8 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
     DeleteCommunityBoardUseCase deleteCommunityBoardUseCase;
     @Autowired
     CommunityBoardQueryService communityBoardQueryService;
+    @Autowired
+    private CommunityBoardDocumentService communityBoardDocumentService;
 
     private UUID writerId1;
     private Long communityId1;
@@ -145,6 +149,31 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(callable)
                 .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD.getMessage());
+    }
+
+    @DisplayName("게시글을 elastic search index에 저장한다. (service)")
+    @Test
+    void saveCommunityBoardDocuments() {
+        //given
+        List<CommunityBoard> communityBoards = new ArrayList<>();
+
+        CommunityBoard communityBoard = createCommunityBoard("저장 잘 되나요?", "안녕하세요",  UUID.randomUUID());
+        CommunityBoard savedBoard = communityBoardRepository.save(communityBoard);
+        communityBoards.add(savedBoard);
+
+        //when
+        communityBoardDocumentService.saveCommunityBoardDocuments(communityBoards);
+
+        //then
+        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("저장", 0);
+
+        assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
+        assertThat(dtos.getTotalElements()).isEqualTo(1);
+        assertThat(dtos.getSize()).isEqualTo(10);
+        assertThat(dtos.getTotalPages()).isEqualTo(1);
+
+        communityBoardRepository.deleteDocument(savedBoard.getId());
     }
 }
 
