@@ -55,6 +55,7 @@ class RecruitmentInfoTest {
         // given
         RecruitmentInfo recruitmentInfo = createRecruitmentInfo();
 
+        String region = "서울특별시";
         Integer count = 2;
         VolunteerCategory volunteerCategory = SAFETY_PREVENTION;
         LocalDateTime startDateTime = createUpdateStartDateTime();
@@ -62,7 +63,7 @@ class RecruitmentInfoTest {
         Boolean admitted = false;
 
         // when
-        recruitmentInfo.updateWith(count, volunteerCategory, startDateTime,
+        recruitmentInfo.updateWith(region, count, volunteerCategory, startDateTime,
             endDateTime, admitted);
 
         // then
@@ -99,7 +100,7 @@ class RecruitmentInfoTest {
 
         // when & then
         assertThatThrownBy(
-            () -> recruitmentInfo.updateWith(3, ADMINISTRATIVE_SUPPORT, startDateTime, endDateTime,
+            () -> recruitmentInfo.updateWith("",3, ADMINISTRATIVE_SUPPORT, startDateTime, endDateTime,
                 false)
         ).isInstanceOf(IllegalArgumentException.class);
 

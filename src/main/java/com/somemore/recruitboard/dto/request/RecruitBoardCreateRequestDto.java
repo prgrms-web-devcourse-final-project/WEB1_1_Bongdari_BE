@@ -23,7 +23,7 @@ public record RecruitBoardCreateRequestDto(
         @Schema(description = "봉사 모집글 내용", example = "서울 청계천 주변 환경 미화 봉사 모집합니다. <br>")
         @NotBlank(message = "모집글 내용은 필수 값입니다.")
         String content,
-        @Schema(description = "봉사 지역", example = "서울")
+        @Schema(description = "봉사 지역", example = "서울특별시")
         @NotBlank(message = "봉사 지역은 필수 값입니다.")
         String region,
         @Schema(description = "예상 모집 인원", example = "4")

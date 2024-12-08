@@ -135,6 +135,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
         RecruitBoardUpdateRequestDto requestDto = RecruitBoardUpdateRequestDto.builder()
                 .title("서울 청계천 환경 미화 봉사 모집")
                 .content("서울 청계천 주변 환경 미화 봉사 모집합니다. <br>")
+                .region("서울 특별시")
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)

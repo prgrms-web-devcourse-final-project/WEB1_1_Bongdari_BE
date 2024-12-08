@@ -19,14 +19,17 @@ public record RecruitBoardUpdateRequestDto(
         @Schema(description = "봉사 모집글 내용", example = "서울 청계천 주변 환경 미화 봉사 모집합니다. <br>")
         @NotBlank(message = "모집글 내용은 필수 값입니다.")
         String content,
+        @Schema(description = "봉사 지역", example = "서울특별시")
+        @NotBlank(message = "봉사 지역은 필수 값입니다.")
+        String region,
         @Schema(description = "예상 모집 인원", example = "4")
         @NotNull(message = "예상 모집 인원은 필수 값입니다.")
         Integer recruitmentCount,
-        @Schema(description = "봉사 시작 일시", example = "2024-11-20T10:00:00", type = "string")
+        @Schema(description = "봉사 시작 일시", example = "2024-12-20T10:00:00", type = "string")
         @NotNull(message = "봉사 시작 일시는 필수 값입니다.")
         @Future(message = "봉사 시작 일시는 내일부터 가능합니다.")
         LocalDateTime volunteerStartDateTime,
-        @Schema(description = "봉사 종료 일시", example = "2024-11-20T12:00:00", type = "string")
+        @Schema(description = "봉사 종료 일시", example = "2024-12-20T12:00:00", type = "string")
         @NotNull(message = "봉사 종료 일시는 필수 값입니다.")
         @Future(message = "봉사 종료 일시는 내일부터 가능합니다.")LocalDateTime volunteerEndDateTime,
         @Schema(description = "봉사 활동 유형", example = "ENVIRONMENTAL_PROTECTION")
