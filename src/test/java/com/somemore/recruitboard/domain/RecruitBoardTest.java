@@ -204,4 +204,30 @@ class RecruitBoardTest {
         assertThat(result).isTrue();
     }
 
+    @DisplayName("모집글을 상태를 모집 완료로 변경할 수 있다.")
+    @Test
+    void markAsClosed() {
+        // given
+        RecruitBoard board = createRecruitBoard();
+
+        // when
+        board.markAsClosed();
+
+        // then
+        assertThat(board.getRecruitStatus()).isEqualTo(CLOSED);
+    }
+
+    @DisplayName("모집글 상태를 종료로 변경할 수 있다.")
+    @Test
+    void markAsCompleted() {
+        /// given
+        RecruitBoard board = createRecruitBoard();
+
+        // when
+        board.markAsCompleted();
+
+        // then
+        assertThat(board.getRecruitStatus()).isEqualTo(COMPLETED);
+    }
+
 }
