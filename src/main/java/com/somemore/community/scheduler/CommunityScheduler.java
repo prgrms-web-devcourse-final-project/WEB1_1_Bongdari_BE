@@ -17,7 +17,7 @@ public class CommunityScheduler {
     private final CommunityBoardDocumentUseCase communityBoardDocumentUseCase;
 
 
-    @Scheduled(cron = "10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateCommunityBoardDocuments() {
         List<CommunityBoard> communityBoards = communityBoardQueryUseCase.getAllCommunityBoards();
         communityBoardDocumentUseCase.saveCommunityBoardDocuments(communityBoards);

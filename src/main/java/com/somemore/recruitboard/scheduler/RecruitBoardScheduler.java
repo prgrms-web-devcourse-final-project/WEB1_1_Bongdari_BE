@@ -17,7 +17,7 @@ public class RecruitBoardScheduler {
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final RecruitBoardDocumentUseCase recruitBoardDocumentUseCase;
 
-    @Scheduled(cron = "10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateRecruitBoardDocuments() {
         List<RecruitBoard> recruitBoards = recruitBoardQueryUseCase.getAllRecruitBoards();
         recruitBoardDocumentUseCase.saveRecruitBoardDocuments(recruitBoards);
