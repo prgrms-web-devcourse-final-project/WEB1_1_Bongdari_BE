@@ -25,12 +25,12 @@ public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSub
 
     @JsonCreator
     public VolunteerApplyStatusChangeEvent(
-            @JsonProperty("volunteerId") UUID volunteerId,
-            @JsonProperty("volunteerApplyId") Long volunteerApplyId,
-            @JsonProperty("centerId") UUID centerId,
-            @JsonProperty("recruitBoardId") Long recruitBoardId,
-            @JsonProperty("oldStatus") ApplyStatus oldStatus,
-            @JsonProperty("newStatus") ApplyStatus newStatus
+            @JsonProperty(value = "volunteerId", required = true) UUID volunteerId,
+            @JsonProperty(value = "volunteerApplyId", required = true) Long volunteerApplyId,
+            @JsonProperty(value = "centerId", required = true) UUID centerId,
+            @JsonProperty(value = "recruitBoardId", required = true) Long recruitBoardId,
+            @JsonProperty(value = "oldStatus", required = true) ApplyStatus oldStatus,
+            @JsonProperty(value = "newStatus", required = true) ApplyStatus newStatus
     ) {
         super(ServerEventType.NOTIFICATION, NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE, LocalDateTime.now());
         this.volunteerId = volunteerId;

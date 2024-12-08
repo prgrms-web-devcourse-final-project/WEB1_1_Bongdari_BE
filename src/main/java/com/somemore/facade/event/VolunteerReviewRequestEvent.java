@@ -21,10 +21,10 @@ public class VolunteerReviewRequestEvent extends ServerEvent<NotificationSubType
 
     @JsonCreator
     public VolunteerReviewRequestEvent(
-            @JsonProperty("volunteerId") UUID volunteerId,
-            @JsonProperty("volunteerApplyId") Long volunteerApplyId,
-            @JsonProperty("centerId") UUID centerId,
-            @JsonProperty("recruitBoardId") Long recruitBoardId
+            @JsonProperty(value = "volunteerId", required = true) UUID volunteerId,
+            @JsonProperty(value = "volunteerApplyId", required = true) Long volunteerApplyId,
+            @JsonProperty(value = "centerId", required = true) UUID centerId,
+            @JsonProperty(value = "recruitBoardId", required = true) Long recruitBoardId
     ) {
         super(ServerEventType.NOTIFICATION, NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE, LocalDateTime.now());
         this.volunteerId = volunteerId;
