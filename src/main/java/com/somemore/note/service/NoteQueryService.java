@@ -6,6 +6,7 @@ import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
+import com.somemore.note.usecase.NoteMarkAsReadUseCase;
 import com.somemore.note.usecase.NoteQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
 @Transactional(readOnly = true)
 public class NoteQueryService implements NoteQueryUseCase {
 
+    private final NoteMarkAsReadUseCase noteMarkAsReadUseCase;
     private final NoteRepository noteRepository;
 
     @Override
@@ -36,12 +38,16 @@ public class NoteQueryService implements NoteQueryUseCase {
 
     @Override
     public NoteDetailViewForCenter getNoteDetailForCenter(Long noteId) {
+        noteMarkAsReadUseCase.noteMarkAsRead(noteId);
+
         return noteRepository.findNoteDetailViewReceiverIsCenter(noteId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
     }
 
     @Override
     public NoteDetailViewForVolunteer getNoteDetailForVolunteer(Long noteId) {
+        noteMarkAsReadUseCase.noteMarkAsRead(noteId);
+
         return noteRepository.findNoteDetailViewReceiverIsVolunteer(noteId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
     }

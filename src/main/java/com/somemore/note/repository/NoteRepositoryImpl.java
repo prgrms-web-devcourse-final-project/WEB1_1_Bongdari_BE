@@ -43,6 +43,11 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
+    public Optional<Note> findById(Long noteId) {
+        return noteJpaRepository.findById(noteId);
+    }
+
+    @Override
     public Page<NoteReceiverViewForCenter> findNotesByReceiverIsCenter(UUID centerId, Pageable pageable) {
 
         BooleanExpression activeVolunteer = isActiveVolunteer();
