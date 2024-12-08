@@ -2,6 +2,8 @@ package com.somemore.note.controller;
 
 import com.somemore.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
+import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
+import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.note.usecase.NoteQueryUseCase;
@@ -41,6 +43,26 @@ public class NoteQueryApiController {
         Page<NoteReceiverViewForVolunteer> response = noteQueryUseCase.getNotesForVolunteer(volunteerId, pageable);
 
         return ApiResponse.ok(200, response, "내 쪽지 조회 성공");
+    }
+
+    @Secured("ROLE_CENTER")
+    @Operation(summary = "기관의 자신에게 온 쪽지 상세 조회")
+    @GetMapping("/center/{noteId}")
+    public ApiResponse<NoteDetailViewForCenter> getNoteDetailForCenter(@PathVariable Long noteId) {
+
+        NoteDetailViewForCenter response = noteQueryUseCase.getNoteDetailForCenter(noteId);
+
+        return ApiResponse.ok(200, response, "쪽지 상세 조회 성공");
+    }
+
+    @Secured("ROLE_VOLUNTEER")
+    @Operation(summary = "봉사자의 자신에게 온 쪽지 상세 조회")
+    @GetMapping("/volunteer/{noteId}")
+    public ApiResponse<NoteDetailViewForVolunteer> getNoteDetailForVolunteer(@PathVariable Long noteId) {
+
+        NoteDetailViewForVolunteer response = noteQueryUseCase.getNoteDetailForVolunteer(noteId);
+
+        return ApiResponse.ok(200, response, "쪽지 상세 조회 성공");
     }
 
 }
