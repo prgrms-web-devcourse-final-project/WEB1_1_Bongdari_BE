@@ -62,12 +62,13 @@ public class RecruitmentInfo {
         return LocalTime.of((int) hours, (int) minutes);
     }
 
-    public void updateWith(Integer recruitmentCount, VolunteerCategory volunteerCategory,
+    public void updateWith(String region, Integer recruitmentCount, VolunteerCategory volunteerCategory,
         LocalDateTime volunteerStartDateTime, LocalDateTime volunteerEndDateTime,
         Boolean admitted) {
 
         validateVolunteerDateTime(volunteerStartDateTime, volunteerEndDateTime);
 
+        this.region = region;
         this.recruitmentCount = recruitmentCount;
         this.volunteerCategory = volunteerCategory;
         this.volunteerStartDateTime = volunteerStartDateTime.truncatedTo(MINUTES);

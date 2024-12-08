@@ -99,6 +99,7 @@ public class RecruitBoard extends BaseEntity {
 
     private void updateRecruitmentInfo(RecruitBoardUpdateRequestDto dto) {
         recruitmentInfo.updateWith(
+                dto.region(),
                 dto.recruitmentCount(),
                 dto.volunteerCategory(),
                 dto.volunteerStartDateTime(),
