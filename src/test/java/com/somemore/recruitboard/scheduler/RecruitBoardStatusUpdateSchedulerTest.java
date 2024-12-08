@@ -19,7 +19,9 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
 
     @Autowired
@@ -29,8 +31,8 @@ class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
     @Test
     void transitionBoardsToClosed() {
         // given
-        LocalDateTime start = LocalDate.now().atStartOfDay().plusHours(1); // 시작일 00시
-        LocalDateTime end = start.plusHours(2); // 종료일 02시
+        LocalDateTime start = LocalDate.now().atStartOfDay().plusHours(1);
+        LocalDateTime end = start.plusHours(2);
 
         List<RecruitBoard> recruitBoards = getRecruitBoards(start, end, RECRUITING);
         recruitBoardRepository.saveAll(recruitBoards);
@@ -38,7 +40,7 @@ class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
         // when
         // then
         Awaitility.await()
-                .atMost(4, TimeUnit.SECONDS)
+                .atMost(3, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
                     List<RecruitBoard> updatedBoards = recruitBoardRepository.findAllByIds(
                             recruitBoards.stream().map(RecruitBoard::getId).toList());
@@ -60,7 +62,7 @@ class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
         // when
         // then
         Awaitility.await()
-                .atMost(4, TimeUnit.SECONDS)
+                .atMost(3, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
                     List<RecruitBoard> updatedBoards = recruitBoardRepository.findAllByIds(
                             recruitBoards.stream().map(RecruitBoard::getId).toList());
