@@ -20,9 +20,9 @@ public abstract class ServerEvent<T extends Enum<T>> {
     private final LocalDateTime createdAt;
 
     protected ServerEvent(
-            @JsonProperty("type") ServerEventType type,
-            @JsonProperty("subType") T subType,
-            @JsonProperty("createdAt") LocalDateTime createdAt
+            @JsonProperty(value = "type", required = true) ServerEventType type,
+            @JsonProperty(value = "subType", required = true) T subType,
+            @JsonProperty(value = "createdAt", required = true) LocalDateTime createdAt
     ) {
         this.type = type;
         this.subType = subType;

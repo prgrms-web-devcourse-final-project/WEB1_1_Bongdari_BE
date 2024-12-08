@@ -6,8 +6,9 @@ import com.somemore.global.exception.BadRequestException;
 import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
-import com.somemore.volunteerapply.domain.VolunteerApplyStatusChangeEvent;
+import com.somemore.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,11 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         validateWriter(recruitBoard, centerId);
         validateBoardStatus(recruitBoard);
 
+        ApplyStatus oldStatus = apply.getStatus();
         apply.changeStatus(APPROVED);
         volunteerApplyRepository.save(apply);
 
-        publishVolunteerApplyStatusChangeEvent(apply.getVolunteerId(), id, recruitBoard, apply);
+        publishVolunteerApplyStatusChangeEvent(apply, recruitBoard, oldStatus);
     }
 
     private VolunteerApply getVolunteerApply(Long id) {
@@ -63,14 +65,15 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         }
     }
 
-    private void publishVolunteerApplyStatusChangeEvent(UUID receiverId, Long id, RecruitBoard recruitBoard, VolunteerApply apply) {
+    private void publishVolunteerApplyStatusChangeEvent(VolunteerApply apply, RecruitBoard recruitBoard, ApplyStatus oldStatus) {
         VolunteerApplyStatusChangeEvent event = VolunteerApplyStatusChangeEvent.builder()
                 .type(ServerEventType.NOTIFICATION)
                 .subType(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
-                .receiverId(receiverId)
-                .volunteerApplyId(id)
+                .volunteerId(apply.getVolunteerId())
+                .volunteerApplyId(apply.getId())
                 .centerId(recruitBoard.getCenterId())
                 .recruitBoardId(recruitBoard.getId())
+                .oldStatus(oldStatus)
                 .newStatus(apply.getStatus())
                 .build();
 

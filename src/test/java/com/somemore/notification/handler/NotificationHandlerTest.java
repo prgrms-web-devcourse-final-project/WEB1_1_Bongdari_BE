@@ -35,10 +35,11 @@ class NotificationHandlerTest extends IntegrationTestSupport {
                 {
                     "type": "NOTIFICATION",
                     "subType": "VOLUNTEER_APPLY_STATUS_CHANGE",
-                    "receiverId": "123e4567-e89b-12d3-a456-426614174000",
+                    "volunteerId": "123e4567-e89b-12d3-a456-426614174000",
                     "volunteerApplyId": 123,
                     "centerId": "123e4567-e89b-12d3-a456-426614174001",
                     "recruitBoardId": 456,
+                    "oldStatus": "WAITING",
                     "newStatus": "APPROVED",
                     "createdAt": "2024-12-05T10:00:00"
                 }
@@ -61,5 +62,7 @@ class NotificationHandlerTest extends IntegrationTestSupport {
         assertThat(savedNotification.getRelatedId()).isEqualTo(456L); // 프론트 요구사항: 123L(봉사신청아이디), 456L(모집글아이디)
         assertThat(savedNotification.isRead()).isFalse();
         assertThat(savedNotification.getCreatedAt()).isEqualTo(notification.getCreatedAt());
+        assertThat(savedNotification.getCreatedAt()).isNotNull();
     }
+
 }

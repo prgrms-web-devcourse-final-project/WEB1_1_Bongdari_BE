@@ -1,4 +1,4 @@
-package com.somemore.volunteerapply.domain;
+package com.somemore.facade.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,30 +13,23 @@ import java.util.UUID;
 
 @Getter
 @SuperBuilder
-public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSubType> {
-
-    private final UUID receiverId;
+public class VolunteerReviewRequestEvent extends ServerEvent<NotificationSubType> {
+    private final UUID volunteerId;
     private final Long volunteerApplyId;
     private final UUID centerId;
     private final Long recruitBoardId;
-    private final ApplyStatus oldStatus;
-    private final ApplyStatus newStatus;
 
     @JsonCreator
-    public VolunteerApplyStatusChangeEvent(
-            @JsonProperty("receiverId") UUID receiverId,
-            @JsonProperty("volunteerApplyId") Long volunteerApplyId,
-            @JsonProperty("centerId") UUID centerId,
-            @JsonProperty("recruitBoardId") Long recruitBoardId,
-            @JsonProperty("oldStatus") ApplyStatus oldStatus,
-            @JsonProperty("newStatus") ApplyStatus newStatus
+    public VolunteerReviewRequestEvent(
+            @JsonProperty(value = "volunteerId", required = true) UUID volunteerId,
+            @JsonProperty(value = "volunteerApplyId", required = true) Long volunteerApplyId,
+            @JsonProperty(value = "centerId", required = true) UUID centerId,
+            @JsonProperty(value = "recruitBoardId", required = true) Long recruitBoardId
     ) {
         super(ServerEventType.NOTIFICATION, NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE, LocalDateTime.now());
-        this.receiverId = receiverId;
+        this.volunteerId = volunteerId;
         this.volunteerApplyId = volunteerApplyId;
         this.centerId = centerId;
         this.recruitBoardId = recruitBoardId;
-        this.oldStatus = oldStatus;
-        this.newStatus = newStatus;
     }
 }
