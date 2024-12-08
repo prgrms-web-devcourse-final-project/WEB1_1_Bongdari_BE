@@ -23,7 +23,8 @@ public class RecruitBoardStatusUpdateScheduler {
     private final RecruitBoardRepository recruitBoardRepository;
 
     @Scheduled(cron = "${spring.schedules.cron.updateBoardsToClosed}")
-    public void transitionBoardsToClosed() {
+    public synchronized void transitionBoardsToClosed() {
+        log.info("봉사 시작일에 해당하는 모집글 상태를 CLOSED로 변경하는 작업 시작");
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime startOfNextDay = LocalDate.now().plusDays(1).atStartOfDay();
 
@@ -36,7 +37,9 @@ public class RecruitBoardStatusUpdateScheduler {
     }
 
     @Scheduled(cron = "${spring.schedules.cron.updateBoardsToCompleted}")
-    public void transitionBoardsToCompleted() {
+    public synchronized void transitionBoardsToCompleted() {
+
+        log.info("봉사 종료일에 해당하는 모집글 상태를 COMPLETED로 변경하는 작업을 시작");
         LocalDateTime now = LocalDateTime.now();
 
         List<RecruitBoard> boards = recruitBoardRepository.findByEndDateTimeBeforeAndStatus(
