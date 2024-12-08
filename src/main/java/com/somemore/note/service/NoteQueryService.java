@@ -36,6 +36,7 @@ public class NoteQueryService implements NoteQueryUseCase {
         return noteRepository.findNotesByReceiverIsVolunteer(volunteerId, pageable);
     }
 
+    @Transactional
     @Override
     public NoteDetailViewForCenter getNoteDetailForCenter(Long noteId) {
         noteMarkAsReadUseCase.noteMarkAsRead(noteId);
@@ -44,6 +45,7 @@ public class NoteQueryService implements NoteQueryUseCase {
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_NOTE));
     }
 
+    @Transactional
     @Override
     public NoteDetailViewForVolunteer getNoteDetailForVolunteer(Long noteId) {
         noteMarkAsReadUseCase.noteMarkAsRead(noteId);
