@@ -8,9 +8,11 @@ import com.somemore.sse.domain.SseEventType;
 import com.somemore.sse.usecase.SseUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class NotificationHandlerImpl implements NotificationHandler {
 
     private final NotificationRepository notificationRepository;
