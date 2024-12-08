@@ -11,6 +11,7 @@ import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
+import com.somemore.recruitboard.usecase.query.RecruitBoardDocumentUseCase;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecruitBoardQueryApiController {
 
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
+    private final RecruitBoardDocumentUseCase recruitBoardDocumentUseCase;
 
     @GetMapping("/recruit-board/{id}")
     @Operation(summary = "봉사 모집글 상세 조회", description = "특정 모집글의 상세 정보를 조회합니다.")
@@ -83,7 +85,7 @@ public class RecruitBoardQueryApiController {
 
         return ApiResponse.ok(
                 200,
-                recruitBoardQueryUseCase.getAllWithCenter(condition),
+                recruitBoardDocumentUseCase.getRecruitBoardBySearch(keyword, condition),
                 "봉사 활동 모집글 검색 조회 성공"
         );
     }
