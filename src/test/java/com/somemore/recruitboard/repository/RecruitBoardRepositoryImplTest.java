@@ -51,6 +51,8 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
     private final List<RecruitBoard> boards = new ArrayList<>();
 
+    private UUID centerId;
+
     @BeforeEach
     void setUp() {
         Location location = createLocation();
@@ -58,6 +60,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         Center center = createCenter();
         centerRepository.save(center);
+        centerId = center.getId();
 
         for (int i = 1; i <= 100; i++) {
             String title = "제목" + i;
@@ -424,6 +427,37 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(all).hasSize(3);
+    }
+
+    @DisplayName("모집글을 elastic search index에 저장할 수 있다. (repository)")
+    @Test
+    void saveDocuments() {
+        //given
+        Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .pageable(pageable)
+                .build();
+
+        List<RecruitBoard> recruitBoards = new ArrayList<>();
+
+        RecruitBoard board1 = createRecruitBoard("저장 잘 되나요?", centerId);
+        RecruitBoard savedBoard1 = recruitBoardRepository.save(board1);
+        RecruitBoard board2 = createRecruitBoard("저장해줘", centerId);
+        RecruitBoard savedBoard2 = recruitBoardRepository.save(board2);
+        recruitBoards.add(savedBoard1);
+        recruitBoards.add(savedBoard2);
+
+        //when
+        recruitBoardRepository.saveDocuments(recruitBoards);
+
+        //then
+        Page<RecruitBoardWithCenter> findBoard = recruitBoardRepository.findByRecruitBoardsContaining("저장", condition);
+
+        assertThat(findBoard).isNotNull();
+        assertThat(findBoard.getTotalElements()).isEqualTo(2);
+
+        recruitBoardRepository.deleteDocument(savedBoard1.getId());
+        recruitBoardRepository.deleteDocument(savedBoard2.getId());
     }
 
     private Pageable getPageable() {

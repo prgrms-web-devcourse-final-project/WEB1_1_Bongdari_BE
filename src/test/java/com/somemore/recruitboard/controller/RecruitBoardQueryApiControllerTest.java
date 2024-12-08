@@ -17,6 +17,7 @@ import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
+import com.somemore.recruitboard.usecase.query.RecruitBoardDocumentUseCase;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import java.util.Collections;
 import java.util.UUID;
@@ -36,6 +37,9 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private RecruitBoardQueryUseCase recruitBoardQueryUseCase;
+
+    @MockBean
+    private RecruitBoardDocumentUseCase documentUseCase;
 
     @Test
     @DisplayName("모집글 ID로 상세 조회할 수 있다.")
@@ -85,7 +89,7 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // given
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        given(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
+        given(documentUseCase.getRecruitBoardBySearch(any(), any(RecruitBoardSearchCondition.class)))
             .willReturn(page);
 
         // when
@@ -99,8 +103,8 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.message").value("봉사 활동 모집글 검색 조회 성공"));
 
-        verify(recruitBoardQueryUseCase, times(1)).getAllWithCenter(
-            any(RecruitBoardSearchCondition.class));
+        verify(documentUseCase, times(1)).getRecruitBoardBySearch(
+            any(), any(RecruitBoardSearchCondition.class));
     }
 
     @Test
