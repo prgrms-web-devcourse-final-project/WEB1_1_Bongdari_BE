@@ -21,7 +21,7 @@ import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityB
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-public class CommunityBoardDocumentRepositoryTest extends IntegrationTestSupport {
+class CommunityBoardDocumentRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private CommunityBoardRepository communityBoardRepository;

@@ -29,7 +29,7 @@ import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-public class RecruitBoardDocumentRepositoryTest extends IntegrationTestSupport {
+class RecruitBoardDocumentRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;

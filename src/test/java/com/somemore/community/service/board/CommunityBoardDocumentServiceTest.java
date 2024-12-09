@@ -19,7 +19,7 @@ import java.util.UUID;
 import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
+class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private CommunityBoardDocumentService communityBoardDocumentService;
