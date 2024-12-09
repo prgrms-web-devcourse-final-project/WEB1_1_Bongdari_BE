@@ -45,7 +45,7 @@ public class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
 
         // when
         // then
-        mockMvc.perform(get("/api_v1/recruit-boards/search")
+        mockMvc.perform(get("/api/v1/recruit-boards/search")
                         .param("keyword", "volunteer")
                         .param("category", ADMINISTRATIVE_SUPPORT.name())
                         .accept(MediaType.APPLICATION_JSON))
@@ -68,7 +68,7 @@ public class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
 
         // when
         // then
-        mockMvc.perform(get("/api_v1/recruit-boards/nearby")
+        mockMvc.perform(get("/api/v1/recruit-boards/nearby")
                         .param("latitude", "37.5665")
                         .param("longitude", "126.9780")
                         .param("radius", "10")
