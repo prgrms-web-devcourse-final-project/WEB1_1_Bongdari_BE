@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.somemore.global.common.event.ServerEvent;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.volunteerapply.domain.ApplyStatus;
+import com.somemore.volunteerapply.domain.VolunteerApply;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -39,5 +41,19 @@ public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSub
         this.recruitBoardId = recruitBoardId;
         this.oldStatus = oldStatus;
         this.newStatus = newStatus;
+    }
+
+    public static VolunteerApplyStatusChangeEvent from(VolunteerApply apply, RecruitBoard recruitBoard, ApplyStatus oldStatus) {
+
+        return VolunteerApplyStatusChangeEvent.builder()
+                .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
+                .volunteerId(apply.getVolunteerId())
+                .volunteerApplyId(apply.getId())
+                .centerId(recruitBoard.getCenterId())
+                .recruitBoardId(recruitBoard.getId())
+                .oldStatus(oldStatus)
+                .newStatus(apply.getStatus())
+                .build();
     }
 }

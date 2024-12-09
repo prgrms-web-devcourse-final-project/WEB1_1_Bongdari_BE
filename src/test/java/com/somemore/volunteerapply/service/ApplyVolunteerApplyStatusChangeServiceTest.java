@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-class ApplyVolunteerApplyServiceTest extends IntegrationTestSupport {
+class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ApplyVolunteerApplyService volunteerApplyCommandService;
