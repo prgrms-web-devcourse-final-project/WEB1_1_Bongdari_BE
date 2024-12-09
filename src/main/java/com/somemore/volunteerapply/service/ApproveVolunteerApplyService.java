@@ -1,9 +1,7 @@
 package com.somemore.volunteerapply.service;
 
 import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteerapply.domain.ApplyStatus;
@@ -65,18 +63,14 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         }
     }
 
-    private void publishVolunteerApplyStatusChangeEvent(VolunteerApply apply, RecruitBoard recruitBoard, ApplyStatus oldStatus) {
-        VolunteerApplyStatusChangeEvent event = VolunteerApplyStatusChangeEvent.builder()
-                .type(ServerEventType.NOTIFICATION)
-                .subType(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
-                .volunteerId(apply.getVolunteerId())
-                .volunteerApplyId(apply.getId())
-                .centerId(recruitBoard.getCenterId())
-                .recruitBoardId(recruitBoard.getId())
-                .oldStatus(oldStatus)
-                .newStatus(apply.getStatus())
-                .build();
+    private void publishVolunteerApplyStatusChangeEvent(VolunteerApply apply,
+                                                        RecruitBoard recruitBoard,
+                                                        ApplyStatus oldStatus) {
 
-        serverEventPublisher.publish(event);
+        if (apply.getStatus() == oldStatus) {
+            return;
+        }
+
+        serverEventPublisher.publish(VolunteerApplyStatusChangeEvent.from(apply, recruitBoard, oldStatus));
     }
 }

@@ -5,10 +5,13 @@ import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ALREA
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;
 
+import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.RejectVolunteerApplyUseCase;
 import java.util.UUID;
@@ -23,20 +26,24 @@ public class RejectVolunteerApplyService implements RejectVolunteerApplyUseCase 
 
     private final VolunteerApplyRepository volunteerApplyRepository;
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
+    private final ServerEventPublisher serverEventPublisher;
 
     @Override
     public void reject(Long id, UUID centerId) {
-        VolunteerApply apply = getApply(id);
+        VolunteerApply apply = getVolunteerApply(id);
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(apply.getRecruitBoardId());
 
         validateWriter(recruitBoard, centerId);
         validateBoardStatus(recruitBoard);
 
+        ApplyStatus oldStatus = apply.getStatus();
         apply.changeStatus(REJECTED);
         volunteerApplyRepository.save(apply);
+
+        publishVolunteerApplyStatusChangeEvent(apply, recruitBoard, oldStatus);
     }
 
-    private VolunteerApply getApply(Long id) {
+    private VolunteerApply getVolunteerApply(Long id) {
         return volunteerApplyRepository.findById(id).orElseThrow(
                 () -> new BadRequestException(NOT_EXISTS_VOLUNTEER_APPLY)
         );
@@ -55,4 +62,14 @@ public class RejectVolunteerApplyService implements RejectVolunteerApplyUseCase 
         }
     }
 
+    private void publishVolunteerApplyStatusChangeEvent(VolunteerApply apply,
+                                                        RecruitBoard recruitBoard,
+                                                        ApplyStatus oldStatus) {
+
+        if (apply.getStatus() == oldStatus) {
+            return;
+        }
+
+        serverEventPublisher.publish(VolunteerApplyStatusChangeEvent.from(apply, recruitBoard, oldStatus));
+    }
 }
