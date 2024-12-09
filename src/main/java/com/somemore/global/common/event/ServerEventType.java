@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Getter
 public enum ServerEventType {
     NOTIFICATION(NotificationSubType.class),
-    DOMAIN(DomainEventSubType.class),
+    DOMAIN_EVENT(DomainEventSubType.class),
     ;
 
     private final Class<? extends Enum<?>> subtype;
