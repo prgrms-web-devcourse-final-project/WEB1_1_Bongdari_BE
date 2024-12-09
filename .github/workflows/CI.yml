@@ -42,6 +42,9 @@ jobs:
       S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       DEFAULT_IMG_URL: ${{ secrets.DEFAULT_IMG_URL }}
       APP_DEVELOP_MODE: ${{ secrets.APP_DEVELOP_MODE }}
+      ELASTIC_URI=localhost: ${{ secrets.ELASTIC_URI }}
+      ELASTIC_USERNAME: ${{ secrets.ELASTIC_USERNAME }}
+      ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
 
 
     steps:

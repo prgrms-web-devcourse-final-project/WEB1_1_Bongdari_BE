@@ -1,13 +1,14 @@
 package com.somemore.notification.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.somemore.community.event.CommentAddedEvent;
 import com.somemore.facade.event.VolunteerReviewRequestEvent;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.volunteerapply.domain.ApplyStatus;
+import com.somemore.volunteerapply.event.VolunteerApplyEvent;
 import com.somemore.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ public class MessageConverter {
                 case NOTE_BLAH_BLAH -> throw new UnsupportedOperationException("NOTE 알림 타입 처리 로직 미구현");
                 case VOLUNTEER_REVIEW_REQUEST -> buildVolunteerReviewRequestNotification(message);
                 case VOLUNTEER_APPLY_STATUS_CHANGE -> buildVolunteerApplyStatusChangeNotification(message);
+                case COMMENT_ADDED -> buildCommentAddedNotification(message);
+                case VOLUNTEER_APPLY -> buildVolunteerApplyNotification(message);
             };
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -58,6 +61,28 @@ public class MessageConverter {
                 .build();
     }
 
+    private Notification buildCommentAddedNotification(String message) throws JsonProcessingException {
+        CommentAddedEvent event = objectMapper.readValue(message, CommentAddedEvent.class);
+
+        return Notification.builder()
+                .receiverId(event.getVolunteerId())
+                .title(createCommentAddedNotificationTitle())
+                .type(NotificationSubType.COMMENT_ADDED)
+                .relatedId(event.getCommunityBoardId())
+                .build();
+    }
+
+    private Notification buildVolunteerApplyNotification(String message) throws JsonProcessingException {
+        VolunteerApplyEvent event = objectMapper.readValue(message, VolunteerApplyEvent.class);
+
+        return Notification.builder()
+                .receiverId(event.getCenterId())
+                .title(createVolunteerApplyNotificationTitle())
+                .type(NotificationSubType.VOLUNTEER_APPLY)
+                .relatedId(event.getRecruitBoardId())
+                .build();
+    }
+
     private String createVolunteerReviewRequestNotificationTitle() {
         return "최근 활동하신 활동의 후기를 작성해 주세요!";
     }
@@ -71,5 +96,13 @@ public class MessageConverter {
                 throw new IllegalArgumentException();
             }
         };
+    }
+
+    private String createCommentAddedNotificationTitle() {
+        return "새로운 댓글이 작성되었습니다.";
+    }
+
+    private String createVolunteerApplyNotificationTitle() {
+        return "봉사 활동 모집에 새로운 신청이 있습니다.";
     }
 }
