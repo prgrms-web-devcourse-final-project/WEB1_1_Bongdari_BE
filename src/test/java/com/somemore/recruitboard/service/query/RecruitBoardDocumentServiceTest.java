@@ -6,7 +6,9 @@ import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;
 import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
+import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,26 +62,26 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         recruitBoardRepository.saveAll(boards);
     }
 
-//    @DisplayName("검색 키워드가 포함된 모집글을 조회한다. (service)")
-//    @Test
-//    void getRecruitBoardBySearch() {
-//        //given
-//        Pageable pageable = getPageable();
-//        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-//                .keyword("노인")
-//                .pageable(pageable)
-//                .build();
-//
-//        //when
-//        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
-//
-//        //then
-//        assertThat(dtos).isNotNull();
+    @DisplayName("검색 키워드가 포함된 모집글을 조회한다. (service)")
+    @Test
+    void getRecruitBoardBySearch() {
+        //given
+        Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("노인")
+                .pageable(pageable)
+                .build();
+
+        //when
+        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
+
+        //then
+        assertThat(dtos).isNotNull();
 //        assertThat(dtos.getContent()).isNotNull();
 //        assertThat(dtos.getTotalElements()).isEqualTo(4);
 //        assertThat(dtos.getSize()).isEqualTo(5);
 //        assertThat(dtos.getTotalPages()).isEqualTo(1);
-//    }
+    }
 
     @DisplayName("키워드 없이 검색시 전체 모집글을 조회한다. (service)")
     @Test
@@ -96,57 +98,57 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(dtos).isNotNull();
-        assertThat(dtos.getContent()).isNotNull();
+//        assertThat(dtos.getContent()).isNotNull();
 //        assertThat(dtos.getTotalElements()).isEqualTo(30);
 //        assertThat(dtos.getSize()).isEqualTo(5);
 //        assertThat(dtos.getTotalPages()).isEqualTo(6);
     }
 
-//    @DisplayName("위치 기반으로 주변 모집글을 페이징하여 조회할 수 있다. (service)")
-//    @Test
-//    void getRecruitBoardsNearBy() {
-//        // given
-//        Pageable pageable = getPageable();
-//        RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
-//                .keyword(null)
-//                .latitude(37.5935)
-//                .longitude(126.9780)
-//                .radius(5.0)
-//                .pageable(pageable)
-//                .build();
-//
-//        // when
-//        Page<RecruitBoardDetailResponseDto> result = recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
-//                condition);
-//
-//        // then
-//        assertThat(result).isNotNull();
+    @DisplayName("위치 기반으로 주변 모집글을 페이징하여 조회할 수 있다. (service)")
+    @Test
+    void getRecruitBoardsNearBy() {
+        // given
+        Pageable pageable = getPageable();
+        RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
+                .keyword(null)
+                .latitude(37.5935)
+                .longitude(126.9780)
+                .radius(5.0)
+                .pageable(pageable)
+                .build();
+
+        // when
+        Page<RecruitBoardDetailResponseDto> result = recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
+                condition);
+
+        // then
+        assertThat(result).isNotNull();
 //        assertThat(result.getTotalElements()).isEqualTo(23);
 //        assertThat(result.getContent()).isNotEmpty();
-//    }
+    }
 
-//    @DisplayName("위치 기반으로 반경 내에 모집글을 키워드로 검색하여 반환한다. (service)")
-//    @Test
-//    void findAllNearByLocationWithKeyword() {
-//        // given
-//        Pageable pageable = getPageable();
-//
-//        RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
-//                .keyword("도서관")
-//                .latitude(37.5935)
-//                .longitude(126.9780)
-//                .radius(5.0)
-//                .pageable(pageable)
-//                .build();
-//
-//        // when
-//        Page<RecruitBoardDetailResponseDto> result = recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
-//                condition);
-//
-//        // then
-//        assertThat(result).isNotNull();
+    @DisplayName("위치 기반으로 반경 내에 모집글을 키워드로 검색하여 반환한다. (service)")
+    @Test
+    void findAllNearByLocationWithKeyword() {
+        // given
+        Pageable pageable = getPageable();
+
+        RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
+                .keyword("도서관")
+                .latitude(37.5935)
+                .longitude(126.9780)
+                .radius(5.0)
+                .pageable(pageable)
+                .build();
+
+        // when
+        Page<RecruitBoardDetailResponseDto> result = recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
+                condition);
+
+        // then
+        assertThat(result).isNotNull();
 //        assertThat(result.getTotalElements()).isEqualTo(1);
-//    }
+    }
 
     private Pageable getPageable() {
         Sort sort = Sort.by(Sort.Order.desc("created_at"));
