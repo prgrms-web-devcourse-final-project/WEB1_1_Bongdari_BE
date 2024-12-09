@@ -6,7 +6,6 @@ import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.usecase.query.RecruitBoardDocumentUseCase;
-import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,6 @@ public class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private RecruitBoardQueryUseCase recruitBoardQueryUseCase;
 
     @MockBean
     private RecruitBoardDocumentUseCase documentUseCase;
