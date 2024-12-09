@@ -86,6 +86,47 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         assertThat(result).isEmpty();
     }
 
+    @DisplayName("센터 ID로 봉사자 ID 목록을 조회할 수 있다.")
+    @Test
+    void getVolunteerIdsByCenterId() {
+        // given
+        UUID centerId = UUID.randomUUID();
+        UUID volunteerId1 = UUID.randomUUID();
+        UUID volunteerId2 = UUID.randomUUID();
+        UUID volunteerId3 = UUID.randomUUID();
+
+        InterestCenter interestCenter1 = createInterestCenter(volunteerId1, centerId);
+        InterestCenter interestCenter2 = createInterestCenter(volunteerId2, centerId);
+        InterestCenter interestCenter3 = createInterestCenter(volunteerId3, centerId);
+        interestCenterJpaRepository.saveAll(List.of(interestCenter1, interestCenter2, interestCenter3));
+
+        // when
+        List<UUID> result = interestCenterQueryService.getVolunteerIdsByCenterId(centerId);
+
+        // then
+        assertThat(result)
+                .hasSize(3)
+                .containsExactlyInAnyOrder(volunteerId1, volunteerId2, volunteerId3);
+    }
+
+    @DisplayName("센터 ID에 등록된 봉사자가 없을 경우 빈 리스트를 반환한다.")
+    @Test
+    void getVolunteerIdsByCenterId_ReturnsEmptyList_WhenNoVolunteers() {
+        // given
+        UUID centerId = UUID.randomUUID();
+
+        Center center = createCenter();
+        centerJpaRepository.save(center);
+
+        // when
+        List<UUID> result = interestCenterQueryService.getVolunteerIdsByCenterId(centerId);
+
+        // then
+        assertThat(result).isEmpty();
+    }
+
+
+
 
     private Center createCenter() {
         return Center.create(
