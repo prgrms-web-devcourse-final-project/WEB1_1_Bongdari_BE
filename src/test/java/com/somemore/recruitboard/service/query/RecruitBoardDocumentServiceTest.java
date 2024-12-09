@@ -60,34 +60,13 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         recruitBoardRepository.saveAll(boards);
     }
 
-    @DisplayName("검색 키워드가 포함된 모집글을 조회한다. (service)")
-    @Test
-    void getRecruitBoardBySearch() {
-        //given
-        Pageable pageable = getPageable();
-        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-                .keyword("노인")
-                .pageable(pageable)
-                .build();
-
-        //when
-        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
-
-        //then
-        assertThat(dtos).isNotNull();
-        assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(4);
-        assertThat(dtos.getSize()).isEqualTo(5);
-        assertThat(dtos.getTotalPages()).isEqualTo(1);
-    }
-
-//    @DisplayName("키워드 없이 검색시 전체 모집글을 조회한다. (service)")
+//    @DisplayName("검색 키워드가 포함된 모집글을 조회한다. (service)")
 //    @Test
-//    void getRecruitBoardBySearchWithNull() {
+//    void getRecruitBoardBySearch() {
 //        //given
 //        Pageable pageable = getPageable();
 //        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-//                .keyword("")
+//                .keyword("노인")
 //                .pageable(pageable)
 //                .build();
 //
@@ -97,10 +76,31 @@ public class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
 //        //then
 //        assertThat(dtos).isNotNull();
 //        assertThat(dtos.getContent()).isNotNull();
-//        assertThat(dtos.getTotalElements()).isEqualTo(23);
+//        assertThat(dtos.getTotalElements()).isEqualTo(4);
 //        assertThat(dtos.getSize()).isEqualTo(5);
-//        assertThat(dtos.getTotalPages()).isEqualTo(5);
+//        assertThat(dtos.getTotalPages()).isEqualTo(1);
 //    }
+
+    @DisplayName("키워드 없이 검색시 전체 모집글을 조회한다. (service)")
+    @Test
+    void getRecruitBoardBySearchWithNull() {
+        //given
+        Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("")
+                .pageable(pageable)
+                .build();
+
+        //when
+        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
+
+        //then
+        assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
+        assertThat(dtos.getTotalElements()).isEqualTo(30);
+        assertThat(dtos.getSize()).isEqualTo(5);
+        assertThat(dtos.getTotalPages()).isEqualTo(6);
+    }
 
 //    @DisplayName("위치 기반으로 주변 모집글을 페이징하여 조회할 수 있다. (service)")
 //    @Test

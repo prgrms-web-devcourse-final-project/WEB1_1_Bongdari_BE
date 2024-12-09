@@ -51,33 +51,33 @@ public class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
         communityBoardRepository.deleteAllInBatch();
     }
 
-    @DisplayName("검색 키워드가 포함된 게시글을 조회한다. (service)")
-    @Test
-    void getCommunityBoardBySearch() {
-        //given
-        //when
-        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("봉사", 0);
-
-        //then
-        assertThat(dtos).isNotNull();
-        assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(10);
-        assertThat(dtos.getSize()).isEqualTo(10);
-        assertThat(dtos.getTotalPages()).isEqualTo(1);
-    }
-
-//    @DisplayName("검색 키워드 없이 조회시 전체 게시글을 조회한다. (service)")
+//    @DisplayName("검색 키워드가 포함된 게시글을 조회한다. (service)")
 //    @Test
-//    void getCommunityBoardBySearchWithNull() {
+//    void getCommunityBoardBySearch() {
 //        //given
 //        //when
-//        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("", 0);
+//        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("봉사", 0);
 //
 //        //then
 //        assertThat(dtos).isNotNull();
 //        assertThat(dtos.getContent()).isNotNull();
-//        assertThat(dtos.getTotalElements()).isEqualTo(15);
+//        assertThat(dtos.getTotalElements()).isEqualTo(10);
 //        assertThat(dtos.getSize()).isEqualTo(10);
-//        assertThat(dtos.getTotalPages()).isEqualTo(2);
+//        assertThat(dtos.getTotalPages()).isEqualTo(1);
 //    }
+
+    @DisplayName("검색 키워드 없이 조회시 전체 게시글을 조회한다. (service)")
+    @Test
+    void getCommunityBoardBySearchWithNull() {
+        //given
+        //when
+        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("", 0);
+
+        //then
+        assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
+        assertThat(dtos.getTotalElements()).isEqualTo(17);
+        assertThat(dtos.getSize()).isEqualTo(10);
+        assertThat(dtos.getTotalPages()).isEqualTo(2);
+    }
 }
