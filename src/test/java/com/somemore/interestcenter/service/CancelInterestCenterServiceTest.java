@@ -43,16 +43,16 @@ class CancelInterestCenterServiceTest extends IntegrationTestSupport {
         Center center = createCenter();
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         UUID centerId = center.getId();
-        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(volunteerId, centerId);
+        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(centerId);
 
-        RegisterInterestCenterResponseDto responseDto = registerInterestCenterUseCase.registerInterestCenter(requestDto);
+        RegisterInterestCenterResponseDto responseDto = registerInterestCenterUseCase.registerInterestCenter(volunteerId, requestDto);
 
         InterestCenter savedInterestCenter = interestCenterRepository.findById(responseDto.id())
                 .orElseThrow(() -> new IllegalStateException("등록된 관심 기관이 없습니다."));
         assertEquals(savedInterestCenter.getId(), responseDto.id());
 
         //when
-        cancelInterestCenterUseCase.cancelInterestCenter(responseDto.id());
+        cancelInterestCenterUseCase.cancelInterestCenter(volunteerId, centerId);
 
         //then
         Optional<InterestCenter> deletedInterestCenterOptional = interestCenterRepository.findById(responseDto.id());
@@ -67,14 +67,14 @@ class CancelInterestCenterServiceTest extends IntegrationTestSupport {
         Center center = createCenter();
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         UUID centerId = center.getId();
-        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(volunteerId, centerId);
-        RegisterInterestCenterResponseDto responseDto = registerInterestCenterUseCase.registerInterestCenter(requestDto);
-        cancelInterestCenterUseCase.cancelInterestCenter(responseDto.id());
+        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(centerId);
+        RegisterInterestCenterResponseDto responseDto = registerInterestCenterUseCase.registerInterestCenter(volunteerId, requestDto);
+        cancelInterestCenterUseCase.cancelInterestCenter(volunteerId, centerId);
 
         //when, then
         long interestCenterId = responseDto.id();
         assertThrows(BadRequestException.class,
-                () -> cancelInterestCenterUseCase.cancelInterestCenter(interestCenterId),
+                () -> cancelInterestCenterUseCase.cancelInterestCenter(volunteerId, centerId),
                 CANNOT_CANCEL_DELETED_INTEREST_CENTER.getMessage()
         );
     }
