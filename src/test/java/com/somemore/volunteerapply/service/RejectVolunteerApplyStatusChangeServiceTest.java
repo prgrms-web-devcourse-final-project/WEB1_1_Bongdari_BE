@@ -23,7 +23,6 @@ import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRec
 import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;
 import static com.somemore.volunteerapply.domain.ApplyStatus.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,9 +34,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @Transactional
-class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
+class RejectVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport {
 
-    private RejectVolunteerApplyService rejectVolunteerApplyService;
+    private VolunteerApplyStatusChangeService volunteerApplyStatusChangeService;
 
     @Autowired
     private VolunteerApplyRepository volunteerApplyRepository;
@@ -54,7 +53,7 @@ class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
     @BeforeEach
     void setUp() {
         serverEventPublisher = mock(ServerEventPublisher.class);
-        rejectVolunteerApplyService = new RejectVolunteerApplyService(
+        volunteerApplyStatusChangeService = new VolunteerApplyStatusChangeService(
                 volunteerApplyRepository,
                 recruitBoardQueryUseCase,
                 serverEventPublisher
@@ -74,7 +73,7 @@ class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(apply);
 
         // when
-        rejectVolunteerApplyService.reject(apply.getId(), centerId);
+        volunteerApplyStatusChangeService.reject(apply.getId(), centerId);
 
         // then
         VolunteerApply approve = volunteerApplyRepository.findById(apply.getId()).orElseThrow();
@@ -98,7 +97,7 @@ class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> rejectVolunteerApplyService.reject(id, wrongCenterId)
+                () -> volunteerApplyStatusChangeService.reject(id, wrongCenterId)
         ).isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
     }
@@ -118,7 +117,7 @@ class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> rejectVolunteerApplyService.reject(id, centerId)
+                () -> volunteerApplyStatusChangeService.reject(id, centerId)
         ).isInstanceOf(BadRequestException.class)
                 .hasMessage(ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED.getMessage());
     }
@@ -137,7 +136,7 @@ class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(apply);
 
         // when
-        rejectVolunteerApplyService.reject(apply.getId(), centerId);
+        volunteerApplyStatusChangeService.reject(apply.getId(), centerId);
 
         // then
         verify(serverEventPublisher, never()).publish(any());
@@ -158,7 +157,7 @@ class RejectVolunteerApplyServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(apply);
 
         // when
-        rejectVolunteerApplyService.reject(apply.getId(), centerId);
+        volunteerApplyStatusChangeService.reject(apply.getId(), centerId);
 
         // then
         ArgumentCaptor<VolunteerApplyStatusChangeEvent> eventCaptor = ArgumentCaptor.forClass(VolunteerApplyStatusChangeEvent.class);

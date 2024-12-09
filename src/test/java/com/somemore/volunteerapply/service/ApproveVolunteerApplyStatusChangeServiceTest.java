@@ -34,9 +34,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @Transactional
-class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
+class ApproveVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport {
 
-    private ApproveVolunteerApplyService approveVolunteerApplyService;
+    private VolunteerApplyStatusChangeService volunteerApplyStatusChangeService;
 
     @Autowired
     private VolunteerApplyRepository volunteerApplyRepository;
@@ -53,7 +53,7 @@ class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
     @BeforeEach
     void setUp() {
         serverEventPublisher = mock(ServerEventPublisher.class);
-        approveVolunteerApplyService = new ApproveVolunteerApplyService(
+        volunteerApplyStatusChangeService = new VolunteerApplyStatusChangeService(
                 volunteerApplyRepository,
                 recruitBoardQueryUseCase,
                 serverEventPublisher
@@ -73,7 +73,7 @@ class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(apply);
 
         // when
-        approveVolunteerApplyService.approve(apply.getId(), centerId);
+        volunteerApplyStatusChangeService.approve(apply.getId(), centerId);
 
         // then
         VolunteerApply approve = volunteerApplyRepository.findById(apply.getId()).orElseThrow();
@@ -97,7 +97,7 @@ class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> approveVolunteerApplyService.approve(id, wrongCenterId)
+                () -> volunteerApplyStatusChangeService.approve(id, wrongCenterId)
         ).isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
     }
@@ -117,7 +117,7 @@ class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> approveVolunteerApplyService.approve(id, centerId)
+                () -> volunteerApplyStatusChangeService.approve(id, centerId)
         ).isInstanceOf(BadRequestException.class)
                 .hasMessage(ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED.getMessage());
     }
@@ -136,7 +136,7 @@ class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(apply);
 
         // when
-        approveVolunteerApplyService.approve(apply.getId(), centerId);
+        volunteerApplyStatusChangeService.approve(apply.getId(), centerId);
 
         // then
         verify(serverEventPublisher, never()).publish(any());
@@ -157,7 +157,7 @@ class ApproveVolunteerApplyServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(apply);
 
         // when
-        approveVolunteerApplyService.approve(apply.getId(), centerId);
+        volunteerApplyStatusChangeService.approve(apply.getId(), centerId);
 
         // then
         ArgumentCaptor<VolunteerApplyStatusChangeEvent> eventCaptor = ArgumentCaptor.forClass(VolunteerApplyStatusChangeEvent.class);
