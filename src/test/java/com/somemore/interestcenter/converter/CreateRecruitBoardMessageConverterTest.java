@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CreateRecruitBoardMessageConverterTest extends IntegrationTestSupport {
 
@@ -39,6 +40,25 @@ class CreateRecruitBoardMessageConverterTest extends IntegrationTestSupport {
         assertThat(event.getRecruitBoardId()).isEqualTo(456);
         assertThat(event.getType()).isEqualTo(ServerEventType.DOMAIN_EVENT);
         assertThat(event.getSubType()).isEqualTo(DomainEventSubType.CREATE_RECRUIT_BOARD);
+    }
+
+    @Test
+    @DisplayName("잘못된 메시지를 변환하려 하면 IllegalStateException이 발생한다")
+    void testMessageConversion_Failure() {
+        // given
+        String invalidMessage = """
+                {
+                    "type": "DOMAIN_EVENT",
+                    "subType": "INVALID_TYPE",
+                    "centerId": "123e4567-e89b-12d3-a456-426614174001",
+                    "recruitBoardId": 456,
+                    "createdAt": "2024-12-05T10:00:00"
+                }
+                """;
+
+        // when & then
+        assertThatThrownBy(() -> createRecruitBoardMessageConverter.from(invalidMessage))
+                .isInstanceOf(IllegalStateException.class);
     }
 
 }
