@@ -1,9 +1,7 @@
 package com.somemore.volunteerapply.service;
 
 import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteerapply.domain.ApplyStatus;
@@ -11,6 +9,7 @@ import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
+import com.somemore.volunteerapply.usecase.RejectVolunteerApplyUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +20,12 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEE
 import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCase {
+public class VolunteerApplyStatusChangeService implements ApproveVolunteerApplyUseCase, RejectVolunteerApplyUseCase {
 
     private final VolunteerApplyRepository volunteerApplyRepository;
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
@@ -33,6 +33,15 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
 
     @Override
     public void approve(Long id, UUID centerId) {
+        changeApplyStatus(id, centerId, APPROVED);
+    }
+
+    @Override
+    public void reject(Long id, UUID centerId) {
+        changeApplyStatus(id, centerId, REJECTED);
+    }
+
+    private void changeApplyStatus(Long id, UUID centerId, ApplyStatus newStatus) {
         VolunteerApply apply = getVolunteerApply(id);
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(apply.getRecruitBoardId());
 
@@ -40,7 +49,7 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         validateBoardStatus(recruitBoard);
 
         ApplyStatus oldStatus = apply.getStatus();
-        apply.changeStatus(APPROVED);
+        apply.changeStatus(newStatus);
         volunteerApplyRepository.save(apply);
 
         publishVolunteerApplyStatusChangeEvent(apply, recruitBoard, oldStatus);
@@ -65,18 +74,12 @@ public class ApproveVolunteerApplyService implements ApproveVolunteerApplyUseCas
         }
     }
 
-    private void publishVolunteerApplyStatusChangeEvent(VolunteerApply apply, RecruitBoard recruitBoard, ApplyStatus oldStatus) {
-        VolunteerApplyStatusChangeEvent event = VolunteerApplyStatusChangeEvent.builder()
-                .type(ServerEventType.NOTIFICATION)
-                .subType(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
-                .volunteerId(apply.getVolunteerId())
-                .volunteerApplyId(apply.getId())
-                .centerId(recruitBoard.getCenterId())
-                .recruitBoardId(recruitBoard.getId())
-                .oldStatus(oldStatus)
-                .newStatus(apply.getStatus())
-                .build();
-
-        serverEventPublisher.publish(event);
+    private void publishVolunteerApplyStatusChangeEvent(VolunteerApply apply,
+                                                        RecruitBoard recruitBoard,
+                                                        ApplyStatus oldStatus) {
+        if (apply.getStatus() == oldStatus) {
+            return;
+        }
+        serverEventPublisher.publish(VolunteerApplyStatusChangeEvent.from(apply, recruitBoard, oldStatus));
     }
 }
