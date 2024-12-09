@@ -1,6 +1,6 @@
 package com.somemore.notification.subscriber;
 
-import com.somemore.notification.converter.MessageConverter;
+import com.somemore.notification.converter.NotificationMessageConverter;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.handler.NotificationHandler;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class RedisNotificationSubscriber implements MessageListener {
 
     private final NotificationHandler notificationHandler;
-    private final MessageConverter messageConverter;
+    private final NotificationMessageConverter messageConverter;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
