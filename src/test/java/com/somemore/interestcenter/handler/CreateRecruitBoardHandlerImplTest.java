@@ -4,7 +4,6 @@ import com.somemore.IntegrationTestSupport;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.interestcenter.event.InterestCenterCreateRecruitBoardEvent;
 import com.somemore.interestcenter.usecase.InterestCenterQueryUseCase;
-import com.somemore.interestcenter.usecase.RegisterInterestCenterUseCase;
 import com.somemore.recruitboard.event.CreateRecruitBoardEvent;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,9 +24,6 @@ class CreateRecruitBoardHandlerImplTest extends IntegrationTestSupport {
 
     @Autowired
     private CreateRecruitBoardHandlerImpl createRecruitBoardHandler;
-
-    @Autowired
-    private RegisterInterestCenterUseCase registerInterestCenterUseCase;
 
     @MockBean
     private InterestCenterQueryUseCase interestCenterQueryUseCase;
