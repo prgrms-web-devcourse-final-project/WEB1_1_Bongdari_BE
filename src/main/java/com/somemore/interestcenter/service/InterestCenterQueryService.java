@@ -31,4 +31,10 @@ public class InterestCenterQueryService implements InterestCenterQueryUseCase {
                 .map(InterestCentersResponseDto::of)
                 .toList();
     }
+
+    @Override
+    public List<UUID> getVolunteerIdsByCenterId(UUID centerId) {
+
+        return interestCenterRepository.findVolunteerIdsByCenterId(centerId);
+    }
 }

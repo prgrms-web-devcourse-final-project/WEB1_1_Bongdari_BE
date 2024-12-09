@@ -1,6 +1,7 @@
 package com.somemore.interestcenter.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.interestcenter.domain.InterestCenter;
 import com.somemore.interestcenter.domain.QInterestCenter;
@@ -18,6 +19,8 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
     private final JPAQueryFactory queryFactory;
     private final InterestCenterJpaRepository interestCenterJpaRepository;
 
+    private final static QInterestCenter interestCenter = QInterestCenter.interestCenter;
+
     @Override
     public InterestCenter save(InterestCenter interestCenter) {
         return interestCenterJpaRepository.save(interestCenter);
@@ -25,13 +28,12 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
 
     @Override
     public Optional<InterestCenter> findById(Long id) {
-        QInterestCenter interestCenter = QInterestCenter.interestCenter;
 
         InterestCenter result = queryFactory
                 .selectFrom(interestCenter)
                 .where(
                         interestCenter.id.eq(id)
-                                .and(interestCenter.deleted.eq(false))
+                                .and(isNotDeleted())
                 )
                 .fetchOne();
 
@@ -40,7 +42,6 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
 
     @Override
     public Optional<RegisterInterestCenterResponseDto> findInterestCenterResponseById(Long id) {
-        QInterestCenter interestCenter = QInterestCenter.interestCenter;
 
         RegisterInterestCenterResponseDto result = queryFactory
                 .select(
@@ -54,7 +55,7 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
                 .from(interestCenter)
                 .where(
                         interestCenter.id.eq(id)
-                                .and(interestCenter.deleted.eq(false))
+                                .and(isNotDeleted())
                 )
                 .fetchOne();
 
@@ -63,21 +64,32 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
 
     @Override
     public List<UUID> findInterestCenterIdsByVolunteerId(UUID volunteerId) {
-        QInterestCenter interestCenter = QInterestCenter.interestCenter;
 
         return queryFactory
                 .select(interestCenter.centerId)
                 .from(interestCenter)
                 .where(
                         interestCenter.volunteerId.eq(volunteerId)
-                                .and(interestCenter.deleted.eq(false))
+                                .and(isNotDeleted())
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<UUID> findVolunteerIdsByCenterId(UUID centerId) {
+
+        return queryFactory
+                .select(interestCenter.volunteerId)
+                .from(interestCenter)
+                .where(
+                        interestCenter.centerId.eq(centerId),
+                        isNotDeleted()
                 )
                 .fetch();
     }
 
     @Override
     public boolean existsByVolunteerIdAndCenterId(UUID volunteerId, UUID centerId) {
-        QInterestCenter interestCenter = QInterestCenter.interestCenter;
 
         Integer result = queryFactory
                 .selectOne()
@@ -85,16 +97,16 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
                 .where(
                         interestCenter.volunteerId.eq(volunteerId)
                                 .and(interestCenter.centerId.eq(centerId))
-                                .and(interestCenter.deleted.eq(false))
+                                .and(isNotDeleted())
                 )
                 .fetchFirst();
 
         return result != null;
     }
 
+
     @Override
     public Optional<InterestCenter> findByVolunteerIdAndCenterId(UUID volunteerId, UUID centerId) {
-        QInterestCenter interestCenter = QInterestCenter.interestCenter;
 
         InterestCenter result = queryFactory.selectFrom(interestCenter)
                 .where(
@@ -106,4 +118,7 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
         return Optional.ofNullable(result);
     }
 
+    private static BooleanExpression isNotDeleted() {
+        return interestCenter.deleted.eq(false);
+    }
 }
