@@ -77,6 +77,31 @@ class NotificationMessageConverterTest extends IntegrationTestSupport {
     }
 
     @Test
+    @DisplayName("INTEREST_CENTER_CREATE_RECRUIT_BOARD 메시지를 변환하면 Notification 객체를 반환한다. ")
+    void testBuildInterestCenterCreateRecruitBoardNotification() {
+        // given
+        String message = """
+                {
+                    "type": "NOTIFICATION",
+                    "subType": "INTEREST_CENTER_CREATE_RECRUIT_BOARD",
+                    "volunteerId": "123e4567-e89b-12d3-a456-426614174000",
+                    "centerId": "123e4567-e89b-12d3-a456-426614174001",
+                    "recruitBoardId": 456,
+                    "createdAt": "2024-12-05T10:00:00"
+                }
+                """;
+
+        // when
+        Notification notification = notificationMessageConverter.from(message);
+
+        // then
+        assertThat(notification.getReceiverId()).isEqualTo(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
+        assertThat(notification.getTitle()).isEqualTo("관심 기관이 봉사 모집을 등록했습니다.");
+        assertThat(notification.getType()).isEqualTo(NotificationSubType.INTEREST_CENTER_CREATE_RECRUIT_BOARD);
+        assertThat(notification.getRelatedId()).isEqualTo(456L);
+    }
+
+    @Test
     @DisplayName("잘못된 JSON 메시지를 변환하면 IllegalStateException을 던진다")
     void testInvalidJson() {
         // given
