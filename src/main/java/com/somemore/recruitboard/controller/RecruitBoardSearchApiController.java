@@ -24,11 +24,10 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Tag(name = "Recruit Board Search API", description = "봉사 활동 모집 검색 관련 API")
 @RequiredArgsConstructor
-@RequestMapping("/api_v1")
+@RequestMapping("/api/v1")
 @RestController
 public class RecruitBoardSearchApiController {
 
-    private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final RecruitBoardDocumentUseCase recruitBoardDocumentUseCase;
 
     @GetMapping("/recruit-boards/search")
