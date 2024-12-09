@@ -1,7 +1,6 @@
 package com.somemore.global.redis.config;
 
 import com.somemore.global.common.event.ServerEventType;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
@@ -18,6 +17,8 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.Map;
 
 @Configuration
 @EnableRedisRepositories
@@ -55,13 +56,21 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic notificationTopic() {
-        return new ChannelTopic("notifications");
+        return new ChannelTopic("notification");
     }
 
     @Bean
-    public Map<ServerEventType, ChannelTopic> eventTopicMap(ChannelTopic notificationTopic) {
+    public ChannelTopic domainEventTopic() {
+        return new ChannelTopic("domainEvent");
+    }
+
+
+    @Bean
+    public Map<ServerEventType, ChannelTopic> eventTopicMap(ChannelTopic notificationTopic,
+                                                            ChannelTopic domainEventTopic) {
         return Map.of(
-                ServerEventType.NOTIFICATION, notificationTopic
+                ServerEventType.NOTIFICATION, notificationTopic,
+                ServerEventType.DOMAIN_EVENT, domainEventTopic
         );
     }
 

@@ -16,6 +16,7 @@ public class RedisListenerRegistrar {
     private final RedisMessageListenerContainer container;
     private final RedisNotificationSubscriber redisNotificationSubscriber;
     private final ChannelTopic notificationTopic;
+    private final ChannelTopic domainEventTopic;
 
     @PostConstruct
     public void registerListeners() {
@@ -24,6 +25,7 @@ public class RedisListenerRegistrar {
 
     private void registerNotificationListener() {
         container.addMessageListener(redisNotificationSubscriber, notificationTopic);
+        container.addMessageListener(redisNotificationSubscriber, domainEventTopic);
         log.info("Redis 알림 리스너가 '{}' 토픽에 성공적으로 등록되었습니다.", notificationTopic.getTopic());
     }
 }
