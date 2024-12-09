@@ -61,7 +61,7 @@ public class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
         //then
         assertThat(dtos).isNotNull();
         assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(9);
+        assertThat(dtos.getTotalElements()).isEqualTo(10);
         assertThat(dtos.getSize()).isEqualTo(10);
         assertThat(dtos.getTotalPages()).isEqualTo(1);
     }

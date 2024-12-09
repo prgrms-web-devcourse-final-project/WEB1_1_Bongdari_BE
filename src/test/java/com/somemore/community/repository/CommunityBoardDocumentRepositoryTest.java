@@ -52,7 +52,7 @@ public class CommunityBoardDocumentRepositoryTest extends IntegrationTestSupport
 
         //then
         assertThat(findBoards).isNotNull();
-        assertThat(findBoards.getTotalElements()).isEqualTo(9);
+        assertThat(findBoards.getTotalElements()).isEqualTo(10);
         assertThat(findBoards.getSize()).isEqualTo(10);
         assertThat(findBoards.getTotalPages()).isEqualTo(1);
     }
