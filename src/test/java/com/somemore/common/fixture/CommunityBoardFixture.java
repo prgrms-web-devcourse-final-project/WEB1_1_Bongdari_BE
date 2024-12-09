@@ -39,4 +39,12 @@ public class CommunityBoardFixture {
                 .writerId(writerId)
                 .build();
     }
+    public static CommunityBoard createCommunityBoard(String title, String content, UUID writerId) {
+        return CommunityBoard.builder()
+                .title(title)
+                .content(content)
+                .imgUrl(IMG_URL)
+                .writerId(writerId)
+                .build();
+    }
 }

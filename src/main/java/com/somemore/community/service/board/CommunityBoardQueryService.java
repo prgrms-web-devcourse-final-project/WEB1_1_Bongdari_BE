@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
@@ -45,5 +46,10 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
         CommunityBoard board = communityBoardRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_COMMUNITY_BOARD.getMessage()));
         return CommunityBoardDetailResponseDto.from(board);
+    }
+
+    @Override
+    public List<CommunityBoard> getAllCommunityBoards() {
+        return communityBoardRepository.findAll();
     }
 }

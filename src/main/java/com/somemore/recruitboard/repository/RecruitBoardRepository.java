@@ -25,9 +25,17 @@ public interface RecruitBoardRepository {
 
     Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition);
 
+    Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition);
+
+
     Page<RecruitBoard> findAllByCenterId(UUID centerId, RecruitBoardSearchCondition condition);
 
     List<Long> findNotCompletedIdsByCenterId(UUID centerId);
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
+
+    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition);
+    void saveDocuments(List<RecruitBoard> recruitBoards);
+    List<RecruitBoard> findAll();
+    void deleteDocument(Long id);
 }

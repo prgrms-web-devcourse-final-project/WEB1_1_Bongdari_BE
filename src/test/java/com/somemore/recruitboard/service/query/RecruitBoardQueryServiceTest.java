@@ -25,6 +25,8 @@ import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +44,9 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private RecruitBoardQueryService recruitBoardQueryService;
+
+    @Autowired
+    private RecruitBoardDocumentService recruitBoardDocumentService;
 
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;
@@ -278,6 +283,41 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(all).hasSize(3);
+    }
+
+    @DisplayName("모집글을 elastic search index에 저장한다. (service)")
+    @Test
+    void saveRecruitBoardDocuments() {
+        //given
+        Center center = createCenter("특별한 기관");
+        centerRepository.save(center);
+
+        Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("저장")
+                .pageable(pageable)
+                .build();
+
+        List<RecruitBoard> recruitBoards = new ArrayList<>();
+
+        RecruitBoard board1 = createRecruitBoard("저장 잘 되나요?", center.getId());
+        RecruitBoard savedBoard1 = recruitBoardRepository.save(board1);
+        RecruitBoard board2 = createRecruitBoard("저장해줘", center.getId());
+        RecruitBoard savedBoard2 = recruitBoardRepository.save(board2);
+        recruitBoards.add(savedBoard1);
+        recruitBoards.add(savedBoard2);
+
+        //when
+        recruitBoardDocumentService.saveRecruitBoardDocuments(recruitBoards);
+
+        //then
+        Page<RecruitBoardWithCenterResponseDto> findBoard = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
+
+        assertThat(findBoard).isNotNull();
+        assertThat(findBoard.getTotalElements()).isEqualTo(2);
+
+        recruitBoardRepository.deleteDocument(savedBoard1.getId());
+        recruitBoardRepository.deleteDocument(savedBoard2.getId());
     }
 
     private Pageable getPageable() {

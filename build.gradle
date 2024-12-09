@@ -67,6 +67,8 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.3.3'
 
+    //elastic-search
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

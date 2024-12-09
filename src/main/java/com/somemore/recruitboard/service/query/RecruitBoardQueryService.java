@@ -86,4 +86,8 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
         return recruitBoardRepository.findAllByIds(ids);
     }
 
+    @Override
+    public List<RecruitBoard> getAllRecruitBoards() {
+        return recruitBoardRepository.findAll();
+    }
 }

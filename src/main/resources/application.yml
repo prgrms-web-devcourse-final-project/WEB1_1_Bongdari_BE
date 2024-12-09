@@ -41,6 +41,10 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
 
+    elasticsearch:
+      repositories:
+        enabled: true
+
   security:
     oauth2:
       client:
@@ -68,6 +72,11 @@ spring:
       max-file-size: 8MB
       max-request-size: 8MB
 
+
+  schedules:
+    cron:
+      updateCommunityBoardDocuments: "0 0 0 * * *"
+      updateRecruitBoardDocuments: "0 0 0 * * *"
 
 #swagger
 springdoc:
@@ -105,3 +114,14 @@ server:
 default:
   image:
     url: ${DEFAULT_IMG_URL}
+
+elastic:
+  search:
+    uri: ${ELASTIC_URI}
+    username: ${ELASTIC_USERNAME}
+    password: ${ELASTIC_PASSWORD}
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
