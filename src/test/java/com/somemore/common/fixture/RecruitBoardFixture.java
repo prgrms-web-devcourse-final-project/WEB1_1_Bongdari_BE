@@ -327,6 +327,13 @@ public class RecruitBoardFixture {
         return recruitBoard;
     }
 
+    public static RecruitBoard createRecruitBoard(LocalDateTime start, LocalDateTime end,
+            RecruitStatus status) {
+        RecruitBoard board = createRecruitBoard(start, end);
+        setRecruitStatus(board, status);
+        return board;
+    }
+
     private static void setRecruitStatus(RecruitBoard recruitBoard, RecruitStatus status) {
         try {
             Field recruitStatusField = RecruitBoard.class.getDeclaredField("recruitStatus");

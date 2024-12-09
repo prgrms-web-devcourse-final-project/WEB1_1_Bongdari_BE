@@ -1,5 +1,6 @@
 package com.somemore.recruitboard.domain;
 
+import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;
 import static jakarta.persistence.EnumType.STRING;
@@ -91,6 +92,14 @@ public class RecruitBoard extends BaseEntity {
         validateChangeDeadline(currentDateTime);
 
         this.recruitStatus = newStatus;
+    }
+
+    public void markAsClosed() {
+        this.recruitStatus = CLOSED;
+    }
+
+    public void markAsCompleted() {
+        this.recruitStatus = COMPLETED;
     }
 
     public boolean isRecruitOpen() {
