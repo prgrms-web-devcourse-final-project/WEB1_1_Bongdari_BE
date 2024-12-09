@@ -11,13 +11,13 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class CommunityScheduler {
+public class CommunityBoardUpdateScheduler {
 
     private final CommunityBoardQueryUseCase communityBoardQueryUseCase;
     private final CommunityBoardDocumentUseCase communityBoardDocumentUseCase;
 
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "${spring.schedules.cron.updateCommunityBoardDocuments}")
     public void updateCommunityBoardDocuments() {
         List<CommunityBoard> communityBoards = communityBoardQueryUseCase.getAllCommunityBoards();
         communityBoardDocumentUseCase.saveCommunityBoardDocuments(communityBoards);

@@ -73,6 +73,11 @@ spring:
       max-request-size: 8MB
 
 
+  schedules:
+    cron:
+      updateCommunityBoardDocuments: "0 0 0 * * *"
+      updateRecruitBoardDocuments: "0 0 0 * * *"
+
 #swagger
 springdoc:
   swagger-ui:
