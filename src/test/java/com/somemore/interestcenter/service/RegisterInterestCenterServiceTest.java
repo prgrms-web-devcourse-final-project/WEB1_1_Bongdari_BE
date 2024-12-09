@@ -38,10 +38,10 @@ class RegisterInterestCenterServiceTest extends IntegrationTestSupport {
         Center center = createCenter();
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         UUID centerId = center.getId();
-        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(volunteerId, centerId);
+        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(centerId);
 
         //when
-        RegisterInterestCenterResponseDto responseDto = registerInterestCenter.registerInterestCenter(requestDto);
+        RegisterInterestCenterResponseDto responseDto = registerInterestCenter.registerInterestCenter(volunteerId, requestDto);
 
         //then
         Optional<RegisterInterestCenterResponseDto> result = interestCenterRepository.findInterestCenterResponseById(responseDto.id());
@@ -58,14 +58,14 @@ class RegisterInterestCenterServiceTest extends IntegrationTestSupport {
         Center center = createCenter();
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         UUID centerId = center.getId();
-        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(volunteerId, centerId);
+        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(centerId);
 
-        registerInterestCenter.registerInterestCenter(requestDto);
+        registerInterestCenter.registerInterestCenter(volunteerId, requestDto);
 
         // when
         DuplicateException exception = assertThrows(
                 DuplicateException.class,
-                () -> registerInterestCenter.registerInterestCenter(requestDto)
+                () -> registerInterestCenter.registerInterestCenter(volunteerId, requestDto)
         );
 
         // then
@@ -79,11 +79,11 @@ class RegisterInterestCenterServiceTest extends IntegrationTestSupport {
         // given
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         UUID invalidCenterId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
-        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(volunteerId, invalidCenterId);
+        RegisterInterestCenterRequestDto requestDto = new RegisterInterestCenterRequestDto(invalidCenterId);
 
         // when
         BadRequestException exception = assertThrows(BadRequestException.class, () -> {
-            registerInterestCenter.registerInterestCenter(requestDto);
+            registerInterestCenter.registerInterestCenter(volunteerId, requestDto);
         });
 
         //then

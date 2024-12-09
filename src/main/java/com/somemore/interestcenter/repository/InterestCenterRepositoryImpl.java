@@ -5,12 +5,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.interestcenter.domain.InterestCenter;
 import com.somemore.interestcenter.domain.QInterestCenter;
 import com.somemore.interestcenter.dto.response.RegisterInterestCenterResponseDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
@@ -91,6 +90,20 @@ public class InterestCenterRepositoryImpl implements InterestCenterRepository {
                 .fetchFirst();
 
         return result != null;
+    }
+
+    @Override
+    public Optional<InterestCenter> findByVolunteerIdAndCenterId(UUID volunteerId, UUID centerId) {
+        QInterestCenter interestCenter = QInterestCenter.interestCenter;
+
+        InterestCenter result = queryFactory.selectFrom(interestCenter)
+                .where(
+                        interestCenter.volunteerId.eq(volunteerId)
+                                .and(interestCenter.centerId.eq(centerId))
+                                .and(interestCenter.deleted.isFalse()))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 
 }
