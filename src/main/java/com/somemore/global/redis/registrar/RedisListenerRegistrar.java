@@ -1,5 +1,6 @@
 package com.somemore.global.redis.registrar;
 
+import com.somemore.interestcenter.subscriber.RedisCreateRecruitBoardSubscriber;
 import com.somemore.notification.subscriber.RedisNotificationSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class RedisListenerRegistrar {
 
     private final RedisMessageListenerContainer container;
     private final RedisNotificationSubscriber redisNotificationSubscriber;
+    private final RedisCreateRecruitBoardSubscriber redisCreateRecruitBoardSubscriber;
     private final ChannelTopic notificationTopic;
     private final ChannelTopic domainEventTopic;
 
@@ -25,7 +27,7 @@ public class RedisListenerRegistrar {
 
     private void registerNotificationListener() {
         container.addMessageListener(redisNotificationSubscriber, notificationTopic);
-        container.addMessageListener(redisNotificationSubscriber, domainEventTopic);
+        container.addMessageListener(redisCreateRecruitBoardSubscriber, domainEventTopic);
         log.info("Redis 알림 리스너가 '{}' 토픽에 성공적으로 등록되었습니다.", notificationTopic.getTopic());
     }
 }
