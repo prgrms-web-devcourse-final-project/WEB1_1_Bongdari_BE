@@ -72,7 +72,6 @@ class CancelInterestCenterServiceTest extends IntegrationTestSupport {
         cancelInterestCenterUseCase.cancelInterestCenter(volunteerId, centerId);
 
         //when, then
-        long interestCenterId = responseDto.id();
         assertThrows(BadRequestException.class,
                 () -> cancelInterestCenterUseCase.cancelInterestCenter(volunteerId, centerId),
                 CANNOT_CANCEL_DELETED_INTEREST_CENTER.getMessage()
