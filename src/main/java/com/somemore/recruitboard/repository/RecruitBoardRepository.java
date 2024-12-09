@@ -25,6 +25,9 @@ public interface RecruitBoardRepository {
 
     Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition);
 
+    Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition);
+
+
     Page<RecruitBoard> findAllByCenterId(UUID centerId, RecruitBoardSearchCondition condition);
 
     List<Long> findNotCompletedIdsByCenterId(UUID centerId);

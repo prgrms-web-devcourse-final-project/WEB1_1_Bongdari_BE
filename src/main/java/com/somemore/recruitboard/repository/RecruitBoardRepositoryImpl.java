@@ -138,6 +138,40 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         QLocation location = QLocation.location;
         QCenter center = QCenter.center;
 
+        Pageable pageable = condition.pageable();
+
+        BooleanExpression predicate = locationBetween(condition)
+                .and(keywordEq(condition.keyword()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
+
+        List<RecruitBoardDetail> content = queryFactory
+                .select(getRecruitBoardDetailConstructorExpression(recruitBoard, location, center))
+                .from(recruitBoard)
+                .join(location).on(recruitBoard.locationId.eq(location.id))
+                .join(center).on(recruitBoard.centerId.eq(center.id))
+                .where(predicate)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(recruitBoard.count())
+                .from(recruitBoard)
+                .join(location).on(recruitBoard.locationId.eq(location.id))
+                .join(center).on(recruitBoard.centerId.eq(center.id))
+                .where(predicate);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition) {
+        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+        QLocation location = QLocation.location;
+        QCenter center = QCenter.center;
+
         List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
 
         List<Long> boardIds = boardDocuments.stream()
