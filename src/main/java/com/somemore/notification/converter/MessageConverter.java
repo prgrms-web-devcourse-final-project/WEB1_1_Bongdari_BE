@@ -8,6 +8,7 @@ import com.somemore.facade.event.VolunteerReviewRequestEvent;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.volunteerapply.domain.ApplyStatus;
+import com.somemore.volunteerapply.event.VolunteerApplyEvent;
 import com.somemore.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class MessageConverter {
                 case VOLUNTEER_REVIEW_REQUEST -> buildVolunteerReviewRequestNotification(message);
                 case VOLUNTEER_APPLY_STATUS_CHANGE -> buildVolunteerApplyStatusChangeNotification(message);
                 case COMMENT_ADDED -> buildCommentAddedNotification(message);
+                case VOLUNTEER_APPLY -> buildVolunteerApplyNotification(message);
             };
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -70,6 +72,17 @@ public class MessageConverter {
                 .build();
     }
 
+    private Notification buildVolunteerApplyNotification(String message) throws JsonProcessingException {
+        VolunteerApplyEvent event = objectMapper.readValue(message, VolunteerApplyEvent.class);
+
+        return Notification.builder()
+                .receiverId(event.getCenterId())
+                .title(createVolunteerApplyNotificationTitle())
+                .type(NotificationSubType.VOLUNTEER_APPLY)
+                .relatedId(event.getRecruitBoardId())
+                .build();
+    }
+
     private String createVolunteerReviewRequestNotificationTitle() {
         return "최근 활동하신 활동의 후기를 작성해 주세요!";
     }
@@ -87,5 +100,9 @@ public class MessageConverter {
 
     private String createCommentAddedNotificationTitle() {
         return "새로운 댓글이 작성되었습니다.";
+    }
+
+    private String createVolunteerApplyNotificationTitle() {
+        return "봉사 활동 모집에 새로운 신청이 있습니다.";
     }
 }
