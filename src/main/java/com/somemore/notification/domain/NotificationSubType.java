@@ -8,7 +8,8 @@ import java.util.Arrays;
 public enum NotificationSubType {
     NOTE_BLAH_BLAH("쪽지"),
     VOLUNTEER_REVIEW_REQUEST("봉사 후기 요청"),
-    VOLUNTEER_APPLY_STATUS_CHANGE("신청 상태 변경")
+    VOLUNTEER_APPLY_STATUS_CHANGE("신청 상태 변경"),
+    COMMENT_ADDED("댓글 대댓글 추가")
     ;
 
     private final String description;
