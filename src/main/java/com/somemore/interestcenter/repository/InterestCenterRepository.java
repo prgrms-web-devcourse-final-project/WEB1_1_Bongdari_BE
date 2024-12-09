@@ -13,4 +13,5 @@ public interface InterestCenterRepository {
     Optional<RegisterInterestCenterResponseDto> findInterestCenterResponseById(Long id);
     List<UUID> findInterestCenterIdsByVolunteerId(UUID volunteerId);
     boolean existsByVolunteerIdAndCenterId(UUID volunteerId, UUID centerId);
+    Optional<InterestCenter> findByVolunteerIdAndCenterId(UUID volunteerId, UUID centerId);
 }

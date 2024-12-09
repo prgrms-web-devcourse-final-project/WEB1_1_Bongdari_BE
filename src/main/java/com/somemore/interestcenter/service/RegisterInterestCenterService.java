@@ -7,6 +7,7 @@ import com.somemore.interestcenter.dto.request.RegisterInterestCenterRequestDto;
 import com.somemore.interestcenter.dto.response.RegisterInterestCenterResponseDto;
 import com.somemore.interestcenter.repository.InterestCenterRepository;
 import com.somemore.interestcenter.usecase.RegisterInterestCenterUseCase;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +21,16 @@ public class RegisterInterestCenterService implements RegisterInterestCenterUseC
     private final CenterQueryUseCase centerQueryUseCase;
 
     @Override
-    public RegisterInterestCenterResponseDto registerInterestCenter(RegisterInterestCenterRequestDto requestDto) {
+    public RegisterInterestCenterResponseDto registerInterestCenter(UUID volunteerId, RegisterInterestCenterRequestDto requestDto) {
 
         centerQueryUseCase.validateCenterExists(requestDto.centerId());
 
-        boolean isDuplicate = repository.existsByVolunteerIdAndCenterId(requestDto.volunteerId(), requestDto.centerId());
+        boolean isDuplicate = repository.existsByVolunteerIdAndCenterId(volunteerId, requestDto.centerId());
         if(isDuplicate){
             throw new DuplicateException(DUPLICATE_INTEREST_CENTER.getMessage());
         }
 
-        InterestCenter interestCenter = repository.save(requestDto.toEntity());
+        InterestCenter interestCenter = repository.save(requestDto.toEntity(volunteerId));
 
         return RegisterInterestCenterResponseDto.from(interestCenter);
     }
