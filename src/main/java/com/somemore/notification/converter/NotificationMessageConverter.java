@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class MessageConverter {
+public class NotificationMessageConverter {
 
     private final ObjectMapper objectMapper;
 

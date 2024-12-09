@@ -12,10 +12,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MessageConverterTest extends IntegrationTestSupport {
+class NotificationMessageConverterTest extends IntegrationTestSupport {
 
     @Autowired
-    private MessageConverter messageConverter;
+    private NotificationMessageConverter notificationMessageConverter;
 
     @Test
     @DisplayName("VOLUNTEER_REVIEW_REQUEST 메시지를 변환하면 Notification 객체를 반환한다")
@@ -34,7 +34,7 @@ class MessageConverterTest extends IntegrationTestSupport {
                 """;
 
         // when
-        Notification notification = messageConverter.from(message);
+        Notification notification = notificationMessageConverter.from(message);
 
         // then
         assertThat(notification.getReceiverId()).isEqualTo(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
@@ -67,7 +67,7 @@ class MessageConverterTest extends IntegrationTestSupport {
                 """;
 
         // when
-        Notification notification = messageConverter.from(message);
+        Notification notification = notificationMessageConverter.from(message);
 
         // then
         assertThat(notification.getReceiverId()).isEqualTo(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
@@ -84,7 +84,7 @@ class MessageConverterTest extends IntegrationTestSupport {
 
         // when
         // then
-        assertThrows(IllegalStateException.class, () -> messageConverter.from(invalidMessage));
+        assertThrows(IllegalStateException.class, () -> notificationMessageConverter.from(invalidMessage));
     }
 
     @Test
@@ -99,6 +99,6 @@ class MessageConverterTest extends IntegrationTestSupport {
                 """;
 
         // when & then
-        assertThrows(IllegalStateException.class, () -> messageConverter.from(messageWithMissingFields));
+        assertThrows(IllegalStateException.class, () -> notificationMessageConverter.from(messageWithMissingFields));
     }
 }
