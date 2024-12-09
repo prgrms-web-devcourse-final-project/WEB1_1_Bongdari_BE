@@ -1,4 +1,4 @@
-package com.somemore.interestcenter.subsciber;
+package com.somemore.interestcenter.subscriber;
 
 import com.somemore.interestcenter.converter.CreateRecruitBoardMessageConverter;
 import com.somemore.interestcenter.handler.CreateRecruitBoardHandler;
