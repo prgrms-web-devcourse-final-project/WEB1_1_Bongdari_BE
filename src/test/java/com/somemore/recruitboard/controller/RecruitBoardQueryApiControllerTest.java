@@ -17,7 +17,6 @@ import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
-import com.somemore.recruitboard.usecase.query.RecruitBoardDocumentUseCase;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import java.util.Collections;
 import java.util.UUID;
@@ -38,9 +37,6 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
     @MockBean
     private RecruitBoardQueryUseCase recruitBoardQueryUseCase;
 
-    @MockBean
-    private RecruitBoardDocumentUseCase documentUseCase;
-
     @Test
     @DisplayName("모집글 ID로 상세 조회할 수 있다.")
     void getById() throws Exception {
@@ -52,11 +48,11 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // when
         // then
         mockMvc.perform(get("/api/recruit-board/{id}", recruitBoardId)
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value(200))
-            .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.message").value("봉사 활동 모집 상세 조회 성공"));
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("봉사 활동 모집 상세 조회 성공"));
 
         verify(recruitBoardQueryUseCase, times(1)).getWithLocationById(recruitBoardId);
     }
@@ -68,19 +64,19 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
         given(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
-            .willReturn(page);
+                .willReturn(page);
 
         // when
         // then
         mockMvc.perform(get("/api/recruit-boards")
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value(200))
-            .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.message").value("봉사 활동 모집글 리스트 조회 성공"));
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("봉사 활동 모집글 리스트 조회 성공"));
 
         verify(recruitBoardQueryUseCase, times(1)).getAllWithCenter(
-            any(RecruitBoardSearchCondition.class));
+                any(RecruitBoardSearchCondition.class));
     }
 
     @Test
@@ -89,21 +85,22 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // given
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        given(documentUseCase.getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class)))
-            .willReturn(page);
+        given(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
+                .willReturn(page);
 
         // when
         // then
         mockMvc.perform(get("/api/recruit-boards/search")
-                .param("keyword", "volunteer")
-                .param("category", ADMINISTRATIVE_SUPPORT.name())
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value(200))
-            .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.message").value("봉사 활동 모집글 검색 조회 성공"));
+                        .param("keyword", "volunteer")
+                        .param("category", ADMINISTRATIVE_SUPPORT.name())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("봉사 활동 모집글 검색 조회 성공"));
 
-        verify(documentUseCase, times(1)).getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class));
+        verify(recruitBoardQueryUseCase, times(1)).getAllWithCenter(
+                any(RecruitBoardSearchCondition.class));
     }
 
     @Test
@@ -112,23 +109,23 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         // given
         Page<RecruitBoardDetailResponseDto> page = new PageImpl<>(Collections.emptyList());
         given(recruitBoardQueryUseCase.getRecruitBoardsNearby(
-            any(RecruitBoardNearByCondition.class)
+                any(RecruitBoardNearByCondition.class)
         )).willReturn(page);
 
         // when
         // then
         mockMvc.perform(get("/api/recruit-boards/nearby")
-                .param("latitude", "37.5665")
-                .param("longitude", "126.9780")
-                .param("radius", "10")
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value(200))
-            .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.message").value("근처 봉사 활동 모집글 조회 성공"));
+                        .param("latitude", "37.5665")
+                        .param("longitude", "126.9780")
+                        .param("radius", "10")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("근처 봉사 활동 모집글 조회 성공"));
 
         verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsNearby(
-            any(RecruitBoardNearByCondition.class));
+                any(RecruitBoardNearByCondition.class));
     }
 
     @Test
@@ -139,20 +136,20 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
         Page<RecruitBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
 
         given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(eq(centerId),
-            any(RecruitBoardSearchCondition.class)))
-            .willReturn(page);
+                any(RecruitBoardSearchCondition.class)))
+                .willReturn(page);
 
         // when
         // then
         mockMvc.perform(get("/api/recruit-boards/center/{centerId}", centerId)
-                .param("keyword", "volunteer")
-                .param("category", ADMINISTRATIVE_SUPPORT.name())
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.data").exists())
-            .andExpect(jsonPath("$.message").value("기관 봉사 활동 모집글 조회 성공"));
+                        .param("keyword", "volunteer")
+                        .param("category", ADMINISTRATIVE_SUPPORT.name())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("기관 봉사 활동 모집글 조회 성공"));
 
         verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsByCenterId(eq(centerId),
-            any(RecruitBoardSearchCondition.class));
+                any(RecruitBoardSearchCondition.class));
     }
 }
