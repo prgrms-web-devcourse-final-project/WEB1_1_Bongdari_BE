@@ -70,9 +70,9 @@ default:
 
 elastic:
   search:
-    uri: localhost:9200
+    uri: ec2-43-201-249-131.ap-northeast-2.compute.amazonaws.com:9200
     username: elastic
-    password: somemore
+    password: changeme
 
 management:
   health:
