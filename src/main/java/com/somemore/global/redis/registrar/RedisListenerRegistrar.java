@@ -28,6 +28,6 @@ public class RedisListenerRegistrar {
     private void registerNotificationListener() {
         container.addMessageListener(redisNotificationSubscriber, notificationTopic);
         container.addMessageListener(redisCreateRecruitBoardSubscriber, domainEventTopic);
-        log.info("Redis 알림 리스너가 '{}' 토픽에 성공적으로 등록되었습니다.", notificationTopic.getTopic());
+        log.info("리스너가 토픽에 성공적으로 등록되었습니다.");
     }
 }
