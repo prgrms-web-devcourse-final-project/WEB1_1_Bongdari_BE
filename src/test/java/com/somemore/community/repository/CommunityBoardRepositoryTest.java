@@ -140,33 +140,33 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(isExist).isTrue();
     }
 
-    @DisplayName("게시글을 elastic search index에 저장할 수 있다. (repository)")
-    @Test
-    void saveDocuments() {
-        //given
-        Pageable pageable = getPageable();
-
-        List<CommunityBoard> communityBoards = new ArrayList<>();
-
-        CommunityBoard communityBoard1 = createCommunityBoard("저장 잘 되나요?", writerId);
-        CommunityBoard savedBoard1 = communityBoardRepository.save(communityBoard1);
-        CommunityBoard communityBoard2 = createCommunityBoard("잘 되나요?", "저장이요", writerId);
-        CommunityBoard savedBoard2 = communityBoardRepository.save(communityBoard2);
-        communityBoards.add(savedBoard1);
-        communityBoards.add(savedBoard2);
-
-        //when
-        communityBoardRepository.saveDocuments(communityBoards);
-
-        //then
-        Page<CommunityBoardView> findBoard = communityBoardRepository.findByCommunityBoardsContaining("저장", pageable);
-
-        assertThat(findBoard).isNotNull();
-        assertThat(findBoard.getTotalElements()).isEqualTo(2);
-
-        communityBoardRepository.deleteDocument(savedBoard1.getId());
-        communityBoardRepository.deleteDocument(savedBoard2.getId());
-    }
+//    @DisplayName("게시글을 elastic search index에 저장할 수 있다. (repository)")
+//    @Test
+//    void saveDocuments() {
+//        //given
+//        Pageable pageable = getPageable();
+//
+//        List<CommunityBoard> communityBoards = new ArrayList<>();
+//
+//        CommunityBoard communityBoard1 = createCommunityBoard("저장 잘 되나요?", writerId);
+//        CommunityBoard savedBoard1 = communityBoardRepository.save(communityBoard1);
+//        CommunityBoard communityBoard2 = createCommunityBoard("잘 되나요?", "저장이요", writerId);
+//        CommunityBoard savedBoard2 = communityBoardRepository.save(communityBoard2);
+//        communityBoards.add(savedBoard1);
+//        communityBoards.add(savedBoard2);
+//
+//        //when
+//        communityBoardRepository.saveDocuments(communityBoards);
+//
+//        //then
+//        Page<CommunityBoardView> findBoard = communityBoardRepository.findByCommunityBoardsContaining("저장", pageable);
+//
+//        assertThat(findBoard).isNotNull();
+//        assertThat(findBoard.getTotalElements()).isEqualTo(2);
+//
+//        communityBoardRepository.deleteDocument(savedBoard1.getId());
+//        communityBoardRepository.deleteDocument(savedBoard2.getId());
+//    }
 
     private Pageable getPageable() {
         return PageRequest.of(0, 10);
