@@ -9,7 +9,9 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Getter
 public enum ServerEventType {
-    NOTIFICATION(NotificationSubType.class);
+    NOTIFICATION(NotificationSubType.class),
+    DOMAIN_EVENT(DomainEventSubType.class),
+    ;
 
     private final Class<? extends Enum<?>> subtype;
 
