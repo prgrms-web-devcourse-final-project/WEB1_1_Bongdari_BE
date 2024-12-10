@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.somemore.ControllerTestSupport;
 import com.somemore.community.dto.response.CommunityBoardDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardResponseDto;
-import com.somemore.community.usecase.board.CommunityBoardDocumentUseCase;
+//import com.somemore.community.usecase.board.CommunityBoardDocumentUseCase;
 import com.somemore.community.usecase.board.CommunityBoardQueryUseCase;
 import java.util.Collections;
 import java.util.UUID;
@@ -33,8 +33,8 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
     @MockBean
     private CommunityBoardQueryUseCase communityBoardQueryUseCase;
 
-    @MockBean
-    private CommunityBoardDocumentUseCase communityBoardDocumentUseCase;
+//    @MockBean
+//    private CommunityBoardDocumentUseCase communityBoardDocumentUseCase;
 
     @Test
     @DisplayName("커뮤니티 게시글 전체 조회 성공")
@@ -106,26 +106,26 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
                 .getCommunityBoardDetail(any());
     }
 
-    @Test
-    @DisplayName("커뮤니티 게시글 검색 조회 성공")
-    void getBySearch() throws Exception {
-        // given
-        Page<CommunityBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
-
-        given(communityBoardDocumentUseCase.getCommunityBoardBySearch(any(), anyInt()))
-                .willReturn(page);
-
-        // when
-        // then
-        mockMvc.perform(get("/api/community-boards/search")
-                        .param("keyword", "봉사")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.data").exists())
-                .andExpect(jsonPath("$.message").value("커뮤니티 게시글 검색 리스트 조회 성공"));
-
-        verify(communityBoardDocumentUseCase, times(1)).getCommunityBoardBySearch(
-                any(), anyInt());
-    }
+//    @Test
+//    @DisplayName("커뮤니티 게시글 검색 조회 성공")
+//    void getBySearch() throws Exception {
+//        // given
+//        Page<CommunityBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
+//
+//        given(communityBoardDocumentUseCase.getCommunityBoardBySearch(any(), anyInt()))
+//                .willReturn(page);
+//
+//        // when
+//        // then
+//        mockMvc.perform(get("/api/community-boards/search")
+//                        .param("keyword", "봉사")
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.code").value(200))
+//                .andExpect(jsonPath("$.data").exists())
+//                .andExpect(jsonPath("$.message").value("커뮤니티 게시글 검색 리스트 조회 성공"));
+//
+//        verify(communityBoardDocumentUseCase, times(1)).getCommunityBoardBySearch(
+//                any(), anyInt());
+//    }
 }

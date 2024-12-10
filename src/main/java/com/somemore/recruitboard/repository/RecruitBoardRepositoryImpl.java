@@ -36,7 +36,7 @@ import org.springframework.stereotype.Repository;
 public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private final RecruitBoardJpaRepository recruitBoardJpaRepository;
-    private final RecruitBoardDocumentRepository documentRepository;
+//    private final RecruitBoardDocumentRepository documentRepository;
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -166,46 +166,46 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-    @Override
-    public Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-        QLocation location = QLocation.location;
-        QCenter center = QCenter.center;
-
-        List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
-
-        List<Long> boardIds = boardDocuments.stream()
-                .map(RecruitBoardDocument::getId)
-                .toList();
-
-        Pageable pageable = condition.pageable();
-
-        BooleanExpression predicate = locationBetween(condition)
-                .and(statusEq(condition.status()))
-                .and(isNotDeleted());
-
-        List<RecruitBoardDetail> content = queryFactory
-                .select(getRecruitBoardDetailConstructorExpression(recruitBoard, location, center))
-                .from(recruitBoard)
-                .join(location).on(recruitBoard.locationId.eq(location.id))
-                .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(recruitBoard.id.in(boardIds)
-                        .and(predicate))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(toOrderSpecifiers(pageable.getSort()))
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(recruitBoard.count())
-                .from(recruitBoard)
-                .join(location).on(recruitBoard.locationId.eq(location.id))
-                .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(recruitBoard.id.in(boardIds)
-                        .and(predicate));
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
+//    @Override
+//    public Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition) {
+//        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+//        QLocation location = QLocation.location;
+//        QCenter center = QCenter.center;
+//
+//        List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
+//
+//        List<Long> boardIds = boardDocuments.stream()
+//                .map(RecruitBoardDocument::getId)
+//                .toList();
+//
+//        Pageable pageable = condition.pageable();
+//
+//        BooleanExpression predicate = locationBetween(condition)
+//                .and(statusEq(condition.status()))
+//                .and(isNotDeleted());
+//
+//        List<RecruitBoardDetail> content = queryFactory
+//                .select(getRecruitBoardDetailConstructorExpression(recruitBoard, location, center))
+//                .from(recruitBoard)
+//                .join(location).on(recruitBoard.locationId.eq(location.id))
+//                .join(center).on(recruitBoard.centerId.eq(center.id))
+//                .where(recruitBoard.id.in(boardIds)
+//                        .and(predicate))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(toOrderSpecifiers(pageable.getSort()))
+//                .fetch();
+//
+//        JPAQuery<Long> countQuery = queryFactory
+//                .select(recruitBoard.count())
+//                .from(recruitBoard)
+//                .join(location).on(recruitBoard.locationId.eq(location.id))
+//                .join(center).on(recruitBoard.centerId.eq(center.id))
+//                .where(recruitBoard.id.in(boardIds)
+//                        .and(predicate));
+//
+//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+//    }
 
     @Override
     public Page<RecruitBoard> findAllByCenterId(UUID centerId,
@@ -237,61 +237,61 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-    @Override
-    public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-        QCenter center = QCenter.center;
-
-
-        List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
-
-        List<Long> boardIds = boardDocuments.stream()
-                .map(RecruitBoardDocument::getId)
-                .toList();
-
-        Pageable pageable = condition.pageable();
-        BooleanExpression predicate = isNotDeleted()
-                .and(volunteerCategoryEq(condition.category()))
-                .and(regionEq(condition.region()))
-                .and(admittedEq(condition.admitted()))
-                .and(statusEq(condition.status()));
-
-        List<RecruitBoardWithCenter> content = queryFactory
-                .select(getRecruitBoardWithCenterConstructorExpression(recruitBoard, center))
-                .from(recruitBoard)
-                .where(recruitBoard.id.in(boardIds)
-                    .and(predicate))
-                .join(center).on(recruitBoard.centerId.eq(center.id))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(toOrderSpecifiers(pageable.getSort()))
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(recruitBoard.count())
-                .from(recruitBoard)
-                .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(recruitBoard.id.in(boardIds)
-                        .and(predicate));
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
-
-    @Override
-    public void saveDocuments(List<RecruitBoard> recruitBoards) {
-        List<RecruitBoardDocument> recruitBoardDocuments = convertEntityToDocuments(recruitBoards);
-        documentRepository.saveAll(recruitBoardDocuments);
-    }
+//    @Override
+//    public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition) {
+//        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+//        QCenter center = QCenter.center;
+//
+//
+//        List<RecruitBoardDocument> boardDocuments = getBoardDocuments(condition.keyword());
+//
+//        List<Long> boardIds = boardDocuments.stream()
+//                .map(RecruitBoardDocument::getId)
+//                .toList();
+//
+//        Pageable pageable = condition.pageable();
+//        BooleanExpression predicate = isNotDeleted()
+//                .and(volunteerCategoryEq(condition.category()))
+//                .and(regionEq(condition.region()))
+//                .and(admittedEq(condition.admitted()))
+//                .and(statusEq(condition.status()));
+//
+//        List<RecruitBoardWithCenter> content = queryFactory
+//                .select(getRecruitBoardWithCenterConstructorExpression(recruitBoard, center))
+//                .from(recruitBoard)
+//                .where(recruitBoard.id.in(boardIds)
+//                    .and(predicate))
+//                .join(center).on(recruitBoard.centerId.eq(center.id))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(toOrderSpecifiers(pageable.getSort()))
+//                .fetch();
+//
+//        JPAQuery<Long> countQuery = queryFactory
+//                .select(recruitBoard.count())
+//                .from(recruitBoard)
+//                .join(center).on(recruitBoard.centerId.eq(center.id))
+//                .where(recruitBoard.id.in(boardIds)
+//                        .and(predicate));
+//
+//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+//    }
+//
+//    @Override
+//    public void saveDocuments(List<RecruitBoard> recruitBoards) {
+//        List<RecruitBoardDocument> recruitBoardDocuments = convertEntityToDocuments(recruitBoards);
+//        documentRepository.saveAll(recruitBoardDocuments);
+//    }
 
     @Override
     public List<RecruitBoard> findAll() {
         return recruitBoardJpaRepository.findAll();
     }
 
-    @Override
-    public void deleteDocument(Long id) {
-        documentRepository.deleteById(id);
-    }
+//    @Override
+//    public void deleteDocument(Long id) {
+//        documentRepository.deleteById(id);
+//    }
 
     private static BooleanExpression idEq(Long id) {
         return recruitBoard.id.eq(id);
@@ -391,25 +391,25 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 recruitBoard, location.address, location.latitude, location.longitude, center.name);
     }
 
-    private List<RecruitBoardDocument> convertEntityToDocuments(List<RecruitBoard> recruitBoards) {
-        List<RecruitBoardDocument> communityBoardDocuments = new ArrayList<>();
-
-        for (RecruitBoard recruitBoard : recruitBoards) {
-            RecruitBoardDocument document = RecruitBoardDocument.builder()
-                    .id(recruitBoard.getId())
-                    .title(recruitBoard.getTitle())
-                    .content(recruitBoard.getContent())
-                    .build();
-            communityBoardDocuments.add(document);
-        }
-        return communityBoardDocuments;
-    }
-
-    private List<RecruitBoardDocument> getBoardDocuments(String keyword) {
-
-        if (keyword == null || keyword.isEmpty()) {
-            return documentRepository.findAll();
-        }
-        return documentRepository.findIdsByTitleOrContentContaining(keyword);
-    }
+//    private List<RecruitBoardDocument> convertEntityToDocuments(List<RecruitBoard> recruitBoards) {
+//        List<RecruitBoardDocument> communityBoardDocuments = new ArrayList<>();
+//
+//        for (RecruitBoard recruitBoard : recruitBoards) {
+//            RecruitBoardDocument document = RecruitBoardDocument.builder()
+//                    .id(recruitBoard.getId())
+//                    .title(recruitBoard.getTitle())
+//                    .content(recruitBoard.getContent())
+//                    .build();
+//            communityBoardDocuments.add(document);
+//        }
+//        return communityBoardDocuments;
+//    }
+//
+//    private List<RecruitBoardDocument> getBoardDocuments(String keyword) {
+//
+//        if (keyword == null || keyword.isEmpty()) {
+//            return documentRepository.findAll();
+//        }
+//        return documentRepository.findIdsByTitleOrContentContaining(keyword);
+//    }
 }

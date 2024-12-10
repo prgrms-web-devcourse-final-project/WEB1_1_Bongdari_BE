@@ -20,8 +20,8 @@ public interface CommunityBoardRepository {
     }
     void deleteAllInBatch();
 
-    Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable);
-    void saveDocuments(List<CommunityBoard> communityBoards);
+//    Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable);
+//    void saveDocuments(List<CommunityBoard> communityBoards);
     List<CommunityBoard> findAll();
-    void deleteDocument(Long id);
+//    void deleteDocument(Long id);
 }
