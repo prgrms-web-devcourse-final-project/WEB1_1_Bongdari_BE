@@ -20,7 +20,8 @@ public class SseSenderImpl implements SseSender {
     public <T> void send(SseEvent<T> sseEvent) {
         UUID receiverId = sseEvent.getReceiverId();
         emitterRepository.findAllByReceiverId(receiverId)
-                .forEach((emitterId, emitter) -> sendEvent(emitterId, emitter, sseEvent));
+                .forEach((emitterId, emitter)
+                        -> sendEvent(emitterId, emitter, sseEvent));
     }
 
     private <T> void sendEvent(String emitterId,
