@@ -22,13 +22,15 @@ public class NotificationMessageConverter {
 
     private final ObjectMapper objectMapper;
 
+    public static final String SUB_TYPE = "subType";
+
     public Notification from(String message) {
         try {
             JsonNode rootNode = objectMapper.readTree(message);
-            String eventType = rootNode.get("subType").asText();
+            String eventType = rootNode.get(SUB_TYPE).asText();
 
             return switch (NotificationSubType.from(eventType)) {
-                case NOTE_BLAH_BLAH -> throw new UnsupportedOperationException("NOTE 알림 타입 처리 로직 미구현");
+                case NEW_NOTE -> buildNewNoteNotification(message);
                 case VOLUNTEER_REVIEW_REQUEST -> buildVolunteerReviewRequestNotification(message);
                 case VOLUNTEER_APPLY_STATUS_CHANGE -> buildVolunteerApplyStatusChangeNotification(message);
                 case COMMENT_ADDED -> buildCommentAddedNotification(message);
@@ -39,6 +41,10 @@ public class NotificationMessageConverter {
             log.error(e.getMessage());
             throw new IllegalStateException();
         }
+    }
+
+    private Notification buildNewNoteNotification(String message) {
+        throw new UnsupportedOperationException("NOTE 알림 타입 처리 로직 미구현" + message);
     }
 
     private Notification buildVolunteerReviewRequestNotification(String message) throws JsonProcessingException {
