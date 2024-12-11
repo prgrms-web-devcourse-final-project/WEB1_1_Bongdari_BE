@@ -50,7 +50,6 @@ public class VolunteerApplyStatusChangeService implements ApproveVolunteerApplyU
 
         ApplyStatus oldStatus = apply.getStatus();
         apply.changeStatus(newStatus);
-        volunteerApplyRepository.save(apply);
 
         publishVolunteerApplyStatusChangeEvent(apply, recruitBoard, oldStatus);
     }

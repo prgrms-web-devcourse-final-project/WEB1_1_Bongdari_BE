@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface InterestCenterQueryUseCase {
     List<InterestCentersResponseDto> getInterestCenters(UUID volunteerId);
+    List<UUID> getVolunteerIdsByCenterId(UUID centerId);
 }

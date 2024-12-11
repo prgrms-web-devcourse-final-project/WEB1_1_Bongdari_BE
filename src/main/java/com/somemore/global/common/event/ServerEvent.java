@@ -10,13 +10,8 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public abstract class ServerEvent<T extends Enum<T>> {
 
-    @JsonProperty("type")
     private final ServerEventType type;
-
-    @JsonProperty("subType")
     private final T subType;
-
-    @JsonProperty("createdAt")
     private final LocalDateTime createdAt;
 
     protected ServerEvent(
