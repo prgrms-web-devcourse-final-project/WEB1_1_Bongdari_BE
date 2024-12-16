@@ -3,6 +3,7 @@ package com.somemore.notification.converter;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.notification.event.converter.NotificationMessageConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MessageConverterTest extends IntegrationTestSupport {
+class NotificationMessageConverterTest extends IntegrationTestSupport {
 
     @Autowired
-    private MessageConverter messageConverter;
+    private NotificationMessageConverter notificationMessageConverter;
 
     @Test
     @DisplayName("VOLUNTEER_REVIEW_REQUEST 메시지를 변환하면 Notification 객체를 반환한다")
@@ -34,7 +35,7 @@ class MessageConverterTest extends IntegrationTestSupport {
                 """;
 
         // when
-        Notification notification = messageConverter.from(message);
+        Notification notification = notificationMessageConverter.from(message);
 
         // then
         assertThat(notification.getReceiverId()).isEqualTo(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
@@ -67,12 +68,37 @@ class MessageConverterTest extends IntegrationTestSupport {
                 """;
 
         // when
-        Notification notification = messageConverter.from(message);
+        Notification notification = notificationMessageConverter.from(message);
 
         // then
         assertThat(notification.getReceiverId()).isEqualTo(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
         assertThat(notification.getTitle()).isEqualTo("봉사 활동 신청이 승인되었습니다.");
         assertThat(notification.getType()).isEqualTo(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE);
+        assertThat(notification.getRelatedId()).isEqualTo(456L);
+    }
+
+    @Test
+    @DisplayName("INTEREST_CENTER_CREATE_RECRUIT_BOARD 메시지를 변환하면 Notification 객체를 반환한다. ")
+    void testBuildInterestCenterCreateRecruitBoardNotification() {
+        // given
+        String message = """
+                {
+                    "type": "NOTIFICATION",
+                    "subType": "INTEREST_CENTER_CREATE_RECRUIT_BOARD",
+                    "volunteerId": "123e4567-e89b-12d3-a456-426614174000",
+                    "centerId": "123e4567-e89b-12d3-a456-426614174001",
+                    "recruitBoardId": 456,
+                    "createdAt": "2024-12-05T10:00:00"
+                }
+                """;
+
+        // when
+        Notification notification = notificationMessageConverter.from(message);
+
+        // then
+        assertThat(notification.getReceiverId()).isEqualTo(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
+        assertThat(notification.getTitle()).isEqualTo("관심 기관이 봉사 모집을 등록했습니다.");
+        assertThat(notification.getType()).isEqualTo(NotificationSubType.INTEREST_CENTER_CREATE_RECRUIT_BOARD);
         assertThat(notification.getRelatedId()).isEqualTo(456L);
     }
 
@@ -84,7 +110,7 @@ class MessageConverterTest extends IntegrationTestSupport {
 
         // when
         // then
-        assertThrows(IllegalStateException.class, () -> messageConverter.from(invalidMessage));
+        assertThrows(IllegalStateException.class, () -> notificationMessageConverter.from(invalidMessage));
     }
 
     @Test
@@ -99,6 +125,6 @@ class MessageConverterTest extends IntegrationTestSupport {
                 """;
 
         // when & then
-        assertThrows(IllegalStateException.class, () -> messageConverter.from(messageWithMissingFields));
+        assertThrows(IllegalStateException.class, () -> notificationMessageConverter.from(messageWithMissingFields));
     }
 }

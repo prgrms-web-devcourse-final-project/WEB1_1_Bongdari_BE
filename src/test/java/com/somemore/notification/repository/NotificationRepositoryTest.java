@@ -104,7 +104,7 @@ class NotificationRepositoryTest extends IntegrationTestSupport {
     private Notification createNotification(long i, boolean isRead) {
         Notification notification = Notification.builder()
                 .title("Notification")
-                .type(NotificationSubType.NOTE_BLAH_BLAH)
+                .type(NotificationSubType.NEW_NOTE)
                 .receiverId(receiverId)
                 .relatedId(i + 1)
                 .build();

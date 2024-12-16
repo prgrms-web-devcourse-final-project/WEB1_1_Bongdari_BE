@@ -1,9 +1,10 @@
 package com.somemore.notification.handler;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.notification.converter.MessageConverter;
+import com.somemore.notification.event.converter.NotificationMessageConverter;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.notification.event.handler.NotificationHandlerImpl;
 import com.somemore.notification.repository.NotificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class NotificationHandlerTest extends IntegrationTestSupport {
     private NotificationHandlerImpl notificationHandler;
 
     @Autowired
-    private MessageConverter messageConverter;
+    private NotificationMessageConverter notificationMessageConverter;
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -47,7 +48,7 @@ class NotificationHandlerTest extends IntegrationTestSupport {
 
         UUID receiverId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
-        Notification notification = messageConverter.from(message);
+        Notification notification = notificationMessageConverter.from(message);
         // when
         notificationHandler.handle(notification);
 

@@ -32,7 +32,7 @@ class NotificationQueryServiceTest extends IntegrationTestSupport {
 
         Notification unreadNotification = Notification.builder()
                 .title("Unread Notification")
-                .type(NotificationSubType.NOTE_BLAH_BLAH)
+                .type(NotificationSubType.NEW_NOTE)
                 .receiverId(receiverId)
                 .relatedId(1L)
                 .build();
