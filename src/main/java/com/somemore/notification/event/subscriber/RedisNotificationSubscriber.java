@@ -1,8 +1,8 @@
-package com.somemore.notification.subscriber;
+package com.somemore.notification.event.subscriber;
 
-import com.somemore.notification.converter.NotificationMessageConverter;
+import com.somemore.notification.event.converter.NotificationMessageConverter;
 import com.somemore.notification.domain.Notification;
-import com.somemore.notification.handler.NotificationHandler;
+import com.somemore.notification.event.handler.NotificationHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;

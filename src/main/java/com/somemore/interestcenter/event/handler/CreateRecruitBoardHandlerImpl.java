@@ -1,8 +1,8 @@
-package com.somemore.interestcenter.handler;
+package com.somemore.interestcenter.event.handler;
 
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.common.event.ServerEventType;
-import com.somemore.interestcenter.event.InterestCenterCreateRecruitBoardEvent;
+import com.somemore.interestcenter.event.domain.InterestCenterCreateRecruitBoardEvent;
 import com.somemore.interestcenter.usecase.InterestCenterQueryUseCase;
 import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.recruitboard.event.CreateRecruitBoardEvent;

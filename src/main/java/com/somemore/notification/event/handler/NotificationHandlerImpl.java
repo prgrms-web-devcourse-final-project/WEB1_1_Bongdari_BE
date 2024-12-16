@@ -1,4 +1,4 @@
-package com.somemore.notification.handler;
+package com.somemore.notification.event.handler;
 
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.dto.NotificationResponseDto;

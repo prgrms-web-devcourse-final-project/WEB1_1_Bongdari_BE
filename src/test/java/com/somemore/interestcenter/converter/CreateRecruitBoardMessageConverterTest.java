@@ -3,6 +3,7 @@ package com.somemore.interestcenter.converter;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.global.common.event.DomainEventSubType;
 import com.somemore.global.common.event.ServerEventType;
+import com.somemore.interestcenter.event.converter.CreateRecruitBoardMessageConverter;
 import com.somemore.recruitboard.event.CreateRecruitBoardEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

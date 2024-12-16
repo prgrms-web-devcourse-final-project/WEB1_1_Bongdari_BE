@@ -1,4 +1,4 @@
-package com.somemore.interestcenter.event;
+package com.somemore.interestcenter.event.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

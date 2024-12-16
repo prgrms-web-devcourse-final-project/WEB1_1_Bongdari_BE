@@ -1,9 +1,10 @@
 package com.somemore.notification.handler;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.notification.converter.NotificationMessageConverter;
+import com.somemore.notification.event.converter.NotificationMessageConverter;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.notification.event.handler.NotificationHandlerImpl;
 import com.somemore.notification.repository.NotificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

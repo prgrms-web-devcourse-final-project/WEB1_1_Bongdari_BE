@@ -1,7 +1,8 @@
 package com.somemore.interestcenter.subscriber;
 
-import com.somemore.interestcenter.converter.CreateRecruitBoardMessageConverter;
-import com.somemore.interestcenter.handler.CreateRecruitBoardHandler;
+import com.somemore.interestcenter.event.converter.CreateRecruitBoardMessageConverter;
+import com.somemore.interestcenter.event.subscriber.RedisCreateRecruitBoardSubscriber;
+import com.somemore.interestcenter.event.handler.CreateRecruitBoardHandler;
 import com.somemore.recruitboard.event.CreateRecruitBoardEvent;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

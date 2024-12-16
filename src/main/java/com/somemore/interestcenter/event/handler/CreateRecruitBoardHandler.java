@@ -1,4 +1,4 @@
-package com.somemore.interestcenter.handler;
+package com.somemore.interestcenter.event.handler;
 
 import com.somemore.recruitboard.event.CreateRecruitBoardEvent;
 

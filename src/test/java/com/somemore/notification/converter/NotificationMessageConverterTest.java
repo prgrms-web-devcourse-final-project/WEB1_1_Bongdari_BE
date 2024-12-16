@@ -3,6 +3,7 @@ package com.somemore.notification.converter;
 import com.somemore.IntegrationTestSupport;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.notification.event.converter.NotificationMessageConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
