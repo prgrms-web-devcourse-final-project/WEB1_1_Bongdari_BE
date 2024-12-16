@@ -1,8 +1,5 @@
 package com.somemore.recruitboard.repository;
 
-import static com.somemore.location.domain.QLocation.location;
-import static com.somemore.recruitboard.domain.QRecruitBoard.recruitBoard;
-
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -12,14 +9,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.QCenter;
 import com.somemore.location.domain.QLocation;
 import com.somemore.location.utils.GeoUtils;
-import com.somemore.recruitboard.domain.*;
+import com.somemore.recruitboard.domain.QRecruitBoard;
+import com.somemore.recruitboard.domain.RecruitBoard;
+import com.somemore.recruitboard.domain.RecruitStatus;
+import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.recruitboard.repository.mapper.RecruitBoardWithLocation;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,8 +34,12 @@ import org.springframework.stereotype.Repository;
 public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private final RecruitBoardJpaRepository recruitBoardJpaRepository;
-//    private final RecruitBoardDocumentRepository documentRepository;
+    //    private final RecruitBoardDocumentRepository documentRepository;
     private final JPAQueryFactory queryFactory;
+
+    private final static QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+    private final static QLocation location = QLocation.location;
+    private final static QCenter center = QCenter.center;
 
     @Override
     public RecruitBoard save(RecruitBoard recruitBoard) {
@@ -51,11 +53,13 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     @Override
     public Optional<RecruitBoard> findById(Long id) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+
+        BooleanExpression exp = idEq(id)
+                .and(isNotDeleted());
 
         RecruitBoard result = queryFactory
                 .selectFrom(recruitBoard)
-                .where(isNotDeleted().and(idEq(id)))
+                .where(exp)
                 .fetchOne();
 
         return Optional.ofNullable(result);
@@ -63,16 +67,15 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     @Override
     public List<Long> findNotCompletedIdsByCenterId(UUID centerId) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+
+        BooleanExpression exp = centerIdEq(centerId)
+                .and(isNotCompleted())
+                .and(isNotDeleted());
 
         return queryFactory
                 .select(recruitBoard.id)
                 .from(recruitBoard)
-                .where(
-                        recruitBoard.centerId.eq(centerId)
-                                .and(isNotCompleted())
-                                .and(isNotDeleted())
-                )
+                .where(exp)
                 .fetch();
     }
 
@@ -89,35 +92,37 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     @Override
     public Optional<RecruitBoardWithLocation> findWithLocationById(Long id) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-        QLocation location = QLocation.location;
 
-        return Optional.ofNullable(
-                queryFactory.select(
-                                getRecruitBoardWithLocationConstructorExpression(recruitBoard, location))
-                        .from(recruitBoard)
-                        .join(location).on(recruitBoard.locationId.eq(location.id))
-                        .where(isNotDeleted().and(idEq(id)))
-                        .fetchOne());
+        BooleanExpression exp = idEq(id)
+                .and(isNotDeleted());
+
+        RecruitBoardWithLocation result = queryFactory
+                .select(getRecruitBoardWithLocationConstructorExpression())
+                .from(recruitBoard)
+                .join(location)
+                .on(recruitBoard.locationId.eq(location.id))
+                .where(exp)
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 
     @Override
     public Page<RecruitBoardWithCenter> findAllWithCenter(RecruitBoardSearchCondition condition) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-        QCenter center = QCenter.center;
 
-        Pageable pageable = condition.pageable();
-        BooleanExpression predicate = isNotDeleted()
+        BooleanExpression exp = isNotDeleted()
                 .and(keywordEq(condition.keyword()))
                 .and(volunteerCategoryEq(condition.category()))
                 .and(regionEq(condition.region()))
                 .and(admittedEq(condition.admitted()))
                 .and(statusEq(condition.status()));
 
+        Pageable pageable = condition.pageable();
+
         List<RecruitBoardWithCenter> content = queryFactory
-                .select(getRecruitBoardWithCenterConstructorExpression(recruitBoard, center))
+                .select(getRecruitBoardWithCenterConstructorExpression())
                 .from(recruitBoard)
-                .where(predicate)
+                .where(exp)
                 .join(center).on(recruitBoard.centerId.eq(center.id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -127,30 +132,28 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(recruitBoard.count())
                 .from(recruitBoard)
-                .where(predicate);
+                .where(exp)
+                .join(center).on(recruitBoard.centerId.eq(center.id));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     @Override
     public Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-        QLocation location = QLocation.location;
-        QCenter center = QCenter.center;
 
-        Pageable pageable = condition.pageable();
-
-        BooleanExpression predicate = locationBetween(condition)
+        BooleanExpression exp = locationBetween(condition)
                 .and(keywordEq(condition.keyword()))
                 .and(statusEq(condition.status()))
                 .and(isNotDeleted());
 
+        Pageable pageable = condition.pageable();
+
         List<RecruitBoardDetail> content = queryFactory
-                .select(getRecruitBoardDetailConstructorExpression(recruitBoard, location, center))
+                .select(getRecruitBoardDetailConstructorExpression())
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
                 .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(predicate)
+                .where(exp)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(toOrderSpecifiers(pageable.getSort()))
@@ -161,7 +164,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
                 .join(center).on(recruitBoard.centerId.eq(center.id))
-                .where(predicate);
+                .where(exp);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -210,10 +213,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     @Override
     public Page<RecruitBoard> findAllByCenterId(UUID centerId,
             RecruitBoardSearchCondition condition) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
 
-        Pageable pageable = condition.pageable();
-        BooleanExpression predicate = isNotDeleted()
+        BooleanExpression exp = isNotDeleted()
                 .and(centerIdEq(centerId))
                 .and(keywordEq(condition.keyword()))
                 .and(volunteerCategoryEq(condition.category()))
@@ -221,9 +222,11 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .and(admittedEq(condition.admitted()))
                 .and(statusEq(condition.status()));
 
+        Pageable pageable = condition.pageable();
+
         List<RecruitBoard> content = queryFactory
                 .selectFrom(recruitBoard)
-                .where(predicate)
+                .where(exp)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(toOrderSpecifiers(pageable.getSort()))
@@ -232,7 +235,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(recruitBoard.count())
                 .from(recruitBoard)
-                .where(predicate);
+                .where(exp);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -352,41 +355,35 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-
         return sort.stream()
                 .map(order -> {
                     String property = order.getProperty();
-
                     if ("created_at".equals(property)) {
                         return order.isAscending()
                                 ? recruitBoard.createdAt.asc()
                                 : recruitBoard.createdAt.desc();
-                    } else if ("volunteer_start_date_time".equals(property)) {
+                    }
+                    if ("volunteer_start_date_time".equals(property)) {
                         return order.isAscending()
                                 ? recruitBoard.recruitmentInfo.volunteerStartDateTime.asc()
                                 : recruitBoard.recruitmentInfo.volunteerStartDateTime.desc();
-                    } else {
-                        throw new IllegalStateException("Invalid sort property: " + property);
                     }
+                    throw new IllegalStateException("Invalid sort property: " + property);
                 })
                 .toArray(OrderSpecifier[]::new);
     }
 
-    private static ConstructorExpression<RecruitBoardWithCenter> getRecruitBoardWithCenterConstructorExpression(
-            QRecruitBoard recruitBoard, QCenter center) {
+    private static ConstructorExpression<RecruitBoardWithCenter> getRecruitBoardWithCenterConstructorExpression() {
         return Projections.constructor(RecruitBoardWithCenter.class,
                 recruitBoard, center.name);
     }
 
-    private static ConstructorExpression<RecruitBoardWithLocation> getRecruitBoardWithLocationConstructorExpression(
-            QRecruitBoard recruitBoard, QLocation location) {
+    private static ConstructorExpression<RecruitBoardWithLocation> getRecruitBoardWithLocationConstructorExpression() {
         return Projections.constructor(RecruitBoardWithLocation.class,
                 recruitBoard, location.address, location.latitude, location.longitude);
     }
 
-    private static ConstructorExpression<RecruitBoardDetail> getRecruitBoardDetailConstructorExpression(
-            QRecruitBoard recruitBoard, QLocation location, QCenter center) {
+    private static ConstructorExpression<RecruitBoardDetail> getRecruitBoardDetailConstructorExpression() {
         return Projections.constructor(RecruitBoardDetail.class,
                 recruitBoard, location.address, location.latitude, location.longitude, center.name);
     }
