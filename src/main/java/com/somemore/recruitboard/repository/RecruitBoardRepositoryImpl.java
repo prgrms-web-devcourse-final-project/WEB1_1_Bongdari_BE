@@ -37,9 +37,9 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     //    private final RecruitBoardDocumentRepository documentRepository;
     private final JPAQueryFactory queryFactory;
 
-    private final static QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
-    private final static QLocation location = QLocation.location;
-    private final static QCenter center = QCenter.center;
+    private static final QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+    private static final QLocation location = QLocation.location;
+    private static final QCenter center = QCenter.center;
 
     @Override
     public RecruitBoard save(RecruitBoard recruitBoard) {
@@ -309,7 +309,6 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     private BooleanExpression isNotCompleted() {
-        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
         return recruitBoard.recruitStatus.in(RecruitStatus.RECRUITING, RecruitStatus.CLOSED);
     }
 
