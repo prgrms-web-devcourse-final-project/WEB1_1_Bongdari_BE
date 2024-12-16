@@ -1,4 +1,4 @@
-package com.somemore.global.configure;
+package com.somemore.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

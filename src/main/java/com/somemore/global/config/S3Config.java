@@ -1,4 +1,4 @@
-package com.somemore.global.configure;
+package com.somemore.global.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.somemore.global.configure;
+package com.somemore.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

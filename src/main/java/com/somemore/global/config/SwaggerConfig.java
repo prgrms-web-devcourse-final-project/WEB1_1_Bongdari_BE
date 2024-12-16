@@ -1,4 +1,4 @@
-package com.somemore.global.configure;
+package com.somemore.global.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;

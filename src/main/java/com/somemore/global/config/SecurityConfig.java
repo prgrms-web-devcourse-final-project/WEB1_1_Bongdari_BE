@@ -1,4 +1,4 @@
-package com.somemore.global.configure;
+package com.somemore.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.auth.cookie.CookieUseCase;
