@@ -3,10 +3,10 @@ package com.somemore.recruitboard.controller;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.imageupload.dto.ImageUploadRequestDto;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardStatusUpdateRequestDto;

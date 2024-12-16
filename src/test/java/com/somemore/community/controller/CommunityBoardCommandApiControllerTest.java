@@ -19,7 +19,7 @@ import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.community.usecase.board.UpdateCommunityBoardUseCase;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

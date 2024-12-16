@@ -2,10 +2,10 @@ package com.somemore.review.controller;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.imageupload.dto.ImageUploadRequestDto;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.review.usecase.CreateReviewUseCase;
 import io.swagger.v3.oas.annotations.Operation;

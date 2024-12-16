@@ -1,6 +1,6 @@
 package com.somemore.facade.volunteerapply;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;

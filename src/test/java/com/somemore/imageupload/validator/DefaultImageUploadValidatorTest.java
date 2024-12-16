@@ -1,6 +1,7 @@
 package com.somemore.imageupload.validator;
 
 import com.somemore.global.exception.ImageUploadException;
+import com.somemore.global.imageupload.validator.DefaultImageUploadValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

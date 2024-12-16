@@ -1,5 +1,6 @@
 package com.somemore.imageupload.util;
 
+import com.somemore.global.imageupload.util.ImageUploadUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

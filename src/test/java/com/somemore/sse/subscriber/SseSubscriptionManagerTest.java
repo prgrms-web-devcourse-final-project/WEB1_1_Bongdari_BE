@@ -1,7 +1,8 @@
 package com.somemore.sse.subscriber;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.sse.repository.EmitterRepository;
+import com.somemore.global.sse.repository.EmitterRepository;
+import com.somemore.global.sse.subscriber.SseSubscriptionManagerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

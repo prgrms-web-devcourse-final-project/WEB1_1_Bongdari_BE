@@ -1,6 +1,6 @@
 package com.somemore.center.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.center.dto.request.PreferItemCreateRequestDto;
 import com.somemore.center.dto.response.PreferItemCreateResponseDto;
 import com.somemore.center.usecase.command.CreatePreferItemUseCase;

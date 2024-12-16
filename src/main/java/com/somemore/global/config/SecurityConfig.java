@@ -1,14 +1,14 @@
 package com.somemore.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.auth.cookie.CookieUseCase;
-import com.somemore.auth.idpw.filter.IdPwAuthFilter;
-import com.somemore.auth.jwt.filter.JwtAuthFilter;
-import com.somemore.auth.jwt.filter.JwtExceptionFilter;
-import com.somemore.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
-import com.somemore.auth.oauth.handler.failure.CustomOAuthFailureHandler;
-import com.somemore.auth.oauth.handler.success.CustomOAuthSuccessHandler;
-import com.somemore.auth.oauth.service.CustomOAuth2UserService;
+import com.somemore.global.auth.cookie.CookieUseCase;
+import com.somemore.global.auth.idpw.filter.IdPwAuthFilter;
+import com.somemore.global.auth.jwt.filter.JwtAuthFilter;
+import com.somemore.global.auth.jwt.filter.JwtExceptionFilter;
+import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
+import com.somemore.global.auth.oauth.handler.failure.CustomOAuthFailureHandler;
+import com.somemore.global.auth.oauth.handler.success.CustomOAuthSuccessHandler;
+import com.somemore.global.auth.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

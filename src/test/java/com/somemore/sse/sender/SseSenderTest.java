@@ -1,9 +1,10 @@
 package com.somemore.sse.sender;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.sse.domain.SseEvent;
-import com.somemore.sse.domain.SseEventType;
-import com.somemore.sse.repository.EmitterRepository;
+import com.somemore.global.sse.domain.SseEvent;
+import com.somemore.global.sse.domain.SseEventType;
+import com.somemore.global.sse.repository.EmitterRepository;
+import com.somemore.global.sse.sender.SseSender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

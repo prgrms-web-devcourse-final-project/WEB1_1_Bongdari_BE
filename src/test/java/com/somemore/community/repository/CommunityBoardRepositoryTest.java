@@ -1,7 +1,7 @@
 package com.somemore.community.repository;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
+import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.repository.board.CommunityBoardRepository;
@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

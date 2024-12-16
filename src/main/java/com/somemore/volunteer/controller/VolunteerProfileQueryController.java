@@ -1,6 +1,6 @@
 package com.somemore.volunteer.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.volunteer.usecase.VolunteerQueryUseCase;

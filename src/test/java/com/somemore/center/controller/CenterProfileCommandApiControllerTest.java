@@ -5,7 +5,7 @@ import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
 import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
 import com.somemore.center.usecase.command.UpdateCenterProfileUseCase;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

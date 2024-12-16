@@ -1,7 +1,8 @@
 package com.somemore.sse.service;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.sse.repository.EmitterRepository;
+import com.somemore.global.sse.repository.EmitterRepository;
+import com.somemore.global.sse.service.SseService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

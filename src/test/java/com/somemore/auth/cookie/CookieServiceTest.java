@@ -1,6 +1,7 @@
 package com.somemore.auth.cookie;
 
-import com.somemore.auth.jwt.domain.TokenType;
+import com.somemore.global.auth.cookie.CookieService;
+import com.somemore.global.auth.jwt.domain.TokenType;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 

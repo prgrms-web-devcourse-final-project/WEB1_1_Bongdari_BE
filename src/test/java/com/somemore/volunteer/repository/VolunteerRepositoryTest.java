@@ -1,6 +1,6 @@
 package com.somemore.volunteer.repository;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.IntegrationTestSupport;

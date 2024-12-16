@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import com.somemore.volunteer.usecase.UpdateVolunteerProfileUseCase;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
 import java.nio.charset.StandardCharsets;

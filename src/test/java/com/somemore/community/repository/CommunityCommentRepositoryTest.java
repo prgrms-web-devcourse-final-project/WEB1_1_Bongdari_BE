@@ -1,7 +1,7 @@
 package com.somemore.community.repository;
 
 import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
+import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.repository.board.CommunityBoardRepository;

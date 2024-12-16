@@ -2,8 +2,9 @@ package com.somemore.imageupload.service;
 
 import com.somemore.IntegrationTestSupport;
 import com.somemore.global.exception.ImageUploadException;
-import com.somemore.imageupload.dto.ImageUploadRequestDto;
-import com.somemore.imageupload.validator.ImageUploadValidator;
+import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
+import com.somemore.global.imageupload.service.ImageUploadService;
+import com.somemore.global.imageupload.validator.ImageUploadValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

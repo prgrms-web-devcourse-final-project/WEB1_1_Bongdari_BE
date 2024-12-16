@@ -19,10 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.ControllerTestSupport;
 import com.somemore.WithMockCustomUser;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardStatusUpdateRequestDto;

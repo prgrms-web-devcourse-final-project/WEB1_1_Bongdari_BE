@@ -1,6 +1,6 @@
 package com.somemore.review.repository;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.common.fixture.CenterFixture.createCenter;
 import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.recruitboard.domain.VolunteerCategory.COUNSELING;
