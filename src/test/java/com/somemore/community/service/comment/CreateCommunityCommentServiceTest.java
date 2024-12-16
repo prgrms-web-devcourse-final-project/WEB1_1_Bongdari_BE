@@ -1,6 +1,6 @@
 package com.somemore.community.service.comment;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;

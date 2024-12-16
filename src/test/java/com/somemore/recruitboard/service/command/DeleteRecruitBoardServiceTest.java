@@ -1,11 +1,11 @@
 package com.somemore.recruitboard.service.command;
 
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.domain.RecruitmentInfo;

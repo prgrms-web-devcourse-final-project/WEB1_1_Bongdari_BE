@@ -1,6 +1,6 @@
 package com.somemore.community.service.comment;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
@@ -20,8 +20,8 @@ import org.springframework.data.domain.Page;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
-import static com.somemore.common.fixture.CommunityCommentFixture.createCommunityComment;
+import static com.somemore.support.fixture.CommunityBoardFixture.createCommunityBoard;
+import static com.somemore.support.fixture.CommunityCommentFixture.createCommunityComment;
 
 class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     @Autowired

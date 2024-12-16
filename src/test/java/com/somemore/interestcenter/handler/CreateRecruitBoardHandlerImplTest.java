@@ -1,6 +1,6 @@
 package com.somemore.interestcenter.handler;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.interestcenter.event.domain.InterestCenterCreateRecruitBoardEvent;
 import com.somemore.interestcenter.event.handler.CreateRecruitBoardHandlerImpl;

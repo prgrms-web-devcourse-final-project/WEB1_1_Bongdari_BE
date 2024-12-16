@@ -1,6 +1,6 @@
 package com.somemore.volunteerapply.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;

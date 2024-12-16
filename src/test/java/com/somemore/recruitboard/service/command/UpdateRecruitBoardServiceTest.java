@@ -1,13 +1,13 @@
 package com.somemore.recruitboard.service.command;
 
-import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.location.domain.Location;
 import com.somemore.location.repository.LocationRepository;

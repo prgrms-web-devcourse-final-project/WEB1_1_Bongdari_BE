@@ -1,6 +1,6 @@
 package com.somemore.note.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.note.domain.Note;
 import com.somemore.note.dto.SendNoteToVolunteerRequestDto;
 import com.somemore.note.repository.NoteJpaRepository;

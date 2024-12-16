@@ -1,7 +1,7 @@
 package com.somemore.interestcenter.controller;
 
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.interestcenter.dto.request.RegisterInterestCenterRequestDto;
 import com.somemore.interestcenter.dto.response.RegisterInterestCenterResponseDto;
 import com.somemore.interestcenter.usecase.CancelInterestCenterUseCase;
@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.UUID;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;

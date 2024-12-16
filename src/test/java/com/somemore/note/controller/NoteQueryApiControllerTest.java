@@ -1,7 +1,7 @@
 package com.somemore.note.controller;
 
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.note.repository.mapper.NoteDetailViewForVolunteer;

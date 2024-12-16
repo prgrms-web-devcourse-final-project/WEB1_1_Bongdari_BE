@@ -1,6 +1,6 @@
 package com.somemore.note.repository;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterJpaRepository;
 import com.somemore.note.domain.Note;

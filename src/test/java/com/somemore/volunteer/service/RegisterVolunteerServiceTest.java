@@ -1,6 +1,6 @@
 package com.somemore.volunteer.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.volunteer.domain.Gender;
 import com.somemore.volunteer.domain.Tier;

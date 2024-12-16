@@ -1,11 +1,11 @@
 package com.somemore.facade.volunteerapply;
 
 import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.volunteer.domain.Volunteer;

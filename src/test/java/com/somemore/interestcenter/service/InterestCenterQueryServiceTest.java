@@ -1,6 +1,6 @@
 package com.somemore.interestcenter.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterJpaRepository;
 import com.somemore.interestcenter.domain.InterestCenter;

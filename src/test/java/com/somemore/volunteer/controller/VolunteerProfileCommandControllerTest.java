@@ -2,8 +2,8 @@ package com.somemore.volunteer.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import com.somemore.volunteer.usecase.UpdateVolunteerProfileUseCase;

@@ -1,16 +1,16 @@
 package com.somemore.recruitboard.service.query;
 
-import static com.somemore.common.fixture.CenterFixture.createCenter;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.common.fixture.LocationFixture.createLocation;
-import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocationFixture.createLocation;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.global.exception.BadRequestException;
@@ -26,7 +26,6 @@ import com.somemore.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;

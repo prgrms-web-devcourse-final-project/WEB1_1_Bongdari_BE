@@ -1,6 +1,6 @@
 package com.somemore.notification.handler;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.notification.event.converter.NotificationMessageConverter;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;

@@ -1,6 +1,6 @@
 package com.somemore.community.service.board;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.community.domain.CommunityBoard;
@@ -26,7 +26,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
+import static com.somemore.support.fixture.CommunityBoardFixture.createCommunityBoard;
 
 
 class CommunityBoardQueryServiceTest extends IntegrationTestSupport {

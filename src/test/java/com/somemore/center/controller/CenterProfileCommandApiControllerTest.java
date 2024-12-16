@@ -1,8 +1,8 @@
 package com.somemore.center.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
 import com.somemore.center.usecase.command.UpdateCenterProfileUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;

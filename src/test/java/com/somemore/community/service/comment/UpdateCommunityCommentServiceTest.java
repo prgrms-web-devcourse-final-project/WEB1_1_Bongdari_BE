@@ -5,7 +5,7 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_COMMUN
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;

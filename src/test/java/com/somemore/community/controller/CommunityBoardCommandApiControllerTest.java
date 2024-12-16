@@ -12,8 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;

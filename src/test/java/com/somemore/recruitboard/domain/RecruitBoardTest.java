@@ -1,9 +1,9 @@
 package com.somemore.recruitboard.domain;
 
-import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.recruitboard.domain.RecruitStatus.RECRUITING;

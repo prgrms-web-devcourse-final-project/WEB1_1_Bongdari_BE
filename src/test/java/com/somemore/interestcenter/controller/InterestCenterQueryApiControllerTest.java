@@ -1,7 +1,7 @@
 package com.somemore.interestcenter.controller;
 
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.interestcenter.usecase.InterestCenterQueryUseCase;
 import org.junit.jupiter.api.DisplayName;
