@@ -1,23 +1,22 @@
-package com.somemore.facade.validator;
+package com.somemore.volunteer.validator;
 
-import com.somemore.support.IntegrationTestSupport;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.repository.VolunteerApplyRepository;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
-
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class VolunteerDetailAccessValidatorImplTest extends IntegrationTestSupport {
@@ -43,15 +42,18 @@ class VolunteerDetailAccessValidatorImplTest extends IntegrationTestSupport {
         UUID unrelatedVolunteerId = UUID.randomUUID();
         UUID relatedVolunteerId = UUID.randomUUID();
 
-        VolunteerApply volunteerApply = createVolunteerApply(recruitBoard.getId(), relatedVolunteerId);
+        VolunteerApply volunteerApply = createVolunteerApply(recruitBoard.getId(),
+                relatedVolunteerId);
         volunteerApplyRepository.save(volunteerApply);
 
         // when
         // then
-        assertThatCode(() -> volunteerDetailAccessValidatorImpl.validateByCenterId(centerId, relatedVolunteerId))
+        assertThatCode(() -> volunteerDetailAccessValidatorImpl.validateByCenterId(centerId,
+                relatedVolunteerId))
                 .doesNotThrowAnyException();
 
-        assertThatThrownBy(() -> volunteerDetailAccessValidatorImpl.validateByCenterId(centerId, unrelatedVolunteerId))
+        assertThatThrownBy(() -> volunteerDetailAccessValidatorImpl.validateByCenterId(centerId,
+                unrelatedVolunteerId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_VOLUNTEER_DETAIL.getMessage());
     }

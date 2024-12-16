@@ -1,4 +1,4 @@
-package com.somemore.facade.volunteerapply;
+package com.somemore.volunteerapply.service;
 
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 
@@ -11,6 +11,7 @@ import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.somemore.facade.event;
+package com.somemore.volunteerapply.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

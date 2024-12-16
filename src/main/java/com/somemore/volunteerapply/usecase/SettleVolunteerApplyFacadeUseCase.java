@@ -1,4 +1,4 @@
-package com.somemore.facade.volunteerapply;
+package com.somemore.volunteerapply.usecase;
 
 import com.somemore.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
 import java.util.UUID;

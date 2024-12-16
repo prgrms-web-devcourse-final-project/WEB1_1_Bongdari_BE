@@ -1,10 +1,10 @@
-package com.somemore.facade.volunteerapply;
+package com.somemore.volunteerapply.service;
 
 import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
 
-import com.somemore.facade.event.VolunteerReviewRequestEvent;
+import com.somemore.volunteerapply.event.VolunteerReviewRequestEvent;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
@@ -14,6 +14,7 @@ import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.volunteer.usecase.UpdateVolunteerUseCase;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
+import com.somemore.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import java.util.List;
 import java.util.UUID;

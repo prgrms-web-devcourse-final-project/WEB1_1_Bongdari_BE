@@ -1,4 +1,4 @@
-package com.somemore.facade.validator;
+package com.somemore.volunteer.validator;
 
 import java.util.UUID;
 

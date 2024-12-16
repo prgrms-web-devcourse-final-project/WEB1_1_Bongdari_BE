@@ -1,6 +1,5 @@
-package com.somemore.support;
+package com.somemore.support.annotation;
 
-import com.somemore.support.annotation.WithMockCustomUser;
 import java.util.Collections;
 import java.util.UUID;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

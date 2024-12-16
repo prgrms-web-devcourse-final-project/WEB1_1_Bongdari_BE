@@ -1,19 +1,19 @@
-package com.somemore.facade.volunteerapply;
+package com.somemore.volunteerapply.service;
 
 import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
-import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
 import static com.somemore.recruitboard.domain.VolunteerCategory.COUNSELING;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.repository.VolunteerRepository;
 import com.somemore.volunteerapply.domain.VolunteerApply;

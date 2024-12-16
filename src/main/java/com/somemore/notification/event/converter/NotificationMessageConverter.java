@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.community.event.CommentAddedEvent;
-import com.somemore.facade.event.VolunteerReviewRequestEvent;
+import com.somemore.volunteerapply.event.VolunteerReviewRequestEvent;
 import com.somemore.interestcenter.event.domain.InterestCenterCreateRecruitBoardEvent;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;

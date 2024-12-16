@@ -1,6 +1,5 @@
 package com.somemore.support.annotation;
 
-import com.somemore.support.CustomSecurityContextFactory;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;

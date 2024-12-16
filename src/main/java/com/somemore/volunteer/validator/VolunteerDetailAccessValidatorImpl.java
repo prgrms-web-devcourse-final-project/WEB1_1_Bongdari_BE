@@ -1,4 +1,4 @@
-package com.somemore.facade.validator;
+package com.somemore.volunteer.validator;
 
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.usecase.query.RecruitBoardQueryUseCase;

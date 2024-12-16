@@ -1,7 +1,7 @@
 package com.somemore.volunteerapply.controller;
 
 import com.somemore.global.auth.annotation.CurrentUser;
-import com.somemore.facade.volunteerapply.SettleVolunteerApplyFacadeUseCase;
+import com.somemore.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
 import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
