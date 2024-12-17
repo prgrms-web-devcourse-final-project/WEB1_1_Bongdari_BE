@@ -2,7 +2,7 @@ package com.somemore.global.auth.jwt.domain;
 
 public record EncodedToken(String value) {
 
-    private final static String UNINITIALIZED = "UNINITIALIZED";
+    private static final String UNINITIALIZED = "UNINITIALIZED";
 
     public boolean isUninitialized() {
         return value == null
