@@ -30,7 +30,7 @@ public class CommunityBoardQueryApiController {
     ) {
         return ApiResponse.ok(
                 200,
-                communityBoardQueryUseCase.getCommunityBoards(pageable.getPageNumber()),
+                communityBoardQueryUseCase.getCommunityBoards(null, pageable.getPageNumber()),
                 "전체 커뮤니티 게시글 리스트 조회 성공"
         );
     }
@@ -60,6 +60,19 @@ public class CommunityBoardQueryApiController {
 //                "커뮤니티 게시글 검색 리스트 조회 성공"
 //        );
 //    }
+
+    @GetMapping("/community-boards/search")
+    @Operation(summary = "커뮤니티 게시글 키워드 검색", description = "키워드를 포함한 커뮤니티 게시글 목록을 조회합니다.")
+    public ApiResponse<Page<CommunityBoardResponseDto>> getCommunityBoardsBySearch(
+            @RequestParam String keyword,
+            Pageable pageable
+    ) {
+        return ApiResponse.ok(
+                200,
+                communityBoardQueryUseCase.getCommunityBoards(keyword, pageable.getPageNumber()),
+                "커뮤니티 게시글 검색 리스트 조회 성공"
+        );
+    }
 
     @GetMapping("/community-board/{id}")
     @Operation(summary = "커뮤니티 게시글 상세 조회", description = "커뮤니티 게시글의 상세 정보를 조회합니다.")
