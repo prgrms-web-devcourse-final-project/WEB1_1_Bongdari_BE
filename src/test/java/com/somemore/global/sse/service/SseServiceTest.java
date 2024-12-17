@@ -1,15 +1,13 @@
 package com.somemore.global.sse.service;
 
-import com.somemore.support.IntegrationTestSupport;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.global.sse.repository.EmitterRepository;
-import com.somemore.global.sse.service.SseService;
+import com.somemore.support.IntegrationTestSupport;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SseServiceTest extends IntegrationTestSupport {
 

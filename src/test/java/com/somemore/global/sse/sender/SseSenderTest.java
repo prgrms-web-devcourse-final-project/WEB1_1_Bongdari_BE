@@ -1,20 +1,18 @@
 package com.somemore.global.sse.sender;
 
-import com.somemore.support.IntegrationTestSupport;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.global.sse.domain.SseEvent;
 import com.somemore.global.sse.domain.SseEventType;
 import com.somemore.global.sse.repository.EmitterRepository;
-import com.somemore.global.sse.sender.SseSender;
+import com.somemore.support.IntegrationTestSupport;
+import java.io.IOException;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.io.IOException;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SseSenderTest extends IntegrationTestSupport {
 
@@ -46,7 +44,6 @@ class SseSenderTest extends IntegrationTestSupport {
         // then
         assertThat(emitterRepository.findAllByReceiverId(receiverId)).isNotEmpty();
     }
-
 
 
     @DisplayName("SSE 전송 중 IOException 발생 시 emitter를 제거한다.")
@@ -96,6 +93,7 @@ class SseSenderTest extends IntegrationTestSupport {
     }
 
     static class TestableSseEmitter extends SseEmitter {
+
         private boolean eventSent = false;
 
         @Override
