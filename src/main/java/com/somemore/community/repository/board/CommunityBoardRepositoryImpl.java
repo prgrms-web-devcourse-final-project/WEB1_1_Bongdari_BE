@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.somemore.recruitboard.domain.QRecruitBoard.recruitBoard;
-
 @RequiredArgsConstructor
 @Repository
 public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
