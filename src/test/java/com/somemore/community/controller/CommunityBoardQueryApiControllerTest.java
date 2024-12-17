@@ -42,7 +42,7 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
         //given
         Page<CommunityBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        given(communityBoardQueryUseCase.getCommunityBoards(anyInt()))
+        given(communityBoardQueryUseCase.getCommunityBoards(any(), anyInt()))
                 .willReturn(page);
 
         //when
@@ -56,7 +56,7 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
                         .value("전체 커뮤니티 게시글 리스트 조회 성공"));
 
         verify(communityBoardQueryUseCase, times(1))
-                .getCommunityBoards(anyInt());
+                .getCommunityBoards(any(), anyInt());
     }
 
     @Test
@@ -104,6 +104,29 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
 
         verify(communityBoardQueryUseCase, times(1))
                 .getCommunityBoardDetail(any());
+    }
+
+    @Test
+    @DisplayName("커뮤니티 게시글 검색 조회 성공")
+    void getBySearch() throws Exception {
+        //given
+        Page<CommunityBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
+
+        given(communityBoardQueryUseCase.getCommunityBoards(any(), anyInt()))
+                .willReturn(page);
+        //when
+        //then
+        mockMvc.perform(get("/api/community-boards/search")
+                        .param("keyword", "봉사")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message")
+                        .value("커뮤니티 게시글 검색 리스트 조회 성공"));
+
+        verify(communityBoardQueryUseCase, times(1))
+                .getCommunityBoards(any(), anyInt());
     }
 
 //    @Test

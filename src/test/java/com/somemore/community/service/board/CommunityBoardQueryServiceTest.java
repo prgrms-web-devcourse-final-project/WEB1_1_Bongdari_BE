@@ -92,7 +92,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
         //given
         //when
-        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoards(2);
+        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoards(null, 2);
 
         //then
         assertThat(dtos).isNotNull();
@@ -147,6 +147,26 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(callable)
                 .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD.getMessage());
+    }
+
+    @DisplayName("검색 키워드가 포함된 커뮤니티 게시글 리스트를 페이지로 조회한다.")
+    @Test
+    void getCommunityBoardsBySearch() {
+
+        //given
+        String title = "봉사";
+        CommunityBoard communityBoard = createCommunityBoard(title, writerId1);
+        communityBoardRepository.save(communityBoard);
+
+        //when
+        Page<CommunityBoardResponseDto> dtos = communityBoardQueryService.getCommunityBoards("봉사", 0);
+
+        //then
+        assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
+        assertThat(dtos.getTotalElements()).isEqualTo(1);
+        assertThat(dtos.getSize()).isEqualTo(10);
+        assertThat(dtos.getTotalPages()).isEqualTo(1);
     }
 
 //    @DisplayName("게시글을 elastic search index에 저장한다. (service)")
