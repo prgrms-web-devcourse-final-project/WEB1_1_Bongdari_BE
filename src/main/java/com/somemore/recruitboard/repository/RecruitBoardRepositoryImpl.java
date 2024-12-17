@@ -214,13 +214,13 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     public Page<RecruitBoard> findAllByCenterId(UUID centerId,
             RecruitBoardSearchCondition condition) {
 
-        BooleanExpression exp = isNotDeleted()
-                .and(centerIdEq(centerId))
+        BooleanExpression exp = centerIdEq(centerId)
                 .and(keywordEq(condition.keyword()))
                 .and(volunteerCategoryEq(condition.category()))
                 .and(regionEq(condition.region()))
                 .and(admittedEq(condition.admitted()))
-                .and(statusEq(condition.status()));
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
 
         Pageable pageable = condition.pageable();
 
