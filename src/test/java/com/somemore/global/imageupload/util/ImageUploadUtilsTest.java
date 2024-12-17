@@ -1,13 +1,15 @@
 package com.somemore.global.imageupload.util;
 
-import com.somemore.global.imageupload.util.ImageUploadUtils;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class ImageUploadUtilsTest {
 
@@ -18,10 +20,13 @@ class ImageUploadUtilsTest {
         constructor.setAccessible(true);
 
         // when
-        InvocationTargetException exception = assertThrows(InvocationTargetException.class, constructor::newInstance);
+        InvocationTargetException exception = assertThrows(InvocationTargetException.class,
+                constructor::newInstance);
 
         // then
-        assertThrows(UnsupportedOperationException.class, () -> { throw exception.getCause(); });
+        assertThrows(UnsupportedOperationException.class, () -> {
+            throw exception.getCause();
+        });
     }
 
     @DisplayName("이미지 업로드시 유일한 이미지 이름을 만들어줄 수 있다.")
