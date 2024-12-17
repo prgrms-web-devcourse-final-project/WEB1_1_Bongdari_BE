@@ -1,6 +1,6 @@
 package com.somemore.note.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.note.domain.Note;
 import com.somemore.note.dto.SendNoteToVolunteerRequestDto;
 import com.somemore.note.repository.NoteJpaRepository;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional

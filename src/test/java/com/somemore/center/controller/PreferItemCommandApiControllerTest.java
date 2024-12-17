@@ -1,7 +1,7 @@
 package com.somemore.center.controller;
 
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.center.dto.request.PreferItemCreateRequestDto;
 import com.somemore.center.dto.response.PreferItemCreateResponseDto;
 import com.somemore.center.usecase.command.CreatePreferItemUseCase;

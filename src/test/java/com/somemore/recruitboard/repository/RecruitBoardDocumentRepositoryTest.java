@@ -1,6 +1,6 @@
 //package com.somemore.recruitboard.repository;
 //
-//import com.somemore.IntegrationTestSupport;
+//import com.somemore.support.IntegrationTestSupport;
 //import com.somemore.center.domain.Center;
 //import com.somemore.center.repository.center.CenterRepository;
 //import com.somemore.location.domain.Location;

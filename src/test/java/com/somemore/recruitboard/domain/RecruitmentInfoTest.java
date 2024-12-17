@@ -1,7 +1,7 @@
 package com.somemore.recruitboard.domain;
 
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.recruitboard.domain.VolunteerCategory.SAFETY_PREVENTION;

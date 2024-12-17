@@ -8,14 +8,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
-import com.somemore.facade.volunteerapply.VolunteerApplyQueryFacadeUseCase;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import java.util.Collections;
 import java.util.UUID;

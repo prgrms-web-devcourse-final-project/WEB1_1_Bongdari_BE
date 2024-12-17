@@ -9,9 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.review.usecase.CreateReviewUseCase;
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package com.somemore.notification.repository;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
 import org.junit.jupiter.api.BeforeEach;

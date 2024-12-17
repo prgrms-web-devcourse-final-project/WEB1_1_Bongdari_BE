@@ -9,9 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
-import com.somemore.facade.volunteerapply.SettleVolunteerApplyFacadeUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
 import com.somemore.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
 import com.somemore.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
 import com.somemore.volunteerapply.usecase.RejectVolunteerApplyUseCase;

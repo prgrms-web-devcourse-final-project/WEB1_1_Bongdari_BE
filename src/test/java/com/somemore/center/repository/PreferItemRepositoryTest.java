@@ -1,6 +1,6 @@
 package com.somemore.center.repository;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.PreferItem;
 import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
 import com.somemore.center.repository.preferitem.PreferItemRepository;

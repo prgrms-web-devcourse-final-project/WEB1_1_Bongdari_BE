@@ -3,7 +3,7 @@ package com.somemore.location.repository;
 import static java.math.RoundingMode.HALF_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.location.domain.Location;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.AfterEach;

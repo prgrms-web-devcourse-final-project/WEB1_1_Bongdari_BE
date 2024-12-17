@@ -1,6 +1,6 @@
 package com.somemore.note.repository;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterJpaRepository;
 import com.somemore.note.domain.Note;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional

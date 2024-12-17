@@ -6,7 +6,7 @@ import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.review.domain.Review;
 import com.somemore.review.dto.request.ReviewCreateRequestDto;

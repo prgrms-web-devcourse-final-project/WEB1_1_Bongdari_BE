@@ -12,14 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.community.usecase.board.UpdateCommunityBoardUseCase;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

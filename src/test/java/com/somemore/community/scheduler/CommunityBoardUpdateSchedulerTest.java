@@ -1,6 +1,6 @@
 //package com.somemore.community.scheduler;
 //
-//import com.somemore.IntegrationTestSupport;
+//import com.somemore.support.IntegrationTestSupport;
 //import com.somemore.community.repository.board.CommunityBoardRepository;
 //import com.somemore.community.repository.mapper.CommunityBoardView;
 //import org.awaitility.Awaitility;

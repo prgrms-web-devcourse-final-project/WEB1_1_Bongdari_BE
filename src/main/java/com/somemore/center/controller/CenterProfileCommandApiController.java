@@ -1,11 +1,11 @@
 package com.somemore.center.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
 import com.somemore.center.usecase.command.UpdateCenterProfileUseCase;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.imageupload.dto.ImageUploadRequestDto;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

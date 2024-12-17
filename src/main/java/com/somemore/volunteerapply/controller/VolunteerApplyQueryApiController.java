@@ -2,8 +2,8 @@ package com.somemore.volunteerapply.controller;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
-import com.somemore.auth.annotation.CurrentUser;
-import com.somemore.facade.volunteerapply.VolunteerApplyQueryFacadeUseCase;
+import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteerapply.domain.ApplyStatus;

@@ -5,7 +5,7 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_NOTIFI
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;

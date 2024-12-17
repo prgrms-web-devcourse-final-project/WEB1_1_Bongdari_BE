@@ -1,6 +1,6 @@
 package com.somemore.center.controller;
 
-import com.somemore.auth.signout.usecase.SignOutUseCase;
+import com.somemore.global.auth.signout.usecase.SignOutUseCase;
 import com.somemore.center.dto.request.CenterSignRequestDto;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

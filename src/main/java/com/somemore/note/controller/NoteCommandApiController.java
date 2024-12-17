@@ -1,6 +1,6 @@
 package com.somemore.note.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.note.dto.SendNoteToCenterRequestDto;
 import com.somemore.note.dto.SendNoteToVolunteerRequestDto;

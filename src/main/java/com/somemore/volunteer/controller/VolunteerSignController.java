@@ -2,7 +2,7 @@ package com.somemore.volunteer.controller;
 
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.auth.signout.usecase.SignOutUseCase;
+import com.somemore.global.auth.signout.usecase.SignOutUseCase;
 import com.somemore.volunteer.usecase.GenerateOAuthUrlUseCase;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

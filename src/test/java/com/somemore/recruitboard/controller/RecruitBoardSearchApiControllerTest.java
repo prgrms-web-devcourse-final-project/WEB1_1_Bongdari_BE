@@ -1,6 +1,6 @@
 //package com.somemore.recruitboard.controller;
 //
-//import com.somemore.ControllerTestSupport;
+//import com.somemore.support.ControllerTestSupport;
 //import com.somemore.recruitboard.dto.condition.RecruitBoardNearByCondition;
 //import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 //import com.somemore.recruitboard.dto.response.RecruitBoardDetailResponseDto;

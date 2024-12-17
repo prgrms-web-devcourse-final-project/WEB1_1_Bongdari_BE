@@ -1,6 +1,6 @@
 package com.somemore.volunteer.dto.request;
 
-import com.somemore.auth.oauth.OAuthProvider;
+import com.somemore.global.auth.oauth.OAuthProvider;
 
 public record VolunteerRegisterRequestDto(
         OAuthProvider oAuthProvider,

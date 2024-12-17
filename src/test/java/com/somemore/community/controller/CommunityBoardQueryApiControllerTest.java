@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.somemore.ControllerTestSupport;
+import com.somemore.support.ControllerTestSupport;
 import com.somemore.community.dto.response.CommunityBoardDetailResponseDto;
 import com.somemore.community.dto.response.CommunityBoardResponseDto;
 //import com.somemore.community.usecase.board.CommunityBoardDocumentUseCase;

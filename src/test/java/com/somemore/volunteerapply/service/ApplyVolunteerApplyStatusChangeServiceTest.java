@@ -1,13 +1,13 @@
 package com.somemore.volunteerapply.service;
 
-import static com.somemore.common.fixture.RecruitBoardFixture.createCloseRecruitBoard;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCloseRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.RECRUITMENT_NOT_OPEN;
 import static com.somemore.volunteerapply.domain.ApplyStatus.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.recruitboard.domain.RecruitBoard;
 import com.somemore.recruitboard.repository.RecruitBoardRepository;

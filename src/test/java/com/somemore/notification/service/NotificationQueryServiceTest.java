@@ -1,6 +1,6 @@
 package com.somemore.notification.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.notification.domain.Notification;
 import com.somemore.notification.domain.NotificationSubType;
 import com.somemore.notification.dto.NotificationResponseDto;

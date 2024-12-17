@@ -1,6 +1,6 @@
 package com.somemore.recruitboard.controller;
 
-import static com.somemore.common.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.VolunteerCategory.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,12 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
-import com.somemore.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.location.dto.request.LocationCreateRequestDto;
 import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.VolunteerCategory;
 import com.somemore.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.recruitboard.dto.request.RecruitBoardStatusUpdateRequestDto;

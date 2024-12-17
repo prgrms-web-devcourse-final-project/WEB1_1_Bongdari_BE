@@ -1,6 +1,6 @@
 //package com.somemore.recruitboard.scheduler;
 //
-//import com.somemore.IntegrationTestSupport;
+//import com.somemore.support.IntegrationTestSupport;
 //import com.somemore.recruitboard.dto.condition.RecruitBoardSearchCondition;
 //import com.somemore.recruitboard.repository.RecruitBoardRepository;
 //import com.somemore.recruitboard.repository.mapper.RecruitBoardWithCenter;

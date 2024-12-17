@@ -1,6 +1,6 @@
 package com.somemore.interestcenter.converter;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.common.event.DomainEventSubType;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.interestcenter.event.converter.CreateRecruitBoardMessageConverter;

@@ -1,6 +1,6 @@
 package com.somemore.note.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterJpaRepository;
 import com.somemore.global.exception.NoSuchElementException;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

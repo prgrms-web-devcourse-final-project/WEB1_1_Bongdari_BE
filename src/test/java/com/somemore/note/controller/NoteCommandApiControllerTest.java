@@ -1,7 +1,7 @@
 package com.somemore.note.controller;
 
-import com.somemore.ControllerTestSupport;
-import com.somemore.WithMockCustomUser;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
 import com.somemore.note.dto.SendNoteToCenterRequestDto;
 import com.somemore.note.dto.SendNoteToVolunteerRequestDto;
 import com.somemore.note.usecase.SendNoteToCenterUseCase;

@@ -1,6 +1,6 @@
 package com.somemore.volunteer.repository;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.Gender;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import org.junit.jupiter.api.DisplayName;

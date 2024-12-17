@@ -1,9 +1,9 @@
 package com.somemore.volunteer.repository;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.domain.VolunteerDetail;
 import com.somemore.volunteer.dto.request.VolunteerRegisterRequestDto;

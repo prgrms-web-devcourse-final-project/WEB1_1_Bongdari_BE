@@ -1,6 +1,6 @@
 package com.somemore.center.service.command;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.dto.request.CenterProfileUpdateRequestDto;
 import com.somemore.center.repository.center.CenterRepository;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.somemore.common.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static org.assertj.core.api.Assertions.*;
 

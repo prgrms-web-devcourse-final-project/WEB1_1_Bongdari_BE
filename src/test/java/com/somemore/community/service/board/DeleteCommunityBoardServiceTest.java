@@ -3,7 +3,7 @@ package com.somemore.community.service.board;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.community.repository.board.CommunityBoardRepository;
 import com.somemore.community.usecase.board.CreateCommunityBoardUseCase;

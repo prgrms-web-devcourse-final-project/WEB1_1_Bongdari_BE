@@ -4,7 +4,7 @@ import static com.somemore.volunteerapply.domain.ApplyStatus.APPROVED;
 import static com.somemore.volunteerapply.domain.ApplyStatus.REJECTED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteerapply.domain.ApplyStatus;
 import com.somemore.volunteerapply.domain.VolunteerApply;
 import com.somemore.volunteerapply.dto.condition.VolunteerApplySearchCondition;

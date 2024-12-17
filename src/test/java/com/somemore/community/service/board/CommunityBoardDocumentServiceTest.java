@@ -1,6 +1,6 @@
 //package com.somemore.community.service.board;
 //
-//import com.somemore.IntegrationTestSupport;
+//import com.somemore.support.IntegrationTestSupport;
 //import com.somemore.auth.oauth.OAuthProvider;
 //import com.somemore.community.domain.CommunityBoard;
 //import com.somemore.community.dto.response.CommunityBoardResponseDto;

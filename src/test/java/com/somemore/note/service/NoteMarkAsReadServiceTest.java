@@ -1,6 +1,6 @@
 package com.somemore.note.service;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.note.domain.Note;
 import com.somemore.note.repository.NoteRepository;

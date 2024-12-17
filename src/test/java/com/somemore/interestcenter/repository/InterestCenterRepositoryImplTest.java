@@ -2,7 +2,7 @@ package com.somemore.interestcenter.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.interestcenter.domain.InterestCenter;
 import java.util.Optional;
 import java.util.UUID;

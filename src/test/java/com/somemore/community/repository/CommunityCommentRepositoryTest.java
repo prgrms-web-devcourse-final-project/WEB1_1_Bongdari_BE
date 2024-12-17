@@ -1,7 +1,7 @@
 package com.somemore.community.repository;
 
-import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
+import com.somemore.support.IntegrationTestSupport;
+import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.community.domain.CommunityBoard;
 import com.somemore.community.domain.CommunityComment;
 import com.somemore.community.repository.board.CommunityBoardRepository;
@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.somemore.common.fixture.CommunityBoardFixture.createCommunityBoard;
-import static com.somemore.common.fixture.CommunityCommentFixture.createCommunityComment;
+import static com.somemore.support.fixture.CommunityBoardFixture.createCommunityBoard;
+import static com.somemore.support.fixture.CommunityCommentFixture.createCommunityComment;
 
 @Transactional
 class CommunityCommentRepositoryTest extends IntegrationTestSupport {

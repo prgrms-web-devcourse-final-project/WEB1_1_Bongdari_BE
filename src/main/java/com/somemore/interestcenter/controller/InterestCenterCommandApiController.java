@@ -1,6 +1,6 @@
 package com.somemore.interestcenter.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.interestcenter.dto.request.RegisterInterestCenterRequestDto;
 import com.somemore.interestcenter.dto.response.RegisterInterestCenterResponseDto;

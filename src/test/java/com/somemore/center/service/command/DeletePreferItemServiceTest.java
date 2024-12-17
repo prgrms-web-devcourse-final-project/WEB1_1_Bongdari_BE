@@ -1,6 +1,6 @@
 package com.somemore.center.service.command;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.domain.PreferItem;
 import com.somemore.center.dto.request.PreferItemCreateRequestDto;

@@ -1,6 +1,6 @@
 package com.somemore.community.controller;
 
-import com.somemore.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.community.dto.request.CommunityCommentCreateRequestDto;
 import com.somemore.community.dto.request.CommunityCommentUpdateRequestDto;
 import com.somemore.community.usecase.comment.CreateCommunityCommentUseCase;

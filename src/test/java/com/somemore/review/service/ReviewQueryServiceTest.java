@@ -1,8 +1,8 @@
 package com.somemore.review.service;
 
-import static com.somemore.auth.oauth.OAuthProvider.NAVER;
-import static com.somemore.common.fixture.CenterFixture.createCenter;
-import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 import static com.somemore.recruitboard.domain.VolunteerCategory.COUNSELING;
 import static com.somemore.recruitboard.domain.VolunteerCategory.CULTURAL_EVENT;
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.global.exception.BadRequestException;

@@ -1,7 +1,7 @@
 package com.somemore.volunteer.service;
 
-import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.oauth.OAuthProvider;
+import com.somemore.support.IntegrationTestSupport;
+import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.volunteer.domain.Volunteer;
 import com.somemore.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import com.somemore.volunteer.repository.VolunteerRepository;

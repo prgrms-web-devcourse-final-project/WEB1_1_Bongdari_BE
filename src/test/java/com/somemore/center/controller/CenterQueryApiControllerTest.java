@@ -1,6 +1,6 @@
 package com.somemore.center.controller;
 
-import com.somemore.ControllerTestSupport;
+import com.somemore.support.ControllerTestSupport;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.usecase.query.CenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;

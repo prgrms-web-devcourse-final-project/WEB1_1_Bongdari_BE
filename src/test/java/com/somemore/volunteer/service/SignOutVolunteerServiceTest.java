@@ -1,16 +1,16 @@
 package com.somemore.volunteer.service;
 
-import com.somemore.IntegrationTestSupport;
-import com.somemore.auth.cookie.CookieUseCase;
-import com.somemore.auth.jwt.domain.EncodedToken;
-import com.somemore.auth.jwt.domain.TokenType;
-import com.somemore.auth.jwt.domain.UserRole;
-import com.somemore.auth.jwt.exception.JwtErrorType;
-import com.somemore.auth.jwt.exception.JwtException;
-import com.somemore.auth.jwt.generator.JwtGenerator;
-import com.somemore.auth.jwt.refresh.domain.RefreshToken;
-import com.somemore.auth.jwt.refresh.manager.RefreshTokenManager;
-import com.somemore.auth.signout.service.SignOutService;
+import com.somemore.support.IntegrationTestSupport;
+import com.somemore.global.auth.cookie.CookieUseCase;
+import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.TokenType;
+import com.somemore.global.auth.jwt.domain.UserRole;
+import com.somemore.global.auth.jwt.exception.JwtErrorType;
+import com.somemore.global.auth.jwt.exception.JwtException;
+import com.somemore.global.auth.jwt.generator.JwtGenerator;
+import com.somemore.global.auth.jwt.refresh.domain.RefreshToken;
+import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.global.auth.signout.service.SignOutService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

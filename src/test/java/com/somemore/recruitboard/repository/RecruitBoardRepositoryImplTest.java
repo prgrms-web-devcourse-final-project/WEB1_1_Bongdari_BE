@@ -1,15 +1,15 @@
 package com.somemore.recruitboard.repository;
 
-import static com.somemore.common.fixture.CenterFixture.createCenter;
-import static com.somemore.common.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.common.fixture.LocationFixture.createLocation;
-import static com.somemore.common.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.common.fixture.RecruitBoardFixture.createRecruitBoard;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocationFixture.createLocation;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.IntegrationTestSupport;
+import com.somemore.support.IntegrationTestSupport;
 import com.somemore.center.domain.Center;
 import com.somemore.center.repository.center.CenterRepository;
 import com.somemore.location.domain.Location;
