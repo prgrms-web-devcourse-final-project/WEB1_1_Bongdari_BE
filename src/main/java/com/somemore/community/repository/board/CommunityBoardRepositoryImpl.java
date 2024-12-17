@@ -9,6 +9,7 @@ import com.somemore.community.repository.mapper.CommunityBoardView;
 import com.somemore.community.domain.QCommunityBoard;
 import com.somemore.volunteer.domain.QVolunteer;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.somemore.recruitboard.domain.QRecruitBoard.recruitBoard;
 
 @RequiredArgsConstructor
 @Repository
@@ -44,9 +47,10 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public Page<CommunityBoardView> findCommunityBoards(Pageable pageable) {
+    public Page<CommunityBoardView> findCommunityBoards(String keyword, Pageable pageable) {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
-                .where(isNotDeleted())
+                .where(isNotDeleted()
+                        .and(keywordEq(keyword)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -55,7 +59,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
                 .select(communityBoard.count())
                 .from(communityBoard)
                 .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-                .where(isNotDeleted());
+                .where(isNotDeleted()
+                        .and(keywordEq(keyword)));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -159,6 +164,12 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     }
 
     private BooleanExpression isWriter(UUID writerId) {return communityBoard.writerId.eq(writerId); }
+
+    private BooleanExpression keywordEq(String keyword) {
+        return StringUtils.isNotBlank(keyword)
+                ? communityBoard.title.containsIgnoreCase(
+                keyword) : null;
+    }
 
 //    private List<CommunityBoardDocument> getBoardDocuments(String keyword) {
 //
