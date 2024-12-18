@@ -47,8 +47,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     @Override
     public Page<CommunityBoardView> findCommunityBoards(String keyword, Pageable pageable) {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
-                .where(isNotDeleted()
-                        .and(keywordEq(keyword)))
+                .where(keywordEq(keyword)
+                    .and(isNotDeleted()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -165,8 +165,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
     private BooleanExpression keywordEq(String keyword) {
         return StringUtils.isNotBlank(keyword)
-                ? communityBoard.title.containsIgnoreCase(
-                keyword) : null;
+                ? communityBoard.title.containsIgnoreCase(keyword)
+                : null;
     }
 
 //    private List<CommunityBoardDocument> getBoardDocuments(String keyword) {
