@@ -1,14 +1,14 @@
 package com.somemore.support.fixture;
 
 import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.recruitboard.domain.RecruitStatus.COMPLETED;
-import static com.somemore.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 
-import com.somemore.recruitboard.domain.RecruitBoard;
-import com.somemore.recruitboard.domain.RecruitStatus;
-import com.somemore.recruitboard.domain.RecruitmentInfo;
-import com.somemore.recruitboard.domain.VolunteerCategory;
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.recruitboard.domain.RecruitStatus;
+import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
+import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.UUID;

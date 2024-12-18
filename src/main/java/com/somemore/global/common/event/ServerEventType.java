@@ -1,6 +1,6 @@
 package com.somemore.global.common.event;
 
-import com.somemore.notification.domain.NotificationSubType;
+import com.somemore.domains.notification.domain.NotificationSubType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

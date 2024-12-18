@@ -1,6 +1,6 @@
 package com.somemore.support.fixture;
 
-import com.somemore.community.domain.CommunityComment;
+import com.somemore.domains.community.domain.CommunityComment;
 
 import java.util.UUID;
 

@@ -1,6 +1,6 @@
 package com.somemore.support.fixture;
 
-import com.somemore.center.domain.Center;
+import com.somemore.domains.center.domain.Center;
 
 public class CenterFixture {
 

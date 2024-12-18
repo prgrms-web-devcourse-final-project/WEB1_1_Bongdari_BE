@@ -4,7 +4,7 @@ import com.somemore.global.auth.oauth.naver.dto.response.NaverUserProfileRespons
 import com.somemore.global.auth.oauth.naver.usecase.query.CheckNaverUserUseCase;
 import com.somemore.global.auth.oauth.naver.usecase.command.RegisterNaverUserUseCase;
 import com.somemore.global.auth.oauth.naver.util.OAuthResponseConverter;
-import com.somemore.volunteer.usecase.RegisterVolunteerUseCase;
+import com.somemore.domains.volunteer.usecase.RegisterVolunteerUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.user.OAuth2User;
