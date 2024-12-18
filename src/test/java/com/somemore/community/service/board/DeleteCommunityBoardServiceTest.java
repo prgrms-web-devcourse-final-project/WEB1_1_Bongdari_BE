@@ -59,7 +59,7 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
         deleteCommunityBoardService.deleteCommunityBoard(writerId, communityId);
 
         //then
-        assertThat(communityBoardQueryUseCase.getCommunityBoards(0)).isEmpty();
+        assertThat(communityBoardQueryUseCase.getCommunityBoards(null, 0)).isEmpty();
     }
 
     @DisplayName("삭제된 커뮤니티 게시글의 id로 게시글을 삭제할 때 예외를 던진다.")

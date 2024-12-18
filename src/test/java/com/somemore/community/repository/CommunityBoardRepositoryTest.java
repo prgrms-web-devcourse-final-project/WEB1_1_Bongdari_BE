@@ -99,7 +99,7 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         Pageable pageable = getPageable();
 
         //when
-        Page<CommunityBoardView> communityBoards = communityBoardRepository.findCommunityBoards(pageable);
+        Page<CommunityBoardView> communityBoards = communityBoardRepository.findCommunityBoards(null, pageable);
 
         //then
         assertThat(communityBoards).isNotNull();
@@ -136,6 +136,27 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(isExist).isTrue();
+    }
+
+    @DisplayName("검색 키워드가 포함된 커뮤니티 게시글을 페이지로 조회할 수 있다. (Repository)")
+    @Test
+    void getCommunityBoardsBySearch() {
+
+        //given
+        Pageable pageable = getPageable();
+
+        String title = "봉사";
+        CommunityBoard communityBoard = createCommunityBoard(title, writerId);
+        communityBoardRepository.save(communityBoard);
+
+        //when
+        Page<CommunityBoardView> communityBoards = communityBoardRepository.findCommunityBoards("봉사", pageable);
+
+        //then
+        assertThat(communityBoards).isNotNull();
+        assertThat(communityBoards.getTotalElements()).isEqualTo(1);
+        assertThat(communityBoards.getSize()).isEqualTo(10);
+        assertThat(communityBoards.getNumber()).isZero();
     }
 
 //    @DisplayName("게시글을 elastic search index에 저장할 수 있다. (repository)")

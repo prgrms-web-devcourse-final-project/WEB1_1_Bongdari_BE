@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface CommunityBoardRepository {
     CommunityBoard save(CommunityBoard communityBoard);
     Optional<CommunityBoard> findById(Long id);
-    Page<CommunityBoardView> findCommunityBoards(Pageable pageable);
+    Page<CommunityBoardView> findCommunityBoards(String keyword, Pageable pageable);
     Page<CommunityBoardView> findByWriterId(UUID writerId, Pageable pageable);
     boolean existsById(Long id);
     default boolean doesNotExistById(Long id) {

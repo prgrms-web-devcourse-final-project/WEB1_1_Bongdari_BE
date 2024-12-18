@@ -28,9 +28,9 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
     private static final int PAGE_SIZE = 10;
 
     @Override
-    public Page<CommunityBoardResponseDto> getCommunityBoards(int page) {
+    public Page<CommunityBoardResponseDto> getCommunityBoards(String keyword, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<CommunityBoardView> boards = communityBoardRepository.findCommunityBoards(pageable);
+        Page<CommunityBoardView> boards = communityBoardRepository.findCommunityBoards(keyword, pageable);
         return boards.map(CommunityBoardResponseDto::from);
     }
 
