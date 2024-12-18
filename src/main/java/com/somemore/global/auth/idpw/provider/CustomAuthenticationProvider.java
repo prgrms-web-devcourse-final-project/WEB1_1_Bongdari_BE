@@ -5,7 +5,7 @@ import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.domain.UserRole;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
-import com.somemore.center.usecase.query.CenterSignUseCase;
+import com.somemore.domains.center.usecase.query.CenterSignUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

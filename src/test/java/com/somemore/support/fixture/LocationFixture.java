@@ -1,6 +1,6 @@
 package com.somemore.support.fixture;
 
-import com.somemore.location.domain.Location;
+import com.somemore.domains.location.domain.Location;
 import java.math.BigDecimal;
 
 public class LocationFixture {

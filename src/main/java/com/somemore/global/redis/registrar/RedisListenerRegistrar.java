@@ -1,7 +1,7 @@
 package com.somemore.global.redis.registrar;
 
-import com.somemore.interestcenter.event.subscriber.RedisCreateRecruitBoardSubscriber;
-import com.somemore.notification.event.subscriber.RedisNotificationSubscriber;
+import com.somemore.domains.interestcenter.event.subscriber.RedisCreateRecruitBoardSubscriber;
+import com.somemore.domains.notification.event.subscriber.RedisNotificationSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

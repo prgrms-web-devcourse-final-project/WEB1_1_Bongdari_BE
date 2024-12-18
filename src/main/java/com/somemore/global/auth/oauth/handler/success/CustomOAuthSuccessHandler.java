@@ -7,7 +7,7 @@ import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.global.auth.oauth.OAuthProvider;
 import com.somemore.global.auth.oauth.naver.service.query.ProcessNaverOAuthUserService;
 import com.somemore.global.auth.redirect.RedirectUseCase;
-import com.somemore.volunteer.usecase.VolunteerQueryUseCase;
+import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

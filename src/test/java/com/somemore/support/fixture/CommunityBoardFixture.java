@@ -1,6 +1,6 @@
 package com.somemore.support.fixture;
 
-import com.somemore.community.domain.CommunityBoard;
+import com.somemore.domains.community.domain.CommunityBoard;
 
 import java.util.UUID;
 
