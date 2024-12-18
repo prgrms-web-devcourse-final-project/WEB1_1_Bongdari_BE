@@ -47,8 +47,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     @Override
     public Page<CommunityBoardView> findCommunityBoards(String keyword, Pageable pageable) {
         List<CommunityBoardView> content = getCommunityBoardsQuery()
-                .where(keywordEq(keyword)
-                    .and(isNotDeleted()))
+                .where(isNotDeleted()
+                        .and(keywordEq(keyword)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
