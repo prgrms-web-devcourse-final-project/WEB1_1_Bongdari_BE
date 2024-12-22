@@ -1,19 +1,5 @@
 package com.somemore.domains.volunteerapply.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.domains.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
-import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
-import com.somemore.domains.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -23,13 +9,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.somemore.domains.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
+import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
+import com.somemore.domains.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private ApplyVolunteerApplyUseCase applyVolunteerApplyUseCase;
@@ -68,7 +58,7 @@ class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
     @Test
     @DisplayName("봉사 활동 철회 성공 테스트")
     @WithMockCustomUser
-    void withdraw () throws Exception {
+    void withdraw() throws Exception {
         // given
         Long id = 1L;
 

@@ -1,21 +1,5 @@
 package com.somemore.domains.volunteerapply.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
-import com.somemore.domains.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
-import com.somemore.domains.volunteerapply.usecase.RejectVolunteerApplyUseCase;
-import com.somemore.domains.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -24,10 +8,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class CenterVolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
+import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
+import com.somemore.domains.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
+import com.somemore.domains.volunteerapply.usecase.RejectVolunteerApplyUseCase;
+import com.somemore.domains.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.List;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-    @Autowired
-    private MockMvc mockMvc;
+class CenterVolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private ApproveVolunteerApplyUseCase approveVolunteerApplyUseCase;
@@ -37,9 +30,6 @@ class CenterVolunteerApplyCommandApiControllerTest extends ControllerTestSupport
 
     @MockBean
     private SettleVolunteerApplyFacadeUseCase settleVolunteerApplyFacadeUseCase;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("봉사 활동 지원 승인 성공 테스트")
