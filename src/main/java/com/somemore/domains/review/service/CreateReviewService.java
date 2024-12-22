@@ -11,6 +11,7 @@ import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.domains.review.usecase.CreateReviewUseCase;
 
+import com.somemore.global.exception.DuplicateException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CreateReviewService implements CreateReviewUseCase {
     @Override
     public Long createReview(ReviewCreateRequestDto requestDto, UUID volunteerId, String imgUrl) {
         VolunteerApply apply = getVolunteerApply(requestDto.recruitBoardId(), volunteerId);
-        validateReviewNotExist(apply);
+        validateDuplicateReview(apply);
         validateActivityCompletion(apply);
 
         Review review = requestDto.toEntity(apply, volunteerId, imgUrl);
@@ -38,9 +39,9 @@ public class CreateReviewService implements CreateReviewUseCase {
         return volunteerApplyQueryUseCase.getByRecruitIdAndVolunteerId(recruitBoardId, volunteerId);
     }
 
-    private void validateReviewNotExist(VolunteerApply apply) {
+    private void validateDuplicateReview(VolunteerApply apply) {
         if (reviewRepository.existsByVolunteerApplyId(apply.getId())) {
-            throw new BadRequestException(REVIEW_ALREADY_EXISTS.getMessage());
+            throw new DuplicateException(REVIEW_ALREADY_EXISTS);
         }
     }
 
@@ -48,6 +49,6 @@ public class CreateReviewService implements CreateReviewUseCase {
         if (apply.isVolunteerActivityCompleted()) {
             return;
         }
-        throw new BadRequestException(REVIEW_RESTRICTED_TO_ATTENDED.getMessage());
+        throw new BadRequestException(REVIEW_RESTRICTED_TO_ATTENDED);
     }
 }

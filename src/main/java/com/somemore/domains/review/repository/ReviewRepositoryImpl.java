@@ -27,9 +27,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     private final ReviewJpaRepository reviewJpaRepository;
     private final JPAQueryFactory queryFactory;
 
-    private final static QReview review = QReview.review;
-    private final static QVolunteerApply volunteerApply = QVolunteerApply.volunteerApply;
-    private final static QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
+    private static final QReview review = QReview.review;
+    private static final QVolunteerApply volunteerApply = QVolunteerApply.volunteerApply;
+    private static final QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
 
     @Override
     public Review save(Review review) {
@@ -55,31 +55,31 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     public Page<Review> findAllByVolunteerIdAndSearch(UUID volunteerId,
             ReviewSearchCondition condition) {
 
-        BooleanExpression predicate = review.volunteerId.eq(volunteerId)
-                .and(eqVolunteerCategory(condition.category()))
+        BooleanExpression exp = volunteerIdEq(volunteerId)
+                .and(volunteerCategoryEq(condition.category()))
                 .and(isNotDeleted());
 
-        return getReviews(condition, predicate);
+        return getReviews(condition, exp);
 
     }
 
     @Override
     public Page<Review> findAllByCenterIdAndSearch(UUID centerId, ReviewSearchCondition condition) {
 
-        BooleanExpression predicate = recruitBoard.centerId.eq(centerId)
-                .and(eqVolunteerCategory(condition.category()))
+        BooleanExpression exp = centerIdEq(centerId)
+                .and(volunteerCategoryEq(condition.category()))
                 .and(isNotDeleted());
 
-        return getReviews(condition, predicate);
+        return getReviews(condition, exp);
     }
 
     @NotNull
-    private Page<Review> getReviews(ReviewSearchCondition condition, BooleanExpression predicate) {
+    private Page<Review> getReviews(ReviewSearchCondition condition, BooleanExpression exp) {
         List<Review> content = queryFactory.select(review)
                 .from(review)
                 .join(volunteerApply).on(review.volunteerApplyId.eq(volunteerApply.id))
                 .join(recruitBoard).on(recruitBoard.id.eq(volunteerApply.recruitBoardId))
-                .where(predicate)
+                .where(exp)
                 .offset(condition.pageable().getOffset())
                 .limit(condition.pageable().getPageSize())
                 .orderBy(toOrderSpecifiers(condition.pageable().getSort()))
@@ -90,16 +90,24 @@ public class ReviewRepositoryImpl implements ReviewRepository {
                 .from(review)
                 .join(volunteerApply).on(review.volunteerApplyId.eq(volunteerApply.id))
                 .join(recruitBoard).on(recruitBoard.id.eq(volunteerApply.recruitBoardId))
-                .where(predicate);
+                .where(exp);
 
         return PageableExecutionUtils.getPage(content, condition.pageable(), countQuery::fetchOne);
+    }
+
+    private static BooleanExpression volunteerIdEq(UUID volunteerId) {
+        return review.volunteerId.eq(volunteerId);
+    }
+
+    private static BooleanExpression centerIdEq(UUID centerId) {
+        return recruitBoard.centerId.eq(centerId);
     }
 
     private BooleanExpression isNotDeleted() {
         return review.deleted.isFalse();
     }
 
-    private BooleanExpression eqVolunteerCategory(VolunteerCategory category) {
+    private BooleanExpression volunteerCategoryEq(VolunteerCategory category) {
         return category != null
                 ? recruitBoard.recruitmentInfo.volunteerCategory.eq(category) : null;
     }

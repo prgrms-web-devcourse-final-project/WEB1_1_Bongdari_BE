@@ -8,8 +8,7 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDt
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
-import com.somemore.global.exception.BadRequestException;
-
+import com.somemore.global.exception.NoSuchElementException;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
     public VolunteerApply getByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
         return volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitId, volunteerId)
                 .orElseThrow(
-                        () -> new BadRequestException(NOT_EXISTS_VOLUNTEER_APPLY));
+                        () -> new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY));
     }
 
     @Override
@@ -49,7 +48,7 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
 
     @Override
     public VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId,
-                                                                                UUID volunteerId) {
+            UUID volunteerId) {
         VolunteerApply apply = getByRecruitIdAndVolunteerId(recruitId, volunteerId);
 
         return VolunteerApplyResponseDto.from(apply);
