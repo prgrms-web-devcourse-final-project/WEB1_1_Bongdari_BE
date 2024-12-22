@@ -105,7 +105,7 @@ class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
                     });
                     String detail = (String) jsonResponse.get("detail");
 
-                    assertThat(detail).isEqualTo("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
+                    assertThat(detail).isEqualTo("닉네임은 최대 10자까지 입력 가능합니다.");
                 });
     }
 
@@ -145,7 +145,7 @@ class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
                     });
                     String detail = (String) jsonResponse.get("detail");
 
-                    assertThat(detail).isEqualTo("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
+                    assertThat(detail).isEqualTo("소개글은 최대 100자까지 입력 가능합니다.");
                 });
     }
 
