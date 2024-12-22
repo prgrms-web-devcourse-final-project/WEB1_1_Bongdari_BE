@@ -6,6 +6,7 @@ import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.DuplicateException;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -124,7 +125,7 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
         // then
         assertThatThrownBy(
                 () -> createReviewService.createReview(requestDto, volunteerId, "")
-        ).isInstanceOf(BadRequestException.class)
+        ).isInstanceOf(DuplicateException.class)
                 .hasMessage(REVIEW_ALREADY_EXISTS.getMessage());
     }
 
