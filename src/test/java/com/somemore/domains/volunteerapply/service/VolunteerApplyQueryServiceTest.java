@@ -1,12 +1,22 @@
 package com.somemore.domains.volunteerapply.service;
 
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +24,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
@@ -191,6 +195,22 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         assertThat(applies)
                 .extracting(VolunteerApply::getId)
                 .containsExactlyInAnyOrderElementsOf(ids);
+    }
+
+    @DisplayName("존재하지 않는 봉사 지원을 조회할 경우 에러가 발생한다.")
+    @Test
+    void getByRecruitIdAndVolunteerIdWhenNotExist() {
+        // given
+        Long wrongBoardId = 999L;
+        UUID wrongVolunteerId = UUID.randomUUID();
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> volunteerApplyQueryService.getByRecruitIdAndVolunteerId(wrongBoardId,
+                        wrongVolunteerId)
+        ).isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_VOLUNTEER_APPLY.getMessage());
     }
 
     private VolunteerApply createApply(UUID volunteerId, Long recruitId) {
