@@ -129,7 +129,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: health, prometheus
 
   endpoint:
     prometheus:
