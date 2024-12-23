@@ -32,7 +32,7 @@ spring:
       hibernate:
         format_sql: true
         highlight_sql: true
-        generate_statistics: true
+        generate_statistics: false
     show-sql: true
 
   data:
@@ -125,3 +125,12 @@ management:
   health:
     elasticsearch:
       enabled: false
+
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+  endpoint:
+    prometheus:
+      enabled: true
