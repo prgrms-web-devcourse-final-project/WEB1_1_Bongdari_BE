@@ -1,19 +1,5 @@
 package com.somemore.domains.center.controller;
 
-import com.somemore.domains.center.dto.request.PreferItemCreateRequestDto;
-import com.somemore.domains.center.dto.response.PreferItemCreateResponseDto;
-import com.somemore.domains.center.usecase.command.CreatePreferItemUseCase;
-import com.somemore.domains.center.usecase.command.DeletePreferItemUseCase;
-import com.somemore.global.exception.BadRequestException;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-
-import java.util.UUID;
-
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -21,6 +7,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.somemore.domains.center.dto.request.PreferItemCreateRequestDto;
+import com.somemore.domains.center.dto.response.PreferItemCreateResponseDto;
+import com.somemore.domains.center.usecase.command.CreatePreferItemUseCase;
+import com.somemore.domains.center.usecase.command.DeletePreferItemUseCase;
+import com.somemore.global.exception.BadRequestException;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 
 class PreferItemCommandApiControllerTest extends ControllerTestSupport {
 

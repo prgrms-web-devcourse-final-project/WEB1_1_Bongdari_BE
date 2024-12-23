@@ -1,25 +1,5 @@
 package com.somemore.domains.volunteer.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.domains.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
-import com.somemore.domains.volunteer.usecase.UpdateVolunteerProfileUseCase;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -30,10 +10,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
+import com.somemore.domains.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
+import com.somemore.domains.volunteer.usecase.UpdateVolunteerProfileUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
 
     @MockBean
     private UpdateVolunteerProfileUseCase updateVolunteerProfileUseCase;
@@ -69,7 +59,6 @@ class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
                         .contentType(MULTIPART_FORM_DATA)
                         .header("Authorization", "Bearer access-token"))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").isEmpty())
@@ -98,15 +87,9 @@ class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
                         .contentType(MULTIPART_FORM_DATA)
                         .header("Authorization", "Bearer access-token"))
                 .andExpect(status().isBadRequest())
-                .andDo(result -> {
-                    String responseBody = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-
-                    Map<String, Object> jsonResponse = objectMapper.readValue(responseBody, new TypeReference<>() {
-                    });
-                    String detail = (String) jsonResponse.get("detail");
-
-                    assertThat(detail).isEqualTo("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
-                });
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.title").value("유효성 예외"))
+                .andExpect(jsonPath("$.detail").value("닉네임은 최대 10자까지 입력 가능합니다."));
     }
 
     @DisplayName("봉사자 프로필 수정의 소개 유효성 검사 실패 테스트")
@@ -138,15 +121,9 @@ class VolunteerProfileCommandControllerTest extends ControllerTestSupport {
                         .contentType(MULTIPART_FORM_DATA)
                         .header("Authorization", "Bearer access-token"))
                 .andExpect(status().isBadRequest())
-                .andDo(result -> {
-                    String responseBody = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-
-                    Map<String, Object> jsonResponse = objectMapper.readValue(responseBody, new TypeReference<>() {
-                    });
-                    String detail = (String) jsonResponse.get("detail");
-
-                    assertThat(detail).isEqualTo("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
-                });
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.title").value("유효성 예외"))
+                .andExpect(jsonPath("$.detail").value("소개글은 최대 100자까지 입력 가능합니다."));
     }
 
     private MockMultipartFile createMockImageFile() {

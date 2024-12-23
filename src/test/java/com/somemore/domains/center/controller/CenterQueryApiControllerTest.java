@@ -1,24 +1,24 @@
 package com.somemore.domains.center.controller;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.center.dto.response.CenterProfileResponseDto;
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.ControllerTestSupport;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class CenterQueryApiControllerTest extends ControllerTestSupport {
 
@@ -53,16 +53,18 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
                         get("/api/center/profile/{centerId}", centerId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.message").value("기관 프로필 조회 성공"))
                 .andExpect(jsonPath("$.data.center_id").value(centerId.toString())) // center_id로 수정
                 .andExpect(jsonPath("$.data.name").value("Test Center"))
-                .andExpect(jsonPath("$.data.contact_number").value("010-1234-5678")) // contact_number로 수정
-                .andExpect(jsonPath("$.data.img_url").value("http://example.com/image.jpg")) // img_url로 수정
+                .andExpect(jsonPath("$.data.contact_number").value(
+                        "010-1234-5678")) // contact_number로 수정
+                .andExpect(jsonPath("$.data.img_url").value(
+                        "http://example.com/image.jpg")) // img_url로 수정
                 .andExpect(jsonPath("$.data.introduce").value("This is a test center."))
-                .andExpect(jsonPath("$.data.homepage_link").value("http://example.com")) // homepage_link로 수정
+                .andExpect(jsonPath("$.data.homepage_link").value(
+                        "http://example.com")) // homepage_link로 수정
                 .andExpect(jsonPath("$.data.prefer_items").isArray()); // prefer_items로 수정
 
         verify(centerQueryUseCase, times(1)).getCenterProfileByCenterId(centerId);
@@ -81,7 +83,6 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
                         get("/api/center/profile/{centerId}", nonExistentCenterId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("400"))
                 .andExpect(jsonPath("$.detail").value("존재하지 않는 기관입니다."));

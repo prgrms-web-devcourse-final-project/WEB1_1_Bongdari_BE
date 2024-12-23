@@ -1,5 +1,13 @@
 package com.somemore.domains.volunteerapply.controller;
 
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
@@ -9,29 +17,15 @@ import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseC
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.Collections;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
-import java.util.UUID;
-
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @MockBean
     private VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;

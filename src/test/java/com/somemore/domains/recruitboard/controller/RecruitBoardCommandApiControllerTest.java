@@ -1,6 +1,20 @@
 package com.somemore.domains.recruitboard.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.location.dto.request.LocationCreateRequestDto;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDto;
@@ -13,41 +27,19 @@ import com.somemore.domains.recruitboard.usecase.command.UpdateRecruitBoardUseCa
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private CreateRecruitBoardUseCase createRecruitBoardUseCase;
@@ -176,7 +168,6 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                         .contentType(MULTIPART_FORM_DATA)
                         .header("Authorization", "Bearer access-token"))
                 //then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").isEmpty())
@@ -206,7 +197,6 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").isEmpty())
@@ -231,7 +221,6 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 //then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("봉사 활동 모집글 상태 수정 성공"))
@@ -250,7 +239,6 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
         mockMvc.perform(delete("/api/recruit-board/{id}", recruitBoardId)
                         .header("Authorization", "Bearer access-token"))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("봉사 활동 모집글 삭제 성공"))

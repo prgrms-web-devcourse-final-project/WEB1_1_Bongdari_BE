@@ -1,41 +1,30 @@
 package com.somemore.domains.center.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.domains.center.dto.request.CenterProfileUpdateRequestDto;
-import com.somemore.domains.center.usecase.command.UpdateCenterProfileUseCase;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.somemore.domains.center.dto.request.CenterProfileUpdateRequestDto;
+import com.somemore.domains.center.usecase.command.UpdateCenterProfileUseCase;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
+
 class CenterProfileCommandApiControllerTest extends ControllerTestSupport {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private UpdateCenterProfileUseCase updateCenterProfileUseCase;
@@ -92,7 +81,6 @@ class CenterProfileCommandApiControllerTest extends ControllerTestSupport {
                         .header("Authorization", "Bearer access-token"))
 
                 //then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").isEmpty())

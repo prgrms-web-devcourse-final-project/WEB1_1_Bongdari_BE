@@ -1,21 +1,5 @@
 package com.somemore.domains.community.controller;
 
-import com.somemore.domains.community.dto.response.CommunityBoardDetailResponseDto;
-import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
-import com.somemore.domains.community.usecase.board.CommunityBoardQueryUseCase;
-import com.somemore.support.ControllerTestSupport;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -25,10 +9,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport {
+import com.somemore.domains.community.dto.response.CommunityBoardDetailResponseDto;
+import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
+import com.somemore.domains.community.usecase.board.CommunityBoardQueryUseCase;
+import com.somemore.support.ControllerTestSupport;
+import java.util.Collections;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
 
-    @Autowired
-    private MockMvc mockMvc;
+public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private CommunityBoardQueryUseCase communityBoardQueryUseCase;
@@ -48,7 +42,7 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
         //when
         //then
         mockMvc.perform(get("/api/community-boards")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").exists())
@@ -88,7 +82,8 @@ public class CommunityBoardQueryApiControllerTest extends ControllerTestSupport 
     void getById() throws Exception {
         //given
         Long communityBoardId = 1L;
-        CommunityBoardDetailResponseDto responseDto = CommunityBoardDetailResponseDto.builder().build();
+        CommunityBoardDetailResponseDto responseDto = CommunityBoardDetailResponseDto.builder()
+                .build();
         given(communityBoardQueryUseCase.getCommunityBoardDetail(any()))
                 .willReturn(responseDto);
 

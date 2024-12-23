@@ -49,10 +49,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ProblemDetail handleMethodArgumentNotValid(final MethodArgumentNotValidException e) {
 
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        String errorMessage = e.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, errorMessage);
 
         problemDetail.setTitle("유효성 예외");
-        problemDetail.setDetail("입력 데이터 유효성 검사가 실패했습니다. 각 필드를 확인해주세요.");
 
         return problemDetail;
     }

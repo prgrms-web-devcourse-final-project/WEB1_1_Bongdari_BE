@@ -1,19 +1,5 @@
 package com.somemore.domains.community.controller;
 
-import com.somemore.domains.community.dto.response.CommunityCommentResponseDto;
-import com.somemore.domains.community.usecase.comment.CommunityCommentQueryUseCase;
-import com.somemore.support.ControllerTestSupport;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -23,10 +9,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class CommunityCommentQueryApiControllerTest extends ControllerTestSupport {
+import com.somemore.domains.community.dto.response.CommunityCommentResponseDto;
+import com.somemore.domains.community.usecase.comment.CommunityCommentQueryUseCase;
+import com.somemore.support.ControllerTestSupport;
+import java.util.Collections;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
 
-    @Autowired
-    private MockMvc mockMvc;
+public class CommunityCommentQueryApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private CommunityCommentQueryUseCase communityCommentQueryUseCase;
@@ -44,7 +38,7 @@ public class CommunityCommentQueryApiControllerTest extends ControllerTestSuppor
         //when
         //then
         mockMvc.perform(get("/api/community-board/{boardId}/comments", communityBoardId)
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").exists())

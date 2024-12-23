@@ -1,5 +1,15 @@
 package com.somemore.domains.recruitboard.controller;
 
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
@@ -8,30 +18,16 @@ import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResp
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
 import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import com.somemore.support.ControllerTestSupport;
+import java.util.Collections;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @MockBean
     private RecruitBoardQueryUseCase recruitBoardQueryUseCase;

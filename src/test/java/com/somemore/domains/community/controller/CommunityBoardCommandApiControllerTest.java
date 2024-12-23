@@ -1,6 +1,15 @@
 package com.somemore.domains.community.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.community.dto.request.CommunityBoardCreateRequestDto;
 import com.somemore.domains.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.domains.community.usecase.board.CreateCommunityBoardUseCase;
@@ -9,37 +18,17 @@ import com.somemore.domains.community.usecase.board.UpdateCommunityBoardUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
-import java.util.UUID;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 public class CommunityBoardCommandApiControllerTest extends ControllerTestSupport {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private CreateCommunityBoardUseCase createCommunityBoardUseCase;
@@ -86,10 +75,10 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
 
         //when
         mockMvc.perform(multipart("/api/community-board")
-                    .file(requestData)
-                    .file(imageFile)
-                    .contentType(MULTIPART_FORM_DATA)
-                    .header("Authorization", "Bearer access-token"))
+                        .file(requestData)
+                        .file(imageFile)
+                        .contentType(MULTIPART_FORM_DATA)
+                        .header("Authorization", "Bearer access-token"))
                 //then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(201))
@@ -138,13 +127,12 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
 
         //when
         mockMvc.perform(builder
-                .file(requestData)
-                .file(imageFile)
-                .contentType(MULTIPART_FORM_DATA)
-                .header("Authorization", "Bearer access-token"))
+                        .file(requestData)
+                        .file(imageFile)
+                        .contentType(MULTIPART_FORM_DATA)
+                        .header("Authorization", "Bearer access-token"))
 
                 //then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").isEmpty())
@@ -157,13 +145,13 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
     void deleteCommunityBoard_success() throws Exception {
         //given
         Long communityBoardId = 1L;
-        willDoNothing().given(deleteCommunityBoardUseCase).deleteCommunityBoard(any(UUID.class), any());
+        willDoNothing().given(deleteCommunityBoardUseCase)
+                .deleteCommunityBoard(any(UUID.class), any());
 
         //when
         mockMvc.perform(delete("/api/community-board/{id}", communityBoardId)
-                .header("Authorization", "Bearer access-token"))
+                        .header("Authorization", "Bearer access-token"))
                 //then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("커뮤니티 게시글 삭제 성공"))
