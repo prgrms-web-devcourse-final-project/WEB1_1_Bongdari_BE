@@ -65,7 +65,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
+
+    // Monitoring
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.3.3'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
     //elastic-search
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
@@ -124,7 +127,8 @@ def jacocoExcludePatterns = [
         '**/controller/**',
         '**/fixture/*',
         '**/*Factory*',
-        '**/event/**'
+        '**/event/**',
+        '**/*Aspect*'
 ]
 
 def jacocoExcludePatternsForVerify = [
@@ -142,7 +146,8 @@ def jacocoExcludePatternsForVerify = [
         '*.controller.*',
         '*.fixture.*',
         '*.*Factory*',
-        '*.*event*.*'
+        '*.*event*.*',
+        '*.*Aspect*'
 ]
 
 jacocoTestReport {
