@@ -1,7 +1,6 @@
 package com.somemore.domains.volunteerapply.controller;
 
-import static org.springframework.data.domain.Sort.Direction.DESC;
-
+import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
@@ -10,21 +9,19 @@ import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseC
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.volunteerapply.domain.ApplyStatus;
+import com.somemore.global.exception.NoSuchElementException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Tag(name = "Volunteer Apply Query API", description = "봉사 활동 지원 조회 API")
 @RequiredArgsConstructor
@@ -48,7 +45,7 @@ public class VolunteerApplyQueryApiController {
                             recruitBoardId, volunteerId),
                     "특정 모집글에 대한 봉사자 지원 단건 조회 성공"
             );
-        } catch (BadRequestException e) {
+        } catch (NoSuchElementException e) {
             return ApiResponse.ok(210, "지원 내역이 없습니다.");
         }
     }

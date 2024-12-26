@@ -1,13 +1,5 @@
 package com.somemore.domains.volunteerapply.controller;
 
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
@@ -15,15 +7,26 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryRes
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
+import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
-import java.util.Collections;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+
+import java.util.Collections;
+import java.util.UUID;
+
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
 
@@ -66,6 +69,27 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data.recruit_board_id").value(recruitBoardId))
                 .andExpect(jsonPath("$.data.status").value("WAITING"))
                 .andExpect(jsonPath("$.data.attended").value(false));
+    }
+
+    @DisplayName("특정 모집글 봉사자 지원 단건 조회 성공 테스트 - 지원 내역이 없는 경우")
+    @Test
+    void getVolunteerApplyByRecruitIdAndVolunteerIdWhenDoesNotExist() throws Exception {
+        // given
+        Long recruitBoardId = 1L;
+        UUID volunteerId = UUID.randomUUID();
+
+        given(volunteerApplyQueryUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
+                volunteerId))
+                .willThrow(new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY));
+
+        // when & then
+        mockMvc.perform(
+                        get("/api/volunteer-apply/recruit-board/{recruitBoardId}/volunteer/{volunteerId}",
+                                recruitBoardId, volunteerId)
+                                .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(210))
+                .andExpect(jsonPath("$.message").value("지원 내역이 없습니다."));
     }
 
     @DisplayName("모집글 지원자 통계 조회 성공 테스트")
