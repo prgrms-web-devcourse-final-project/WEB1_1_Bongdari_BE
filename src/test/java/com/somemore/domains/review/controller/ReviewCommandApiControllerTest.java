@@ -1,25 +1,29 @@
 package com.somemore.domains.review.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.somemore.domains.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.domains.review.usecase.CreateReviewUseCase;
+import com.somemore.domains.review.usecase.DeleteReviewUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
@@ -28,6 +32,9 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private CreateReviewUseCase createReviewUseCase;
+
+    @MockBean
+    DeleteReviewUseCase deleteReviewUseCase;
 
     @DisplayName("리뷰 생성 성공")
     @Test
@@ -145,6 +152,25 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.title").value("유효성 예외"))
                 .andExpect(jsonPath("$.detail").value("리뷰 내용은 필수 값입니다."));
+    }
+
+    @DisplayName("리뷰 삭제 성공 테스트")
+    @Test
+    @WithMockCustomUser()
+    void deleteReview() throws Exception {
+        // given
+        Long id = 1L;
+        UUID volunteerId = UUID.randomUUID();
+
+        willDoNothing().given(deleteReviewUseCase).deleteReview(volunteerId, id);
+
+        // when
+        mockMvc.perform(delete("/api/review/{id}", id)
+                        .header("Authorization", "Bearer access-token"))
+                // then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("리뷰 삭제 성공"));
     }
 
     private MockMultipartFile getRequestData(ReviewCreateRequestDto requestDto)
