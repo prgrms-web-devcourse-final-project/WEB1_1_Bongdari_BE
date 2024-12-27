@@ -50,4 +50,8 @@ public class Review extends BaseEntity {
         this.content = content;
         this.imgUrl = imgUrl;
     }
+
+    public boolean isAuthor(UUID volunteerId) {
+        return this.volunteerId.equals(volunteerId);
+    }
 }
