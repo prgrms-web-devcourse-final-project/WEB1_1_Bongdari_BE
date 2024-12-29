@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.COUNSELING;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static com.somemore.global.exception.ExceptionMessage.*;
 import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;

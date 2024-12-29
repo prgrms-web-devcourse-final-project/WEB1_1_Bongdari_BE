@@ -8,7 +8,7 @@ import com.somemore.domains.community.repository.comment.CommunityCommentReposit
 import com.somemore.domains.community.usecase.comment.DeleteCommunityCommentUseCase;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.OAuthProvider;
+import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

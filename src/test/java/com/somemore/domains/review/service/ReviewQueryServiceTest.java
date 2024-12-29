@@ -30,7 +30,7 @@ import java.util.UUID;
 
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.*;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;

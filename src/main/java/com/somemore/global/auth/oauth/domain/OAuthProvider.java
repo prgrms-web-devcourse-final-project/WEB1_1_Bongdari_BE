@@ -1,4 +1,4 @@
-package com.somemore.global.auth.oauth;
+package com.somemore.global.auth.oauth.domain;
 
 import lombok.Getter;
 

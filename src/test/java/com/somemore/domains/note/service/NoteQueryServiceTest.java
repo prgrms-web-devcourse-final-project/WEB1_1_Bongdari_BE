@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

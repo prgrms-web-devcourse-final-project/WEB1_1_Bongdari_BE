@@ -7,7 +7,7 @@ import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.OAuthProvider;
+import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
