@@ -25,7 +25,6 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
 
     private final JPAQueryFactory queryFactory;
     private final CommunityBoardJpaRepository communityBoardJpaRepository;
-//    private final CommunityBoardDocumentRepository documentRepository;
 
     private static final QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
     private static final QVolunteer volunteer = QVolunteer.volunteer;
@@ -87,47 +86,6 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         return communityBoardJpaRepository.existsByIdAndDeletedFalse(id);
     }
 
-//    @Override
-//    public Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable) {
-//        List<CommunityBoardDocument> boardDocuments = getBoardDocuments(keyword);
-//
-//        List<Long> boardIds = boardDocuments.stream()
-//                .map(CommunityBoardDocument::getId)
-//                .toList();
-//
-//        List<CommunityBoardView> content = getCommunityBoardsQuery()
-//                .where(communityBoard.id.in(boardIds)
-//                        .and(isNotDeleted()))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        JPAQuery<Long> countQuery = queryFactory
-//                .select(communityBoard.count())
-//                .from(communityBoard)
-//                .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-//                .where(communityBoard.id.in(boardIds)
-//                    .and(isNotDeleted()));
-//
-//        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-//    }
-
-//    @Override
-//    public void saveDocuments(List<CommunityBoard> communityBoards) {
-//        List<CommunityBoardDocument> communityBoardDocuments = convertEntityToDocuments(communityBoards);
-//        documentRepository.saveAll(communityBoardDocuments);
-//    }
-
-//    @Override
-//    public void deleteDocument(Long id) {
-//        documentRepository.deleteById(id);
-//    }
-
-    @Override
-    public List<CommunityBoard> findAll() {
-        return communityBoardJpaRepository.findAll();
-    }
-
     @Override
     public void deleteAllInBatch() {
         communityBoardJpaRepository.deleteAllInBatch();
@@ -143,19 +101,10 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
                 .orderBy(communityBoard.createdAt.desc());
     }
 
-//    private List<CommunityBoardDocument> convertEntityToDocuments(List<CommunityBoard> communityBoards) {
-//        List<CommunityBoardDocument> communityBoardDocuments = new ArrayList<>();
-//
-//        for (CommunityBoard communityboard : communityBoards) {
-//            CommunityBoardDocument document = CommunityBoardDocument.builder()
-//                    .id(communityboard.getId())
-//                    .title(communityboard.getTitle())
-//                    .content(communityboard.getContent())
-//                    .build();
-//            communityBoardDocuments.add(document);
-//        }
-//        return communityBoardDocuments;
-//    }
+    @Override
+    public List<CommunityBoard> findAll() {
+        return communityBoardJpaRepository.findAll();
+    }
 
     private BooleanExpression isNotDeleted() {
         return communityBoard.deleted.eq(false);
@@ -170,12 +119,4 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
                 ? communityBoard.title.containsIgnoreCase(keyword)
                 : null;
     }
-
-//    private List<CommunityBoardDocument> getBoardDocuments(String keyword) {
-//
-//        if (keyword == null || keyword.isEmpty()) {
-//            return documentRepository.findAll();
-//        }
-//        return documentRepository.findIdsByTitleOrContentContaining(keyword);
-//    }
 }

@@ -42,10 +42,6 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
 
-    elasticsearch:
-      repositories:
-        enabled: true
-
   security:
     oauth2:
       client:
@@ -132,6 +128,7 @@ elastic:
     uri: ${ELASTIC_URI}
     username: ${ELASTIC_USERNAME}
     password: ${ELASTIC_PASSWORD}
+    enabled: false
 
 management:
   health:
