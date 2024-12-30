@@ -3,6 +3,11 @@ package com.somemore.global.auth.jwt.domain;
 public record EncodedToken(String value) {
 
     private static final String UNINITIALIZED = "UNINITIALIZED";
+    private static final String PREFIX = "Bearer ";
+
+    public String getValueWithPrefix() {
+        return PREFIX + this.value;
+    }
 
     public boolean isUninitialized() {
         return value == null
