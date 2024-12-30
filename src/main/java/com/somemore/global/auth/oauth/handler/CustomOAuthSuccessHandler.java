@@ -1,7 +1,7 @@
 package com.somemore.global.auth.oauth.handler;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
-import com.somemore.global.auth.jwt.domain.UserRole;
+import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.global.auth.oauth.processor.OAuthUserProcessor;
 import com.somemore.global.auth.redirect.RedirectUseCase;

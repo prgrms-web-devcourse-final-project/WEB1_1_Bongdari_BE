@@ -1,7 +1,7 @@
-package com.somemore.global.auth.jwt.domain;
+package com.somemore.user.domain;
 
-import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
+import com.somemore.global.auth.jwt.exception.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 

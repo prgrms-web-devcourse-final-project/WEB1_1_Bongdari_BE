@@ -1,6 +1,5 @@
 package com.somemore.user.domain;
 
-import com.somemore.global.auth.jwt.domain.UserRole;
 import com.somemore.global.common.entity.BaseEntity;
 import com.somemore.user.dto.UserAuthInfo;
 import jakarta.persistence.Column;

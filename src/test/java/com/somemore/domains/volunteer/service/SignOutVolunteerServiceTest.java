@@ -3,7 +3,7 @@ package com.somemore.domains.volunteer.service;
 import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
-import com.somemore.global.auth.jwt.domain.UserRole;
+import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
 import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;

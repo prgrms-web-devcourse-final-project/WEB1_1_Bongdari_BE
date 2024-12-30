@@ -3,7 +3,7 @@ package com.somemore.global.auth.idpw.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
-import com.somemore.global.auth.jwt.domain.UserRole;
+import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
