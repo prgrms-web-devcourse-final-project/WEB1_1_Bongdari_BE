@@ -18,6 +18,10 @@ public enum UserRole implements GrantedAuthority {
         return this.authority;
     }
 
+    public static UserRole getOAuthUserDefaultRole() {
+        return VOLUNTEER;
+    }
+
     public static UserRole from(String role) {
         for (UserRole userRole : values()) {
             if (userRole.name().equals(role)) {

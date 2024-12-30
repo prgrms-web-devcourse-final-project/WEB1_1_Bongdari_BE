@@ -46,7 +46,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private void processAccessToken(HttpServletResponse response, UUID userId) {
         EncodedToken accessToken =
                 generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(
-                        userId, UserRole.VOLUNTEER);
+                        userId, UserRole.getOAuthUserDefaultRole());
 
         setAccessToken(response, accessToken);
     }
