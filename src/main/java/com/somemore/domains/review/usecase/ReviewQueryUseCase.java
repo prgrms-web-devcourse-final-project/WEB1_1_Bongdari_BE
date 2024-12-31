@@ -2,21 +2,20 @@ package com.somemore.domains.review.usecase;
 
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
-import com.somemore.domains.review.dto.response.ReviewResponseDto;
-import com.somemore.domains.review.dto.response.ReviewWithNicknameResponseDto;
-import java.util.UUID;
+import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import org.springframework.data.domain.Page;
+
+import java.util.UUID;
 
 public interface ReviewQueryUseCase {
 
     Review getById(Long id);
 
-    ReviewResponseDto getReviewById(Long id);
+    ReviewDetailResponseDto getDetailById(Long id);
 
-    Page<ReviewWithNicknameResponseDto> getReviewsByVolunteerId(UUID volunteerId,
-            ReviewSearchCondition condition);
+    Page<ReviewDetailWithNicknameResponseDto> getDetailsWithNicknameByVolunteerId(UUID volunteerId, ReviewSearchCondition condition);
 
-    Page<ReviewWithNicknameResponseDto> getReviewsByCenterId(UUID centerId,
-            ReviewSearchCondition condition);
+    Page<ReviewDetailWithNicknameResponseDto> getDetailsWithNicknameByCenterId(UUID centerId, ReviewSearchCondition condition);
 
 }
