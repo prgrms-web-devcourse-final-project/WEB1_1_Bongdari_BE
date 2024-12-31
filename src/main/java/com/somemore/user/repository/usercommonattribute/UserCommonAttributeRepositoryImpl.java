@@ -1,5 +1,6 @@
 package com.somemore.user.repository.usercommonattribute;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.user.domain.QUserCommonAttribute;
 import com.somemore.user.domain.UserCommonAttribute;
@@ -22,6 +23,9 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
     public Optional<UserCommonAttribute> findByUserId(UUID userId) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(userCommonAttribute)
+                        .where(
+                                eqUserId(userId),
+                                isNotDeleted())
                         .fetchOne());
     }
 
@@ -29,4 +33,24 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
     public UserCommonAttribute save(UserCommonAttribute userCommonAttribute) {
         return userCommonAttributeJpaRepository.save(userCommonAttribute);
     }
+
+    @Override
+    public Optional<Boolean> findIsCustomizedByUserId(UUID userId) {
+        return Optional.ofNullable(
+                queryFactory.select(userCommonAttribute.isCustomized)
+                        .where(
+                                eqUserId(userId),
+                                isNotDeleted())
+                        .fetchOne()
+        );
+    }
+
+    private static BooleanExpression eqUserId(UUID userId) {
+        return userCommonAttribute.userId.eq(userId);
+    }
+
+    private static BooleanExpression isNotDeleted() {
+        return userCommonAttribute.deleted.eq(false);
+    }
+
 }
