@@ -1,5 +1,6 @@
 package com.somemore.global.auth.oauth.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.global.auth.oauth.domain.OAuthInfo;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
@@ -25,20 +26,36 @@ public class OAuthInfoRepositoryImpl implements OAuthInfoRepository {
                 queryFactory.select(oauthInfo.userId)
                         .from(oauthInfo)
                         .where(
-                                oauthInfo.oauthId.eq(oauthId),
-                                oauthInfo.oAuthProvider.eq(provider)
+                                eqOAuthInfo(provider, oauthId),
+                                isNotDeleted()
                         )
                         .fetchOne()
         );
     }
 
     @Override
-    public boolean existByOAuthProviderAndOauthId(OAuthProvider provider, String oauthId) {
-        return oauthInfoJpaRepository.existByOAuthProviderAndOauthId(provider, oauthId);
+    public boolean existsByOAuthProviderAndOauthId(OAuthProvider provider, String oauthId) {
+        return queryFactory.selectOne()
+                .from(oauthInfo)
+                .where(
+                        eqOAuthInfo(provider, oauthId),
+                        isNotDeleted()
+                )
+                .fetchFirst() != null;
     }
 
     @Override
     public OAuthInfo save(OAuthInfo oauthInfo) {
         return oauthInfoJpaRepository.save(oauthInfo);
     }
+
+    private BooleanExpression eqOAuthInfo(OAuthProvider provider, String oauthId) {
+        return oauthInfo.oauthId.eq(oauthId)
+                .and(oauthInfo.oAuthProvider.eq(provider));
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return oauthInfo.deleted.eq(false);
+    }
+
 }
