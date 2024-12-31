@@ -1,6 +1,7 @@
 package com.somemore.domains.review.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.review.domain.Review;
@@ -10,12 +11,12 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.Builder;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonNaming(SnakeCaseStrategy.class)
 @Builder
 public record ReviewCreateRequestDto(
-        @Schema(description = "봉사 모집글 아이디", example = "1")
-        @NotNull(message = "봉사 모집글 아이디는 필수 값입니다.")
-        Long recruitBoardId,
+        @Schema(description = "봉사 지원 아이디", example = "1")
+        @NotNull(message = "봉사 지원 아이디는 필수 값입니다.")
+        Long volunteerApplyId,
         @Schema(description = "리뷰 제목", example = "내 인생 최고의 봉사 활동")
         @NotBlank(message = "리뷰 제목은 필수 값입니다.")
         String title,
@@ -24,9 +25,9 @@ public record ReviewCreateRequestDto(
         String content
 ) {
 
-    public Review toEntity(VolunteerApply apply, UUID volunteerId, String imgUrl) {
+    public Review toEntity(UUID volunteerId, String imgUrl) {
         return Review.builder()
-                .volunteerApplyId(apply.getId())
+                .volunteerApplyId(volunteerApplyId)
                 .volunteerId(volunteerId)
                 .title(title)
                 .content(content)

@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface ReviewQueryUseCase {
 
+    boolean existsByVolunteerApplyId(Long volunteerApplyId);
+
     Review getById(Long id);
 
     ReviewDetailResponseDto getDetailById(Long id);

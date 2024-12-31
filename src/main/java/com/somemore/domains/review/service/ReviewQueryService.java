@@ -32,6 +32,11 @@ public class ReviewQueryService implements ReviewQueryUseCase {
     private final CenterQueryUseCase centerQueryUseCase;
 
     @Override
+    public boolean existsByVolunteerApplyId(Long volunteerApplyId) {
+        return reviewRepository.existsByVolunteerApplyId(volunteerApplyId);
+    }
+
+    @Override
     public Review getById(Long id) {
         return reviewRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException(NOT_EXISTS_REVIEW));
