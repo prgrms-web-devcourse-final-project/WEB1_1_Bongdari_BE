@@ -1,7 +1,7 @@
 package com.somemore.user.domain;
 
 import com.somemore.global.common.entity.BaseEntity;
-import com.somemore.user.dto.UserAuthInfo;
+import com.somemore.user.dto.UserAuthInfoRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,10 +39,10 @@ public class User extends BaseEntity {
     private UserRole role;
 
 
-    public static User from(UserAuthInfo userAuthInfo, UserRole role) {
+    public static User from(UserAuthInfoRequestDto userAuthInfoRequestDto, UserRole role) {
         return User.builder()
-                .email(userAuthInfo.email())
-                .password(userAuthInfo.password())
+                .email(userAuthInfoRequestDto.email())
+                .password(userAuthInfoRequestDto.password())
                 .role(role)
                 .build();
     }
