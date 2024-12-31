@@ -48,7 +48,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
     void createReview() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .recruitBoardId(1L)
+                .volunteerApplyId(1L)
                 .title("리뷰 제목")
                 .content("리뷰 내용")
                 .build();
@@ -105,7 +105,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.title").value("유효성 예외"))
-                .andExpect(jsonPath("$.detail").value("봉사 모집글 아이디는 필수 값입니다."));
+                .andExpect(jsonPath("$.detail").value("봉사 지원 아이디는 필수 값입니다."));
     }
 
     @DisplayName("리뷰 생성 유효성 테스트 - 제목")
@@ -114,7 +114,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
     void createReviewValidateTestTitle() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .recruitBoardId(1L)
+                .volunteerApplyId(1L)
                 .content("리뷰 내용")
                 .build();
 
@@ -140,7 +140,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
     void createReviewValidateTestContent() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .recruitBoardId(1L)
+                .volunteerApplyId(1L)
                 .title("리뷰 제목")
                 .build();
 

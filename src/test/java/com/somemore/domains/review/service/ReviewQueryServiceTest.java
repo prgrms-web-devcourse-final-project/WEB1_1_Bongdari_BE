@@ -16,6 +16,7 @@ import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,15 +58,63 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private CenterRepository centerRepository;
 
+    private Long volunteerApplyId;
+    private Review review;
+
+    @BeforeEach
+    void setUp() {
+        volunteerApplyId = 100L;
+        review = createReview(volunteerApplyId, UUID.randomUUID());
+        reviewRepository.save(review);
+    }
+
+    @DisplayName("봉사 지원 아이디로 리뷰 존재 유무를 조회할 수 있다.")
+    @Test
+    void existsByVolunteerApplyId() {
+        // given
+        // when
+        boolean result = reviewQueryService.existsByVolunteerApplyId(volunteerApplyId);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
     @DisplayName("아이디로 리뷰를 조회할 수 있다.")
     @Test
-    void getReviewById() {
+    void getById() {
         // given
-        Review review = createReview(1L, UUID.randomUUID());
-        reviewRepository.save(review);
+        Long id = review.getId();
 
         // when
-        ReviewDetailResponseDto findOne = reviewQueryService.getDetailById(review.getId());
+        Review findOne = reviewQueryService.getById(id);
+
+        // then
+        assertThat(findOne.getId()).isEqualTo(id);
+    }
+
+    @DisplayName("존재하지 않는 아이디로 리뷰를 조회하면 에러가 발생한다.")
+    @Test
+    void getByIdWhenDoesNotExist() {
+        // given
+        Long wrongId = 10000000L;
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> reviewQueryService.getById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_REVIEW.getMessage());
+    }
+
+
+    @DisplayName("아이디로 리뷰를 상세 조회할 수 있다.")
+    @Test
+    void getDetailById() {
+        // given
+        Long id = review.getId();
+
+        // when
+        ReviewDetailResponseDto findOne = reviewQueryService.getDetailById(id);
 
         // then
         assertThat(findOne).extracting("id").isEqualTo(review.getId());
@@ -75,19 +124,6 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         assertThat(findOne).extracting("imgUrl").isEqualTo(review.getImgUrl());
     }
 
-    @DisplayName("존재하지 않는 아이디로 리뷰를 조회하면 에러가 발생한다.")
-    @Test
-    void getReviewByIdWhenWrongId() {
-        // given
-        Long wrongId = 10000000L;
-
-        // when
-        // then
-        assertThatThrownBy(
-                () -> reviewQueryService.getDetailById(wrongId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage(NOT_EXISTS_REVIEW.getMessage());
-    }
 
     @DisplayName("봉사자 ID로 리뷰 리스트를 조회할 수 있다.")
     @Test
