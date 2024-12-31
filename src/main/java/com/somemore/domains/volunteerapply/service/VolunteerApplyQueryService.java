@@ -8,6 +8,7 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDt
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
+import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import java.util.List;
 import java.util.UUID;
@@ -26,44 +27,45 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
     private final VolunteerApplyRepository volunteerApplyRepository;
 
     @Override
-    public List<UUID> getVolunteerIdsByRecruitIds(List<Long> recruitIds) {
-        return volunteerApplyRepository.findVolunteerIdsByRecruitIds(recruitIds);
+    public VolunteerApply getById(Long id) {
+        return volunteerApplyRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY));
     }
 
     @Override
     public VolunteerApply getByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
-        return volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitId, volunteerId)
-                .orElseThrow(
+        return volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitId, volunteerId).orElseThrow(
                         () -> new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY));
     }
 
     @Override
     public VolunteerApplySummaryResponseDto getSummaryByRecruitId(Long recruitId) {
 
-        List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(
-                recruitId);
+        List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitId);
 
         return VolunteerApplySummaryResponseDto.from(applies);
     }
 
     @Override
-    public VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId,
-            UUID volunteerId) {
+    public VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
         VolunteerApply apply = getByRecruitIdAndVolunteerId(recruitId, volunteerId);
 
         return VolunteerApplyResponseDto.from(apply);
     }
 
     @Override
-    public Page<VolunteerApply> getAllByRecruitId(Long recruitId,
-            VolunteerApplySearchCondition condition) {
+    public Page<VolunteerApply> getAllByRecruitId(Long recruitId, VolunteerApplySearchCondition condition) {
         return volunteerApplyRepository.findAllByRecruitId(recruitId, condition);
     }
 
     @Override
-    public Page<VolunteerApply> getAllByVolunteerId(UUID volunteerId,
-            VolunteerApplySearchCondition condition) {
+    public Page<VolunteerApply> getAllByVolunteerId(UUID volunteerId, VolunteerApplySearchCondition condition) {
         return volunteerApplyRepository.findAllByVolunteerId(volunteerId, condition);
+    }
+
+    @Override
+    public List<UUID> getVolunteerIdsByRecruitIds(List<Long> recruitIds) {
+        return volunteerApplyRepository.findVolunteerIdsByRecruitIds(recruitIds);
     }
 
     @Override
