@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
 
@@ -37,20 +38,25 @@ public class UserCommonAttribute {
     @Column(name = "introduce", nullable = false)
     private String introduce;
 
+    @Column(name = "is_customized", nullable = false)
+    private boolean isCustomized;
+
     public static UserCommonAttribute createDefault(UUID userId) {
         return UserCommonAttribute.builder()
                 .userId(userId)
                 .nickname(String.valueOf(UUID.randomUUID()).substring(0, 8))
                 .imgUrl(ImageUploadService.DEFAULT_IMAGE_URL)
                 .introduce("")
+                .isCustomized(false)
                 .build();
     }
 
     @Builder
-    private UserCommonAttribute(UUID userId, String nickname, String imgUrl, String introduce) {
+    private UserCommonAttribute(UUID userId, String nickname, String imgUrl, String introduce, boolean isCustomized) {
         this.userId = userId;
         this.nickname = nickname;
         this.imgUrl = imgUrl;
         this.introduce = introduce;
+        this.isCustomized = isCustomized;
     }
 }
