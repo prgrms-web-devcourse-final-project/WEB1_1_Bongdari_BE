@@ -1,4 +1,4 @@
-package com.somemore.global.auth.oauth.handler.success;
+package com.somemore.global.auth.oauth.handler;
 
 import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
