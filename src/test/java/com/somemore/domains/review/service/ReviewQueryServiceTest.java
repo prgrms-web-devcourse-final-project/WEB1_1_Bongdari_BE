@@ -7,14 +7,14 @@ import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
-import com.somemore.domains.review.dto.response.ReviewResponseDto;
-import com.somemore.domains.review.dto.response.ReviewWithNicknameResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
-import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         reviewRepository.save(review);
 
         // when
-        ReviewResponseDto findOne = reviewQueryService.getReviewById(review.getId());
+        ReviewDetailResponseDto findOne = reviewQueryService.getDetailById(review.getId());
 
         // then
         assertThat(findOne).extracting("id").isEqualTo(review.getId());
@@ -84,8 +84,8 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> reviewQueryService.getReviewById(wrongId)
-        ).isInstanceOf(BadRequestException.class)
+                () -> reviewQueryService.getDetailById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
                 .hasMessage(NOT_EXISTS_REVIEW.getMessage());
     }
 
@@ -122,7 +122,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<ReviewWithNicknameResponseDto> result = reviewQueryService.getReviewsByVolunteerId(
+        Page<ReviewDetailWithNicknameResponseDto> result = reviewQueryService.getDetailsWithNicknameByVolunteerId(
                 volunteerId,
                 conditionWithoutCategory);
 
@@ -172,7 +172,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<ReviewWithNicknameResponseDto> result = reviewQueryService.getReviewsByCenterId(
+        Page<ReviewDetailWithNicknameResponseDto> result = reviewQueryService.getDetailsWithNicknameByCenterId(
                 center.getId(),
                 condition);
 
@@ -199,7 +199,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     }
 
     private Review createReview(Long applyId, UUID volunteerId, String title, String content,
-            String imgUrl) {
+                                String imgUrl) {
         return Review.builder()
                 .volunteerApplyId(applyId)
                 .volunteerId(volunteerId)
