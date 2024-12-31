@@ -1,5 +1,6 @@
 package com.somemore.user.domain;
 
+import com.somemore.global.common.entity.BaseEntity;
 import com.somemore.global.imageupload.service.ImageUploadService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "user_common_attribute")
-public class UserCommonAttribute {
+public class UserCommonAttribute extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
