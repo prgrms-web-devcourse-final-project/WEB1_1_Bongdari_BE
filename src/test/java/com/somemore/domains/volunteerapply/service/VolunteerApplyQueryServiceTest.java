@@ -80,11 +80,11 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
     void getByRecruitIdAndVolunteerId() {
         // given
         // when
-        VolunteerApply apply = volunteerApplyQueryService.getByRecruitIdAndVolunteerId(recruitBoardId, volunteerId);
+        VolunteerApply findApply = volunteerApplyQueryService.getByRecruitIdAndVolunteerId(recruitBoardId, volunteerId);
 
         // then
-        assertThat(apply.getRecruitBoardId()).isEqualTo(recruitBoardId);
-        assertThat(apply.getVolunteerId()).isEqualTo(volunteerId);
+        assertThat(findApply.getRecruitBoardId()).isEqualTo(recruitBoardId);
+        assertThat(findApply.getVolunteerId()).isEqualTo(volunteerId);
     }
 
     @DisplayName("존재하지 않는 모집글 아이디와 봉사자 아이디로 조회할 수 있다")
@@ -110,21 +110,21 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         long approveCount = 10;
         long rejectCount = 2;
         long waitingCount = 5;
-        long recruitBoardId = 100L;
+        long recruitId = 100L;
 
         for (int i = 0; i < waitingCount; i++) {
-            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitBoardId, WAITING));
+            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId, WAITING));
         }
         for (int i = 0; i < approveCount; i++) {
-            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitBoardId, APPROVED));
+            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId, APPROVED));
         }
         for (int i = 0; i < rejectCount; i++) {
-            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitBoardId, REJECTED));
+            volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId, REJECTED));
         }
 
         // when
-        VolunteerApplySummaryResponseDto dto = volunteerApplyQueryService.getSummaryByRecruitId(
-                recruitBoardId);
+        VolunteerApplySummaryResponseDto dto = volunteerApplyQueryService.getSummaryByRecruitId(recruitId);
+
         // then
         assertThat(dto.waiting()).isEqualTo(waitingCount);
         assertThat(dto.approve()).isEqualTo(approveCount);
@@ -135,18 +135,12 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getVolunteerApplyByRecruitIdAndVolunteerId() {
         // given
-        Long recruitId = 1234L;
-        UUID volunteerId = UUID.randomUUID();
-
-        VolunteerApply newApply = createApply(volunteerId, recruitId);
-        volunteerApplyRepository.save(newApply);
-
         // when
         VolunteerApplyResponseDto dto = volunteerApplyQueryService.getVolunteerApplyByRecruitIdAndVolunteerId(
-                recruitId, volunteerId);
+                recruitBoardId, volunteerId);
 
         // then
-        assertThat(dto.recruitBoardId()).isEqualTo(recruitId);
+        assertThat(dto.recruitBoardId()).isEqualTo(recruitBoardId);
         assertThat(dto.volunteerId()).isEqualTo(volunteerId);
     }
 
@@ -164,8 +158,7 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApply> applies = volunteerApplyQueryService.getAllByRecruitId(boardId,
-                condition);
+        Page<VolunteerApply> applies = volunteerApplyQueryService.getAllByRecruitId(boardId, condition);
 
         // then
         assertThat(applies).hasSize(2);
@@ -175,11 +168,11 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getVolunteerAppliesByVolunteerId() {
         // given
-        UUID volunteerId = UUID.randomUUID();
+        UUID volunteerOneId = UUID.randomUUID();
 
-        VolunteerApply apply1 = createApply(volunteerId, 200L);
-        VolunteerApply apply2 = createApply(volunteerId, 201L);
-        VolunteerApply apply3 = createApply(volunteerId, 202L);
+        VolunteerApply apply1 = createApply(volunteerOneId, 200L);
+        VolunteerApply apply2 = createApply(volunteerOneId, 201L);
+        VolunteerApply apply3 = createApply(volunteerOneId, 202L);
         VolunteerApply apply4 = createApply(UUID.randomUUID(), 203L);
         volunteerApplyRepository.saveAll(List.of(apply1, apply2, apply3, apply4));
 
@@ -189,7 +182,7 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
 
         // when
         Page<VolunteerApply> applies = volunteerApplyQueryService.getAllByVolunteerId(
-                volunteerId, condition);
+                volunteerOneId, condition);
 
         // then
         assertThat(applies).hasSize(3);
@@ -199,16 +192,12 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getAllByIds() {
         // given
-        Long recruitBoardId = 1L;
+        Long recruitId = 1L;
 
-        VolunteerApply apply1 = volunteerApplyRepository.save(
-                createApply(UUID.randomUUID(), recruitBoardId));
-        VolunteerApply apply2 = volunteerApplyRepository.save(
-                createApply(UUID.randomUUID(), recruitBoardId));
-        VolunteerApply apply3 = volunteerApplyRepository.save(
-                createApply(UUID.randomUUID(), recruitBoardId));
-        VolunteerApply apply4 = volunteerApplyRepository.save(
-                createApply(UUID.randomUUID(), recruitBoardId));
+        VolunteerApply apply1 = volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId));
+        VolunteerApply apply2 = volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId));
+        VolunteerApply apply3 = volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId));
+        VolunteerApply apply4 = volunteerApplyRepository.save(createApply(UUID.randomUUID(), recruitId));
 
         List<Long> ids = List.of(apply1.getId(), apply2.getId(), apply3.getId(), apply4.getId());
 
@@ -258,8 +247,8 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         // then
         assertThatThrownBy(
                 () -> volunteerApplyQueryService.getByRecruitIdAndVolunteerId(wrongBoardId,
-                        wrongVolunteerId)
-        ).isInstanceOf(NoSuchElementException.class)
+                        wrongVolunteerId))
+                .isInstanceOf(NoSuchElementException.class)
                 .hasMessage(NOT_EXISTS_VOLUNTEER_APPLY.getMessage());
     }
 
