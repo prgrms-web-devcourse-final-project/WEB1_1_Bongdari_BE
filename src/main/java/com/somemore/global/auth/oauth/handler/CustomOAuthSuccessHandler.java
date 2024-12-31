@@ -1,15 +1,14 @@
 package com.somemore.global.auth.oauth.handler;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
-import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.global.auth.oauth.processor.OAuthUserProcessor;
 import com.somemore.global.auth.redirect.RedirectUseCase;
+import com.somemore.user.domain.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -28,9 +27,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final RedirectUseCase redirectUseCase;
 
     public static final String AUTHORIZATION = "Authorization";
-
-    @Value("${app.front-url}")
-    private String frontendRootUrl;
+    public static final String MAIN_PATH = "/main";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -40,7 +37,12 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         UUID userId = oauthUserProcessor.fetchUserIdByOAuthUser(oauthUser);
 
         processAccessToken(response, userId);
-        redirectUseCase.redirect(request, response, frontendRootUrl);
+        redirect(request, response);
+    }
+
+    private void redirect(HttpServletRequest request, HttpServletResponse response) {
+        // TODO 유저 정보 커스텀 확인 분기
+        redirectUseCase.redirect(request, response, MAIN_PATH);
     }
 
     private void processAccessToken(HttpServletResponse response, UUID userId) {
@@ -48,10 +50,6 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(
                         userId, UserRole.getOAuthUserDefaultRole());
 
-        setAccessToken(response, accessToken);
-    }
-
-    private void setAccessToken(HttpServletResponse response, EncodedToken accessToken) {
         response.addHeader(AUTHORIZATION, accessToken.getValueWithPrefix());
     }
 
