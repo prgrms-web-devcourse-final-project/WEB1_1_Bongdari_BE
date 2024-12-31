@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ExceptionMessage {
+    // USER
+    NOT_EXIST_USER("존재하지 않는 유저입니다."),
+
     // CENTER
     NOT_EXISTS_CENTER("존재하지 않는 기관입니다."),
     NOT_EXISTS_PREFER_ITEM("존재하지 않는 선호물품 ID 입니다"),
