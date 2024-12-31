@@ -13,10 +13,13 @@ import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCon
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import java.util.List;
 import java.util.UUID;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,48 +37,73 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private VolunteerApplyRepository volunteerApplyRepository;
 
-    @DisplayName("recruitIds로 봉사자 ID 리스트를 조회할 수 있다")
+    private Long recruitBoardId;
+    private UUID volunteerId;
+    private VolunteerApply apply;
+
+    @BeforeEach
+    void setUp() {
+        recruitBoardId = 1234L;
+        volunteerId = UUID.randomUUID();
+        apply = createApply(volunteerId, recruitBoardId);
+        volunteerApplyRepository.save(apply);
+    }
+
+    @DisplayName("봉사 지원 아이디로 조회할 수 있다.")
     @Test
-    void getVolunteerIdsByRecruitIds() {
-        // Given
-        Long recruitId1 = 10L;
-        Long recruitId2 = 20L;
-        UUID volunteerId1 = UUID.randomUUID();
-        UUID volunteerId2 = UUID.randomUUID();
+    void getById() {
+        // given
+        Long id = apply.getId();
 
-        VolunteerApply apply1 = createApply(volunteerId1, recruitId1);
-        VolunteerApply apply2 = createApply(volunteerId2, recruitId2);
+        // when
+        VolunteerApply findApply = volunteerApplyQueryService.getById(id);
 
-        volunteerApplyRepository.save(apply1);
-        volunteerApplyRepository.save(apply2);
+        // then
+        assertThat(findApply.getId()).isEqualTo(id);
+        assertThat(findApply.getVolunteerId()).isEqualTo(volunteerId);
+        assertThat(findApply.getRecruitBoardId()).isEqualTo(recruitBoardId);
+    }
 
-        // When
-        List<UUID> volunteerIds = volunteerApplyQueryService.getVolunteerIdsByRecruitIds(
-                List.of(recruitId1, recruitId2));
+    @DisplayName("존재하지 않는 봉사 지원 아이디로 조회할 경우 에러가 발생한다.")
+    @Test
+    void getByIdWhenDoesNotExist() {
+        // given
+        Long wrongId = 999L;
 
-        // Then
-        assertThat(volunteerIds)
-                .hasSize(2)
-                .containsExactlyInAnyOrder(volunteerId1, volunteerId2);
+        // when
+        // then
+        assertThatThrownBy(
+                () -> volunteerApplyQueryService.getById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_VOLUNTEER_APPLY.getMessage());
     }
 
     @DisplayName("모집글 아이디와 봉사자 아이디로 조회할 수 있다")
     @Test
     void getByRecruitIdAndVolunteerId() {
         // given
-        Long recruitId = 1234L;
-        UUID volunteerId = UUID.randomUUID();
-
-        VolunteerApply newApply = createApply(volunteerId, recruitId);
-        volunteerApplyRepository.save(newApply);
-
         // when
-        VolunteerApply apply = volunteerApplyQueryService.getByRecruitIdAndVolunteerId(
-                recruitId, volunteerId);
+        VolunteerApply apply = volunteerApplyQueryService.getByRecruitIdAndVolunteerId(recruitBoardId, volunteerId);
 
         // then
-        assertThat(apply.getRecruitBoardId()).isEqualTo(recruitId);
+        assertThat(apply.getRecruitBoardId()).isEqualTo(recruitBoardId);
         assertThat(apply.getVolunteerId()).isEqualTo(volunteerId);
+    }
+
+    @DisplayName("존재하지 않는 모집글 아이디와 봉사자 아이디로 조회할 수 있다")
+    @Test
+    void getByRecruitIdAndVolunteerIdWhenDoesNotExist() {
+        // given
+        Long wrongRecruitBoardId = 999L;
+        UUID wrongVolunteerId = UUID.randomUUID();
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> volunteerApplyQueryService.getByRecruitIdAndVolunteerId(wrongRecruitBoardId, wrongVolunteerId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_VOLUNTEER_APPLY.getMessage());
+
     }
 
     @DisplayName("모집글 아이디로 지원 현황을 조회할 수 있다.")
@@ -195,6 +223,31 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         assertThat(applies)
                 .extracting(VolunteerApply::getId)
                 .containsExactlyInAnyOrderElementsOf(ids);
+    }
+
+    @DisplayName("recruitIds로 봉사자 ID 리스트를 조회할 수 있다")
+    @Test
+    void getVolunteerIdsByRecruitIds() {
+        // Given
+        Long recruitId1 = 10L;
+        Long recruitId2 = 20L;
+        UUID volunteerId1 = UUID.randomUUID();
+        UUID volunteerId2 = UUID.randomUUID();
+
+        VolunteerApply apply1 = createApply(volunteerId1, recruitId1);
+        VolunteerApply apply2 = createApply(volunteerId2, recruitId2);
+
+        volunteerApplyRepository.save(apply1);
+        volunteerApplyRepository.save(apply2);
+
+        // When
+        List<UUID> volunteerIds = volunteerApplyQueryService.getVolunteerIdsByRecruitIds(
+                List.of(recruitId1, recruitId2));
+
+        // Then
+        assertThat(volunteerIds)
+                .hasSize(2)
+                .containsExactlyInAnyOrder(volunteerId1, volunteerId2);
     }
 
     @DisplayName("존재하지 않는 봉사 지원을 조회할 경우 에러가 발생한다.")
