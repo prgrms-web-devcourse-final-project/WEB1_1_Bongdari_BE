@@ -4,6 +4,7 @@ import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.request.ReviewUpdateRequestDto;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.review.service.validator.ReviewValidator;
+import com.somemore.domains.review.usecase.ReviewQueryUseCase;
 import com.somemore.domains.review.usecase.UpdateReviewUseCase;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
@@ -18,25 +19,21 @@ import java.util.UUID;
 @Service
 public class UpdateReviewService implements UpdateReviewUseCase {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewQueryUseCase reviewQueryUseCase;
     private final ReviewValidator reviewValidator;
 
     @Override
     public void updateReview(Long id, UUID volunteerId, ReviewUpdateRequestDto requestDto) {
-        Review review = getReview(id);
+        Review review = reviewQueryUseCase.getById(id);
         reviewValidator.validateAuthor(review, volunteerId);
         review.updateWith(requestDto);
     }
 
     @Override
     public void updateReviewImageUrl(Long id, UUID volunteerId, String imgUrl) {
-        Review review = getReview(id);
+        Review review = reviewQueryUseCase.getById(id);
         reviewValidator.validateAuthor(review, volunteerId);
         review.updateWith(imgUrl);
     }
 
-    private Review getReview(Long id) {
-        return reviewRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_REVIEW));
-    }
 }

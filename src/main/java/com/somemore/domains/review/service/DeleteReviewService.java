@@ -4,6 +4,7 @@ import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.review.service.validator.ReviewValidator;
 import com.somemore.domains.review.usecase.DeleteReviewUseCase;
+import com.somemore.domains.review.usecase.ReviewQueryUseCase;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,12 @@ import java.util.UUID;
 @Service
 public class DeleteReviewService implements DeleteReviewUseCase {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewQueryUseCase reviewQueryUseCase;
     private final ReviewValidator reviewValidator;
 
     @Override
     public void deleteReview(UUID volunteerId, Long id) {
-        Review review = reviewRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_REVIEW));
+        Review review = reviewQueryUseCase.getById(id);
 
         reviewValidator.validateAuthor(review, volunteerId);
         review.markAsDeleted();
