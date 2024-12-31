@@ -1,24 +1,13 @@
 package com.somemore.domains.volunteerapply.service;
 
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
-import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
-import java.util.List;
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +16,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.*;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {

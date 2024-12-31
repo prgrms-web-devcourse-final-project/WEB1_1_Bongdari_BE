@@ -1,15 +1,14 @@
 package com.somemore.domains.review.dto.request;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.review.domain.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
 import lombok.Builder;
+
+import java.util.UUID;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
