@@ -38,6 +38,8 @@ public class UserQueryService implements UserQueryUseCase {
 
     @Override
     public boolean getIsCustomizedByUserId(UUID userId) {
-        return false;
+        return userCommonAttributeRepository.findIsCustomizedByUserId(userId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
     }
+
 }
