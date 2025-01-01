@@ -23,7 +23,9 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findById(UUID id) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(user)
-                        .where(isNotDeleted())
+                        .where(
+                                user.id.eq(id),
+                                isNotDeleted())
                         .fetchOne());
     }
 
