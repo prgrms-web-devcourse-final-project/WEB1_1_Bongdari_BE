@@ -42,6 +42,11 @@ public class UserCommonAttribute extends BaseEntity {
     @Column(name = "is_customized", nullable = false)
     private boolean isCustomized;
 
+    public void customize() {
+        // TODO param의 정보를 필드에 업데이트
+        this.isCustomized = true;
+    }
+
     public static UserCommonAttribute createDefault(UUID userId) {
         return UserCommonAttribute.builder()
                 .userId(userId)
