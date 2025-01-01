@@ -38,6 +38,7 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
     public Optional<Boolean> findIsCustomizedByUserId(UUID userId) {
         return Optional.ofNullable(
                 queryFactory.select(userCommonAttribute.isCustomized)
+                        .from(userCommonAttribute)
                         .where(
                                 eqUserId(userId),
                                 isNotDeleted())
