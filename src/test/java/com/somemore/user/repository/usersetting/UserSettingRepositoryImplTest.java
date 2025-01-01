@@ -50,5 +50,4 @@ class UserSettingRepositoryImplTest extends IntegrationTestSupport {
         assertThat(savedUserSetting.isAuthenticated()).isEqualTo(false);
         assertThat(savedUserSetting.isSmsAgreed()).isEqualTo(false);
     }
-
 }
