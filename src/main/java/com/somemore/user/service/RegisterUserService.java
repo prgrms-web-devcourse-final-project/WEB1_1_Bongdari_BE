@@ -5,7 +5,7 @@ import com.somemore.global.auth.oauth.domain.CommonOAuthInfo;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserSetting;
-import com.somemore.user.dto.UserAuthInfoRequestDto;
+import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import com.somemore.user.repository.usersetting.UserSettingRepository;
@@ -29,17 +29,17 @@ public class RegisterUserService implements RegisterUserUseCase {
 
     @Override
     public User registerOAuthUser(CommonOAuthInfo commonOAuthInfo, UserRole role) {
-        UserAuthInfoRequestDto userAuthInfoRequestDto = UserAuthInfoRequestDto.createForOAuth(commonOAuthInfo.provider());
-        return createAndRegisterUser(role, userAuthInfoRequestDto);
+        UserAuthInfo userAuthInfo = UserAuthInfo.createForOAuth(commonOAuthInfo.provider());
+        return createAndRegisterUser(role, userAuthInfo);
     }
 
     @Override
-    public User registerLocalUser(UserAuthInfoRequestDto userAuthInfoRequestDto, UserRole role) {
-        return createAndRegisterUser(role, userAuthInfoRequestDto);
+    public User registerLocalUser(UserAuthInfo userAuthInfo, UserRole role) {
+        return createAndRegisterUser(role, userAuthInfo);
     }
 
-    private User createAndRegisterUser(UserRole role, UserAuthInfoRequestDto userAuthInfoRequestDto) {
-        User user = User.from(userAuthInfoRequestDto, role);
+    private User createAndRegisterUser(UserRole role, UserAuthInfo userAuthInfo) {
+        User user = User.from(userAuthInfo, role);
         userRepository.save(user);
         UUID userId = user.getId();
 
