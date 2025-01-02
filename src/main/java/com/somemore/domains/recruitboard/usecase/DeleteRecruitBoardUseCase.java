@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.usecase.command;
+package com.somemore.domains.recruitboard.usecase;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.usecase.command;
+package com.somemore.domains.recruitboard.usecase;
 
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;

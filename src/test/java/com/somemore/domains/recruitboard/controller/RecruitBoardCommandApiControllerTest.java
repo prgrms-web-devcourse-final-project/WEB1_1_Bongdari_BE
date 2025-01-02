@@ -6,9 +6,9 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDt
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardStatusUpdateRequestDto;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
-import com.somemore.domains.recruitboard.usecase.command.CreateRecruitBoardUseCase;
-import com.somemore.domains.recruitboard.usecase.command.DeleteRecruitBoardUseCase;
-import com.somemore.domains.recruitboard.usecase.command.UpdateRecruitBoardUseCase;
+import com.somemore.domains.recruitboard.usecase.CreateRecruitBoardUseCase;
+import com.somemore.domains.recruitboard.usecase.DeleteRecruitBoardUseCase;
+import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;

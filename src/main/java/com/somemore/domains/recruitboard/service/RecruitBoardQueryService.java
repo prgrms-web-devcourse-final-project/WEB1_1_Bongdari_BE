@@ -1,13 +1,9 @@
-package com.somemore.domains.recruitboard.service.query;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
@@ -16,13 +12,17 @@ import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
-
-import java.util.List;
-import java.util.UUID;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
+import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -70,7 +70,7 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     @Override
     public Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
-            RecruitBoardSearchCondition condition) {
+                                                                    RecruitBoardSearchCondition condition) {
         centerQueryUseCase.validateCenterExists(centerId);
 
         Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(centerId, condition);

@@ -1,18 +1,14 @@
-package com.somemore.domains.recruitboard.service.command;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.recruitboard.service.validator.RecruitBoardValidator;
-import com.somemore.domains.recruitboard.usecase.command.DeleteRecruitBoardUseCase;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.global.exception.BadRequestException;
+import com.somemore.domains.recruitboard.usecase.DeleteRecruitBoardUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 
 @RequiredArgsConstructor
 @Transactional

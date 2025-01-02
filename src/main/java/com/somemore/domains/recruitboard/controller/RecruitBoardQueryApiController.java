@@ -1,29 +1,26 @@
 package com.somemore.domains.recruitboard.controller;
 
-import static org.springframework.data.domain.Sort.Direction.DESC;
-
-import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
-import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.global.common.response.ApiResponse;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
+import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
+import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
+import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Tag(name = "Recruit Board Query API", description = "봉사 활동 모집 조회 관련 API")
 @RequiredArgsConstructor
