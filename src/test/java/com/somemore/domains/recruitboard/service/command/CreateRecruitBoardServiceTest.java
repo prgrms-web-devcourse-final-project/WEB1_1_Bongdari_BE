@@ -46,25 +46,26 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
     void createRecruitBoardWithDto() {
         // given
         LocationCreateRequestDto locationDto = LocationCreateRequestDto.builder()
-            .address("도로명 주소 33")
-            .latitude(BigDecimal.valueOf(37.4845373748015))
-            .longitude(BigDecimal.valueOf(127.010842267696))
-            .build();
+                .address("도로명 주소 33")
+                .latitude(BigDecimal.valueOf(37.4845373748015))
+                .longitude(BigDecimal.valueOf(127.010842267696))
+                .build();
 
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(2);
 
         RecruitBoardCreateRequestDto dto = RecruitBoardCreateRequestDto.builder()
-            .title("봉사 모집글 작성")
-            .content("봉사 하실분을 모집합니다. <br>")
-            .region("지역")
-            .recruitmentCount(10)
-            .volunteerStartDateTime(startDateTime)
-            .volunteerEndDateTime(endDateTime)
-            .volunteerCategory(OTHER)
-            .admitted(true)
-            .location(locationDto)
-            .build();
+                .title("봉사 모집글 작성")
+                .content("봉사 하실분을 모집합니다. <br>")
+                .region("지역")
+                .recruitmentCount(10)
+                .volunteerStartDateTime(startDateTime)
+                .volunteerEndDateTime(endDateTime)
+                .volunteerHours(2)
+                .volunteerCategory(OTHER)
+                .admitted(true)
+                .location(locationDto)
+                .build();
 
         UUID centerId = UUID.randomUUID();
         String imgUrl = "https://image.domain.com/links";

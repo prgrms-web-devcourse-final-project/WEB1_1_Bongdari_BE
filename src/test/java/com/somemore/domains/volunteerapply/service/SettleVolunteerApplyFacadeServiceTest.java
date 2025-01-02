@@ -58,7 +58,7 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         VolunteerApply apply3 = createApply(volunteer3.getId(), board.getId());
         volunteerApplyRepository.saveAll(List.of(apply1, apply2, apply3));
 
-        int hour = board.getVolunteerHours().getHour();
+        int hour = board.getRecruitmentInfo().getVolunteerHours();
         VolunteerApplySettleRequestDto dto = VolunteerApplySettleRequestDto.builder()
                 .ids(List.of(apply1.getId(), apply2.getId(), apply3.getId()))
                 .build();

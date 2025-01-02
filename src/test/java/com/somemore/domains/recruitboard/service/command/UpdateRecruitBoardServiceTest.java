@@ -73,17 +73,18 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .region("서울특별시")
                 .volunteerStartDateTime(newStartDateTime)
                 .volunteerEndDateTime(newEndDateTime)
+                .volunteerHours(3)
                 .volunteerCategory(ADMINISTRATIVE_SUPPORT)
                 .admitted(false)
                 .build();
 
         // when
         updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId,
-            newImgUrl);
+                newImgUrl);
 
         // then
         RecruitBoard updatedRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
-            .orElseThrow();
+                .orElseThrow();
 
         assertThat(updatedRecruitBoard.getTitle()).isEqualTo(dto.title());
         assertThat(updatedRecruitBoard.getContent()).isEqualTo(dto.content());
@@ -95,9 +96,9 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(recruitmentInfo.getAdmitted()).isEqualTo(dto.admitted());
 
         assertThat(recruitmentInfo.getVolunteerStartDateTime())
-            .isEqualToIgnoringNanos(dto.volunteerStartDateTime());
+                .isEqualToIgnoringNanos(dto.volunteerStartDateTime());
         assertThat(recruitmentInfo.getVolunteerEndDateTime())
-            .isEqualToIgnoringNanos(dto.volunteerEndDateTime());
+                .isEqualToIgnoringNanos(dto.volunteerEndDateTime());
     }
 
     @DisplayName("봉사 모집글 위치를 수정할 수 있다")
@@ -105,27 +106,27 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     void updateRecruitBoardLocation() {
         // given
         RecruitBoardLocationUpdateRequestDto dto = RecruitBoardLocationUpdateRequestDto.builder()
-            .region("새로새로지역지역")
-            .address("새로새로주소주소")
-            .latitude(BigDecimal.valueOf(37.2222222))
-            .longitude(BigDecimal.valueOf(127.2222222))
-            .build();
+                .region("새로새로지역지역")
+                .address("새로새로주소주소")
+                .latitude(BigDecimal.valueOf(37.2222222))
+                .longitude(BigDecimal.valueOf(127.2222222))
+                .build();
 
         // when
         updateRecruitBoardService.updateRecruitBoardLocation(dto, recruitBoard.getId(), centerId);
 
         // then
         RecruitBoard updateRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
-            .orElseThrow();
+                .orElseThrow();
         Location updateLocation = locationRepository.findById(recruitBoard.getLocationId())
-            .orElseThrow();
+                .orElseThrow();
 
         assertThat(updateRecruitBoard.getRecruitmentInfo().getRegion()).isEqualTo(dto.region());
         assertThat(updateLocation.getAddress()).isEqualTo(dto.address());
         assertThat(updateLocation.getLongitude())
-            .isEqualByComparingTo(dto.longitude());
+                .isEqualByComparingTo(dto.longitude());
         assertThat(updateLocation.getLatitude())
-            .isEqualByComparingTo(dto.latitude());
+                .isEqualByComparingTo(dto.latitude());
     }
 
     @DisplayName("봉사 모집글은 작성자만 수정할 수 있다")
@@ -138,19 +139,19 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
         String newImgUrl = "https://image.domain.com/updates";
         RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
-            .title("업데이트 제목")
-            .content("업데이트 내용")
-            .recruitmentCount(1111)
-            .volunteerStartDateTime(newStartDateTime)
-            .volunteerEndDateTime(newEndDateTime)
-            .volunteerCategory(ADMINISTRATIVE_SUPPORT)
-            .admitted(false)
-            .build();
+                .title("업데이트 제목")
+                .content("업데이트 내용")
+                .recruitmentCount(1111)
+                .volunteerStartDateTime(newStartDateTime)
+                .volunteerEndDateTime(newEndDateTime)
+                .volunteerCategory(ADMINISTRATIVE_SUPPORT)
+                .admitted(false)
+                .build();
 
         // when
         // then
         Assertions.assertThatThrownBy(
-            () -> updateRecruitBoardService.updateRecruitBoard(dto, id, wrongCenterId, newImgUrl)
+                () -> updateRecruitBoardService.updateRecruitBoard(dto, id, wrongCenterId, newImgUrl)
         ).isInstanceOf(BadRequestException.class);
 
     }
@@ -165,7 +166,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
         // when
         updateRecruitBoardService.updateRecruitBoardStatus(newStatus, recruitBoardId, centerId,
-            currentDateTime);
+                currentDateTime);
 
         // then
         RecruitBoard findBoard = recruitBoardRepository.findById(recruitBoardId).orElseThrow();
@@ -179,34 +180,33 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         return createRecruitBoard(centerId, locationId, startDateTime, endDateTime);
     }
 
-    private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId,
-        LocalDateTime startDateTime,
-        LocalDateTime endDateTime) {
+    private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
-            .region("경기")
-            .recruitmentCount(1)
-            .volunteerStartDateTime(startDateTime)
-            .volunteerEndDateTime(endDateTime)
-            .volunteerCategory(OTHER)
-            .admitted(true)
-            .build();
+                .region("경기")
+                .recruitmentCount(1)
+                .volunteerStartDateTime(startDateTime)
+                .volunteerEndDateTime(endDateTime)
+                .volunteerHours(1)
+                .volunteerCategory(OTHER)
+                .admitted(true)
+                .build();
 
         return RecruitBoard.builder()
-            .centerId(centerId)
-            .locationId(locationId)
-            .title("봉사모집제목")
-            .content("봉사모집내용")
-            .imgUrl("https://image.domain.com/links")
-            .recruitmentInfo(recruitmentInfo)
-            .build();
+                .centerId(centerId)
+                .locationId(locationId)
+                .title("봉사모집제목")
+                .content("봉사모집내용")
+                .imgUrl("https://image.domain.com/links")
+                .recruitmentInfo(recruitmentInfo)
+                .build();
     }
 
     private static Location createLocation() {
         return Location.builder()
-            .address("주소주소")
-            .longitude(BigDecimal.valueOf(37.11111))
-            .latitude(BigDecimal.valueOf(127.11111))
-            .build();
+                .address("주소주소")
+                .longitude(BigDecimal.valueOf(37.11111))
+                .latitude(BigDecimal.valueOf(127.11111))
+                .build();
     }
 }
