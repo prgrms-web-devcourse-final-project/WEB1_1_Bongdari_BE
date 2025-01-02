@@ -5,10 +5,9 @@ import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
-import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.recruitboard.service.validator.RecruitBoardValidator;
 import com.somemore.domains.recruitboard.usecase.command.UpdateRecruitBoardUseCase;
-import com.somemore.global.exception.BadRequestException;
+import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,20 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
-
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
 
-    private final RecruitBoardRepository recruitBoardRepository;
-    private final RecruitBoardValidator recruitBoardValidator;
+    private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final UpdateLocationUseCase updateLocationUseCase;
+    private final RecruitBoardValidator recruitBoardValidator;
 
     @Override
-    public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long recruitBoardId, UUID centerId, String imgUrl) {
-        RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
+    public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId, String imgUrl) {
+        RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
         recruitBoardValidator.validateAuthor(recruitBoard, centerId);
         recruitBoardValidator.validateRecruitBoardTime(dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
 
@@ -37,9 +34,8 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     }
 
     @Override
-    public void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto, Long recruitBoardId,
-                                           UUID centerId) {
-        RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
+    public void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto, Long id, UUID centerId) {
+        RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
         recruitBoardValidator.validateAuthor(recruitBoard, centerId);
 
         updateLocationUseCase.updateLocation(requestDto.toLocationUpdateRequestDto(), recruitBoard.getLocationId());
@@ -48,18 +44,11 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     }
 
     @Override
-    public void updateRecruitBoardStatus(RecruitStatus status, Long recruitBoardId, UUID centerId,
-                                         LocalDateTime currentDateTime) {
-        RecruitBoard recruitBoard = getRecruitBoard(recruitBoardId);
+    public void updateRecruitBoardStatus(RecruitStatus status, Long id, UUID centerId, LocalDateTime currentDateTime) {
+        RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
         recruitBoardValidator.validateAuthor(recruitBoard, centerId);
 
         recruitBoard.changeRecruitStatus(status, currentDateTime);
-    }
-
-    private RecruitBoard getRecruitBoard(Long recruitBoardId) {
-        return recruitBoardRepository.findById(recruitBoardId).orElseThrow(
-                () -> new BadRequestException(NOT_EXISTS_RECRUIT_BOARD.getMessage())
-        );
     }
 
 }
