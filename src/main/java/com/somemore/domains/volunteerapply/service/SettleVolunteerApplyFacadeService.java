@@ -52,7 +52,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
     }
 
     private void validateAuth(RecruitBoard recruitBoard, UUID centerId) {
-        if (recruitBoard.isWriter(centerId)) {
+        if (recruitBoard.isAuthor(centerId)) {
             return;
         }
         throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD);
