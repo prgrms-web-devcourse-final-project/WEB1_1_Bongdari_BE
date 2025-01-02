@@ -80,13 +80,13 @@ class RecruitBoardTest {
 
     @DisplayName("올바른 기관 식별 값이 주어지면 작성자인지 확인할 수 있다")
     @Test
-    void isWriterWithCorrectCenterId() {
+    void isAuthorWithCorrectCenterId() {
         // given
         UUID centerId = UUID.randomUUID();
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
 
         // when
-        boolean isWriter = recruitBoard.isWriter(centerId);
+        boolean isWriter = recruitBoard.isAuthor(centerId);
 
         // then
         assertThat(isWriter).isTrue();
@@ -94,13 +94,13 @@ class RecruitBoardTest {
 
     @DisplayName("잘못된 기관 식별 값이 주어지면 잘못된 작성자인 확인할 수있다.")
     @Test
-    void isNotWriterWithWrongCenterId() {
+    void isNotAuthorWithWrongCenterId() {
         UUID centerId = UUID.randomUUID();
         UUID wrongId = UUID.randomUUID();
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
 
         // when
-        boolean isWriter = recruitBoard.isWriter(wrongId);
+        boolean isWriter = recruitBoard.isAuthor(wrongId);
 
         // then
         assertThat(isWriter).isFalse();
