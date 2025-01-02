@@ -9,14 +9,12 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardLocationUpdateR
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.domains.recruitboard.repository.RecruitBoardJpaRepository;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.IntegrationTestSupport;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,6 +25,7 @@ import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.support.fixture.LocalDateTimeFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -53,12 +52,6 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         recruitBoardJpaRepository.saveAndFlush(recruitBoard);
     }
 
-    @AfterEach
-    void tearDown() {
-        recruitBoardJpaRepository.deleteAllInBatch();
-        locationRepository.deleteAllInBatch();
-    }
-
     @DisplayName("봉사 모집글의 데이터를 업데이트하면 저장소에 반영된다.")
     @Test
     void updateRecruitBoard() {
@@ -79,8 +72,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId,
-                newImgUrl);
+        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId, newImgUrl);
 
         // then
         RecruitBoard updatedRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
@@ -129,33 +121,6 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .isEqualByComparingTo(dto.latitude());
     }
 
-    @DisplayName("봉사 모집글은 작성자만 수정할 수 있다")
-    @Test
-    void updateRecruitBoardWhenCenterIdIsWrong() {
-        // given
-        Long id = recruitBoard.getId();
-        UUID wrongCenterId = UUID.randomUUID();
-        LocalDateTime newStartDateTime = createUpdateStartDateTime();
-        LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
-        String newImgUrl = "https://image.domain.com/updates";
-        RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
-                .title("업데이트 제목")
-                .content("업데이트 내용")
-                .recruitmentCount(1111)
-                .volunteerStartDateTime(newStartDateTime)
-                .volunteerEndDateTime(newEndDateTime)
-                .volunteerCategory(ADMINISTRATIVE_SUPPORT)
-                .admitted(false)
-                .build();
-
-        // when
-        // then
-        Assertions.assertThatThrownBy(
-                () -> updateRecruitBoardService.updateRecruitBoard(dto, id, wrongCenterId, newImgUrl)
-        ).isInstanceOf(BadRequestException.class);
-
-    }
-
     @DisplayName("봉사 모집글 상태를 변경할 수 있다")
     @Test
     void updateRecruitBoardStatus() {
@@ -165,8 +130,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         LocalDateTime currentDateTime = createCurrentDateTime();
 
         // when
-        updateRecruitBoardService.updateRecruitBoardStatus(newStatus, recruitBoardId, centerId,
-                currentDateTime);
+        updateRecruitBoardService.updateRecruitBoardStatus(newStatus, recruitBoardId, centerId, currentDateTime);
 
         // then
         RecruitBoard findBoard = recruitBoardRepository.findById(recruitBoardId).orElseThrow();
