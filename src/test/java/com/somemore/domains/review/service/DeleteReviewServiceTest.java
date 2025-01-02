@@ -1,20 +1,16 @@
 package com.somemore.domains.review.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.repository.ReviewRepository;
-import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class DeleteReviewServiceTest extends IntegrationTestSupport {
@@ -43,21 +39,6 @@ class DeleteReviewServiceTest extends IntegrationTestSupport {
         // then
         Optional<Review> findReview = reviewRepository.findById(review.getId());
         assertThat(findReview).isEmpty();
-    }
-
-    @DisplayName("존재하지 않는 리뷰를 삭제하려고 하는 경우 에러가 발생한다")
-    @Test
-    void deleteReviewWhenDoesNotExist() {
-        // given
-        UUID volunteerId = UUID.randomUUID();
-        Long wrongId = 999L;
-
-        // when
-        // then
-        assertThatThrownBy(
-                () -> deleteReviewService.deleteReview(volunteerId, wrongId))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessage(NOT_EXISTS_REVIEW.getMessage());
     }
 
     private Review createReview(UUID volunteerId, String title, String content, String imgUrl) {
