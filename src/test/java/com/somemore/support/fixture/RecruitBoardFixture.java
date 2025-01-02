@@ -1,30 +1,32 @@
 package com.somemore.support.fixture;
 
-import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
+
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+
 public class RecruitBoardFixture {
 
-    public static final String REGION = "경기";
-    public static final int RECRUITMENT_COUNT = 1;
-    public static final LocalDateTime START_DATE_TIME = createStartDateTime();
-    public static final LocalDateTime END_DATE_TIME = START_DATE_TIME.plusHours(1);
-    public static final boolean ADMITTED = true;
-    public static final long LOCATION_ID = 1L;
-    public static final String TITLE = "봉사모집제목";
-    public static final String CONTENT = "봉사모집내용";
-    public static final String IMG_URL = "https://image.domain.com/links";
-    public static final VolunteerCategory VOLUNTEER_CATEGORY = OTHER;
+    private static final String REGION = "경기";
+    private static final int RECRUITMENT_COUNT = 1;
+    private static final LocalDateTime START_DATE_TIME = createStartDateTime();
+    private static final LocalDateTime END_DATE_TIME = START_DATE_TIME.plusHours(1);
+    private static final Integer VOLUNTEER_HOURS = 1;
+    private static final boolean ADMITTED = true;
+    private static final long LOCATION_ID = 1L;
+    private static final String TITLE = "봉사모집제목";
+    private static final String CONTENT = "봉사모집내용";
+    private static final String IMG_URL = "https://image.domain.com/links";
+    private static final VolunteerCategory VOLUNTEER_CATEGORY = OTHER;
 
     private RecruitBoardFixture() {
     }
@@ -36,6 +38,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -57,6 +60,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -78,6 +82,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -99,6 +104,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -120,6 +126,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(category)
                 .admitted(ADMITTED)
                 .build();
@@ -141,6 +148,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(admitted)
                 .build();
@@ -162,6 +170,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -183,6 +192,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -204,6 +214,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -219,13 +230,14 @@ public class RecruitBoardFixture {
     }
 
     public static RecruitBoard createRecruitBoard(String region,
-            VolunteerCategory volunteerCategory) {
+                                                  VolunteerCategory volunteerCategory) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(region)
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(volunteerCategory)
                 .admitted(ADMITTED)
                 .build();
@@ -247,6 +259,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -268,6 +281,7 @@ public class RecruitBoardFixture {
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(start)
                 .volunteerEndDateTime(end)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(VOLUNTEER_CATEGORY)
                 .admitted(ADMITTED)
                 .build();
@@ -283,12 +297,13 @@ public class RecruitBoardFixture {
     }
 
     public static RecruitBoard createCompletedRecruitBoard(UUID centerId,
-            VolunteerCategory category) {
+                                                           VolunteerCategory category) {
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(REGION)
                 .recruitmentCount(RECRUITMENT_COUNT)
                 .volunteerStartDateTime(START_DATE_TIME)
                 .volunteerEndDateTime(END_DATE_TIME)
+                .volunteerHours(VOLUNTEER_HOURS)
                 .volunteerCategory(category)
                 .admitted(ADMITTED)
                 .build();

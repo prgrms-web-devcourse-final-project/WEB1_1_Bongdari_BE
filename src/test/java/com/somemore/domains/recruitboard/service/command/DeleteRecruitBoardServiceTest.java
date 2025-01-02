@@ -71,7 +71,7 @@ class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-            () -> deleteRecruitBoardService.deleteRecruitBoard(wrongCenterId, recruitBoardId)
+                () -> deleteRecruitBoardService.deleteRecruitBoard(wrongCenterId, recruitBoardId)
         ).isInstanceOf(BadRequestException.class);
     }
 
@@ -81,21 +81,22 @@ class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
         LocalDateTime endDateTime = startDateTime.plusHours(1);
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
-            .region("경기")
-            .recruitmentCount(1)
-            .volunteerStartDateTime(startDateTime)
-            .volunteerEndDateTime(endDateTime)
-            .volunteerCategory(OTHER)
-            .admitted(true)
-            .build();
+                .region("경기")
+                .recruitmentCount(1)
+                .volunteerStartDateTime(startDateTime)
+                .volunteerEndDateTime(endDateTime)
+                .volunteerHours(1)
+                .volunteerCategory(OTHER)
+                .admitted(true)
+                .build();
 
         return RecruitBoard.builder()
-            .centerId(UUID.randomUUID())
-            .locationId(1L)
-            .title("봉사모집제목")
-            .content("봉사모집내용")
-            .imgUrl("https://image.domain.com/links")
-            .recruitmentInfo(recruitmentInfo)
-            .build();
+                .centerId(UUID.randomUUID())
+                .locationId(1L)
+                .title("봉사모집제목")
+                .content("봉사모집내용")
+                .imgUrl("https://image.domain.com/links")
+                .recruitmentInfo(recruitmentInfo)
+                .build();
     }
 }

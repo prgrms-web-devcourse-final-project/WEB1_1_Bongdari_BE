@@ -1,20 +1,5 @@
 package com.somemore.domains.recruitboard.controller;
 
-import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.somemore.domains.location.dto.request.LocationCreateRequestDto;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDto;
@@ -27,9 +12,6 @@ import com.somemore.domains.recruitboard.usecase.command.UpdateRecruitBoardUseCa
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -38,6 +20,22 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
@@ -74,6 +72,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)
+                .volunteerHours(2)
                 .volunteerCategory(OTHER)
                 .admitted(true)
                 .location(location)
@@ -128,6 +127,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)
+                .volunteerHours(2)
                 .volunteerCategory(OTHER)
                 .admitted(true)
                 .build();
