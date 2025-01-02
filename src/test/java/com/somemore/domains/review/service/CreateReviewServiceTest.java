@@ -39,17 +39,17 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
     void createReview() {
         // given
         UUID volunteerId = UUID.randomUUID();
-        Long recruitId = 200L;
+        Long recruitBoardId = 200L;
         VolunteerApply apply = VolunteerApply.builder()
                 .volunteerId(volunteerId)
-                .recruitBoardId(200L)
+                .recruitBoardId(recruitBoardId)
                 .status(APPROVED)
                 .attended(true)
                 .build();
         volunteerApplyRepository.save(apply);
 
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .recruitBoardId(recruitId)
+                .volunteerApplyId(apply.getId())
                 .title("리뷰 제목")
                 .content("리뷰 내용")
                 .build();
@@ -63,43 +63,15 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
         assertThat(findReview.get().getId()).isEqualTo(reviewId);
     }
 
-    @DisplayName("참석하지 않은 봉사 활동에 대해 리뷰를 생성하면 에러가 발생한다")
-    @Test
-    void createReviewWhenNotCompleted() {
-        // given
-        UUID volunteerId = UUID.randomUUID();
-        Long recruitId = 200L;
-        VolunteerApply apply = VolunteerApply.builder()
-                .volunteerId(volunteerId)
-                .recruitBoardId(200L)
-                .status(APPROVED)
-                .attended(false)
-                .build();
-        volunteerApplyRepository.save(apply);
-
-        ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .recruitBoardId(recruitId)
-                .title("리뷰 제목")
-                .content("리뷰 내용")
-                .build();
-
-        // when
-        // then
-        assertThatThrownBy(
-                () -> createReviewService.createReview(requestDto, volunteerId, "")
-        ).isInstanceOf(BadRequestException.class)
-                .hasMessage(REVIEW_RESTRICTED_TO_ATTENDED.getMessage());
-    }
-
     @DisplayName("이미 작성한 봉사 활동에 대해 리뷰를 생성하면 에러가 발생한다")
     @Test
     void createReviewWhenExistsReview() {
         // given
         UUID volunteerId = UUID.randomUUID();
-        Long recruitId = 200L;
+        Long recruitBoardId = 200L;
         VolunteerApply apply = VolunteerApply.builder()
                 .volunteerId(volunteerId)
-                .recruitBoardId(200L)
+                .recruitBoardId(recruitBoardId)
                 .status(APPROVED)
                 .attended(false)
                 .build();
@@ -112,11 +84,10 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
                 .content("리뷰 내용")
                 .imgUrl("")
                 .build();
-
         reviewRepository.save(review);
 
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
-                .recruitBoardId(recruitId)
+                .volunteerApplyId(apply.getId())
                 .title("리뷰 제목")
                 .content("리뷰 내용")
                 .build();
@@ -124,9 +95,37 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> createReviewService.createReview(requestDto, volunteerId, "")
-        ).isInstanceOf(DuplicateException.class)
+                () -> createReviewService.createReview(requestDto, volunteerId, ""))
+                .isInstanceOf(DuplicateException.class)
                 .hasMessage(REVIEW_ALREADY_EXISTS.getMessage());
     }
 
+
+    @DisplayName("참석하지 않은 봉사 활동에 대해 리뷰를 생성하면 에러가 발생한다")
+    @Test
+    void createReviewWhenNotCompleted() {
+        // given
+        UUID volunteerId = UUID.randomUUID();
+        Long recruitBoardId = 200L;
+        VolunteerApply apply = VolunteerApply.builder()
+                .volunteerId(volunteerId)
+                .recruitBoardId(recruitBoardId)
+                .status(APPROVED)
+                .attended(false)
+                .build();
+        volunteerApplyRepository.save(apply);
+
+        ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
+                .volunteerApplyId(apply.getId())
+                .title("리뷰 제목")
+                .content("리뷰 내용")
+                .build();
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> createReviewService.createReview(requestDto, volunteerId, ""))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(REVIEW_RESTRICTED_TO_ATTENDED.getMessage());
+    }
 }

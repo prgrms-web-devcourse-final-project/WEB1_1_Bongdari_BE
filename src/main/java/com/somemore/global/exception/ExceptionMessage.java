@@ -53,6 +53,7 @@ public enum ExceptionMessage {
     REVIEW_ALREADY_EXISTS("이미 작성한 리뷰가 존재합니다."),
     REVIEW_RESTRICTED_TO_ATTENDED("리뷰는 참석한 봉사에 한해서만 작성할 수 있습니다."),
     NOT_EXISTS_REVIEW("존재하지 않는 리뷰입니다."),
+    UNAUTHORIZED_REVIEW("해당 리뷰에 권한이 없습니다."),
 
     // NOTIFICATION
     NOT_EXISTS_NOTIFICATION("존재하지 않는 알림입니다."),

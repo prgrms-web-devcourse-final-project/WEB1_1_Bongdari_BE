@@ -1,26 +1,26 @@
 package com.somemore.domains.review.service;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
-
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
-import com.somemore.domains.review.dto.response.ReviewResponseDto;
-import com.somemore.domains.review.dto.response.ReviewWithNicknameResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.review.usecase.ReviewQueryUseCase;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
-import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.NoSuchElementException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -32,34 +32,37 @@ public class ReviewQueryService implements ReviewQueryUseCase {
     private final CenterQueryUseCase centerQueryUseCase;
 
     @Override
+    public boolean existsByVolunteerApplyId(Long volunteerApplyId) {
+        return reviewRepository.existsByVolunteerApplyId(volunteerApplyId);
+    }
+
+    @Override
     public Review getById(Long id) {
         return reviewRepository.findById(id).orElseThrow(
-                () -> new BadRequestException(NOT_EXISTS_REVIEW)
-        );
+                () -> new NoSuchElementException(NOT_EXISTS_REVIEW));
     }
 
     @Override
-    public ReviewResponseDto getReviewById(Long id) {
+    public ReviewDetailResponseDto getDetailById(Long id) {
         Review review = getById(id);
-        return ReviewResponseDto.from(review);
+        return ReviewDetailResponseDto.from(review);
     }
 
     @Override
-    public Page<ReviewWithNicknameResponseDto> getReviewsByVolunteerId(
+    public Page<ReviewDetailWithNicknameResponseDto> getDetailsWithNicknameByVolunteerId(
             UUID volunteerId,
             ReviewSearchCondition condition
     ) {
         String nickname = volunteerQueryUseCase.getNicknameById(volunteerId);
-        Page<Review> reviews = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId,
-                condition);
+        Page<Review> reviews = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId, condition);
 
         return reviews.map(
-                review -> ReviewWithNicknameResponseDto.from(review, nickname)
+                review -> ReviewDetailWithNicknameResponseDto.from(review, nickname)
         );
     }
 
     @Override
-    public Page<ReviewWithNicknameResponseDto> getReviewsByCenterId(
+    public Page<ReviewDetailWithNicknameResponseDto> getDetailsWithNicknameByCenterId(
             UUID centerId,
             ReviewSearchCondition condition
     ) {
@@ -73,7 +76,7 @@ public class ReviewQueryService implements ReviewQueryUseCase {
                 review -> {
                     String nickname = volunteerNicknames.getOrDefault(review.getVolunteerId(),
                             "삭제된 아이디");
-                    return ReviewWithNicknameResponseDto.from(review, nickname);
+                    return ReviewDetailWithNicknameResponseDto.from(review, nickname);
                 });
     }
 

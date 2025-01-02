@@ -7,15 +7,16 @@ import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
-import com.somemore.domains.review.dto.response.ReviewResponseDto;
-import com.somemore.domains.review.dto.response.ReviewWithNicknameResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
+import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
-import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,15 +58,63 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private CenterRepository centerRepository;
 
+    private Long volunteerApplyId;
+    private Review review;
+
+    @BeforeEach
+    void setUp() {
+        volunteerApplyId = 100L;
+        review = createReview(volunteerApplyId, UUID.randomUUID());
+        reviewRepository.save(review);
+    }
+
+    @DisplayName("봉사 지원 아이디로 리뷰 존재 유무를 조회할 수 있다.")
+    @Test
+    void existsByVolunteerApplyId() {
+        // given
+        // when
+        boolean result = reviewQueryService.existsByVolunteerApplyId(volunteerApplyId);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
     @DisplayName("아이디로 리뷰를 조회할 수 있다.")
     @Test
-    void getReviewById() {
+    void getById() {
         // given
-        Review review = createReview(1L, UUID.randomUUID());
-        reviewRepository.save(review);
+        Long id = review.getId();
 
         // when
-        ReviewResponseDto findOne = reviewQueryService.getReviewById(review.getId());
+        Review findOne = reviewQueryService.getById(id);
+
+        // then
+        assertThat(findOne.getId()).isEqualTo(id);
+    }
+
+    @DisplayName("존재하지 않는 아이디로 리뷰를 조회하면 에러가 발생한다.")
+    @Test
+    void getByIdWhenDoesNotExist() {
+        // given
+        Long wrongId = 10000000L;
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> reviewQueryService.getById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_REVIEW.getMessage());
+    }
+
+
+    @DisplayName("아이디로 리뷰를 상세 조회할 수 있다.")
+    @Test
+    void getDetailById() {
+        // given
+        Long id = review.getId();
+
+        // when
+        ReviewDetailResponseDto findOne = reviewQueryService.getDetailById(id);
 
         // then
         assertThat(findOne).extracting("id").isEqualTo(review.getId());
@@ -75,19 +124,6 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         assertThat(findOne).extracting("imgUrl").isEqualTo(review.getImgUrl());
     }
 
-    @DisplayName("존재하지 않는 아이디로 리뷰를 조회하면 에러가 발생한다.")
-    @Test
-    void getReviewByIdWhenWrongId() {
-        // given
-        Long wrongId = 10000000L;
-
-        // when
-        // then
-        assertThatThrownBy(
-                () -> reviewQueryService.getReviewById(wrongId)
-        ).isInstanceOf(BadRequestException.class)
-                .hasMessage(NOT_EXISTS_REVIEW.getMessage());
-    }
 
     @DisplayName("봉사자 ID로 리뷰 리스트를 조회할 수 있다.")
     @Test
@@ -122,7 +158,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<ReviewWithNicknameResponseDto> result = reviewQueryService.getReviewsByVolunteerId(
+        Page<ReviewDetailWithNicknameResponseDto> result = reviewQueryService.getDetailsWithNicknameByVolunteerId(
                 volunteerId,
                 conditionWithoutCategory);
 
@@ -172,7 +208,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<ReviewWithNicknameResponseDto> result = reviewQueryService.getReviewsByCenterId(
+        Page<ReviewDetailWithNicknameResponseDto> result = reviewQueryService.getDetailsWithNicknameByCenterId(
                 center.getId(),
                 condition);
 
@@ -199,7 +235,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     }
 
     private Review createReview(Long applyId, UUID volunteerId, String title, String content,
-            String imgUrl) {
+                                String imgUrl) {
         return Review.builder()
                 .volunteerApplyId(applyId)
                 .volunteerId(volunteerId)

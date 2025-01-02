@@ -4,6 +4,7 @@ import static com.somemore.global.exception.ExceptionMessage.REVIEW_ALREADY_EXIS
 import static com.somemore.global.exception.ExceptionMessage.REVIEW_RESTRICTED_TO_ATTENDED;
 
 import com.somemore.domains.review.repository.ReviewRepository;
+import com.somemore.domains.review.usecase.ReviewQueryUseCase;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
@@ -23,24 +24,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateReviewService implements CreateReviewUseCase {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewQueryUseCase reviewQueryUseCase;
     private final VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
 
     @Override
     public Long createReview(ReviewCreateRequestDto requestDto, UUID volunteerId, String imgUrl) {
-        VolunteerApply apply = getVolunteerApply(requestDto.recruitBoardId(), volunteerId);
-        validateDuplicateReview(apply);
+        validateDuplicateReview(requestDto.volunteerApplyId());
+
+        VolunteerApply apply = volunteerApplyQueryUseCase.getById(requestDto.volunteerApplyId());
         validateActivityCompletion(apply);
 
-        Review review = requestDto.toEntity(apply, volunteerId, imgUrl);
-        return reviewRepository.save(review).getId();
+        Review review = requestDto.toEntity(volunteerId, imgUrl);
+        reviewRepository.save(review);
+
+        return review.getId();
     }
 
-    private VolunteerApply getVolunteerApply(Long recruitBoardId, UUID volunteerId) {
-        return volunteerApplyQueryUseCase.getByRecruitIdAndVolunteerId(recruitBoardId, volunteerId);
-    }
-
-    private void validateDuplicateReview(VolunteerApply apply) {
-        if (reviewRepository.existsByVolunteerApplyId(apply.getId())) {
+    private void validateDuplicateReview(Long volunteerApplyId) {
+        if (reviewQueryUseCase.existsByVolunteerApplyId(volunteerApplyId)) {
             throw new DuplicateException(REVIEW_ALREADY_EXISTS);
         }
     }

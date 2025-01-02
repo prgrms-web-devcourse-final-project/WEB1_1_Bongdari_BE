@@ -3,6 +3,7 @@ package com.somemore.domains.review.domain;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.somemore.domains.review.dto.request.ReviewUpdateRequestDto;
 import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,6 +49,19 @@ public class Review extends BaseEntity {
         this.volunteerId = volunteerId;
         this.title = title;
         this.content = content;
+        this.imgUrl = imgUrl;
+    }
+
+    public boolean isAuthor(UUID volunteerId) {
+        return this.volunteerId.equals(volunteerId);
+    }
+
+    public void updateWith(ReviewUpdateRequestDto dto) {
+        this.title = dto.title();
+        this.content = dto.content();
+    }
+
+    public void updateWith(String imgUrl) {
         this.imgUrl = imgUrl;
     }
 }
