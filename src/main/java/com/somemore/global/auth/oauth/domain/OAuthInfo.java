@@ -1,6 +1,7 @@
 package com.somemore.global.auth.oauth.domain;
 
 import com.somemore.global.common.entity.BaseEntity;
+import com.somemore.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,8 +38,16 @@ public class OAuthInfo extends BaseEntity {
     @Column(name = "oauth_provider", nullable = false)
     private OAuthProvider oAuthProvider;
 
+    public static OAuthInfo create(User user, CommonOAuthInfo commonOAuthInfo) {
+        return OAuthInfo.builder()
+                .userId(user.getId())
+                .oauthId(commonOAuthInfo.oauthId())
+                .oAuthProvider(commonOAuthInfo.provider())
+                .build();
+    }
+
     @Builder
-    public OAuthInfo(UUID userId, String oauthId, OAuthProvider oAuthProvider) {
+    private OAuthInfo(UUID userId, String oauthId, OAuthProvider oAuthProvider) {
         this.userId = userId;
         this.oauthId = oauthId;
         this.oAuthProvider = oAuthProvider;

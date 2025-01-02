@@ -19,15 +19,9 @@ public class OAuthInfoRegistrarImpl implements OAuthInfoRegistrar {
 
     @Override
     public OAuthInfo register(User user, CommonOAuthInfo commonOAuthInfo) {
-        return oauthInfoRepository.save(
-                createOAuthInfo(user, commonOAuthInfo));
+        OAuthInfo oAuthInfo = OAuthInfo.create(user, commonOAuthInfo);
+        return oauthInfoRepository.save(oAuthInfo);
     }
 
-    private OAuthInfo createOAuthInfo(User user, CommonOAuthInfo commonOAuthInfo) {
-        return OAuthInfo.builder()
-                .userId(user.getId())
-                .oauthId(commonOAuthInfo.oauthId())
-                .oAuthProvider(commonOAuthInfo.provider())
-                .build();
-    }
+
 }
