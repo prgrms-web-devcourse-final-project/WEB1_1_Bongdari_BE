@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.service.command;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitmentInfo;

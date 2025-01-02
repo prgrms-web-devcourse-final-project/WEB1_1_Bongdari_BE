@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.service.command;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.location.dto.request.LocationCreateRequestDto;
 import com.somemore.domains.location.repository.LocationRepository;

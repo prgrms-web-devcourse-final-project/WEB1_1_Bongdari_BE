@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.service.query;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.repository.center.CenterRepository;

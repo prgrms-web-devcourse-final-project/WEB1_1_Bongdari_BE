@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.usecase.query;
+package com.somemore.domains.recruitboard.usecase;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
@@ -7,9 +7,10 @@ import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponse
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
 
 public interface RecruitBoardQueryUseCase {
 
@@ -25,7 +26,7 @@ public interface RecruitBoardQueryUseCase {
             RecruitBoardNearByCondition condition);
 
     Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
-            RecruitBoardSearchCondition condition);
+                                                             RecruitBoardSearchCondition condition);
 
     List<Long> getNotCompletedIdsByCenterIds(UUID centerId);
 

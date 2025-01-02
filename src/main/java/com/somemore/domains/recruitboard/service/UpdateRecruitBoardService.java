@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.service.command;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.location.usecase.command.UpdateLocationUseCase;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
@@ -6,8 +6,8 @@ import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.domains.recruitboard.service.validator.RecruitBoardValidator;
-import com.somemore.domains.recruitboard.usecase.command.UpdateRecruitBoardUseCase;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.service.command;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.location.usecase.command.CreateLocationUseCase;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
@@ -6,7 +6,7 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDt
 import com.somemore.domains.recruitboard.event.CreateRecruitBoardEvent;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.recruitboard.service.validator.RecruitBoardValidator;
-import com.somemore.domains.recruitboard.usecase.command.CreateRecruitBoardUseCase;
+import com.somemore.domains.recruitboard.usecase.CreateRecruitBoardUseCase;
 import com.somemore.global.common.event.DomainEventSubType;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.common.event.ServerEventType;
