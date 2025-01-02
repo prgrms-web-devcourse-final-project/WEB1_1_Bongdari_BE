@@ -19,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class OAuthUserProcessorImpl implements OAuthUserProcessor {
 
     private final OAuthResponseConverter oauthResponseConverter;
