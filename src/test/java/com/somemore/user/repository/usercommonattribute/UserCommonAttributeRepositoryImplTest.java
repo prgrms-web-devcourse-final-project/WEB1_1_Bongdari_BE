@@ -30,6 +30,8 @@ class UserCommonAttributeRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(savedUserCommonAttribute).isNotNull();
+        assertThat(savedUserCommonAttribute).isEqualTo(userCommonAttribute);
+
         assertThat(savedUserCommonAttribute.getId()).isNotNull();
         assertThat(savedUserCommonAttribute.getUserId()).isEqualTo(userId);
         assertThat(savedUserCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
