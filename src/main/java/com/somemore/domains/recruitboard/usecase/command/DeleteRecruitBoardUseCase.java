@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface DeleteRecruitBoardUseCase {
 
-    void deleteRecruitBoard(UUID centerId, Long recruitBoardId);
+    void deleteRecruitBoard(UUID centerId, Long id);
 }

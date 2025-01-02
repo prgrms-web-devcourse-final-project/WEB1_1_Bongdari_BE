@@ -26,6 +26,6 @@ public class RecruitBoardValidator {
             return;
         }
 
-        throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
+        throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD);
     }
 }
