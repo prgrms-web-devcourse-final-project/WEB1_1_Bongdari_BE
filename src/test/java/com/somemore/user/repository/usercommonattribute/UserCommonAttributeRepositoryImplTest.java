@@ -29,13 +29,14 @@ class UserCommonAttributeRepositoryImplTest extends IntegrationTestSupport {
         UserCommonAttribute savedUserCommonAttribute = userCommonAttributeRepository.save(userCommonAttribute);
 
         // then
-        assertThat(savedUserCommonAttribute).isNotNull();
-        assertThat(savedUserCommonAttribute).isEqualTo(userCommonAttribute);
+        assertThat(savedUserCommonAttribute)
+                .isNotNull()
+                .isEqualTo(userCommonAttribute);
 
         assertThat(savedUserCommonAttribute.getId()).isNotNull();
         assertThat(savedUserCommonAttribute.getUserId()).isEqualTo(userId);
         assertThat(savedUserCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
-        assertThat(savedUserCommonAttribute.isCustomized()).isEqualTo(false);
+        assertThat(savedUserCommonAttribute.isCustomized()).isFalse();
 
     }
 }

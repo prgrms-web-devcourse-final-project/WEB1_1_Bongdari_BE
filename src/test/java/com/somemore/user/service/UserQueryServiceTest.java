@@ -72,6 +72,6 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         boolean isCustomized = userQueryService.getIsCustomizedByUserId(user.getId());
 
         // then
-        assertThat(isCustomized).isEqualTo(false);
+        assertThat(isCustomized).isFalse();
     }
 }

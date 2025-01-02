@@ -37,10 +37,6 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
     @Autowired
     private UserCommonAttributeRepository userCommonAttributeRepository;
 
-    @BeforeEach
-    void setup() {
-    }
-
     @DisplayName("OAuth 사용자를 기본 ROLE인 봉사자로 등록할 수 있다.")
     @Test
     void registerOAuthUser() {
@@ -58,8 +54,8 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getRole()).isEqualTo(UserRole.getOAuthUserDefaultRole());
-        assertThat(savedUser.getEmail().length()).isEqualTo(UUID.randomUUID().toString().length() + provider.getProviderName().length());
-
+        assertThat(savedUser.getEmail())
+                .hasSize(UUID.randomUUID().toString().length() + provider.getProviderName().length());
         assertThat(savedSetting).isNotNull();
         assertThat(savedSetting.getUserId()).isEqualTo(savedUser.getId());
         boolean userDefaultSetting = false;
@@ -68,7 +64,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedCommonAttribute).isNotNull();
         assertThat(savedCommonAttribute.getUserId()).isEqualTo(savedUser.getId());
-        assertThat(savedCommonAttribute.getNickname().length()).isEqualTo(8);
+        assertThat(savedCommonAttribute.getNickname()).hasSize(8);
         assertThat(savedCommonAttribute.getIntroduce()).isEqualTo("");
         assertThat(savedCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
         assertThat(savedCommonAttribute.isCustomized()).isEqualTo(userDefaultSetting);
@@ -102,7 +98,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedCommonAttribute).isNotNull();
         assertThat(savedCommonAttribute.getUserId()).isEqualTo(savedUser.getId());
-        assertThat(savedCommonAttribute.getNickname().length()).isEqualTo(8);
+        assertThat(savedCommonAttribute.getNickname()).hasSize(8);
         assertThat(savedCommonAttribute.getIntroduce()).isEqualTo("");
         assertThat(savedCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
         assertThat(savedCommonAttribute.isCustomized()).isEqualTo(userDefaultSetting);

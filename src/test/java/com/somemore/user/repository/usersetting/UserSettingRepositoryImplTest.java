@@ -30,8 +30,9 @@ class UserSettingRepositoryImplTest extends IntegrationTestSupport {
         Optional<UserSetting> foundUserSetting = userSettingRepository.findByUserId(userId);
 
         // then
-        assertThat(foundUserSetting).isNotNull();
-        assertThat(foundUserSetting).get().isEqualTo(savedUserSetting);
+        assertThat(foundUserSetting)
+                .isPresent()
+                .hasValue(savedUserSetting);
     }
 
     @DisplayName("유저 세팅을 저장할 수 있다.")
@@ -47,7 +48,7 @@ class UserSettingRepositoryImplTest extends IntegrationTestSupport {
         // then
         assertThat(savedUserSetting).isNotNull();
         assertThat(savedUserSetting.getId()).isNotNull();
-        assertThat(savedUserSetting.isAuthenticated()).isEqualTo(false);
-        assertThat(savedUserSetting.isSmsAgreed()).isEqualTo(false);
+        assertThat(savedUserSetting.isAuthenticated()).isFalse();
+        assertThat(savedUserSetting.isSmsAgreed()).isFalse();
     }
 }
