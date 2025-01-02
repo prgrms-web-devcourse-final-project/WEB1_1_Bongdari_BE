@@ -1,25 +1,18 @@
 package com.somemore.domains.recruitboard.domain;
 
-import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
-
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDto;
 import com.somemore.global.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -56,17 +49,13 @@ public class RecruitBoard extends BaseEntity {
 
     @Builder
     public RecruitBoard(UUID centerId, Long locationId, String title, String content,
-            RecruitmentInfo recruitmentInfo, String imgUrl) {
+                        RecruitmentInfo recruitmentInfo, String imgUrl) {
         this.centerId = centerId;
         this.locationId = locationId;
         this.title = title;
         this.content = content;
         this.recruitmentInfo = recruitmentInfo;
         this.imgUrl = imgUrl;
-    }
-
-    public LocalTime getVolunteerHours() {
-        return recruitmentInfo.calculateVolunteerTime();
     }
 
     public boolean isWriter(UUID centerId) {
@@ -102,6 +91,7 @@ public class RecruitBoard extends BaseEntity {
                 dto.volunteerCategory(),
                 dto.volunteerStartDateTime(),
                 dto.volunteerEndDateTime(),
+                dto.volunteerHours(),
                 dto.admitted()
         );
     }
