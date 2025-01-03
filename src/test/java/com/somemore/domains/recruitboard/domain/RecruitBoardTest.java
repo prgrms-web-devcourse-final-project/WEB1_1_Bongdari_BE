@@ -7,12 +7,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.*;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.*;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,23 +32,6 @@ class RecruitBoardTest {
         // then
         assertThat(board.getCenterId()).isEqualTo(centerId);
         assertThat(recruitStatus).isEqualTo(RECRUITING);
-    }
-
-    @DisplayName("봉사 시간을 계산할 수 있다")
-    @Test
-    void testCalculateVolunteerTime() {
-        // given
-        int hours = 3;
-        LocalDateTime startDateTime = createStartDateTime();
-        LocalDateTime endDateTime = startDateTime.plusHours(hours);
-
-        RecruitBoard board = createRecruitBoard(startDateTime, endDateTime);
-
-        // when
-        LocalTime volunteerTime = board.getVolunteerHours();
-
-        // then
-        assertThat(volunteerTime).isEqualTo(LocalTime.of(hours, 0));
     }
 
     @DisplayName("봉사 모집글을 업데이트 할 수 있다")
@@ -97,13 +80,13 @@ class RecruitBoardTest {
 
     @DisplayName("올바른 기관 식별 값이 주어지면 작성자인지 확인할 수 있다")
     @Test
-    void isWriterWithCorrectCenterId() {
+    void isAuthorWithCorrectCenterId() {
         // given
         UUID centerId = UUID.randomUUID();
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
 
         // when
-        boolean isWriter = recruitBoard.isWriter(centerId);
+        boolean isWriter = recruitBoard.isAuthor(centerId);
 
         // then
         assertThat(isWriter).isTrue();
@@ -111,13 +94,13 @@ class RecruitBoardTest {
 
     @DisplayName("잘못된 기관 식별 값이 주어지면 잘못된 작성자인 확인할 수있다.")
     @Test
-    void isNotWriterWithWrongCenterId() {
+    void isNotAuthorWithWrongCenterId() {
         UUID centerId = UUID.randomUUID();
         UUID wrongId = UUID.randomUUID();
         RecruitBoard recruitBoard = createRecruitBoard(centerId);
 
         // when
-        boolean isWriter = recruitBoard.isWriter(wrongId);
+        boolean isWriter = recruitBoard.isAuthor(wrongId);
 
         // then
         assertThat(isWriter).isFalse();

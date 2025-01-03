@@ -2,17 +2,17 @@ package com.somemore.domains.recruitboard.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.domains.location.dto.response.LocationResponseDto;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
+import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.UUID;
 import lombok.Builder;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)
@@ -42,8 +42,8 @@ public record RecruitBoardWithLocationResponseDto(
         LocalDateTime volunteerEndDateTime,
         @Schema(description = "봉사 유형", example = "LIVING_SUPPORT")
         VolunteerCategory volunteerCategory,
-        @Schema(description = "봉사 시간", example = "04:00:00")
-        LocalTime volunteerTime,
+        @Schema(description = "봉사 시간", example = "4")
+        Integer volunteerHours,
         @Schema(description = "시간 인정 여부", example = "true")
         Boolean admitted,
         @Schema(description = "이미지 URL", example = "https://image.domain.com/links")
@@ -70,7 +70,7 @@ public record RecruitBoardWithLocationResponseDto(
                 .volunteerStartDateTime(info.getVolunteerStartDateTime())
                 .volunteerEndDateTime(info.getVolunteerEndDateTime())
                 .volunteerCategory(info.getVolunteerCategory())
-                .volunteerTime(info.calculateVolunteerTime())
+                .volunteerHours(info.getVolunteerHours())
                 .admitted(info.getAdmitted())
                 .imgUrl(board.getImgUrl())
                 .location(

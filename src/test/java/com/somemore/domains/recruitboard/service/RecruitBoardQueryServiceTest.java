@@ -1,4 +1,4 @@
-package com.somemore.domains.recruitboard.service.query;
+package com.somemore.domains.recruitboard.service;
 
 import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.repository.center.CenterRepository;
@@ -252,18 +252,16 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         recruitBoardRepository.save(completedRecruitBoard);
 
         // when
-        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(
-                centerId);
+        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(centerId);
 
         // then
         assertThat(notCompletedBoardIds)
-                .hasSize(2);
-
-        assertThat(notCompletedBoardIds)
-                .doesNotContain(deletedRecruitingBoard.getId())
-                .doesNotContain(deletedClosedBoard.getId())
-                .doesNotContain(deletedCompletedRecruitBoard.getId())
-                .doesNotContain(completedRecruitBoard.getId());
+                .hasSize(2)
+                .doesNotContain(
+                        deletedRecruitingBoard.getId(),
+                        deletedClosedBoard.getId(),
+                        deletedCompletedRecruitBoard.getId(),
+                        completedRecruitBoard.getId());
     }
 
     @DisplayName("아이디리스트로 모집글 리스트를 조회할 수 있다.")

@@ -31,6 +31,7 @@ public enum ExceptionMessage {
     // RECRUIT BOARD
     NOT_EXISTS_RECRUIT_BOARD("존재하지 않는 봉사 모집글입니다."),
     UNAUTHORIZED_RECRUIT_BOARD("해당 봉사 모집글에 권한이 없습니다."),
+    INVALID_RECRUIT_BOARD_TIME("종료 시간은 시작 시간보다 이후여야 합니다."),
 
     // IMAGE
     UPLOAD_FAILED("파일 업로드에 실패했습니다."),

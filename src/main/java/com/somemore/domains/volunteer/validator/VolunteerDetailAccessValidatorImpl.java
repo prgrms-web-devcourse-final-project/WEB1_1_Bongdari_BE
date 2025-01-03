@@ -1,6 +1,6 @@
 package com.somemore.domains.volunteer.validator;
 
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;

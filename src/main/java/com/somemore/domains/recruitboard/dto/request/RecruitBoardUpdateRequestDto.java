@@ -7,8 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import lombok.Builder;
+
+import java.time.LocalDateTime;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
@@ -31,7 +32,11 @@ public record RecruitBoardUpdateRequestDto(
         LocalDateTime volunteerStartDateTime,
         @Schema(description = "봉사 종료 일시", example = "2024-12-20T12:00:00", type = "string")
         @NotNull(message = "봉사 종료 일시는 필수 값입니다.")
-        @Future(message = "봉사 종료 일시는 내일부터 가능합니다.")LocalDateTime volunteerEndDateTime,
+        @Future(message = "봉사 종료 일시는 내일부터 가능합니다.")
+        LocalDateTime volunteerEndDateTime,
+        @Schema(description = "봉사 시간", example = "2")
+        @NotNull(message = "봉사 시간는 필수 값입니다.")
+        Integer volunteerHours,
         @Schema(description = "봉사 활동 유형", example = "ENVIRONMENTAL_PROTECTION")
         @NotNull(message = "봉사 활동 유형은 필수 값입니다.")
         VolunteerCategory volunteerCategory,
