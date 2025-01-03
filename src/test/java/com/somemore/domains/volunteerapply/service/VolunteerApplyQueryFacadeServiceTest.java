@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 

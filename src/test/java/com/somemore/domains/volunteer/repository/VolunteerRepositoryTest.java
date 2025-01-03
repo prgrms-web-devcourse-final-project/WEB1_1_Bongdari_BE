@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional

@@ -3,7 +3,7 @@ package com.somemore.global.auth.idpw.provider;
 import com.somemore.global.auth.authentication.JwtAuthenticationToken;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
-import com.somemore.global.auth.jwt.domain.UserRole;
+import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
 import com.somemore.domains.center.usecase.query.CenterSignUseCase;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.somemore.global.auth.jwt.service;
 
-import com.somemore.global.auth.jwt.domain.UserRole;
+import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;

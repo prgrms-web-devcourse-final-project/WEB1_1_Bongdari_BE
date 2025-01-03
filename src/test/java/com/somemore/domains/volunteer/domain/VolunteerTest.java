@@ -3,7 +3,7 @@ package com.somemore.domains.volunteer.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.somemore.global.auth.oauth.OAuthProvider.NAVER;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class VolunteerTest {

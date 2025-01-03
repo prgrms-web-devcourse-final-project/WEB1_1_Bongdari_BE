@@ -3,7 +3,7 @@ package com.somemore.domains.volunteer.service;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.OAuthProvider;
+import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
