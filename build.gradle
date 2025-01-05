@@ -69,6 +69,7 @@ dependencies {
     // Monitoring
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.3.3'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
 
     //elastic-search
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
