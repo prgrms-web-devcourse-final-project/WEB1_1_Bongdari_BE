@@ -3,6 +3,7 @@ package com.somemore.global.aspect.log.extractor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.global.aspect.log.utils.SensitiveDataMasker;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -14,17 +15,13 @@ import java.lang.reflect.Parameter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Slf4j
 @Component
 public class ParameterExtractor {
 
     private final ObjectMapper objectMapper;
     private final SensitiveDataMasker sensitiveDataMasker;
-
-    public ParameterExtractor(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-        this.sensitiveDataMasker = new SensitiveDataMasker();
-    }
 
     public String extractParameters(ProceedingJoinPoint joinPoint) {
         try {

@@ -6,21 +6,19 @@ import com.somemore.global.exception.DuplicateException;
 import com.somemore.global.exception.ImageUploadException;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.NoSuchElementException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+@RequiredArgsConstructor
 @Slf4j
 @Component
 public class ResponseExtractor {
 
     private final ObjectMapper objectMapper;
-
-    public ResponseExtractor(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
 
     public LoggedResponse extractResponse(Object result) {
         try {
