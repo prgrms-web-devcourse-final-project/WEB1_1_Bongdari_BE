@@ -1,38 +1,81 @@
-<configuration>
-    <springProfile name="default">
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-        </appender>
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
 
-        <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="FILE" />
-            <queueSize>5000</queueSize>
-            <discardingThreshold>0</discardingThreshold>
-        </appender>
+    <property name="LOG_PATH" value="./logs" />
+    <property name="LOG_FILE_NAME" value="application" />
 
-        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${LOG_DIR:-logs}/application.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>${LOG_DIR:-logs}/application.%d{yyyy-MM-dd}.log</fileNamePattern>
-                <maxHistory>30</maxHistory>
-            </rollingPolicy>
-            <encoder>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-        </appender>
+    <!-- 공통 로그 패턴 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
 
-        <logger name="com.somemore" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="ASYNC_FILE" />
-        </logger>
+    <!-- 콘솔 출력 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-        <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="ASYNC_FILE" />
-        </root>
-    </springProfile>
+    <!-- 파일 출력 Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Loki Appender -->
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+            <connectionTimeoutMs>30000</connectionTimeoutMs>
+            <requestTimeoutMs>15000</requestTimeoutMs>
+            <maxRetries>3</maxRetries>
+            <backoffMs>1000</backoffMs>
+        </http>
+
+        <batchSize>100</batchSize>
+        <batchTimeoutMs>10000</batchTimeoutMs>
+        <bufferSize>1048576</bufferSize>
+
+        <format>
+            <label>
+                <pattern>app=my-app,host=${HOSTNAME},environment=${ENV:-local},service=${SERVICE_NAME:-somemore}</pattern>
+            </label>
+            <message class="com.github.loki4j.logback.JsonLayout">
+                <includeTimestamp>true</includeTimestamp>
+                <includeMDC>true</includeMDC>
+                <includeThreadName>true</includeThreadName>
+                <includeLoggerName>true</includeLoggerName>
+                <jsonFactory>JACKSON</jsonFactory>
+                <timestampFieldName>@timestamp</timestampFieldName>
+                <prettyPrint>false</prettyPrint>
+                <appendLineSeparator>true</appendLineSeparator>
+                <messageTemplate>${LOG_PATTERN}</messageTemplate>
+                <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+            </message>
+            <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</timestampPattern>
+        </format>
+
+        <timeZone>Asia/Seoul</timeZone>
+    </appender>
+
+    <logger name="com.somemore.application" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="LOKI" />
+    </logger>
+
+    <logger name="org.springframework" level="INFO" />
+    <logger name="org.hibernate" level="INFO" />
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="LOKI" />
+    </root>
 </configuration>

@@ -41,3 +41,6 @@ out/
 
 ### env file ###
 *.env
+
+### log file ###
+/logs/
