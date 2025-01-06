@@ -34,7 +34,7 @@ public class RedirectService implements RedirectUseCase {
 
     private void handleRedirectFailure(HttpServletRequest request, HttpServletResponse response) {
         try {
-            redirectStrategy.sendRedirect(request, response, frontUrl + RedirectService.ERROR_PATH);
+            redirectStrategy.sendRedirect(request, response, frontUrl + ERROR_PATH);
         } catch (IOException e) {
             log.error("에러 페이지로 리디렉션 시도 중 오류 발생 - 메시지: {}", e.getMessage());
         }
