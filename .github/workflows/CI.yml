@@ -45,6 +45,7 @@ jobs:
       ELASTIC_URI=localhost: ${{ secrets.ELASTIC_URI }}
       ELASTIC_USERNAME: ${{ secrets.ELASTIC_USERNAME }}
       ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
+      LOKI_URL: ${{ secrets.LOKI_URL }}
 
 
     steps:
