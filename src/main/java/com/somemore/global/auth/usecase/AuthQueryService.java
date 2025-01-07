@@ -1,0 +1,34 @@
+package com.somemore.global.auth.usecase;
+
+import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.user.domain.UserRole;
+import com.somemore.user.usecase.UserQueryUseCase;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class AuthQueryService implements AuthQueryUseCase {
+
+    private final UserQueryUseCase userQueryUseCase;
+    private final RefreshTokenManager refreshTokenManager;
+
+    @Override
+    public UserRole getRoleByUserId(UUID userId) {
+        return userQueryUseCase.getRoleById(userId);
+    }
+
+    @Override
+    public EncodedToken getAccessTokenByUserId(UUID userId) {
+        return new EncodedToken(
+                refreshTokenManager.findRefreshTokenByUserId(userId)
+                        .getAccessToken());
+    }
+}
