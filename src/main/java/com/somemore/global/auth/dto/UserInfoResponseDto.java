@@ -1,7 +1,10 @@
 package com.somemore.global.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.somemore.user.domain.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.UUID;
 
 @Schema(description = "유저 정보 DTO")
 public record UserInfoResponseDto(
@@ -13,4 +16,7 @@ public record UserInfoResponseDto(
         @Schema(description = "유저 ROLE")
         String role
 ) {
+        public static UserInfoResponseDto from(UUID userId, UserRole role) {
+                return new UserInfoResponseDto(userId.toString(), role.getAuthority());
+        }
 }
