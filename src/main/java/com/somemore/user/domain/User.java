@@ -28,8 +28,8 @@ public class User extends BaseEntity {
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "account_id", nullable = false)
+    private String accountId;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -41,15 +41,15 @@ public class User extends BaseEntity {
 
     public static User from(UserAuthInfo userAuthInfo, UserRole role) {
         return User.builder()
-                .email(userAuthInfo.email())
+                .accountId(userAuthInfo.accountId())
                 .password(userAuthInfo.password())
                 .role(role)
                 .build();
     }
 
     @Builder
-    private User(String email, String password, UserRole role) {
-        this.email = email;
+    private User(String accountId, String password, UserRole role) {
+        this.accountId = accountId;
         this.password = password;
         this.role = role;
     }
