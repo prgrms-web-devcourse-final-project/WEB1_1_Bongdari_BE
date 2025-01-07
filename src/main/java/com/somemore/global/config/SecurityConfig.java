@@ -50,7 +50,7 @@ public class SecurityConfig {
                                                    ObjectMapper objectMapper) throws Exception {
 
         IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, cookieUseCase, objectMapper);
-        idPwAuthFilter.setFilterProcessesUrl("/api/center/sign-in");
+        idPwAuthFilter.setFilterProcessesUrl("/api/sign-in/id-pw");
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
@@ -62,20 +62,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
 
                 .authorizeHttpRequests(request ->
-                                request
-                                        .requestMatchers(
-                                                "/api/center/sign-in",
-                                                "/**"
-//                                        "/login",
-//                                        "/oauth2/**",
-//                                        "/api/auth/**",
-//                                        "/v3/api-docs/**",
-//                                        "/swagger/**",
-//                                        "/swagger-ui.html",
-//                                        "/swagger-ui/**"
-                                        )
-                                        .permitAll()
-                                        .anyRequest().authenticated()
+                        request
+                                .requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated()
                 )
 
                 .oauth2Login(oauth2 ->
