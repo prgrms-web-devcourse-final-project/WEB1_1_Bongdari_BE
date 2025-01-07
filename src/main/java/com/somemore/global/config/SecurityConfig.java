@@ -46,10 +46,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
                                                    AuthenticationManager authenticationManager,
                                                    GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase,
-                                                   CookieUseCase cookieUseCase,
+//                                                   CookieUseCase cookieUseCase,
                                                    ObjectMapper objectMapper) throws Exception {
 
-        IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, cookieUseCase, objectMapper);
+        IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, objectMapper);
         idPwAuthFilter.setFilterProcessesUrl("/api/sign-in/id-pw");
 
         httpSecurity
