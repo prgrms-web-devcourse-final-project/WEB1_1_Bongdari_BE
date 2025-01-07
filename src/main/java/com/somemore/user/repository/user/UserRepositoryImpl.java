@@ -30,6 +30,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByAccountId(String accountId) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(user)
+                        .where(
+                                user.accountId.eq(accountId),
+                                isNotDeleted())
+                        .fetchOne());
+    }
+
+    @Override
     public User save(User user) {
         return userJpaRepository.save(user);
     }
