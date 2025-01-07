@@ -2,7 +2,7 @@ package com.somemore.domains.volunteerapply.controller;
 
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
-import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
+import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
@@ -44,7 +44,7 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
         Long recruitBoardId = 1L;
         UUID volunteerId = UUID.randomUUID();
 
-        VolunteerApplyResponseDto response = VolunteerApplyResponseDto.builder()
+        VolunteerApplyWithReviewStatusResponseDto response = VolunteerApplyWithReviewStatusResponseDto.builder()
                 .id(1L)
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitBoardId)
@@ -52,7 +52,7 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
                 .attended(false)
                 .build();
 
-        given(volunteerApplyQueryUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
+        given(volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
                 volunteerId))
                 .willReturn(response);
 
@@ -78,7 +78,7 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
         Long recruitBoardId = 1L;
         UUID volunteerId = UUID.randomUUID();
 
-        given(volunteerApplyQueryUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
+        given(volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
                 volunteerId))
                 .willThrow(new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY));
 

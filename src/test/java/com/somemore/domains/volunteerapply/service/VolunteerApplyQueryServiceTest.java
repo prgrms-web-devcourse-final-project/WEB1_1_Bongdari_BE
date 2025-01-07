@@ -3,7 +3,6 @@ package com.somemore.domains.volunteerapply.service;
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
-import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.NoSuchElementException;
@@ -129,19 +128,6 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
         assertThat(dto.waiting()).isEqualTo(waitingCount);
         assertThat(dto.approve()).isEqualTo(approveCount);
         assertThat(dto.reject()).isEqualTo(rejectCount);
-    }
-
-    @DisplayName("모집글 아이디와 봉사자 아이디로 지원 응답 값을 조회할 수 있다.")
-    @Test
-    void getVolunteerApplyByRecruitIdAndVolunteerId() {
-        // given
-        // when
-        VolunteerApplyResponseDto dto = volunteerApplyQueryService.getVolunteerApplyByRecruitIdAndVolunteerId(
-                recruitBoardId, volunteerId);
-
-        // then
-        assertThat(dto.recruitBoardId()).isEqualTo(recruitBoardId);
-        assertThat(dto.volunteerId()).isEqualTo(volunteerId);
     }
 
     @DisplayName("모집글 아이디로 지원 리스트를 페이징 조회할 수 있다.")
