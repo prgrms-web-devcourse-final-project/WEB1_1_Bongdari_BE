@@ -1,7 +1,6 @@
 package com.somemore.global.auth.idpw.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.user.domain.UserRole;
@@ -47,7 +46,7 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
         String userId = authResult.getName();
         String role = extractRole(authResult);
         EncodedToken accessToken =
-                generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(
+                generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(
                         UUID.fromString(userId),
                         UserRole.from(role));
 
