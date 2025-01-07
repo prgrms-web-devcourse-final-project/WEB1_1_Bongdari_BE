@@ -3,6 +3,7 @@ package com.somemore.user.service;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import com.somemore.user.usecase.UserQueryUseCase;
@@ -27,6 +28,12 @@ public class UserQueryService implements UserQueryUseCase {
     @Override
     public User getById(UUID id) {
         return userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
+    }
+
+    @Override
+    public UserRole getRoleById(UUID id) {
+        return userRepository.findRoleById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
     }
 

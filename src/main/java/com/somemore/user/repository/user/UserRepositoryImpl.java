@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.user.domain.QUser;
 import com.somemore.user.domain.User;
+import com.somemore.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +24,17 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findById(UUID id) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(user)
+                        .where(
+                                user.id.eq(id),
+                                isNotDeleted())
+                        .fetchOne());
+    }
+
+    @Override
+    public Optional<UserRole> findRoleById(UUID id) {
+        return Optional.ofNullable(
+                queryFactory.select(user.role)
+                        .from(user)
                         .where(
                                 user.id.eq(id),
                                 isNotDeleted())
