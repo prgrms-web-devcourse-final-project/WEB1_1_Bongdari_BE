@@ -24,7 +24,7 @@ public class DefaultJwtRefresher implements JwtRefresher {
 
     @Override
     public EncodedToken refreshAccessToken(EncodedToken accessToken) {
-        RefreshToken refreshToken = refreshTokenManager.findRefreshToken(accessToken);
+        RefreshToken refreshToken = refreshTokenManager.findRefreshTokenByAccessToken(accessToken);
         EncodedToken refreshTokenValue = new EncodedToken(refreshToken.getRefreshToken());
         jwtValidator.validateToken(refreshTokenValue);
 
