@@ -1,4 +1,4 @@
-package com.somemore.domains.center.dto.request;
+package com.somemore.global.auth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -7,10 +7,10 @@ import lombok.Builder;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
-public record CenterSignRequestDto(
-        @Schema(description = "기관 아이디", example = "somemore")
+public record SignRequestDto(
+        @Schema(description = "ID", example = "somemore")
         String accountId,
-        @Schema(description = "기관 패스워드", example = "password1234")
+        @Schema(description = "PW", example = "password1234")
         String accountPassword
 ) {
 
