@@ -72,7 +72,7 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
         signOutVolunteerService.signOut(response, volunteerId);
 
         // Then
-        assertThatThrownBy(() -> refreshTokenManager.findRefreshToken(accessToken))
+        assertThatThrownBy(() -> refreshTokenManager.findRefreshTokenByAccessToken(accessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
 

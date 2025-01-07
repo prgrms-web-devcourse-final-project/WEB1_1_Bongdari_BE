@@ -81,8 +81,8 @@ class JwtServiceTest extends IntegrationTestSupport {
         long accessTokenDuration = accessClaims.getExpiration().getTime() - accessClaims.getIssuedAt().getTime();
         long refreshTokenDuration = refreshClaims.getExpiration().getTime() - refreshClaims.getIssuedAt().getTime();
 
-        assertThat(accessTokenDuration).isEqualTo(TokenType.ACCESS.getPeriod());
-        assertThat(refreshTokenDuration).isEqualTo(TokenType.REFRESH.getPeriod());
+        assertThat(accessTokenDuration).isEqualTo(TokenType.ACCESS.getPeriodInMillis());
+        assertThat(refreshTokenDuration).isEqualTo(TokenType.REFRESH.getPeriodInMillis());
     }
 
     @DisplayName("동일한 사용자로 여러 토큰 생성 시 서로 다른 값이어야 한다")
@@ -107,7 +107,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         String userId = UUID.randomUUID().toString();
         UserRole role = UserRole.VOLUNTEER;
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
@@ -164,7 +164,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
 
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
@@ -186,14 +186,14 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
 
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        RefreshToken oldRefreshToken = createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        RefreshToken oldRefreshToken = createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         EncodedToken newAccessToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
-        RefreshToken newRefreshToken = createAndSaveRefreshToken(userId, newAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        RefreshToken newRefreshToken = createAndSaveRefreshToken(userId, newAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         // when
         // then
-        assertThatThrownBy(() -> refreshTokenManager.findRefreshToken(expiredAccessToken))
+        assertThatThrownBy(() -> refreshTokenManager.findRefreshTokenByAccessToken(expiredAccessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
 
@@ -263,7 +263,7 @@ class JwtServiceTest extends IntegrationTestSupport {
     private RefreshToken createAndSaveRefreshToken(String userId, EncodedToken accessToken, Instant expiration) {
         Claims claims = buildClaims(userId, UserRole.VOLUNTEER);
         Instant now = Instant.now();
-        Instant refreshExpiration = now.plusMillis(TokenType.REFRESH.getPeriod());
+        Instant refreshExpiration = now.plusMillis(TokenType.REFRESH.getPeriodInMillis());
         String uniqueId = UUID.randomUUID().toString(); // jti
 
         RefreshToken refreshToken = new RefreshToken(
