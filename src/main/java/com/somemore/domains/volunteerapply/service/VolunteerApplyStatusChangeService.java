@@ -1,26 +1,24 @@
 package com.somemore.domains.volunteerapply.service;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
+import com.somemore.domains.volunteerapply.domain.ApplyStatus;
+import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.domains.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
 import com.somemore.domains.volunteerapply.usecase.RejectVolunteerApplyUseCase;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.volunteerapply.domain.ApplyStatus;
-import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
-import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
+import static com.somemore.global.exception.ExceptionMessage.*;
 
 @RequiredArgsConstructor
 @Transactional

@@ -2,7 +2,7 @@ package com.somemore.domains.volunteerapply.service;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;

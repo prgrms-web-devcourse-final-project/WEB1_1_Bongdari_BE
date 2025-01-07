@@ -1,24 +1,24 @@
 package com.somemore.domains.volunteerapply.service;
 
-import static com.somemore.global.exception.ExceptionMessage.DUPLICATE_APPLICATION;
-import static com.somemore.global.exception.ExceptionMessage.RECRUITMENT_NOT_OPEN;
-
 import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
-import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
-import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
-import com.somemore.global.exception.BadRequestException;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.domains.volunteerapply.event.VolunteerApplyEvent;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
-
-import java.util.UUID;
+import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
+import com.somemore.global.common.event.ServerEventPublisher;
+import com.somemore.global.common.event.ServerEventType;
+import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.DUPLICATE_APPLICATION;
+import static com.somemore.global.exception.ExceptionMessage.RECRUITMENT_NOT_OPEN;
 
 @RequiredArgsConstructor
 @Transactional

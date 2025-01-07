@@ -7,12 +7,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.*;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.*;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,23 +34,6 @@ class RecruitBoardTest {
         assertThat(recruitStatus).isEqualTo(RECRUITING);
     }
 
-    @DisplayName("봉사 시간을 계산할 수 있다")
-    @Test
-    void testCalculateVolunteerTime() {
-        // given
-        int hours = 3;
-        LocalDateTime startDateTime = createStartDateTime();
-        LocalDateTime endDateTime = startDateTime.plusHours(hours);
-
-        RecruitBoard board = createRecruitBoard(startDateTime, endDateTime);
-
-        // when
-        LocalTime volunteerTime = board.getVolunteerHours();
-
-        // then
-        assertThat(volunteerTime).isEqualTo(LocalTime.of(hours, 0));
-    }
-
     @DisplayName("봉사 모집글을 업데이트 할 수 있다")
     @Test
     void updateRecruitBoard() {
@@ -67,6 +50,7 @@ class RecruitBoardTest {
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)
+                .volunteerHours(2)
                 .volunteerCategory(OTHER)
                 .admitted(true).build();
 

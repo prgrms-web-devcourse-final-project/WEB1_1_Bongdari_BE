@@ -1,14 +1,15 @@
-package com.somemore.domains.recruitboard.service.command;
+package com.somemore.domains.recruitboard.service;
 
-import com.somemore.global.common.event.DomainEventSubType;
-import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.domains.location.usecase.command.CreateLocationUseCase;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.domains.recruitboard.event.CreateRecruitBoardEvent;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.domains.recruitboard.usecase.command.CreateRecruitBoardUseCase;
+import com.somemore.domains.recruitboard.service.validator.RecruitBoardValidator;
+import com.somemore.domains.recruitboard.usecase.CreateRecruitBoardUseCase;
+import com.somemore.global.common.event.DomainEventSubType;
+import com.somemore.global.common.event.ServerEventPublisher;
+import com.somemore.global.common.event.ServerEventType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,17 +23,16 @@ import java.util.UUID;
 public class CreateRecruitBoardService implements CreateRecruitBoardUseCase {
 
     private final RecruitBoardRepository recruitBoardRepository;
+    private final RecruitBoardValidator recruitBoardValidator;
     private final CreateLocationUseCase createLocationUseCase;
     private final ServerEventPublisher serverEventPublisher;
 
     @Override
-    public Long createRecruitBoard(
-            RecruitBoardCreateRequestDto requestDto,
-            UUID centerId,
-            String imgUrl
-    ) {
-        Long locationId = createLocationUseCase.createLocation(requestDto.location());
-        RecruitBoard recruitBoard = requestDto.toEntity(centerId, locationId, imgUrl);
+    public Long createRecruitBoard(RecruitBoardCreateRequestDto dto, UUID centerId, String imgUrl) {
+        recruitBoardValidator.validateRecruitBoardTime(dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
+
+        Long locationId = createLocationUseCase.createLocation(dto.location());
+        RecruitBoard recruitBoard = dto.toEntity(centerId, locationId, imgUrl);
 
         recruitBoardRepository.save(recruitBoard);
 

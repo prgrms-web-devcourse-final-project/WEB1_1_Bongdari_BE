@@ -1,27 +1,25 @@
 package com.somemore.domains.volunteerapply.service;
 
-import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
-import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
-
 import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.volunteer.usecase.UpdateVolunteerUseCase;
+import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
+import com.somemore.domains.volunteerapply.event.VolunteerReviewRequestEvent;
 import com.somemore.domains.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
-import com.somemore.domains.volunteerapply.event.VolunteerReviewRequestEvent;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.volunteerapply.domain.VolunteerApply;
-
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.*;
 
 @RequiredArgsConstructor
 @Transactional
@@ -43,7 +41,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
         validateRecruitBoardConsistency(applies, recruitBoardId);
         validateAuth(recruitBoard, centerId);
 
-        int hours = recruitBoard.getVolunteerHours().getHour();
+        int hours = recruitBoard.getRecruitmentInfo().getVolunteerHours();
 
         applies.forEach(apply -> {
             apply.changeAttended(true);
@@ -68,7 +66,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
     }
 
     private void validateRecruitBoardConsistency(List<VolunteerApply> applies,
-            Long recruitBoardId) {
+                                                 Long recruitBoardId) {
         boolean anyMismatch = applies.stream()
                 .anyMatch(apply -> !apply.getRecruitBoardId().equals(recruitBoardId));
 

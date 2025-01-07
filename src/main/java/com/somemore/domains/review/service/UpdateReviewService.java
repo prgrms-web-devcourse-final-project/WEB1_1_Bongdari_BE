@@ -22,14 +22,14 @@ public class UpdateReviewService implements UpdateReviewUseCase {
     @Override
     public void updateReview(Long id, UUID volunteerId, ReviewUpdateRequestDto requestDto) {
         Review review = reviewQueryUseCase.getById(id);
-        reviewValidator.validateAuthor(review, volunteerId);
+        reviewValidator.validateWriter(review, volunteerId);
         review.updateWith(requestDto);
     }
 
     @Override
     public void updateReviewImageUrl(Long id, UUID volunteerId, String imgUrl) {
         Review review = reviewQueryUseCase.getById(id);
-        reviewValidator.validateAuthor(review, volunteerId);
+        reviewValidator.validateWriter(review, volunteerId);
         review.updateWith(imgUrl);
     }
 

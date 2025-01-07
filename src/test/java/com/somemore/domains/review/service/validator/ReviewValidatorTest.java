@@ -17,7 +17,7 @@ class ReviewValidatorTest {
 
     @DisplayName("리뷰 작성자인지 검증할 수 있다")
     @Test
-    void validateAuthor() {
+    void validateWriter() {
         // given
         UUID volunteerId = UUID.randomUUID();
         Review review = createReview(volunteerId, "리뷰 제목", "내용내용", "이미지링크");
@@ -25,13 +25,13 @@ class ReviewValidatorTest {
         // when
         // then
         assertThatCode(
-                () -> reviewValidator.validateAuthor(review, volunteerId))
+                () -> reviewValidator.validateWriter(review, volunteerId))
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("리뷰 작성자와 일치 하지 않는 경우 에러가 발생한다.")
     @Test
-    void validateAuthorWhenMissMatch() {
+    void validateWriterWhenMissMatch() {
         // given
         UUID wrongVolunteerId = UUID.randomUUID();
         Review review = createReview(UUID.randomUUID(), "다른 제목", "다른 내용", "다른 링크");
@@ -39,7 +39,7 @@ class ReviewValidatorTest {
         // when
         // then
         assertThatThrownBy(
-                () -> reviewValidator.validateAuthor(review, wrongVolunteerId))
+                () -> reviewValidator.validateWriter(review, wrongVolunteerId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_REVIEW.getMessage());
     }
