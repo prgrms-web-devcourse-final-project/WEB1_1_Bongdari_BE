@@ -59,7 +59,7 @@ public class VolunteerApplyStatusChangeService implements ApproveVolunteerApplyU
     }
 
     private void validateWriter(RecruitBoard recruitBoard, UUID centerId) {
-        if (recruitBoard.isAuthor(centerId)) {
+        if (recruitBoard.isWriter(centerId)) {
             return;
         }
         throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD);

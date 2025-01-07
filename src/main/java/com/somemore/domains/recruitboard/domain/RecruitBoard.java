@@ -58,7 +58,7 @@ public class RecruitBoard extends BaseEntity {
         this.imgUrl = imgUrl;
     }
 
-    public boolean isAuthor(UUID centerId) {
+    public boolean isWriter(UUID centerId) {
         return this.centerId.equals(centerId);
     }
 

@@ -23,11 +23,11 @@ class ReviewTest {
 
     @DisplayName("작성자 인지 확인할 수 있다.")
     @Test
-    void isAuthor() {
+    void isWriter() {
         // given
 
         // when
-        boolean result = review.isAuthor(volunteerId);
+        boolean result = review.isWriter(volunteerId);
 
         // then
         assertThat(result).isTrue();

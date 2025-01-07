@@ -21,8 +21,8 @@ public class RecruitBoardValidator {
         throw new BadRequestException(INVALID_RECRUIT_BOARD_TIME);
     }
 
-    public void validateAuthor(RecruitBoard recruitBoard, UUID centerId) {
-        if (recruitBoard.isAuthor(centerId)) {
+    public void validateWriter(RecruitBoard recruitBoard, UUID centerId) {
+        if (recruitBoard.isWriter(centerId)) {
             return;
         }
 

@@ -21,7 +21,7 @@ public class DeleteRecruitBoardService implements DeleteRecruitBoardUseCase {
     @Override
     public void deleteRecruitBoard(UUID centerId, Long id) {
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
-        recruitBoardValidator.validateAuthor(recruitBoard, centerId);
+        recruitBoardValidator.validateWriter(recruitBoard, centerId);
 
         recruitBoard.markAsDeleted();
     }

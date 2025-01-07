@@ -38,7 +38,7 @@ class RecruitBoardValidatorTest {
 
     @DisplayName("모집글 작성자가 아닌 경우 에러가 발생한다")
     @Test
-    void validateAuthor() {
+    void validateWriter() {
         // given
         UUID wrongCenterId = UUID.randomUUID();
         RecruitBoard board = createRecruitBoard(UUID.randomUUID());
@@ -46,7 +46,7 @@ class RecruitBoardValidatorTest {
         // when
         // then
         assertThatThrownBy(
-                () -> validator.validateAuthor(board, wrongCenterId))
+                () -> validator.validateWriter(board, wrongCenterId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
     }

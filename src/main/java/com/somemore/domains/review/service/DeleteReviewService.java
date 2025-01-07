@@ -22,7 +22,7 @@ public class DeleteReviewService implements DeleteReviewUseCase {
     public void deleteReview(UUID volunteerId, Long id) {
         Review review = reviewQueryUseCase.getById(id);
 
-        reviewValidator.validateAuthor(review, volunteerId);
+        reviewValidator.validateWriter(review, volunteerId);
         review.markAsDeleted();
     }
 

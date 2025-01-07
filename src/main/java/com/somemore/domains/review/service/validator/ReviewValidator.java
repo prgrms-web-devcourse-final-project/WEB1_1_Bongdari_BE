@@ -11,8 +11,8 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_REVIEW
 @Component
 public class ReviewValidator {
 
-    public void validateAuthor(Review review, UUID volunteerId) {
-        if (review.isAuthor(volunteerId)) {
+    public void validateWriter(Review review, UUID volunteerId) {
+        if (review.isWriter(volunteerId)) {
             return;
         }
 

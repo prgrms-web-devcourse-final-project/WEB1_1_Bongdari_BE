@@ -27,7 +27,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     @Override
     public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId, String imgUrl) {
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
-        recruitBoardValidator.validateAuthor(recruitBoard, centerId);
+        recruitBoardValidator.validateWriter(recruitBoard, centerId);
         recruitBoardValidator.validateRecruitBoardTime(dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
 
         recruitBoard.updateWith(dto, imgUrl);
@@ -36,7 +36,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     @Override
     public void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto, Long id, UUID centerId) {
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
-        recruitBoardValidator.validateAuthor(recruitBoard, centerId);
+        recruitBoardValidator.validateWriter(recruitBoard, centerId);
 
         updateLocationUseCase.updateLocation(requestDto.toLocationUpdateRequestDto(), recruitBoard.getLocationId());
 
@@ -46,7 +46,7 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     @Override
     public void updateRecruitBoardStatus(RecruitStatus status, Long id, UUID centerId, LocalDateTime currentDateTime) {
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
-        recruitBoardValidator.validateAuthor(recruitBoard, centerId);
+        recruitBoardValidator.validateWriter(recruitBoard, centerId);
 
         recruitBoard.changeRecruitStatus(status, currentDateTime);
     }

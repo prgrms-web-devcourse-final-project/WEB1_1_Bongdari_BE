@@ -68,7 +68,7 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
 
     private void validateAuthorization(Long recruitId, UUID centerId) {
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(recruitId);
-        if (recruitBoard.isAuthor(centerId)) {
+        if (recruitBoard.isWriter(centerId)) {
             return;
         }
 
