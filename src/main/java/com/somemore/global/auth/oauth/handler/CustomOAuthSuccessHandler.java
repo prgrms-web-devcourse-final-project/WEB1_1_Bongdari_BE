@@ -1,6 +1,8 @@
 package com.somemore.global.auth.oauth.handler;
 
+import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import com.somemore.global.auth.oauth.processor.OAuthUserProcessor;
 import com.somemore.global.auth.redirect.RedirectUseCase;
@@ -24,10 +26,10 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final OAuthUserProcessor oauthUserProcessor;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
+    private final CookieUseCase cookieUseCase;
     private final RedirectUseCase redirectUseCase;
 
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String MAIN_PATH = "/main";
+    public static final String SUCCESS_PATH = "/success";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -42,15 +44,18 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private void redirect(HttpServletRequest request, HttpServletResponse response) {
         // TODO 유저 정보 커스텀 확인 분기
-        redirectUseCase.redirect(request, response, MAIN_PATH);
+        redirectUseCase.redirect(request, response, SUCCESS_PATH);
     }
 
     private void processAccessToken(HttpServletResponse response, UUID userId) {
-        EncodedToken accessToken =
-                generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(
+        generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(
+                userId, UserRole.getOAuthUserDefaultRole());
+
+        EncodedToken loginToken =
+                generateTokensOnLoginUseCase.generateLoginToken(
                         userId, UserRole.getOAuthUserDefaultRole());
 
-        response.addHeader(AUTHORIZATION, accessToken.getValueWithPrefix());
+        cookieUseCase.setToken(response, loginToken.getValueWithPrefix(), TokenType.LOGIN);
     }
 
     private OAuth2User extractOAuthUser(Authentication authentication) {
