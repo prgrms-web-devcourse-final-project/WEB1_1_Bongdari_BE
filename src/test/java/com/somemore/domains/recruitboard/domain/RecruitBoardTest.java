@@ -50,6 +50,7 @@ class RecruitBoardTest {
                 .recruitmentCount(10)
                 .volunteerStartDateTime(startDateTime)
                 .volunteerEndDateTime(endDateTime)
+                .volunteerHours(2)
                 .volunteerCategory(OTHER)
                 .admitted(true).build();
 

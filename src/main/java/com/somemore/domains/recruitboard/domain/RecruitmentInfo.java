@@ -31,7 +31,7 @@ public class RecruitmentInfo {
     private LocalDateTime volunteerEndDateTime;
 
     @Column(name = "volunteer_hours", nullable = false)
-    private Integer volunteerHours;
+    private int volunteerHours;
 
     @Enumerated(value = STRING)
     @Column(name = "volunteer_category", nullable = false, length = 30)
@@ -42,7 +42,7 @@ public class RecruitmentInfo {
 
     @Builder
     public RecruitmentInfo(String region, Integer recruitmentCount, LocalDateTime volunteerStartDateTime, LocalDateTime volunteerEndDateTime,
-                           Integer volunteerHours, VolunteerCategory volunteerCategory, Boolean admitted) {
+                           int volunteerHours, VolunteerCategory volunteerCategory, Boolean admitted) {
 
         this.region = region;
         this.recruitmentCount = recruitmentCount;
