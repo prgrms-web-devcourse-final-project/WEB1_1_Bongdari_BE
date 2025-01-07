@@ -42,7 +42,7 @@ public record RecruitBoardResponseDto(
         LocalDateTime volunteerEndDateTime,
         @Schema(description = "봉사 유형", example = "LIVING_SUPPORT")
         VolunteerCategory volunteerCategory,
-        @Schema(description = "봉사 시간", example = "04:00:00")
+        @Schema(description = "봉사 시간", example = "4")
         Integer volunteerHours,
         @Schema(description = "시간 인정 여부", example = "true")
         Boolean admitted,

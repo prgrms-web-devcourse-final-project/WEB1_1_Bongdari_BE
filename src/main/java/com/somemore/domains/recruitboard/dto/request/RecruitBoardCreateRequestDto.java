@@ -39,7 +39,7 @@ public record RecruitBoardCreateRequestDto(
         @Future(message = "봉사 종료 일시는 내일부터 가능합니다.")
         LocalDateTime volunteerEndDateTime,
         @Schema(description = "봉사 시간", example = "2")
-        @NotNull(message = "봉사 시간는 필수 값입니다.")
+        @NotNull(message = "봉사 시간은 필수 값입니다.")
         Integer volunteerHours,
         @Schema(description = "봉사 활동 유형", example = "ENVIRONMENTAL_PROTECTION")
         @NotNull(message = "봉사 활동 유형은 필수 값입니다.")
