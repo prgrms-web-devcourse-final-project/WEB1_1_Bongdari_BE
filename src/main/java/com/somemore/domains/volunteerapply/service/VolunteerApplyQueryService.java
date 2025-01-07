@@ -2,7 +2,6 @@ package com.somemore.domains.volunteerapply.service;
 
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
-import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
@@ -44,13 +43,6 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
         List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitId);
 
         return VolunteerApplySummaryResponseDto.from(applies);
-    }
-
-    @Override
-    public VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId) {
-        VolunteerApply apply = getByRecruitIdAndVolunteerId(recruitId, volunteerId);
-
-        return VolunteerApplyResponseDto.from(apply);
     }
 
     @Override

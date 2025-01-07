@@ -5,6 +5,7 @@ import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCon
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
+import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
@@ -34,19 +35,18 @@ public class VolunteerApplyQueryApiController {
 
     @Operation(summary = "특정 모집글 봉사자 지원 단건 조회", description = "특정 모집글에 대한 봉사자 지원을 조회합니다.")
     @GetMapping("/volunteer-apply/recruit-board/{recruitBoardId}/volunteer/{volunteerId}")
-    public ApiResponse<?> getVolunteerApplyByRecruitIdAndVolunteerId(
+    public ApiResponse<VolunteerApplyWithReviewStatusResponseDto> getVolunteerApplyByRecruitIdAndVolunteerId(
             @PathVariable Long recruitBoardId,
             @PathVariable UUID volunteerId
     ) {
         try {
             return ApiResponse.ok(
                     200,
-                    volunteerApplyQueryUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(
-                            recruitBoardId, volunteerId),
+                    volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId, volunteerId),
                     "특정 모집글에 대한 봉사자 지원 단건 조회 성공"
             );
         } catch (NoSuchElementException e) {
-            return ApiResponse.ok(210, "지원 내역이 없습니다.");
+            return ApiResponse.ok(210, null, "지원 내역이 없습니다.");
         }
     }
 
