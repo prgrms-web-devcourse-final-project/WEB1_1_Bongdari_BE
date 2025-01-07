@@ -15,14 +15,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -101,10 +99,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String userId = claims.get("id", String.class);
         String role = claims.get("role", String.class);
 
-        return new JwtAuthenticationToken(
-                userId,
-                accessToken,
-                List.of(new SimpleGrantedAuthority(role))
+        return JwtAuthenticationToken.from(userId, role, accessToken
         );
     }
 }
