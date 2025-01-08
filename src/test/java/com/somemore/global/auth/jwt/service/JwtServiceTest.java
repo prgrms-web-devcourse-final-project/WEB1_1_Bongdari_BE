@@ -288,15 +288,4 @@ class JwtServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private void assertRefreshedAccessToken(MockHttpServletResponse mockResponse) {
-        String cookie = mockResponse.getHeader("Set-Cookie");
-        assertThat(cookie).isNotNull();
-        assertThat(cookie).contains(TokenType.ACCESS.name());
-
-        EncodedToken refreshedAccessToken = new EncodedToken(
-                cookie.split(";")[0].substring("ACCESS=".length()));
-        assertThatCode(() -> jwtValidator.validateToken(refreshedAccessToken))
-                .doesNotThrowAnyException();
-    }
-
 }
