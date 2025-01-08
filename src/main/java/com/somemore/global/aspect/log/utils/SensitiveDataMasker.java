@@ -19,9 +19,11 @@ public class SensitiveDataMasker {
     public Object maskSensitiveData(String fieldName, Object value, ObjectMapper objectMapper) throws JsonProcessingException {
         if (isSensitiveField(fieldName)) {
             return "********";
-        } else if (value instanceof Map) {
+        }
+        if (value instanceof Map) {
             return maskSensitiveDataInMap((Map<?, ?>) value);
-        } else if (isComplexObject(value)) {
+        }
+        if (isComplexObject(value)) {
             String json = objectMapper.writeValueAsString(value);
             json = maskSensitiveDataInJson(json, objectMapper);
             return objectMapper.readValue(json, Object.class);
