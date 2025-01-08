@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         EncodedToken accessToken = generateAccessToken(user);
 
-        return JwtAuthenticationToken.from(user, accessToken);
+        return JwtAuthenticationToken.of(user, accessToken);
     }
 
     @Override

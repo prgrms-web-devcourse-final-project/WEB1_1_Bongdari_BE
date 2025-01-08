@@ -35,7 +35,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         return principal;
     }
 
-    public static JwtAuthenticationToken from(User user, EncodedToken accessToken) {
+    public static JwtAuthenticationToken of(User user, EncodedToken accessToken) {
         return new JwtAuthenticationToken(
                 user.getId(),
                 accessToken,
@@ -43,7 +43,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         );
     }
 
-    public static JwtAuthenticationToken from(String userId, String role, EncodedToken accessToken) {
+    public static JwtAuthenticationToken of(String userId, String role, EncodedToken accessToken) {
         return new JwtAuthenticationToken(
                 userId,
                 accessToken,

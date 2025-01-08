@@ -99,6 +99,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String userId = claims.get("id", String.class);
         String role = claims.get("role", String.class);
 
-        return JwtAuthenticationToken.from(userId, role, accessToken);
+        return JwtAuthenticationToken.of(userId, role, accessToken);
     }
 }
