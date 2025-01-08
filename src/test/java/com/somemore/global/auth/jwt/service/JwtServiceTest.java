@@ -263,7 +263,6 @@ class JwtServiceTest extends IntegrationTestSupport {
     private RefreshToken createAndSaveRefreshToken(String userId, EncodedToken accessToken, Instant expiration) {
         Claims claims = buildClaims(userId, UserRole.VOLUNTEER);
         Instant now = Instant.now();
-        Instant refreshExpiration = now.plusMillis(TokenType.REFRESH.getPeriodInMillis());
         String uniqueId = UUID.randomUUID().toString(); // jti
 
         RefreshToken refreshToken = new RefreshToken(
@@ -273,7 +272,7 @@ class JwtServiceTest extends IntegrationTestSupport {
                         .claims(claims)
                         .id(uniqueId)
                         .issuedAt(Date.from(now))
-                        .expiration(Date.from(refreshExpiration))
+                        .expiration(Date.from(expiration))
                         .signWith(secretKey, Jwts.SIG.HS256)
                         .compact()));
 
