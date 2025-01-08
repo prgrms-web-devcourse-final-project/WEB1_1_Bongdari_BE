@@ -66,7 +66,7 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
                 jwtGenerator.generateToken(volunteerId, role.getAuthority(), TokenType.REFRESH));
 
         refreshTokenManager.save(refreshToken);
-        cookieUseCase.setAccessToken(response, accessToken.value());
+        cookieUseCase.setToken(response, accessToken.value(), TokenType.ACCESS);
 
         // When
         signOutVolunteerService.signOut(response, volunteerId);

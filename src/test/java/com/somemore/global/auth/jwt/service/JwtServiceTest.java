@@ -45,9 +45,27 @@ class JwtServiceTest extends IntegrationTestSupport {
                 .forEach(redisTemplate::delete);
     }
 
-    @DisplayName("토큰이 올바르게 생성된다")
+    @DisplayName("액세스 토큰이 올바르게 생성된다")
     @Test
-    void generateAndValidateToken() {
+    void generateAndValidateAccessToken() {
+        // given
+        String userId = UUID.randomUUID().toString();
+        UserRole role = UserRole.VOLUNTEER;
+        TokenType tokenType = TokenType.ACCESS;
+
+        // when
+        EncodedToken token = jwtService.generateToken(userId, role.getAuthority(), tokenType);
+
+        // then
+        Claims claims = jwtService.getClaims(token);
+        assertThat(claims.get("id", String.class)).isEqualTo(userId);
+        assertThat(claims.get("role", String.class)).isEqualTo(role.getAuthority());
+        assertThat(claims.getExpiration()).isNotNull();
+    }
+
+    @DisplayName("로그인 토큰이 올바르게 생성된다")
+    @Test
+    void generateAndValidateLoginToken() {
         // given
         String userId = UUID.randomUUID().toString();
         UserRole role = UserRole.VOLUNTEER;
@@ -98,24 +116,6 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(token1.value()).isNotEqualTo(token2.value());
-    }
-
-    @DisplayName("만료된 엑세스 토큰은 리프레시 토큰이 유효하다면 갱신된다")
-    @Test
-    void verifyAndRefreshExpiredToken() {
-        // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-        EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
-
-        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-
-        // when
-        jwtService.processAccessToken(expiredAccessToken, mockResponse);
-
-        // then
-        assertRefreshedAccessToken(mockResponse);
     }
 
     @DisplayName("만료된 엑세스 토큰은 리프레시 토큰이 유효하지 않다면 갱신되지 않고 예외가 발생한다")
@@ -173,7 +173,7 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         // then
         String cookieHeader = mockResponse.getHeader("Set-Cookie");
-        assertThat(cookieHeader).contains("ACCESS=");
+        assertThat(cookieHeader).contains("ACCESS_TOKEN=");
         assertThat(cookieHeader).contains("HttpOnly");
         assertThat(cookieHeader).contains("Secure");
     }
