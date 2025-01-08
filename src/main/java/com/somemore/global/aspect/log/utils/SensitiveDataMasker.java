@@ -1,6 +1,7 @@
 package com.somemore.global.aspect.log.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,11 @@ public class SensitiveDataMasker {
     public Object maskSensitiveData(String fieldName, Object value, ObjectMapper objectMapper) throws JsonProcessingException {
         if (isSensitiveField(fieldName)) {
             return "********";
-        } else if (value instanceof Map) {
+        }
+        if (value instanceof Map) {
             return maskSensitiveDataInMap((Map<?, ?>) value);
-        } else if (isComplexObject(value)) {
+        }
+        if (isComplexObject(value)) {
             String json = objectMapper.writeValueAsString(value);
             json = maskSensitiveDataInJson(json, objectMapper);
             return objectMapper.readValue(json, Object.class);
@@ -54,7 +57,7 @@ public class SensitiveDataMasker {
 
     private String maskSensitiveDataInJson(String json, ObjectMapper objectMapper) {
         try {
-            Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+            Map<String, Object> jsonMap = objectMapper.readValue(json, new TypeReference<>() {});
             Map<String, Object> maskedMap = maskSensitiveDataInMap(jsonMap);
             return objectMapper.writeValueAsString(maskedMap);
         } catch (Exception e) {
