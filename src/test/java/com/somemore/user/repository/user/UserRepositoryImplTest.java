@@ -32,8 +32,9 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // then
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser).isEqualTo(user);
+        assertThat(savedUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("OAuth 유저(기관)를 저장할 수 있다.")
@@ -47,8 +48,9 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // then
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser).isEqualTo(user);
+        assertThat(savedUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("Local 유저(기관)를 저장할 수 있다.")
@@ -62,8 +64,9 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // then
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser).isEqualTo(user);
+        assertThat(savedUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("유저아이디로 유저를 조회할 수 있다.")

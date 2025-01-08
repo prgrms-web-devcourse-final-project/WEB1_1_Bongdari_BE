@@ -1,7 +1,6 @@
 package com.somemore.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.idpw.filter.IdPwAuthFilter;
 import com.somemore.global.auth.jwt.filter.JwtAuthFilter;
 import com.somemore.global.auth.jwt.filter.JwtExceptionFilter;
@@ -12,8 +11,8 @@ import com.somemore.global.auth.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
