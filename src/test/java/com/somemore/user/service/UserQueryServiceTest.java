@@ -29,13 +29,14 @@ class UserQueryServiceTest extends IntegrationTestSupport {
     private UserCommonAttributeRepository userCommonAttributeRepository;
 
     private User user;
+    private UserCommonAttribute userCommonAttribute;
 
     @BeforeEach
     void setup() {
         UserAuthInfo userAuthInfo = UserAuthInfo.createForOAuth(OAuthProvider.NAVER);
 
         user = userRepository.save(User.from(userAuthInfo, UserRole.VOLUNTEER));
-        userCommonAttributeRepository.save(UserCommonAttribute.createDefault(user.getId()));
+        userCommonAttribute = userCommonAttributeRepository.save(UserCommonAttribute.createDefault(user.getId()));
     }
 
 
@@ -48,7 +49,24 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         User foundUser = userQueryService.getById(user.getId());
 
         // then
-        assertThat(foundUser).isNotNull();
+        assertThat(foundUser)
+                .isNotNull()
+                .isEqualTo(user);
+
+    }
+
+    @DisplayName("유저 아이디로 유저 권한을 조회할 수 있다.")
+    @Test
+    void getRoleById() {
+        // given
+
+        // when
+        UserRole role = userQueryService.getRoleById(user.getId());
+
+        // then
+        assertThat(role)
+                .isNotNull()
+                .isEqualTo(user.getRole());
     }
 
     @DisplayName("유저 계정 아이디로 유저를 조회할 수 있다.")
@@ -60,7 +78,9 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         User foundUser = userQueryService.getByAccountId(user.getAccountId());
 
         // then
-        assertThat(foundUser).isNotNull();
+        assertThat(foundUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("유저 아이디로 유저 공통 속성을 조회할 수 있다.")
@@ -72,7 +92,9 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         UserCommonAttribute foundCommonAttribute = userQueryService.getCommonAttributeByUserId(user.getId());
 
         // then
-        assertThat(foundCommonAttribute).isNotNull();
+        assertThat(foundCommonAttribute)
+                .isNotNull()
+                .isEqualTo(userCommonAttribute);
     }
 
     @DisplayName("유저가 필수 입력 필드를 사용자화하지 않은 경우 기본 값 false를 반환한다.")

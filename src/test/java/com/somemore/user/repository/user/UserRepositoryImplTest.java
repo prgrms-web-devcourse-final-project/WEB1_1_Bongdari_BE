@@ -101,6 +101,22 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         assertThat(findUser).isEmpty();
     }
 
+    @DisplayName("유저 아이디로 유저 권한을 조회할 수 있다.")
+    @Test
+    void findRoleById() {
+        // given
+        UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
+        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User savedUser = userRepository.save(user);
+
+        // when
+        Optional<UserRole> role = userRepository.findRoleById(savedUser.getId());
+
+        // then
+        assertThat(role).isPresent();
+        assertThat(role.get()).isEqualTo(savedUser.getRole());
+    }
+
     @DisplayName("유저 계정 아이디로 유저를 조회할 수 있다.")
     @Test
     void findByAccountId() {
