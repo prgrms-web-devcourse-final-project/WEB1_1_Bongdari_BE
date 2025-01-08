@@ -1,20 +1,27 @@
 package com.somemore.global.auth.jwt.domain;
 
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Getter
+import java.time.Duration;
+
+@RequiredArgsConstructor
 public enum TokenType {
-    ACCESS(1000 * 60 * 30),
-    REFRESH(1000 * 60 * 60 * 24 * 7),
-    SIGNOUT(0);
+    ACCESS(Duration.ofMinutes(30)),
+    REFRESH(Duration.ofDays(7)),
+    SIGN_IN(Duration.ofMinutes(1)),
+    SIGN_OUT(Duration.ZERO);
 
-    private final int period;
+    private final Duration period;
 
-    TokenType(int period) {
-        this.period = period;
+    public String getDescription() {
+        return this.name() + "_TOKEN";
+    }
+
+    public int getPeriodInMillis() {
+        return Math.toIntExact(period.toMillis());
     }
 
     public int getPeriodInSeconds() {
-        return Math.toIntExact(period / 1000);
+        return Math.toIntExact(period.getSeconds());
     }
 }

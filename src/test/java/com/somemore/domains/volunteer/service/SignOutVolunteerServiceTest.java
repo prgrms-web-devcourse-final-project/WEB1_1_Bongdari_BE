@@ -66,17 +66,17 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
                 jwtGenerator.generateToken(volunteerId, role.getAuthority(), TokenType.REFRESH));
 
         refreshTokenManager.save(refreshToken);
-        cookieUseCase.setAccessToken(response, accessToken.value());
+        cookieUseCase.setToken(response, accessToken.value(), TokenType.ACCESS);
 
         // When
         signOutVolunteerService.signOut(response, volunteerId);
 
         // Then
-        assertThatThrownBy(() -> refreshTokenManager.findRefreshToken(accessToken))
+        assertThatThrownBy(() -> refreshTokenManager.findRefreshTokenByAccessToken(accessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
 
-        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGNOUT.name());
+        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGN_OUT.name());
     }
 
     @Test
@@ -87,6 +87,6 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
 
         // Then
         assertThatNoException().isThrownBy(() -> signOutVolunteerService.signOut(response, volunteerId));
-        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGNOUT.name());
+        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGN_OUT.name());
     }
 }

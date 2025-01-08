@@ -8,6 +8,8 @@ import com.somemore.global.auth.jwt.refresh.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class RedisRefreshTokenManager implements RefreshTokenManager {
@@ -15,8 +17,14 @@ public class RedisRefreshTokenManager implements RefreshTokenManager {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
-    public RefreshToken findRefreshToken(EncodedToken accessToken) {
+    public RefreshToken findRefreshTokenByAccessToken(EncodedToken accessToken) {
         return refreshTokenRepository.findByAccessToken(accessToken.value())
+                .orElseThrow(() -> new JwtException(JwtErrorType.EXPIRED_TOKEN));
+    }
+
+    @Override
+    public RefreshToken findRefreshTokenByUserId(UUID userId) {
+        return refreshTokenRepository.findByUserId(userId.toString())
                 .orElseThrow(() -> new JwtException(JwtErrorType.EXPIRED_TOKEN));
     }
 

@@ -6,5 +6,6 @@ import com.somemore.user.domain.UserRole;
 import java.util.UUID;
 
 public interface GenerateTokensOnLoginUseCase {
-    EncodedToken saveRefreshTokenAndReturnAccessToken(UUID userId, UserRole role);
+    EncodedToken generateLoginToken(UUID userId, UserRole role);
+    EncodedToken generateAuthTokensAndReturnAccessToken(UUID userId, UserRole role);
 }

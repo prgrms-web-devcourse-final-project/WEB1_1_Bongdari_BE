@@ -13,21 +13,19 @@ import org.springframework.stereotype.Service;
 public class CookieService implements CookieUseCase {
 
     @Override
-    public void setAccessToken(HttpServletResponse response, String value) {
-        ResponseCookie cookie = generateCookie(TokenType.ACCESS, value);
+    public void setToken(HttpServletResponse response, String value, TokenType tokenType) {
+        ResponseCookie cookie = generateCookie(tokenType, value);
         response.addHeader("Set-Cookie", cookie.toString());
-        log.info("SET_COOKIE_ACCESS_TOKEN = {}", value);
     }
 
     @Override
     public void deleteAccessToken(HttpServletResponse response) {
-        ResponseCookie cookie = generateCookie(TokenType.SIGNOUT, TokenType.SIGNOUT.name());
+        ResponseCookie cookie = generateCookie(TokenType.SIGN_OUT, TokenType.SIGN_OUT.name());
         response.addHeader("Set-Cookie", cookie.toString());
-        log.info("DELETE_COOKIE_ACCESS_TOKEN");
     }
 
     private static ResponseCookie generateCookie(TokenType tokenType, String value) {
-        return ResponseCookie.from(TokenType.ACCESS.name(), value)
+        return ResponseCookie.from(TokenType.ACCESS.getDescription(), value)
                 .domain(".somemore.site")
                 .httpOnly(true)
                 .secure(true)

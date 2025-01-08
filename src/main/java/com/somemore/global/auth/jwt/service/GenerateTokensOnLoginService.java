@@ -24,26 +24,32 @@ public class GenerateTokensOnLoginService implements GenerateTokensOnLoginUseCas
     private final RefreshTokenManager refreshTokenManager;
 
     @Override
-    public EncodedToken saveRefreshTokenAndReturnAccessToken(UUID userId, UserRole role) {
-        EncodedToken accessToken = jwtGenerator.generateToken(
-                userId.toString(),
-                role.getAuthority(),
-                TokenType.ACCESS
-        );
-        RefreshToken refreshToken = generateRefreshToken(userId, role, accessToken);
+    public EncodedToken generateLoginToken(UUID userId, UserRole role) {
+        return generateToken(userId, role, TokenType.SIGN_IN);
+    }
+
+    @Override
+    public EncodedToken generateAuthTokensAndReturnAccessToken(UUID userId, UserRole role) {
+        EncodedToken accessToken = generateToken(userId, role, TokenType.ACCESS);
+        RefreshToken refreshToken = generateRefreshTokenWithAccessToken(userId, role, accessToken);
         saveRefreshToken(refreshToken);
 
         return accessToken;
     }
 
-    private RefreshToken generateRefreshToken(UUID userId, UserRole role, EncodedToken accessToken) {
+    private EncodedToken generateToken(UUID userId, UserRole role, TokenType tokenType) {
+        return jwtGenerator.generateToken(
+                userId.toString(),
+                role.getAuthority(),
+                tokenType
+        );
+    }
+
+    private RefreshToken generateRefreshTokenWithAccessToken(UUID userId, UserRole role, EncodedToken accessToken) {
         return new RefreshToken(
                 userId.toString(),
                 accessToken,
-                jwtGenerator.generateToken(
-                        userId.toString(),
-                        role.getAuthority(),
-                        TokenType.REFRESH)
+                generateToken(userId, role, TokenType.REFRESH)
         );
     }
 

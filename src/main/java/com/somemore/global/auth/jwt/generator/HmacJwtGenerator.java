@@ -23,7 +23,7 @@ public class HmacJwtGenerator implements JwtGenerator {
     public EncodedToken generateToken(String userId, String role, TokenType tokenType) {
         Claims claims = buildClaims(userId, role);
         Instant now = Instant.now();
-        Instant expiration = now.plusMillis(tokenType.getPeriod());
+        Instant expiration = now.plusMillis(tokenType.getPeriodInMillis());
         String uniqueId = UUID.randomUUID().toString(); // JTI
 
         return new EncodedToken(Jwts.builder()

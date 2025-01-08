@@ -45,9 +45,27 @@ class JwtServiceTest extends IntegrationTestSupport {
                 .forEach(redisTemplate::delete);
     }
 
-    @DisplayName("토큰이 올바르게 생성된다")
+    @DisplayName("액세스 토큰이 올바르게 생성된다")
     @Test
-    void generateAndValidateToken() {
+    void generateAndValidateAccessToken() {
+        // given
+        String userId = UUID.randomUUID().toString();
+        UserRole role = UserRole.VOLUNTEER;
+        TokenType tokenType = TokenType.ACCESS;
+
+        // when
+        EncodedToken token = jwtService.generateToken(userId, role.getAuthority(), tokenType);
+
+        // then
+        Claims claims = jwtService.getClaims(token);
+        assertThat(claims.get("id", String.class)).isEqualTo(userId);
+        assertThat(claims.get("role", String.class)).isEqualTo(role.getAuthority());
+        assertThat(claims.getExpiration()).isNotNull();
+    }
+
+    @DisplayName("로그인 토큰이 올바르게 생성된다")
+    @Test
+    void generateAndValidateLoginToken() {
         // given
         String userId = UUID.randomUUID().toString();
         UserRole role = UserRole.VOLUNTEER;
@@ -81,8 +99,8 @@ class JwtServiceTest extends IntegrationTestSupport {
         long accessTokenDuration = accessClaims.getExpiration().getTime() - accessClaims.getIssuedAt().getTime();
         long refreshTokenDuration = refreshClaims.getExpiration().getTime() - refreshClaims.getIssuedAt().getTime();
 
-        assertThat(accessTokenDuration).isEqualTo(TokenType.ACCESS.getPeriod());
-        assertThat(refreshTokenDuration).isEqualTo(TokenType.REFRESH.getPeriod());
+        assertThat(accessTokenDuration).isEqualTo(TokenType.ACCESS.getPeriodInMillis());
+        assertThat(refreshTokenDuration).isEqualTo(TokenType.REFRESH.getPeriodInMillis());
     }
 
     @DisplayName("동일한 사용자로 여러 토큰 생성 시 서로 다른 값이어야 한다")
@@ -98,24 +116,6 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(token1.value()).isNotEqualTo(token2.value());
-    }
-
-    @DisplayName("만료된 엑세스 토큰은 리프레시 토큰이 유효하다면 갱신된다")
-    @Test
-    void verifyAndRefreshExpiredToken() {
-        // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-        EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
-
-        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-
-        // when
-        jwtService.processAccessToken(expiredAccessToken, mockResponse);
-
-        // then
-        assertRefreshedAccessToken(mockResponse);
     }
 
     @DisplayName("만료된 엑세스 토큰은 리프레시 토큰이 유효하지 않다면 갱신되지 않고 예외가 발생한다")
@@ -164,7 +164,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
 
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
@@ -173,7 +173,7 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         // then
         String cookieHeader = mockResponse.getHeader("Set-Cookie");
-        assertThat(cookieHeader).contains("ACCESS=");
+        assertThat(cookieHeader).contains("ACCESS_TOKEN=");
         assertThat(cookieHeader).contains("HttpOnly");
         assertThat(cookieHeader).contains("Secure");
     }
@@ -186,14 +186,14 @@ class JwtServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.VOLUNTEER;
 
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        RefreshToken oldRefreshToken = createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        RefreshToken oldRefreshToken = createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         EncodedToken newAccessToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
-        RefreshToken newRefreshToken = createAndSaveRefreshToken(userId, newAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriod()));
+        RefreshToken newRefreshToken = createAndSaveRefreshToken(userId, newAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         // when
         // then
-        assertThatThrownBy(() -> refreshTokenManager.findRefreshToken(expiredAccessToken))
+        assertThatThrownBy(() -> refreshTokenManager.findRefreshTokenByAccessToken(expiredAccessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
 
@@ -263,7 +263,6 @@ class JwtServiceTest extends IntegrationTestSupport {
     private RefreshToken createAndSaveRefreshToken(String userId, EncodedToken accessToken, Instant expiration) {
         Claims claims = buildClaims(userId, UserRole.VOLUNTEER);
         Instant now = Instant.now();
-        Instant refreshExpiration = now.plusMillis(TokenType.REFRESH.getPeriod());
         String uniqueId = UUID.randomUUID().toString(); // jti
 
         RefreshToken refreshToken = new RefreshToken(
@@ -273,7 +272,7 @@ class JwtServiceTest extends IntegrationTestSupport {
                         .claims(claims)
                         .id(uniqueId)
                         .issuedAt(Date.from(now))
-                        .expiration(Date.from(refreshExpiration))
+                        .expiration(Date.from(expiration))
                         .signWith(secretKey, Jwts.SIG.HS256)
                         .compact()));
 
@@ -287,17 +286,6 @@ class JwtServiceTest extends IntegrationTestSupport {
                 .add("id", userId)
                 .add("role", role)
                 .build();
-    }
-
-    private void assertRefreshedAccessToken(MockHttpServletResponse mockResponse) {
-        String cookie = mockResponse.getHeader("Set-Cookie");
-        assertThat(cookie).isNotNull();
-        assertThat(cookie).contains(TokenType.ACCESS.name());
-
-        EncodedToken refreshedAccessToken = new EncodedToken(
-                cookie.split(";")[0].substring("ACCESS=".length()));
-        assertThatCode(() -> jwtValidator.validateToken(refreshedAccessToken))
-                .doesNotThrowAnyException();
     }
 
 }

@@ -48,7 +48,7 @@ public class JwtService implements JwtUseCase {
     private void handleJwtExpiredException(JwtException e, EncodedToken accessToken, HttpServletResponse response) {
         if (e.getErrorType() == JwtErrorType.EXPIRED_TOKEN) {
             EncodedToken refreshedToken = jwtRefresher.refreshAccessToken(accessToken);
-            cookieUseCase.setAccessToken(response, refreshedToken.value());
+            cookieUseCase.setToken(response, refreshedToken.value(), TokenType.ACCESS);
             return;
         }
         throw e;
