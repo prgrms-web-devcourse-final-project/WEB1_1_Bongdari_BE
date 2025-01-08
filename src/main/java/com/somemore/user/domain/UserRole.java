@@ -24,7 +24,7 @@ public enum UserRole implements GrantedAuthority {
 
     public static UserRole from(String role) {
         for (UserRole userRole : values()) {
-            if (userRole.name().equals(role)) {
+            if (role.contains(userRole.name())) {
                 return userRole;
             }
         }
