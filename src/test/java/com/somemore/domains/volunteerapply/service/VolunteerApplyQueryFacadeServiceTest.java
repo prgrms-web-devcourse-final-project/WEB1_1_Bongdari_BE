@@ -2,6 +2,8 @@ package com.somemore.domains.volunteerapply.service;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
+import com.somemore.domains.review.domain.Review;
+import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
@@ -11,6 +13,7 @@ import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
+import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +45,30 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
     private VolunteerDetailRepository volunteerDetailRepository;
     @Autowired
     private VolunteerApplyRepository volunteerApplyRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
+    @DisplayName("모집글 아이디와 봉사자 아이디로 지원 응답 값을 조회할 수 있다.")
+    @Test
+    void getVolunteerApplyByRecruitIdAndVolunteerId() {
+        // given
+        Long recruitBoardId = 1234L;
+        UUID volunteerId = UUID.randomUUID();
+        VolunteerApply apply = createApply(volunteerId, recruitBoardId);
+        volunteerApplyRepository.save(apply);
+
+        Review review = createReview(apply.getId(), volunteerId);
+        reviewRepository.save(review);
+
+        // when
+        VolunteerApplyWithReviewStatusResponseDto dto = volunteerApplyQueryFacadeService.getVolunteerApplyByRecruitIdAndVolunteerId(
+                recruitBoardId, volunteerId);
+
+        // then
+        assertThat(dto.recruitBoardId()).isEqualTo(recruitBoardId);
+        assertThat(dto.volunteerId()).isEqualTo(volunteerId);
+        assertThat(dto.isReviewed()).isTrue();
+    }
 
     @DisplayName("모집글 아이디와 기관 아이디로 필터에 맞는 지원자 간단 정보를 조회할 수 있다.")
     @Test
@@ -108,6 +134,16 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
         assertThat(result).hasSize(3);
     }
 
+    private static Review createReview(Long volunteerApplyId, UUID volunteerId) {
+        return Review.builder()
+                .volunteerApplyId(volunteerApplyId)
+                .volunteerId(volunteerId)
+                .title("리뷰 제목")
+                .content("리뷰 내용")
+                .imgUrl("리뷰 이미지")
+                .build();
+    }
+
     private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
 
         VolunteerRegisterRequestDto volunteerRegisterRequestDto =
@@ -130,7 +166,7 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
                 .status(APPROVED)
-                .attended(false)
+                .attended(true)
                 .build();
     }
 

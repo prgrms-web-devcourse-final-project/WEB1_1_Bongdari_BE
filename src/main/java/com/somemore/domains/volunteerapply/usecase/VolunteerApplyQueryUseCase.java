@@ -2,7 +2,6 @@ package com.somemore.domains.volunteerapply.usecase;
 
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
-import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import org.springframework.data.domain.Page;
 
@@ -16,8 +15,6 @@ public interface VolunteerApplyQueryUseCase {
     VolunteerApply getByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
 
     VolunteerApplySummaryResponseDto getSummaryByRecruitId(Long recruitId);
-
-    VolunteerApplyResponseDto getVolunteerApplyByRecruitIdAndVolunteerId(Long recruitId, UUID volunteerId);
 
     List<UUID> getVolunteerIdsByRecruitIds(List<Long> recruitIds);
 
