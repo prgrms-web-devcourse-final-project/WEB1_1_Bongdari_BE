@@ -54,7 +54,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getRole()).isEqualTo(UserRole.getOAuthUserDefaultRole());
-        assertThat(savedUser.getEmail())
+        assertThat(savedUser.getAccountId())
                 .hasSize(UUID.randomUUID().toString().length() + provider.getProviderName().length());
         assertThat(savedSetting).isNotNull();
         assertThat(savedSetting.getUserId()).isEqualTo(savedUser.getId());
@@ -88,7 +88,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getRole()).isEqualTo(role);
-        assertThat(savedUser.getEmail()).isEqualTo("test");
+        assertThat(savedUser.getAccountId()).isEqualTo("test");
 
         assertThat(savedSetting).isNotNull();
         assertThat(savedSetting.getUserId()).isEqualTo(savedUser.getId());

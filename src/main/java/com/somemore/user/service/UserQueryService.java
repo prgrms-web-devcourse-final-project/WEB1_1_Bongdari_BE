@@ -31,6 +31,12 @@ public class UserQueryService implements UserQueryUseCase {
     }
 
     @Override
+    public User getByAccountId(String accountId) {
+        return userRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
+    }
+
+    @Override
     public UserCommonAttribute getCommonAttributeByUserId(UUID userId) {
         return userCommonAttributeRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));

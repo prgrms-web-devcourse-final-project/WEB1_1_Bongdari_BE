@@ -51,6 +51,18 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         assertThat(foundUser).isNotNull();
     }
 
+    @DisplayName("유저 계정 아이디로 유저를 조회할 수 있다.")
+    @Test
+    void getByAccountId() {
+        // given
+
+        // when
+        User foundUser = userQueryService.getByAccountId(user.getAccountId());
+
+        // then
+        assertThat(foundUser).isNotNull();
+    }
+
     @DisplayName("유저 아이디로 유저 공통 속성을 조회할 수 있다.")
     @Test
     void getCommonAttributeByUserID() {

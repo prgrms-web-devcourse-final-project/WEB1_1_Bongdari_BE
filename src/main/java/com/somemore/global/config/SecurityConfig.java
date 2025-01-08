@@ -1,7 +1,6 @@
 package com.somemore.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.idpw.filter.IdPwAuthFilter;
 import com.somemore.global.auth.jwt.filter.JwtAuthFilter;
 import com.somemore.global.auth.jwt.filter.JwtExceptionFilter;
@@ -12,8 +11,8 @@ import com.somemore.global.auth.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,11 +45,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
                                                    AuthenticationManager authenticationManager,
                                                    GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase,
-                                                   CookieUseCase cookieUseCase,
+//                                                   CookieUseCase cookieUseCase,
                                                    ObjectMapper objectMapper) throws Exception {
 
-        IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, cookieUseCase, objectMapper);
-        idPwAuthFilter.setFilterProcessesUrl("/api/center/sign-in");
+        IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, objectMapper);
+        idPwAuthFilter.setFilterProcessesUrl("/api/sign-in/id-pw");
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
@@ -62,20 +61,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
 
                 .authorizeHttpRequests(request ->
-                                request
-                                        .requestMatchers(
-                                                "/api/center/sign-in",
-                                                "/**"
-//                                        "/login",
-//                                        "/oauth2/**",
-//                                        "/api/auth/**",
-//                                        "/v3/api-docs/**",
-//                                        "/swagger/**",
-//                                        "/swagger-ui.html",
-//                                        "/swagger-ui/**"
-                                        )
-                                        .permitAll()
-                                        .anyRequest().authenticated()
+                        request
+                                .requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated()
                 )
 
                 .oauth2Login(oauth2 ->

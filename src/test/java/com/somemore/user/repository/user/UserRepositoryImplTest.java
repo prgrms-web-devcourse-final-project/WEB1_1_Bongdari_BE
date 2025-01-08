@@ -32,10 +32,9 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // then
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getId()).isNotNull();
-        assertThat(savedUser.getRole()).isEqualTo(UserRole.VOLUNTEER);
-        assertThat(savedUser.getEmail()).isEqualTo(userAuthInfo.email());
+        assertThat(savedUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("OAuth 유저(기관)를 저장할 수 있다.")
@@ -49,10 +48,9 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // then
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getId()).isNotNull();
-        assertThat(savedUser.getRole()).isEqualTo(UserRole.CENTER);
-        assertThat(savedUser.getEmail()).isEqualTo(userAuthInfo.email());
+        assertThat(savedUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("Local 유저(기관)를 저장할 수 있다.")
@@ -66,10 +64,9 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
 
         // then
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getId()).isNotNull();
-        assertThat(savedUser.getRole()).isEqualTo(UserRole.CENTER);
-        assertThat(savedUser.getEmail()).isEqualTo(userAuthInfo.email());
+        assertThat(savedUser)
+                .isNotNull()
+                .isEqualTo(user);
     }
 
     @DisplayName("유저아이디로 유저를 조회할 수 있다.")
@@ -85,9 +82,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(findUser).isPresent();
-        assertThat(findUser.get().getId()).isEqualTo(savedUser.getId());
-        assertThat(findUser.get().getRole()).isEqualTo(UserRole.CENTER);
-        assertThat(savedUser.getEmail()).isEqualTo(userAuthInfo.email());
+        assertThat(findUser.get()).isEqualTo(savedUser);
     }
 
     @DisplayName("유효하지 않은 유저 아이디로 유저를 조회할 수 없다.")
@@ -104,5 +99,21 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(findUser).isEmpty();
+    }
+
+    @DisplayName("유저 계정 아이디로 유저를 조회할 수 있다.")
+    @Test
+    void findByAccountId() {
+        // given
+        UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
+        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User savedUser = userRepository.save(user);
+
+        // when
+        Optional<User> findUser = userRepository.findByAccountId(savedUser.getAccountId());
+
+        // then
+        assertThat(findUser).isPresent();
+        assertThat(findUser.get()).isEqualTo(savedUser);
     }
 }
