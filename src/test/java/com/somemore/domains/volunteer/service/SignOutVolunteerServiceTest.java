@@ -76,7 +76,7 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
 
-        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGNOUT.name());
+        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGN_OUT.name());
     }
 
     @Test
@@ -87,6 +87,6 @@ class SignOutVolunteerServiceTest extends IntegrationTestSupport {
 
         // Then
         assertThatNoException().isThrownBy(() -> signOutVolunteerService.signOut(response, volunteerId));
-        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGNOUT.name());
+        assertThat(Arrays.toString(response.getCookies())).contains(TokenType.SIGN_OUT.name());
     }
 }

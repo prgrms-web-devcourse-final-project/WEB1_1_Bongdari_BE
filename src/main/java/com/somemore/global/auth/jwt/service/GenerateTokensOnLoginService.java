@@ -25,7 +25,7 @@ public class GenerateTokensOnLoginService implements GenerateTokensOnLoginUseCas
 
     @Override
     public EncodedToken generateLoginToken(UUID userId, UserRole role) {
-        return generateToken(userId, role, TokenType.LOGIN);
+        return generateToken(userId, role, TokenType.SIGN_IN);
     }
 
     @Override

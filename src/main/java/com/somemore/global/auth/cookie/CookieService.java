@@ -20,7 +20,7 @@ public class CookieService implements CookieUseCase {
 
     @Override
     public void deleteAccessToken(HttpServletResponse response) {
-        ResponseCookie cookie = generateCookie(TokenType.SIGNOUT, TokenType.SIGNOUT.name());
+        ResponseCookie cookie = generateCookie(TokenType.SIGN_OUT, TokenType.SIGN_OUT.name());
         response.addHeader("Set-Cookie", cookie.toString());
     }
 

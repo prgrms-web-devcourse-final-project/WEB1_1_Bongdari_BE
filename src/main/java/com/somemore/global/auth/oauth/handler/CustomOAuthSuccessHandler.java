@@ -55,7 +55,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 generateTokensOnLoginUseCase.generateLoginToken(
                         userId, UserRole.getOAuthUserDefaultRole());
 
-        cookieUseCase.setToken(response, loginToken.getValueWithPrefix(), TokenType.LOGIN);
+        cookieUseCase.setToken(response, loginToken.getValueWithPrefix(), TokenType.SIGN_IN);
     }
 
     private OAuth2User extractOAuthUser(Authentication authentication) {

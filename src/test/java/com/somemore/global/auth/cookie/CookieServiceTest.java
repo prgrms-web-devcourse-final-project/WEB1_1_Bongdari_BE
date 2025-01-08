@@ -37,7 +37,7 @@ class CookieServiceTest {
 
         // Then
         String setCookieHeader = response.getHeader("Set-Cookie");
-        assertThat(setCookieHeader).contains("ACCESS_TOKEN=" + TokenType.SIGNOUT.name()); // 빈 값
+        assertThat(setCookieHeader).contains("ACCESS_TOKEN=" + TokenType.SIGN_OUT.name()); // 빈 값
         assertThat(setCookieHeader).contains("Max-Age=0"); // 삭제
         assertThat(setCookieHeader).contains("Path=/");
     }

@@ -8,8 +8,8 @@ import java.time.Duration;
 public enum TokenType {
     ACCESS(Duration.ofMinutes(30)),
     REFRESH(Duration.ofDays(7)),
-    LOGIN(Duration.ofMinutes(1)),
-    SIGNOUT(Duration.ZERO);
+    SIGN_IN(Duration.ofMinutes(1)),
+    SIGN_OUT(Duration.ZERO);
 
     private final Duration period;
 
