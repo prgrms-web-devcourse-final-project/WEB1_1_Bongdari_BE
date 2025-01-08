@@ -28,7 +28,7 @@ public class AuthController {
         UserRole role = authQueryUseCase.getRoleByUserId(userId);
 
         return ApiResponse.ok(HttpStatus.OK.value(),
-                UserInfoResponseDto.from(userId, role),
+                UserInfoResponseDto.of(userId, role),
                 "유저 정보 응답 성공");
     }
 

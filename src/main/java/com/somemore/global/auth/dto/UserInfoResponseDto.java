@@ -16,7 +16,7 @@ public record UserInfoResponseDto(
         @Schema(description = "유저 ROLE")
         String role
 ) {
-        public static UserInfoResponseDto from(UUID userId, UserRole role) {
+        public static UserInfoResponseDto of(UUID userId, UserRole role) {
                 return new UserInfoResponseDto(userId.toString(), role.getAuthority());
         }
 }
