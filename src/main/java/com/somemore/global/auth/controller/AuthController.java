@@ -40,6 +40,6 @@ public class AuthController {
 
         return ApiResponse.ok(HttpStatus.OK.value(),
                 accessToken.getValueWithPrefix(),
-                "유저 정보 응답 성공");
+                "액세스 토큰 응답 성공");
     }
 }
