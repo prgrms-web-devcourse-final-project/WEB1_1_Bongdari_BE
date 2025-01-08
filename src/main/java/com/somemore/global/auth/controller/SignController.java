@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/center")
+@RequestMapping("/api")
 @Tag(name = "Sign API", description = "ID,PW 로그인, 로그아웃")
 public class SignController {
 
@@ -30,7 +30,7 @@ public class SignController {
      *
      * 실제 로그인 절차는 필터에서 처리됩니다.
      */
-    @PostMapping("/sign-in")
+    @PostMapping("/sign-in/id-pw")
     public ApiResponse<String> signIn(
             @RequestParam SignRequestDto signRequestDto
     ) {

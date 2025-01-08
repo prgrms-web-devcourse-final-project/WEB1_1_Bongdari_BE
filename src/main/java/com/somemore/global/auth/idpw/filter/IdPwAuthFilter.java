@@ -44,16 +44,22 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
         response.setStatus(HttpServletResponse.SC_OK);
+        String userId = authResult.getName();
+        String role = extractRole(authResult);
         EncodedToken accessToken =
                 generateTokensOnLoginUseCase.saveRefreshTokenAndReturnAccessToken(
-                        UUID.fromString(authResult.getName()),
-                        UserRole.from(authResult.getAuthorities().stream()
-                                .findFirst()
-                                .map(GrantedAuthority::getAuthority)
-                                .orElseThrow(() -> new IllegalStateException("유저 권한 자체가 존재하지 않습니다."))));
+                        UUID.fromString(userId),
+                        UserRole.from(role));
 
         response.setHeader("Authorization", accessToken.getValueWithPrefix());
         // cookieUseCase.setAccessToken(response, accessToken.value());
+    }
+
+    private static String extractRole(Authentication authResult) {
+        return authResult.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElseThrow(() -> new IllegalStateException("유저 권한 자체가 존재하지 않습니다."));
     }
 
     @Override
