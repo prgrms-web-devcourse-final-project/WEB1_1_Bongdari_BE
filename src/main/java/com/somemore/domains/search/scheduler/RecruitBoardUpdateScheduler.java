@@ -1,7 +1,7 @@
 package com.somemore.domains.search.scheduler;
 
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.search.config.ElasticsearchHealthChecker;
 import com.somemore.domains.search.usecase.RecruitBoardDocumentUseCase;
 import lombok.RequiredArgsConstructor;

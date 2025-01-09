@@ -7,7 +7,7 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchConditi
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
-import com.somemore.domains.recruitboard.usecase.query.RecruitBoardQueryUseCase;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.search.config.ElasticsearchHealthChecker;
 import com.somemore.domains.search.usecase.RecruitBoardDocumentUseCase;
 import com.somemore.global.common.response.ApiResponse;
