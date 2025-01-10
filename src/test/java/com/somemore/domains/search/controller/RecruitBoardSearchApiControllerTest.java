@@ -4,6 +4,8 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByConditi
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
+import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
+import com.somemore.domains.search.config.ElasticsearchHealthChecker;
 import com.somemore.domains.search.usecase.RecruitBoardDocumentUseCase;
 import com.somemore.support.ControllerTestSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -31,8 +34,14 @@ class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ElasticsearchHealthChecker elasticsearchHealthChecker;
+
     @MockBean
     private RecruitBoardDocumentUseCase recruitBoardDocumentUseCase;
+
+    @MockBean
+    private RecruitBoardQueryUseCase recruitBoardQueryUseCase;
 
     @Test
     @DisplayName("모집글을 검색 조건으로 페이징 조회 성공")
@@ -40,8 +49,13 @@ class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
         // given
         Page<RecruitBoardWithCenterResponseDto> page = new PageImpl<>(Collections.emptyList());
 
-        given(recruitBoardDocumentUseCase.getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class)))
-                .willReturn(page);
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            given(recruitBoardDocumentUseCase.getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class)))
+                    .willReturn(page);
+        } else {
+            given(recruitBoardQueryUseCase.getAllWithCenter(any(RecruitBoardSearchCondition.class)))
+                    .willReturn(page);
+        }
 
         // when
         // then
@@ -54,7 +68,11 @@ class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.message").value("봉사 활동 모집글 검색 조회 성공"));
 
-        verify(recruitBoardDocumentUseCase, times(1)).getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class));
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            verify(recruitBoardDocumentUseCase, times(1)).getRecruitBoardBySearch(any(RecruitBoardSearchCondition.class));
+        } else {
+            verify(recruitBoardQueryUseCase, times(1)).getAllWithCenter(any(RecruitBoardSearchCondition.class));
+        }
     }
 
     @Test
@@ -62,9 +80,16 @@ class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
     void getNearby() throws Exception {
         // given
         Page<RecruitBoardDetailResponseDto> page = new PageImpl<>(Collections.emptyList());
-        given(recruitBoardDocumentUseCase.getRecruitBoardsNearbyWithKeyword(
-                any(RecruitBoardNearByCondition.class)
-        )).willReturn(page);
+
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            given(recruitBoardDocumentUseCase.getRecruitBoardsNearbyWithKeyword(
+                    any(RecruitBoardNearByCondition.class)
+            )).willReturn(page);
+        } else {
+            given(recruitBoardQueryUseCase.getRecruitBoardsNearby(
+                    any(RecruitBoardNearByCondition.class)
+            )).willReturn(page);
+        }
 
         // when
         // then
@@ -78,7 +103,12 @@ class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").exists())
                 .andExpect(jsonPath("$.message").value("근처 봉사 활동 모집글 조회 성공"));
 
-        verify(recruitBoardDocumentUseCase, times(1)).getRecruitBoardsNearbyWithKeyword(
-                any(RecruitBoardNearByCondition.class));
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            verify(recruitBoardDocumentUseCase, times(1)).getRecruitBoardsNearbyWithKeyword(
+                    any(RecruitBoardNearByCondition.class));
+        } else {
+            verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsNearby(
+                    any(RecruitBoardNearByCondition.class));
+        }
     }
 }
