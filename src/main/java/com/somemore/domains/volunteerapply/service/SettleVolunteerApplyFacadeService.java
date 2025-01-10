@@ -9,6 +9,7 @@ import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleReque
 import com.somemore.domains.volunteerapply.event.VolunteerReviewRequestEvent;
 import com.somemore.domains.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
+import com.somemore.domains.volunteerrecord.event.VolunteerRecordEventPublisher;
 import com.somemore.global.common.event.ServerEventPublisher;
 import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
@@ -30,6 +31,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final UpdateVolunteerUseCase updateVolunteerUseCase;
     private final ServerEventPublisher serverEventPublisher;
+    private final VolunteerRecordEventPublisher volunteerRecordEventPublisher;
 
     @Override
     public void settleVolunteerApplies(VolunteerApplySettleRequestDto dto, UUID centerId) {
@@ -47,6 +49,7 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
             apply.changeAttended(true);
             updateVolunteerUseCase.updateVolunteerStats(apply.getVolunteerId(), hours);
             publishVolunteerReviewRequestEvent(apply, recruitBoard);
+            volunteerRecordEventPublisher.publishVolunteerRecordCreateEvent(apply, recruitBoard);
         });
 
     }

@@ -7,6 +7,8 @@ import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
+import com.somemore.domains.volunteerrecord.domain.VolunteerRecord;
+import com.somemore.domains.volunteerrecord.repository.VolunteerRecordJpaRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +41,9 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
+
+    @Autowired
+    private VolunteerRecordJpaRepository volunteerRecordJpaRepository;
 
     @DisplayName("봉사 활동 지원을 정산할 수 있다.")
     @Test
@@ -86,6 +91,18 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         assertThat(findVolunteer1.getTotalVolunteerCount()).isEqualTo(1);
         assertThat(findVolunteer2.getTotalVolunteerCount()).isEqualTo(1);
         assertThat(findVolunteer3.getTotalVolunteerCount()).isEqualTo(1);
+
+        // 봉사 기록 생성 확인
+        List<VolunteerRecord> records = volunteerRecordJpaRepository.findAll();
+        assertThat(records).hasSize(3);
+
+        assertThat(records)
+                .extracting(VolunteerRecord::getVolunteerId)
+                .containsExactlyInAnyOrder(volunteer1.getId(), volunteer2.getId(), volunteer3.getId());
+
+        assertThat(records)
+                .extracting(VolunteerRecord::getVolunteerHours)
+                .containsOnly(hour);
     }
 
     @DisplayName("정산시, 지원 리스트에 존재하지 않는 지원이 있는 경우 에러가 발생한다.")

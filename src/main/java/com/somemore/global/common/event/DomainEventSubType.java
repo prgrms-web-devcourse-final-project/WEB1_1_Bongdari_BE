@@ -7,6 +7,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum DomainEventSubType {
     CREATE_RECRUIT_BOARD("모집 글 등록"),
+    VOLUNTEER_HOURS_SETTLE("봉사 시간 정산")
     ;
 
     private final String description;
