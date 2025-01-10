@@ -23,6 +23,7 @@ public class CreateRecruitBoardMessageConverter {
 
             return switch (DomainEventSubType.from(eventType)) {
                 case CREATE_RECRUIT_BOARD -> parseCreateRecruitBoardEvent(message);
+                case VOLUNTEER_HOURS_SETTLE -> null;
             };
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -34,4 +35,5 @@ public class CreateRecruitBoardMessageConverter {
 
         return objectMapper.readValue(message, CreateRecruitBoardEvent.class);
     }
+
 }
