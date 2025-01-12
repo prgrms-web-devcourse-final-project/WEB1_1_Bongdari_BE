@@ -1,4 +1,4 @@
-package com.somemore.global.auth.oauth.naver.dto;
+package com.somemore.global.auth.oauth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -12,7 +12,7 @@ public record NaverUserProfileResponseDto(
 ) {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Response(
-            String id // 일련 번호
+            String id // OAuth ID
     ) {
     }
 }
