@@ -4,6 +4,7 @@ import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
+import com.somemore.global.auth.oauth.domain.CustomOAuth2User;
 import com.somemore.global.auth.oauth.processor.OAuthUserProcessor;
 import com.somemore.global.auth.redirect.RedirectUseCase;
 import com.somemore.user.domain.UserRole;
@@ -35,7 +36,7 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) {
-        OAuth2User oauthUser = extractOAuthUser(authentication);
+        CustomOAuth2User oauthUser = extractOAuthUser(authentication);
         UUID userId = oauthUserProcessor.fetchUserIdByOAuthUser(oauthUser);
 
         processAccessToken(response, userId);
@@ -55,14 +56,28 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 generateTokensOnLoginUseCase.generateLoginToken(
                         userId, UserRole.getOAuthUserDefaultRole());
 
-        cookieUseCase.setToken(response, loginToken.getValueWithPrefix(), TokenType.SIGN_IN);
+        cookieUseCase.setToken(response, loginToken.value(), TokenType.SIGN_IN);
     }
 
-    private OAuth2User extractOAuthUser(Authentication authentication) {
+    private CustomOAuth2User extractOAuthUser(Authentication authentication) {
+        OAuth2AuthenticationToken oAuth2AuthenticationToken = castToOAuth2AuthenticationTokenBy(authentication);
+        OAuth2User oAuth2User = oAuth2AuthenticationToken.getPrincipal();
+        return castToCustomOAuth2UserBy(oAuth2User);
+    }
+
+    private OAuth2AuthenticationToken castToOAuth2AuthenticationTokenBy(Authentication authentication) {
         if (authentication instanceof OAuth2AuthenticationToken token) {
-            return token.getPrincipal();
+            return token;
         }
         log.error("Authentication 객체가 OAuth2AuthenticationToken 타입이 아닙니다: {}", authentication.getClass().getName());
-        throw new IllegalArgumentException("잘못된 인증 객체입니다.");
+        throw new IllegalArgumentException();
+    }
+
+    private CustomOAuth2User castToCustomOAuth2UserBy(OAuth2User oAuth2User) {
+        if (oAuth2User instanceof CustomOAuth2User customOAuth2User) {
+            return customOAuth2User;
+        }
+        log.error("OAuth2User 객체가 CustomOAuth2User 타입이 아닙니다: {}", oAuth2User.getClass().getName());
+        throw new IllegalArgumentException();
     }
 }
