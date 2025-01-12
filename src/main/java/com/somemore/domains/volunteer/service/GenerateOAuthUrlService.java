@@ -1,6 +1,7 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.usecase.GenerateOAuthUrlUseCase;
+import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ public class GenerateOAuthUrlService implements GenerateOAuthUrlUseCase {
     @Override
     public String generateUrl(String oAuthProvider) {
         return UriComponentsBuilder.fromHttpUrl(generateBaseUrl())
-                .pathSegment(oAuthProvider)
+                .pathSegment(OAuthProvider.from(oAuthProvider).getProviderName())
                 .build()
                 .toUriString();
     }
