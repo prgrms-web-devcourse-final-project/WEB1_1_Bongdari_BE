@@ -5,8 +5,8 @@ import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
 import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
-import com.somemore.global.auth.jwt.refresh.domain.RefreshToken;
-import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.global.auth.jwt.domain.RefreshToken;
+import com.somemore.global.auth.jwt.manager.TokenManager;
 import com.somemore.global.auth.sign.out.SignOutService;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserRole;
@@ -28,7 +28,7 @@ class SignOutServiceTest extends IntegrationTestSupport {
     @Autowired
     private SignOutService signOutVolunteerService;
     @Autowired
-    private RefreshTokenManager refreshTokenManager;
+    private TokenManager tokenManager;
     @Autowired
     private JwtGenerator jwtGenerator;
     @Autowired
@@ -63,13 +63,13 @@ class SignOutServiceTest extends IntegrationTestSupport {
                 accessToken,
                 jwtGenerator.generateToken(userId.toString(), role.getAuthority(), TokenType.REFRESH));
 
-        refreshTokenManager.save(refreshToken);
+        tokenManager.save(refreshToken);
 
         // When
         signOutVolunteerService.signOut(response, userId);
 
         // Then
-        assertThatThrownBy(() -> refreshTokenManager.getRefreshTokenByAccessToken(accessToken))
+        assertThatThrownBy(() -> tokenManager.getRefreshTokenByAccessToken(accessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }

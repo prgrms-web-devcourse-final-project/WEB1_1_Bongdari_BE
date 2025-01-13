@@ -1,11 +1,11 @@
-package com.somemore.global.auth.jwt.refresh.refresher;
+package com.somemore.global.auth.jwt.refresher;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
 import com.somemore.global.auth.jwt.parser.JwtParser;
-import com.somemore.global.auth.jwt.refresh.domain.RefreshToken;
-import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.global.auth.jwt.domain.RefreshToken;
+import com.somemore.global.auth.jwt.manager.TokenManager;
 import com.somemore.global.auth.jwt.validator.JwtValidator;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +17,22 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class DefaultJwtRefresher implements JwtRefresher {
 
-    private final RefreshTokenManager refreshTokenManager;
+    private final TokenManager tokenManager;
     private final JwtValidator jwtValidator;
     private final JwtParser jwtParser;
     private final JwtGenerator jwtGenerator;
 
     @Override
     public EncodedToken refreshAccessToken(EncodedToken accessToken) {
-        RefreshToken refreshToken = refreshTokenManager.findRefreshTokenByAccessToken(accessToken);
-        EncodedToken refreshTokenValue = new EncodedToken(refreshToken.getRefreshToken());
+        RefreshToken refreshToken = tokenManager.getRefreshTokenByAccessToken(accessToken);
+        EncodedToken refreshTokenValue = EncodedToken.from(refreshToken.getRefreshToken());
         jwtValidator.validateToken(refreshTokenValue);
 
         Claims claims = jwtParser.parseToken(refreshTokenValue);
         refreshToken.updateAccessToken(generateAccessToken(claims));
-        refreshTokenManager.save(refreshToken);
+        tokenManager.save(refreshToken);
 
-        return new EncodedToken(refreshToken.getAccessToken());
+        return EncodedToken.from(refreshToken.getAccessToken());
     }
 
     private EncodedToken generateAccessToken(Claims claims) {

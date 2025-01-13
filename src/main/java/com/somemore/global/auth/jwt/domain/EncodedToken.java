@@ -5,6 +5,10 @@ public record EncodedToken(String value) {
     private static final String UNINITIALIZED = "UNINITIALIZED";
     private static final String PREFIX = "Bearer ";
 
+    public static EncodedToken from(String value) {
+        return new EncodedToken(value);
+    }
+
     public String getValueWithPrefix() {
         return PREFIX + this.value;
     }

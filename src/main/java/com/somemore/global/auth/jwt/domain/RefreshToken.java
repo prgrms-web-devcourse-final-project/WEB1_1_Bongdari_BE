@@ -1,6 +1,5 @@
-package com.somemore.global.auth.jwt.refresh.domain;
+package com.somemore.global.auth.jwt.domain;
 
-import com.somemore.global.auth.jwt.domain.EncodedToken;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

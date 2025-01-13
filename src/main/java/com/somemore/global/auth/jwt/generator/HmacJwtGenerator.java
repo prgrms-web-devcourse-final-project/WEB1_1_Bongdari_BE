@@ -26,13 +26,15 @@ public class HmacJwtGenerator implements JwtGenerator {
         Instant expiration = now.plusMillis(tokenType.getPeriodInMillis());
         String uniqueId = UUID.randomUUID().toString(); // JTI
 
-        return new EncodedToken(Jwts.builder()
-                .claims(claims)
-                .id(uniqueId)
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(expiration))
-                .signWith(secretKey, ALGORITHM)
-                .compact());
+        return EncodedToken.from(
+                Jwts.builder()
+                        .claims(claims)
+                        .id(uniqueId)
+                        .issuedAt(Date.from(now))
+                        .expiration(Date.from(expiration))
+                        .signWith(secretKey, ALGORITHM)
+                        .compact()
+        );
     }
 
     private static Claims buildClaims(String userId, String role) {
