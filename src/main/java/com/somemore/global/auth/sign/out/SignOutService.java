@@ -1,8 +1,6 @@
-package com.somemore.global.auth.signout.service;
+package com.somemore.global.auth.sign.out;
 
-import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
-import com.somemore.global.auth.signout.usecase.SignOutUseCase;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import java.util.UUID;
 @Transactional
 public class SignOutService implements SignOutUseCase {
 
-    private final CookieUseCase cookieUseCase;
     private final RefreshTokenManager refreshTokenManager;
 
     @Override
