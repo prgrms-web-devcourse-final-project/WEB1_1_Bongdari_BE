@@ -63,7 +63,8 @@ public class RecruitBoardCommandApiController {
             @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
         String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
-        updateRecruitBoardUseCase.updateRecruitBoard(requestDto, id, userId, imgUrl);
+        LocalDateTime now = LocalDateTime.now();
+        updateRecruitBoardUseCase.updateRecruitBoard(requestDto, id, userId, imgUrl, now);
 
         return ApiResponse.ok("봉사 활동 모집글 수정 성공");
     }
@@ -76,8 +77,8 @@ public class RecruitBoardCommandApiController {
             @PathVariable Long id,
             @Valid @RequestBody RecruitBoardLocationUpdateRequestDto requestDto
     ) {
-
-        updateRecruitBoardUseCase.updateRecruitBoardLocation(requestDto, id, userId);
+        LocalDateTime now = LocalDateTime.now();
+        updateRecruitBoardUseCase.updateRecruitBoardLocation(requestDto, id, userId, now);
         return ApiResponse.ok("봉사 활동 모집글 위치 수정 성공");
     }
 
