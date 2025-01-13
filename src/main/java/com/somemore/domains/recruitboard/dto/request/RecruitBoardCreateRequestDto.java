@@ -1,5 +1,7 @@
 package com.somemore.domains.recruitboard.dto.request;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.location.dto.request.LocationCreateRequestDto;
@@ -10,10 +12,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Builder;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
@@ -69,6 +70,7 @@ public record RecruitBoardCreateRequestDto(
                 .content(content)
                 .imgUrl(imgUrl)
                 .recruitmentInfo(recruitmentInfo)
+                .status(RECRUITING)
                 .build();
     }
 }
