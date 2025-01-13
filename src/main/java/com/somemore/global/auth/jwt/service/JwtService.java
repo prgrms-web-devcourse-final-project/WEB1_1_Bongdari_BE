@@ -24,7 +24,6 @@ public class JwtService implements JwtUseCase {
     private final JwtParser jwtParser;
     private final JwtValidator jwtValidator;
     private final JwtRefresher jwtRefresher;
-    private final CookieUseCase cookieUseCase;
 
     @Override
     public EncodedToken generateToken(String userId, String role, TokenType tokenType) {
@@ -48,7 +47,7 @@ public class JwtService implements JwtUseCase {
     private void handleJwtExpiredException(JwtException e, EncodedToken accessToken, HttpServletResponse response) {
         if (e.getErrorType() == JwtErrorType.EXPIRED_TOKEN) {
             EncodedToken refreshedToken = jwtRefresher.refreshAccessToken(accessToken);
-            cookieUseCase.setToken(response, refreshedToken.value(), TokenType.ACCESS);
+            // TODO 프론트엔드와 협의 : 만료된 액세스 토큰 관리 방법
             return;
         }
         throw e;
