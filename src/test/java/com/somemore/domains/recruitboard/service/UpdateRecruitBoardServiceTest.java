@@ -57,6 +57,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     @Test
     void updateRecruitBoard() {
         // given
+        LocalDateTime current = createCurrentDateTime();
         LocalDateTime newStartDateTime = createUpdateStartDateTime();
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
         String newImgUrl = "https://image.domain.com/updates";
@@ -73,7 +74,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId, newImgUrl);
+        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId, newImgUrl, current);
 
         // then
         RecruitBoard updatedRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
@@ -98,6 +99,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     @Test
     void updateRecruitBoardLocation() {
         // given
+        LocalDateTime current = createCurrentDateTime();
         RecruitBoardLocationUpdateRequestDto dto = RecruitBoardLocationUpdateRequestDto.builder()
                 .region("새로새로지역지역")
                 .address("새로새로주소주소")
@@ -106,7 +108,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        updateRecruitBoardService.updateRecruitBoardLocation(dto, recruitBoard.getId(), centerId);
+        updateRecruitBoardService.updateRecruitBoardLocation(dto, recruitBoard.getId(), centerId, current);
 
         // then
         RecruitBoard updateRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())

@@ -150,7 +150,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
         given(imageUploadUseCase.uploadImage(any())).willReturn(mockImageUrl);
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoard(any(), any(), any(UUID.class), anyString());
+                .updateRecruitBoard(any(), any(), any(UUID.class), anyString(), any());
 
         MockMultipartHttpServletRequestBuilder builder = multipart("/api/recruit-board/{id}", 1);
         builder.with(new RequestPostProcessor() {
@@ -187,7 +187,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .build();
 
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoardLocation(any(), any(), any(UUID.class));
+                .updateRecruitBoardLocation(any(), any(), any(UUID.class), any());
 
         String requestBody = objectMapper.writeValueAsString(requestDto);
 
