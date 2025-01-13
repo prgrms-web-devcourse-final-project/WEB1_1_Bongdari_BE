@@ -21,17 +21,6 @@ public class AuthController {
 
     private final AuthQueryUseCase authQueryUseCase;
 
-    @GetMapping("/user-info")
-    public ApiResponse<UserInfoResponseDto> getUserInfo(
-            @CurrentUser UUID userId
-    ) {
-        UserRole role = authQueryUseCase.getRoleByUserId(userId);
-
-        return ApiResponse.ok(HttpStatus.OK.value(),
-                UserInfoResponseDto.of(userId, role),
-                "유저 정보 응답 성공");
-    }
-
     @GetMapping("/token")
     public ApiResponse<String> getToken(
             @CurrentUser UUID userId

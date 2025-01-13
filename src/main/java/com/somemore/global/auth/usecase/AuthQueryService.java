@@ -15,13 +15,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class AuthQueryService implements AuthQueryUseCase {
 
-    private final UserQueryUseCase userQueryUseCase;
     private final RefreshTokenManager refreshTokenManager;
-
-    @Override
-    public UserRole getRoleByUserId(UUID userId) {
-        return userQueryUseCase.getRoleById(userId);
-    }
 
     @Override
     public EncodedToken getAccessTokenByUserId(UUID userId) {

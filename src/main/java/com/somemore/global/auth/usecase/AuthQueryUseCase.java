@@ -6,6 +6,5 @@ import com.somemore.user.domain.UserRole;
 import java.util.UUID;
 
 public interface AuthQueryUseCase {
-    UserRole getRoleByUserId(UUID userId);
     EncodedToken getAccessTokenByUserId(UUID userId);
 }
