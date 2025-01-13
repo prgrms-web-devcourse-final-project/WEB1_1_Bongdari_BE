@@ -1,4 +1,4 @@
-package com.somemore.global.auth.jwt.refresh.refresher;
+package com.somemore.global.auth.jwt.refresher;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 

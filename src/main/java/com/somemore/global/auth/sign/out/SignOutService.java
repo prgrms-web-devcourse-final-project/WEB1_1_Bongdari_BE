@@ -1,6 +1,6 @@
 package com.somemore.global.auth.sign.out;
 
-import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.global.auth.jwt.manager.TokenManager;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,13 +15,13 @@ import java.util.UUID;
 @Transactional
 public class SignOutService implements SignOutUseCase {
 
-    private final RefreshTokenManager refreshTokenManager;
+    private final TokenManager tokenManager;
 
     @Override
     public void signOut(
             HttpServletResponse response,
             UUID userId) {
 
-        refreshTokenManager.removeRefreshToken(userId.toString());
+        tokenManager.removeRefreshToken(userId.toString());
     }
 }

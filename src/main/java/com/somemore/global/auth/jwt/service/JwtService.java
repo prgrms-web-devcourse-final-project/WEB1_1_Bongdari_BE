@@ -7,7 +7,7 @@ import com.somemore.global.auth.jwt.exception.JwtErrorType;
 import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
 import com.somemore.global.auth.jwt.parser.JwtParser;
-import com.somemore.global.auth.jwt.refresh.refresher.JwtRefresher;
+import com.somemore.global.auth.jwt.refresher.JwtRefresher;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
 import com.somemore.global.auth.jwt.validator.JwtValidator;
 import io.jsonwebtoken.Claims;

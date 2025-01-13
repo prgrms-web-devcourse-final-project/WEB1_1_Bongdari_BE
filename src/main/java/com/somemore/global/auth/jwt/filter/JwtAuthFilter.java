@@ -76,7 +76,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return EncodedToken.createUninitialized();
         }
 
-        return new EncodedToken(authorizationHeader);
+        return EncodedToken.from(authorizationHeader);
     }
 
     private EncodedToken findAccessTokenFromCookie(HttpServletRequest request) {
