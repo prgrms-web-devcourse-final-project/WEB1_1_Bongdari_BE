@@ -31,8 +31,8 @@ public class User extends BaseEntity {
     @Column(name = "account_id", nullable = false)
     private String accountId;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "account_password", nullable = false)
+    private String accountPassword;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -42,15 +42,15 @@ public class User extends BaseEntity {
     public static User from(UserAuthInfo userAuthInfo, UserRole role) {
         return User.builder()
                 .accountId(userAuthInfo.accountId())
-                .password(userAuthInfo.password())
+                .accountPassword(userAuthInfo.accountPassword())
                 .role(role)
                 .build();
     }
 
     @Builder
-    private User(String accountId, String password, UserRole role) {
+    private User(String accountId, String accountPassword, UserRole role) {
         this.accountId = accountId;
-        this.password = password;
+        this.accountPassword = accountPassword;
         this.role = role;
     }
 }
