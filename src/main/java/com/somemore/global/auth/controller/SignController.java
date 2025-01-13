@@ -1,24 +1,30 @@
 package com.somemore.global.auth.controller;
 
+import com.somemore.global.auth.oauth.usecase.GenerateOAuthUrlUseCase;
 import com.somemore.global.auth.dto.SignRequestDto;
 import com.somemore.global.auth.signout.usecase.SignOutUseCase;
 import com.somemore.global.common.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Tag(name = "Sign API", description = "ID,PW 로그인, 로그아웃")
+@Tag(name = "Sign API", description = "유저 로그인, 로그아웃")
 public class SignController {
 
     private final SignOutUseCase signOutUseCase;
+    private final GenerateOAuthUrlUseCase generateOAuthUrlUseCase;
 
     /*
      * ID 및 PW 기반 로그인 엔드포인트 (Swagger 문서화를 위한 엔드포인트)
@@ -35,6 +41,16 @@ public class SignController {
             @RequestParam SignRequestDto signRequestDto
     ) {
         return ApiResponse.ok("로그인되었습니다.");
+    }
+
+    @PostMapping("/sign-in/oauth/{oauthProvider}")
+    public RedirectView signIn(
+            @Parameter(name = "oauthProvider", description = "OAuth 제공자 선택", example = "naver", required = true, schema = @Schema(allowableValues = {"naver, kakao"}))
+            @PathVariable("oauthProvider") String oauthProvider) {
+
+        String redirectUrl = generateOAuthUrlUseCase.generateUrl(oauthProvider);
+
+        return new RedirectView(redirectUrl);
     }
 
     @PostMapping("/sign-out")

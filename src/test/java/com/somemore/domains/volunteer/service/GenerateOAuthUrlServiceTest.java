@@ -1,6 +1,7 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
+import com.somemore.global.auth.oauth.service.GenerateOAuthUrlService;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
