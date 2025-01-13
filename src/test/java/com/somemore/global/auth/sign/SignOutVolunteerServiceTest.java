@@ -7,7 +7,7 @@ import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
 import com.somemore.global.auth.jwt.refresh.domain.RefreshToken;
 import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
-import com.somemore.global.auth.signout.service.SignOutService;
+import com.somemore.global.auth.sign.out.SignOutService;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserRole;
 import org.junit.jupiter.api.AfterEach;
@@ -69,7 +69,7 @@ class SignOutServiceTest extends IntegrationTestSupport {
         signOutVolunteerService.signOut(response, userId);
 
         // Then
-        assertThatThrownBy(() -> refreshTokenManager.findRefreshTokenByAccessToken(accessToken))
+        assertThatThrownBy(() -> refreshTokenManager.getRefreshTokenByAccessToken(accessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }

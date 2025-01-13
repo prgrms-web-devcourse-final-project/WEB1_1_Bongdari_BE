@@ -1,7 +1,6 @@
-package com.somemore.global.auth.controller;
+package com.somemore.global.auth.sign.out;
 
 import com.somemore.global.auth.annotation.CurrentUser;
-import com.somemore.global.auth.signout.usecase.SignOutUseCase;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;

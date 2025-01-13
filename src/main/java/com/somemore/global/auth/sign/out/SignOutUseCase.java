@@ -1,4 +1,4 @@
-package com.somemore.global.auth.signout.usecase;
+package com.somemore.global.auth.sign.out;
 
 import jakarta.servlet.http.HttpServletResponse;
 
