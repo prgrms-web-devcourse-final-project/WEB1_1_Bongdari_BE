@@ -3,6 +3,7 @@ package com.somemore.domains.recruitboard.domain;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
 import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -113,6 +114,21 @@ class RecruitBoardTest {
 
         // then
         assertThat(result).isTrue();
+    }
+
+    @DisplayName("모집글 수정 가능 여부를 확인할 수 있다.")
+    @Test
+    void isUpdatable() {
+        // given
+        // volunteerStartDateTime 내일 13:00:00
+        // current 오늘 16:00:00
+        LocalDateTime current = createCurrentDateTime();
+
+        // when
+        boolean updatable = board.isUpdatable(current);
+
+        // then
+        assertThat(updatable).isTrue();
     }
 
     public static RecruitBoard createRecruitBoard(UUID centerId) {
