@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,9 +23,8 @@ public class SignOutService implements SignOutUseCase {
     @Override
     public void signOut(
             HttpServletResponse response,
-            String volunteerId) {
+            UUID userId) {
 
-        cookieUseCase.deleteAccessToken(response);
-        refreshTokenManager.removeRefreshToken(volunteerId);
+        refreshTokenManager.removeRefreshToken(userId.toString());
     }
 }

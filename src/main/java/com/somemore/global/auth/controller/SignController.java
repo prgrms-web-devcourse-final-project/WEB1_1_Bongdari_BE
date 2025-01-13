@@ -1,5 +1,6 @@
 package com.somemore.global.auth.controller;
 
+import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.auth.oauth.usecase.GenerateOAuthUrlUseCase;
 import com.somemore.global.auth.dto.SignRequestDto;
 import com.somemore.global.auth.signout.usecase.SignOutUseCase;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,7 +59,7 @@ public class SignController {
     @PostMapping("/sign-out")
     public ApiResponse<String> signOut(
             HttpServletResponse response,
-            @AuthenticationPrincipal String userId) {
+            @CurrentUser UUID userId) {
 
         signOutUseCase.signOut(response, userId);
 
