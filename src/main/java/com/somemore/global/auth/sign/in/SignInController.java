@@ -1,6 +1,5 @@
-package com.somemore.global.auth.controller;
+package com.somemore.global.auth.sign.in;
 
-import com.somemore.global.auth.dto.SignRequestDto;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,7 +31,7 @@ public class SignInController {
      */
     @PostMapping("/api/sign-in/id-pw")
     public ApiResponse<String> signIn(
-            @RequestParam SignRequestDto signRequestDto) {
+            @RequestParam SignInRequestDto signInRequestDto) {
         return ApiResponse.ok("로그인되었습니다.");
     }
 
