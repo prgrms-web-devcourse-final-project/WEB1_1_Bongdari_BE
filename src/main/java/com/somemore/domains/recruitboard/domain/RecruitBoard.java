@@ -14,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,6 +90,11 @@ public class RecruitBoard extends BaseEntity {
 
     public boolean isCompleted() {
         return this.recruitStatus == RecruitStatus.COMPLETED;
+    }
+
+    public boolean isUpdatable(LocalDateTime current) {
+        LocalDateTime deadline = this.recruitmentInfo.getVolunteerStartDateTime().toLocalDate().atStartOfDay();
+        return current.isBefore(deadline);
     }
 
     private void updateRecruitmentInfo(RecruitBoardUpdateRequestDto dto) {

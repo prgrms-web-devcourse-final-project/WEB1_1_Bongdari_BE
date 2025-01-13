@@ -33,6 +33,8 @@ public enum ExceptionMessage {
     UNAUTHORIZED_RECRUIT_BOARD("해당 봉사 모집글에 권한이 없습니다."),
     INVALID_RECRUIT_BOARD_TIME("종료 시간은 시작 시간보다 이후여야 합니다."),
     INVALID_RECRUIT_BOARD_TIME_UPDATE("변경할수 없는 봉사 시작/종료 일시입니다."),
+    INVALID_RECRUIT_BOARD_STATUS_UPDATE("상태는 '모집중' 또는 '마감'으로만 변경할 수 있습니다."),
+    INVALID_DEADLINE_RECRUIT_BOARD_UPDATE("봉사 시작 일시 자정 전까지 변경할 수 있습니다."),
 
     // IMAGE
     UPLOAD_FAILED("파일 업로드에 실패했습니다."),

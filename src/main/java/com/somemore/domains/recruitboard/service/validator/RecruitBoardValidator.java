@@ -1,34 +1,36 @@
 package com.somemore.domains.recruitboard.service.validator;
 
-import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.global.exception.BadRequestException;
-import java.time.temporal.ChronoUnit;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
+import static com.somemore.global.exception.ExceptionMessage.INVALID_DEADLINE_RECRUIT_BOARD_UPDATE;
+import static com.somemore.global.exception.ExceptionMessage.INVALID_RECRUIT_BOARD_STATUS_UPDATE;
 import static com.somemore.global.exception.ExceptionMessage.INVALID_RECRUIT_BOARD_TIME;
 import static com.somemore.global.exception.ExceptionMessage.INVALID_RECRUIT_BOARD_TIME_UPDATE;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.recruitboard.domain.RecruitStatus;
+import com.somemore.global.exception.BadRequestException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+import org.springframework.stereotype.Component;
+
 @Component
 public class RecruitBoardValidator {
 
-    public void validateRecruitBoardTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if (endDateTime.isAfter(startDateTime)) {
+    public void validateRecruitBoardTime(LocalDateTime start, LocalDateTime end) {
+        if (end.isAfter(start)) {
             return;
         }
 
         throw new BadRequestException(INVALID_RECRUIT_BOARD_TIME);
     }
 
-    public void validateUpdateRecruitBoardTime(LocalDateTime createdAt, LocalDateTime startDateTime,
-            LocalDateTime endDateTime) {
-        validateRecruitBoardTime(startDateTime, endDateTime);
+    public void validateUpdateRecruitBoardTime(LocalDateTime createdAt, LocalDateTime start,
+            LocalDateTime end) {
+        validateRecruitBoardTime(start, end);
 
         LocalDateTime oneDayAfterCreatedAt = createdAt.plusDays(1).truncatedTo(ChronoUnit.DAYS);
-        if (startDateTime.isAfter(oneDayAfterCreatedAt)) {
+        if (start.isAfter(oneDayAfterCreatedAt)) {
             return;
         }
 
@@ -41,6 +43,21 @@ public class RecruitBoardValidator {
         }
 
         throw new BadRequestException(UNAUTHORIZED_RECRUIT_BOARD);
+    }
+
+    public void validateUpdatable(RecruitBoard recruitBoard, LocalDateTime current) {
+        if (recruitBoard.isUpdatable(current)) {
+            return;
+        }
+
+        throw new BadRequestException(INVALID_DEADLINE_RECRUIT_BOARD_UPDATE);
+    }
+
+    public void validateRecruitStatus(RecruitStatus newStatus) {
+        if (newStatus.isChangeable()) {
+            return;
+        }
+        throw new BadRequestException(INVALID_RECRUIT_BOARD_STATUS_UPDATE);
     }
 
 }
