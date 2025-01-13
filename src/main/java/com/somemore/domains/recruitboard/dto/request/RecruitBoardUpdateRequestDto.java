@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
+import lombok.Builder;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
@@ -28,11 +26,9 @@ public record RecruitBoardUpdateRequestDto(
         Integer recruitmentCount,
         @Schema(description = "봉사 시작 일시", example = "2024-12-20T10:00:00", type = "string")
         @NotNull(message = "봉사 시작 일시는 필수 값입니다.")
-        @Future(message = "봉사 시작 일시는 내일부터 가능합니다.")
         LocalDateTime volunteerStartDateTime,
         @Schema(description = "봉사 종료 일시", example = "2024-12-20T12:00:00", type = "string")
         @NotNull(message = "봉사 종료 일시는 필수 값입니다.")
-        @Future(message = "봉사 종료 일시는 내일부터 가능합니다.")
         LocalDateTime volunteerEndDateTime,
         @Schema(description = "봉사 시간", example = "2")
         @NotNull(message = "봉사 시간는 필수 값입니다.")

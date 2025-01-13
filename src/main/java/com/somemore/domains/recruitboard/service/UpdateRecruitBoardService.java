@@ -28,7 +28,8 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId, String imgUrl) {
         RecruitBoard recruitBoard = recruitBoardQueryUseCase.getById(id);
         recruitBoardValidator.validateWriter(recruitBoard, centerId);
-        recruitBoardValidator.validateRecruitBoardTime(dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
+        recruitBoardValidator.validateUpdateRecruitBoardTime(recruitBoard.getCreatedAt(),
+                dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
 
         recruitBoard.updateWith(dto, imgUrl);
     }
