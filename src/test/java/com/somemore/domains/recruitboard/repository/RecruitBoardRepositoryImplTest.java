@@ -230,12 +230,12 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.save(recruitingBoard);
 
         RecruitBoard deletedClosedBoard = createRecruitBoard(centerId);
-        deletedClosedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
+        deletedClosedBoard.updateRecruitStatus(RecruitStatus.CLOSED);
         deletedClosedBoard.markAsDeleted();
         recruitBoardRepository.save(deletedClosedBoard);
 
         RecruitBoard closedBoard = createRecruitBoard(centerId);
-        closedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
+        closedBoard.updateRecruitStatus(RecruitStatus.CLOSED);
         recruitBoardRepository.save(closedBoard);
 
         RecruitBoard deletedCompletedRecruitBoard = createCompletedRecruitBoard();
@@ -300,7 +300,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         RecruitStatus status = CLOSED;
         RecruitBoard recruitBoard = createRecruitBoard(center.getId());
         LocalDateTime currentDateTime = createCurrentDateTime();
-        recruitBoard.changeRecruitStatus(status, currentDateTime);
+        recruitBoard.updateRecruitStatus(status);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();

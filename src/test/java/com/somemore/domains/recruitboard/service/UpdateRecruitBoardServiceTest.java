@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.support.fixture.LocalDateTimeFixture.*;
@@ -163,6 +164,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .content("봉사모집내용")
                 .imgUrl("https://image.domain.com/links")
                 .recruitmentInfo(recruitmentInfo)
+                .status(RECRUITING)
                 .build();
     }
 

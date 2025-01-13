@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
 
@@ -27,6 +28,7 @@ public class RecruitBoardFixture {
     private static final String CONTENT = "봉사모집내용";
     private static final String IMG_URL = "https://image.domain.com/links";
     private static final VolunteerCategory VOLUNTEER_CATEGORY = OTHER;
+    private static final RecruitStatus STATUS = RECRUITING;
 
     private RecruitBoardFixture() {
     }
@@ -50,6 +52,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -72,6 +75,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -94,6 +98,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -116,6 +121,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -138,6 +144,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -160,6 +167,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -182,6 +190,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -204,6 +213,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(RECRUITING)
                 .build();
     }
 
@@ -226,11 +236,11 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
-    public static RecruitBoard createRecruitBoard(String region,
-                                                  VolunteerCategory volunteerCategory) {
+    public static RecruitBoard createRecruitBoard(String region, VolunteerCategory volunteerCategory) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(region)
@@ -249,6 +259,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -271,6 +282,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -293,6 +305,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
     }
 
@@ -315,6 +328,7 @@ public class RecruitBoardFixture {
                 .content(CONTENT)
                 .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
+                .status(STATUS)
                 .build();
 
         setRecruitStatus(recruitBoard, COMPLETED);
