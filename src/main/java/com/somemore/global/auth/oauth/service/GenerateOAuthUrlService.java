@@ -1,7 +1,7 @@
-package com.somemore.domains.volunteer.service;
+package com.somemore.global.auth.oauth.service;
 
-import com.somemore.domains.volunteer.usecase.GenerateOAuthUrlUseCase;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
+import com.somemore.global.auth.oauth.usecase.GenerateOAuthUrlUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
