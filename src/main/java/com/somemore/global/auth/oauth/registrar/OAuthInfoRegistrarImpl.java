@@ -22,6 +22,4 @@ public class OAuthInfoRegistrarImpl implements OAuthInfoRegistrar {
         OAuthInfo oAuthInfo = OAuthInfo.create(user, commonOAuthInfo);
         return oauthInfoRepository.save(oAuthInfo);
     }
-
-
 }

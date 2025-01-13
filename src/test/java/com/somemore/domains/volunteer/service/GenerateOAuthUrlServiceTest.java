@@ -1,6 +1,8 @@
 package com.somemore.domains.volunteer.service;
 
+import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,9 +19,10 @@ class GenerateOAuthUrlServiceTest extends IntegrationTestSupport {
 
 
     @Test
+    @DisplayName("Naver 제공자를 위한 OAuth URL이 올바르게 생성되는지 검증")
     void generateUrl_ShouldReturnCorrectUrl_ForNaver() {
         // Given
-        String oAuthProvider = "naver";
+        String oAuthProvider = OAuthProvider.NAVER.getProviderName();
 
         // When
         String result = generateOAuthUrlService.generateUrl(oAuthProvider);
@@ -31,15 +34,16 @@ class GenerateOAuthUrlServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    void generateUrl_ShouldReturnCorrectUrl_ForGoogle() {
+    @DisplayName("Kakao 제공자를 위한 OAuth URL이 올바르게 생성되는지 검증")
+    void generateUrl_ShouldReturnCorrectUrl_ForKakao() {
         // Given
-        String oAuthProvider = "google";
+        String oAuthProvider = OAuthProvider.KAKAO.getProviderName();
 
         // When
         String result = generateOAuthUrlService.generateUrl(oAuthProvider);
 
         // Then
-        String expectedUrl = backendRootUrl + "/oauth2/authorization/google";
+        String expectedUrl = backendRootUrl + "/oauth2/authorization/kakao";
 
         assertThat(result).isEqualTo(expectedUrl);
     }

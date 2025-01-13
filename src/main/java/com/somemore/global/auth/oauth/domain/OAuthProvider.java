@@ -4,7 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum OAuthProvider {
-    NAVER("naver");
+    NAVER("naver"),
+    KAKAO("kakao"),
+    ;
 
     private final String providerName;
 
@@ -14,7 +16,7 @@ public enum OAuthProvider {
 
     public static OAuthProvider from(String providerName) {
         for (OAuthProvider provider : values()) {
-            if (provider.providerName.equals(providerName)) {
+            if (provider.providerName.equalsIgnoreCase(providerName)) {
                 return provider;
             }
         }

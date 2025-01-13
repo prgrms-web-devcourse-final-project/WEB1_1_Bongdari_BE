@@ -1,16 +1,16 @@
 package com.somemore.global.auth.oauth.processor;
 
-import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.oauth.checker.OAuthInfoChecker;
-import com.somemore.global.auth.oauth.domain.CommonOAuthInfo;
 import com.somemore.global.auth.oauth.converter.OAuthResponseConverter;
+import com.somemore.global.auth.oauth.domain.CommonOAuthInfo;
+import com.somemore.global.auth.oauth.domain.CustomOAuth2User;
 import com.somemore.global.auth.oauth.registrar.OAuthInfoRegistrar;
 import com.somemore.global.auth.oauth.service.OAuthInfoQueryService;
 import com.somemore.user.domain.User;
+import com.somemore.user.domain.UserRole;
 import com.somemore.user.usecase.RegisterUserUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class OAuthUserProcessorImpl implements OAuthUserProcessor {
     private final OAuthInfoQueryService oAuthInfoQueryService;
 
     @Override
-    public UUID fetchUserIdByOAuthUser(OAuth2User oauthUser) {
+    public UUID fetchUserIdByOAuthUser(CustomOAuth2User oauthUser) {
         CommonOAuthInfo oauthInfo = oauthResponseConverter.convert(oauthUser);
         return findUserIdByOAuthInfo(oauthInfo);
     }

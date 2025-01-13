@@ -1,9 +1,8 @@
 package com.somemore.domains.volunteer.controller;
 
 import com.somemore.domains.volunteer.usecase.GenerateOAuthUrlUseCase;
-import com.somemore.global.common.response.ApiResponse;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.auth.signout.usecase.SignOutUseCase;
+import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,11 +31,7 @@ public class VolunteerSignController {
             @Parameter(name = "oauthProvider", description = "OAuth 제공자 선택", example = "naver", required = true, schema = @Schema(allowableValues = {"naver"}))
             @PathVariable("oauthProvider") String oauthProvider) {
 
-        String redirectUrl = switch (oauthProvider.toLowerCase()) {
-            case "naver" -> generateOAuthUrlUseCase.generateUrl(oauthProvider);
-
-            default -> throw new BadRequestException("지원되지 않는 OAuth 제공자: " + oauthProvider);
-        };
+        String redirectUrl = generateOAuthUrlUseCase.generateUrl(oauthProvider);
 
         return new RedirectView(redirectUrl);
     }
