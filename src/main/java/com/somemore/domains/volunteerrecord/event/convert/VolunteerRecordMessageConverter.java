@@ -24,7 +24,7 @@ public class VolunteerRecordMessageConverter {
             String eventType = rootNode.get(SUB_TYPE).asText();
 
             return switch (DomainEventSubType.from(eventType)) {
-                case VOLUNTEER_HOURS_SETTLE -> buildVolunteerRecordCreate(message);
+                case VOLUNTEER_HOURS_SETTLE -> convertToVolunteerRecord(message);
                 default -> {
                     log.error("지원하지 않는 이벤트 타입입니다: {}", eventType);
                     throw new IllegalArgumentException("지원하지 않는 이벤트 타입입니다: " + eventType);
@@ -36,7 +36,7 @@ public class VolunteerRecordMessageConverter {
         }
     }
 
-    private VolunteerRecord buildVolunteerRecordCreate(String message) throws JsonProcessingException {
+    private VolunteerRecord convertToVolunteerRecord(String message) throws JsonProcessingException {
 
         VolunteerRecordCreateEvent volunteerRecordCreateEvent = objectMapper.readValue(message, VolunteerRecordCreateEvent.class);
 
