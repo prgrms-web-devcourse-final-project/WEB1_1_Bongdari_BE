@@ -1,7 +1,7 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

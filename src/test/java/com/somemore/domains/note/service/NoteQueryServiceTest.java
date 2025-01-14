@@ -9,7 +9,7 @@ import com.somemore.domains.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.domains.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.domains.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerJpaRepository;
+import com.somemore.domains.volunteer.repository.old.VolunteerJpaRepository;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;

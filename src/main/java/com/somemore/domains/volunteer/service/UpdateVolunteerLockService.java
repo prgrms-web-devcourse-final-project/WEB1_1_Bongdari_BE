@@ -5,7 +5,7 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEE
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.usecase.UpdateVolunteerUseCase;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

@@ -4,7 +4,7 @@ import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.repository.mapper.CommunityBoardView;
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.BeforeEach;
