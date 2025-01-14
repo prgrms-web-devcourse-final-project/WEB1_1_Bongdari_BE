@@ -32,7 +32,7 @@ public class Volunteer extends BaseEntity {
     private String imgUrl;
 
     @Lob
-    @Column(name = "introduce", nullable = false)
+    @Column(name = "introduce", length = 500, nullable = false)
     private String introduce;
 
     @Enumerated(EnumType.STRING)

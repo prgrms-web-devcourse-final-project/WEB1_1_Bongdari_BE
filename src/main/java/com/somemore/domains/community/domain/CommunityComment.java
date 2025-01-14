@@ -30,7 +30,7 @@ public class CommunityComment extends BaseEntity {
     private UUID writerId;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", length = 200, nullable = false)
     private String content;
 
     @Column(name = "parent_comment_id")

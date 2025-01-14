@@ -30,7 +30,7 @@ public class Note extends BaseEntity {
     private String title;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", length = 500, nullable = false)
     private String content;
 
     @Column(name = "is_read", nullable = false)
