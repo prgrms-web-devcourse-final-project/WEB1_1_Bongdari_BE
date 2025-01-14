@@ -210,24 +210,27 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public long updateRecruitingToClosedByStartDate(LocalDateTime startTime, LocalDateTime endTime) {
-        BooleanExpression exp = statusEq(RECRUITING)
-                .and(volunteerStartDateTimeBetween(startTime, endTime));
-
+    public long updateRecruitingToClosedByStartDate(LocalDateTime startTime,
+            LocalDateTime endTime) {
         return queryFactory.update(recruitBoard)
                 .set(recruitBoard.recruitStatus, CLOSED)
-                .where(exp)
+                .where(
+                        statusEq(RECRUITING),
+                        volunteerStartDateTimeBetween(startTime, endTime),
+                        isNotDeleted()
+                )
                 .execute();
     }
 
     @Override
     public long updateClosedToCompletedByEndDate(LocalDateTime now) {
-        BooleanExpression exp = statusEq(CLOSED)
-                .and(volunteerEndDateTimeBefore(now));
-
         return queryFactory.update(recruitBoard)
                 .set(recruitBoard.recruitStatus, COMPLETED)
-                .where(exp)
+                .where(
+                        statusEq(CLOSED),
+                        volunteerEndDateTimeBefore(now),
+                        isNotDeleted()
+                )
                 .execute();
     }
 
