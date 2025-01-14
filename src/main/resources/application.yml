@@ -34,6 +34,7 @@ spring:
         highlight_sql: true
         generate_statistics: false
     show-sql: true
+    open-in-view: false
 
   data:
     redis:
