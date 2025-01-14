@@ -39,7 +39,7 @@ public class RegisterUserService implements RegisterUserUseCase {
     }
 
     private User createAndRegisterUser(UserRole role, UserAuthInfo userAuthInfo) {
-        User user = User.from(userAuthInfo, role);
+        User user = User.of(userAuthInfo, role);
         userRepository.save(user);
         UUID userId = user.getId();
 

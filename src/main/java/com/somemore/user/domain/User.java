@@ -39,7 +39,7 @@ public class User extends BaseEntity {
     private UserRole role;
 
 
-    public static User from(UserAuthInfo userAuthInfo, UserRole role) {
+    public static User of(UserAuthInfo userAuthInfo, UserRole role) {
         return User.builder()
                 .accountId(userAuthInfo.accountId())
                 .accountPassword(userAuthInfo.accountPassword())
