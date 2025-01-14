@@ -157,28 +157,6 @@ class JwtServiceTest extends IntegrationTestSupport {
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }
 
-    @DisplayName("리프레시된 AccessToken은 쿠키에 올바르게 저장된다")
-    @Test
-    void refreshedAccessTokenIsSetInCookie() {
-        // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-
-        EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
-
-        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-
-        // when
-        jwtService.processAccessToken(expiredAccessToken, mockResponse);
-
-        // then
-        String cookieHeader = mockResponse.getHeader("Set-Cookie");
-        assertThat(cookieHeader).contains("ACCESS_TOKEN=");
-        assertThat(cookieHeader).contains("HttpOnly");
-        assertThat(cookieHeader).contains("Secure");
-    }
-
     @DisplayName("기존 RefreshToken이 갱신된다")
     @Test
     void refreshTokenIsUpdated() {

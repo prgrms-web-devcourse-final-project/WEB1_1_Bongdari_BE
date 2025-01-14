@@ -1,5 +1,6 @@
 package com.somemore.domains.volunteer.domain;
 
+import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "volunteer_new") // TODO suffix 삭제
-public class Volunteer_NEW {
+public class Volunteer_NEW extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -8,7 +8,7 @@ import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;

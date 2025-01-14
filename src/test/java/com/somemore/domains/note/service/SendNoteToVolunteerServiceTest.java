@@ -4,7 +4,7 @@ import com.somemore.domains.note.domain.Note;
 import com.somemore.domains.note.dto.SendNoteToVolunteerRequestDto;
 import com.somemore.domains.note.repository.NoteJpaRepository;
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerJpaRepository;
+import com.somemore.domains.volunteer.repository.old.VolunteerJpaRepository;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

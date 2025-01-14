@@ -14,8 +14,6 @@ public class CenterFixture {
             .imgUrl("https://image.domain.com/center-img")
             .introduce("센터 소개")
             .homepageLink("https://www.centerhomepage.com")
-            .accountId("center_account")
-            .accountPw("password123")
             .build();
     }
 
@@ -26,8 +24,6 @@ public class CenterFixture {
             .imgUrl("https://image.domain.com/center-img")
             .introduce("센터 소개")
             .homepageLink("https://www.centerhomepage.com")
-            .accountId("center_account")
-            .accountPw("password123")
             .build();
     }
 

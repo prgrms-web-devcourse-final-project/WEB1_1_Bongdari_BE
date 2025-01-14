@@ -32,7 +32,7 @@ class CenterTest {
                 () -> assertThat(center.getContactNumber()).isEqualTo(CONTACT_NUMBER),
                 () -> assertThat(center.getImgUrl()).isEqualTo(IMG_URL),
                 () -> assertThat(center.getIntroduce()).isEqualTo(INTRODUCE),
-                () -> assertThat(center.getHomepageLink()).isEqualTo(HOMEPAGE_LINK),
+                () -> assertThat(center.getHomepageLink()).isEqualTo(HOMEPAGE_LINK)
         );
     }
 
