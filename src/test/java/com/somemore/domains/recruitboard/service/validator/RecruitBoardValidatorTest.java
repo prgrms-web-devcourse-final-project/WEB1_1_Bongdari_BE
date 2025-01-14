@@ -55,7 +55,7 @@ class RecruitBoardValidatorTest {
     }
 
     @Test
-    @DisplayName("StartDateTime이 createdAt + 1일 이후일 경우 예외 없이 통과")
+    @DisplayName("StartDateTime createdAt + 1일 이후일 경우 예외 없이 통과")
     void validateUpdateRecruitBoardTime() {
         // given
         LocalDateTime createdAt = LocalDateTime.of(2025, 1, 1, 10, 0); // 2025-01-01 10:00:00
@@ -68,12 +68,12 @@ class RecruitBoardValidatorTest {
     }
 
     @Test
-    @DisplayName("StartDateTime이 createdAt + 1일 이전일 경우 예외 발생")
+    @DisplayName("StartDateTime createdAt + 1일 이전일 경우 예외 발생")
     void validateUpdateRecruitBoardTimeWhenNotValid() {
         // given
-        LocalDateTime createdAt = LocalDateTime.of(2025, 1, 2, 10, 0); // 2025-1-1 10:00:00
-        LocalDateTime start = LocalDateTime.of(2025, 1, 2, 12, 0); // 2025-1-2 12:00:00
-        LocalDateTime end = LocalDateTime.of(2025, 1, 2, 14, 0); // 2025-1-2 14:00:00
+        LocalDateTime createdAt = LocalDateTime.of(2025, 1, 2, 10, 0); // 2025-01-02 10:00:00
+        LocalDateTime start = LocalDateTime.of(2025, 1, 2, 12, 0); // 2025-01-02 12:00:00
+        LocalDateTime end = LocalDateTime.of(2025, 1, 2, 14, 0); // 2025-01-02 14:00:00
 
         // when
         // then
