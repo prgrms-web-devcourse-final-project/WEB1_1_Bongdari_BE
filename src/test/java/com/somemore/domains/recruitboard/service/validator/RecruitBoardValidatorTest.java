@@ -10,7 +10,6 @@ import static com.somemore.global.exception.ExceptionMessage.INVALID_RECRUIT_BOA
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
 import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -32,6 +31,7 @@ class RecruitBoardValidatorTest {
     private final RecruitBoardValidator validator = new RecruitBoardValidator();
 
     private RecruitBoard board;
+
     @BeforeEach
     void setUp() {
         board = createRecruitBoard();
@@ -89,7 +89,6 @@ class RecruitBoardValidatorTest {
     void validateWriter() {
         // given
         UUID wrongCenterId = UUID.randomUUID();
-        RecruitBoard board = createRecruitBoard();
 
         // when
         // then
