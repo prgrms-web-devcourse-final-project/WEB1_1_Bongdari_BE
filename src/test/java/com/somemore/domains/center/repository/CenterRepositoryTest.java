@@ -36,8 +36,6 @@ class CenterRepositoryTest extends IntegrationTestSupport {
         assertThat(foundCenter.get().getImgUrl()).isEqualTo("http://example.com/image.jpg");
         assertThat(foundCenter.get().getIntroduce()).isEqualTo("기관 소개 내용");
         assertThat(foundCenter.get().getHomepageLink()).isEqualTo("http://example.com");
-        assertThat(foundCenter.get().getAccountId()).isEqualTo("account123");
-        assertThat(foundCenter.get().getAccountPw()).isEqualTo("password123");
     }
 
     @DisplayName("기관 id로 기관이 존재하는지 확인할 수 있다.")
@@ -129,9 +127,7 @@ class CenterRepositoryTest extends IntegrationTestSupport {
                 "010-1234-5678",
                 "http://example.com/image.jpg",
                 "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
+                "http://example.com"
         );
     }
 }

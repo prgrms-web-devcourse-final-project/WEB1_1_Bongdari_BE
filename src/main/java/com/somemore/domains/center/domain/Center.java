@@ -34,34 +34,22 @@ public class Center extends BaseEntity {
     @Column(name = "homepage_link", nullable = false)
     private String homepageLink;
 
-    @Column(name = "account_id", nullable = false)
-    private String accountId;
-
-    @Column(name = "account_pw", nullable = false)
-    private String accountPw;
-
-
     @Builder
-    private Center(String name, String contactNumber, String imgUrl, String introduce, String homepageLink, String accountId, String accountPw) {
-
+    private Center(String name, String contactNumber, String imgUrl, String introduce, String homepageLink) {
         this.name = name;
         this.contactNumber = contactNumber;
         this.imgUrl = imgUrl;
         this.introduce = introduce;
         this.homepageLink = homepageLink;
-        this.accountId = accountId;
-        this.accountPw = accountPw;
     }
 
-    public static Center create(String name, String contactNumber, String imgUrl, String introduce, String homepageLink, String accountId, String accountPw) {
+    public static Center create(String name, String contactNumber, String imgUrl, String introduce, String homepageLink) {
         return Center.builder()
                 .name(name)
                 .contactNumber(contactNumber)
                 .imgUrl(imgUrl)
                 .introduce(introduce)
                 .homepageLink(homepageLink)
-                .accountId(accountId)
-                .accountPw(accountPw)
                 .build();
     }
 
