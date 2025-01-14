@@ -102,7 +102,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(boardWithLocation.longitude()).isEqualByComparingTo(location.getLongitude());
     }
 
-    @DisplayName("조건 없이 모집 게시글을 조회한다. (정렬 포함)")
+    @DisplayName("조건 없이 모집 게시글을 조회한다.")
     @Test
     void findAllWithCenterWithoutCondition() {
         // given
@@ -204,9 +204,6 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllWithCenterByAdmitted() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
         boolean admitted = false;
         RecruitBoard recruitBoard = createRecruitBoard(center.getId(), "제목", OTHER, "지역", admitted,
                 RECRUITING);
@@ -237,9 +234,6 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllWithCenterByStatus() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
         RecruitStatus status = CLOSED;
         RecruitBoard recruitBoard = createRecruitBoard(center.getId(), "제목", OTHER, "지역", true,
                 status);
