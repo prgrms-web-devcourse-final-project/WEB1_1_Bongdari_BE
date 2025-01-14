@@ -21,7 +21,8 @@ public class RecruitBoardStatusUpdateScheduler {
 
     @Retryable(
             retryFor = Exception.class,
-            backoff = @Backoff(delay = 100000)
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 2000)
     )
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateRecruitBoardStatusToClosed() {
@@ -37,7 +38,8 @@ public class RecruitBoardStatusUpdateScheduler {
 
     @Retryable(
             retryFor = Exception.class,
-            backoff = @Backoff(delay = 100000)
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 2000)
     )
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateRecruitBoardStatusToCompleted() {
