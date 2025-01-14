@@ -17,8 +17,5 @@ public interface CenterRepository {
     }
     Optional<Center> findCenterById(UUID id);
     List<CenterOverviewInfo> findCenterOverviewsByIds(List<UUID> ids);
-    UUID findIdByAccountId(String accountId);
-    String findPasswordByAccountId(String accountId);
     void deleteAllInBatch();
-
 }

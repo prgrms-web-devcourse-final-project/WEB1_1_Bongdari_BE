@@ -62,28 +62,6 @@ public class CenterRepositoryImpl implements CenterRepository {
     }
 
     @Override
-    public UUID findIdByAccountId(String accountId) {
-
-        return queryFactory
-                .select(center.id)
-                .from(center)
-                .where(center.accountId.eq(accountId)
-                        .and(isNotDeleted()))
-                .fetchOne();
-    }
-
-    @Override
-    public String findPasswordByAccountId(String accountId) {
-
-        return queryFactory
-                .select(center.accountPw)
-                .from(center)
-                .where(center.accountId.eq(accountId)
-                        .and(isNotDeleted()))
-                .fetchOne();
-    }
-
-    @Override
     public void deleteAllInBatch() {
         centerJpaRepository.deleteAllInBatch();
     }
