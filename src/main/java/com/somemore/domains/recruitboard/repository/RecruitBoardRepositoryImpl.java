@@ -1,5 +1,9 @@
 package com.somemore.domains.recruitboard.repository;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -8,17 +12,17 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.domains.center.domain.QCenter;
 import com.somemore.domains.location.domain.QLocation;
+import com.somemore.domains.location.utils.GeoUtils;
 import com.somemore.domains.recruitboard.domain.QRecruitBoard;
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.recruitboard.domain.RecruitStatus;
+import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
-import com.somemore.domains.location.utils.GeoUtils;
-import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.domain.RecruitStatus;
-import com.somemore.domains.recruitboard.domain.VolunteerCategory;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,8 +39,8 @@ import org.springframework.stereotype.Repository;
 public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private final RecruitBoardJpaRepository recruitBoardJpaRepository;
-    //    private final RecruitBoardDocumentRepository documentRepository;
     private final JPAQueryFactory queryFactory;
+    //    private final RecruitBoardDocumentRepository documentRepository;
 
     private static final QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
     private static final QLocation location = QLocation.location;
@@ -64,31 +68,6 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .fetchOne();
 
         return Optional.ofNullable(result);
-    }
-
-    @Override
-    public List<Long> findNotCompletedIdsByCenterId(UUID centerId) {
-
-        BooleanExpression exp = centerIdEq(centerId)
-                .and(isNotCompleted())
-                .and(isNotDeleted());
-
-        return queryFactory
-                .select(recruitBoard.id)
-                .from(recruitBoard)
-                .where(exp)
-                .fetch();
-    }
-
-    @Override
-    public List<RecruitBoard> findAllByIds(List<Long> ids) {
-        BooleanExpression exp = recruitBoard.id.in(ids)
-                .and(isNotDeleted());
-
-        return queryFactory
-                .selectFrom(recruitBoard)
-                .where(exp)
-                .fetch();
     }
 
     @Override
@@ -170,6 +149,88 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Page<RecruitBoard> findAllByCenterId(UUID centerId,
+            RecruitBoardSearchCondition condition) {
+
+        BooleanExpression exp = centerIdEq(centerId)
+                .and(keywordEq(condition.keyword()))
+                .and(volunteerCategoryEq(condition.category()))
+                .and(regionEq(condition.region()))
+                .and(admittedEq(condition.admitted()))
+                .and(statusEq(condition.status()))
+                .and(isNotDeleted());
+
+        Pageable pageable = condition.pageable();
+
+        List<RecruitBoard> content = queryFactory
+                .selectFrom(recruitBoard)
+                .where(exp)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(toOrderSpecifiers(pageable.getSort()))
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(recruitBoard.count())
+                .from(recruitBoard)
+                .where(exp);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<Long> findNotCompletedIdsByCenterId(UUID centerId) {
+
+        BooleanExpression exp = centerIdEq(centerId)
+                .and(isNotCompleted())
+                .and(isNotDeleted());
+
+        return queryFactory
+                .select(recruitBoard.id)
+                .from(recruitBoard)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
+    public List<RecruitBoard> findAllByIds(List<Long> ids) {
+        BooleanExpression exp = recruitBoard.id.in(ids)
+                .and(isNotDeleted());
+
+        return queryFactory
+                .selectFrom(recruitBoard)
+                .where(exp)
+                .fetch();
+    }
+
+    @Override
+    public List<RecruitBoard> findAll() {
+        return recruitBoardJpaRepository.findAll();
+    }
+
+    @Override
+    public long updateRecruitingToClosedByStartDate(LocalDateTime startTime, LocalDateTime endTime) {
+        BooleanExpression exp = statusEq(RECRUITING)
+                .and(volunteerStartDateTimeBetween(startTime, endTime));
+
+        return queryFactory.update(recruitBoard)
+                .set(recruitBoard.recruitStatus, CLOSED)
+                .where(exp)
+                .execute();
+    }
+
+    @Override
+    public long updateClosedToCompletedByEndDate(LocalDateTime now) {
+        BooleanExpression exp = statusEq(CLOSED)
+                .and(volunteerEndDateTimeBefore(now));
+
+        return queryFactory.update(recruitBoard)
+                .set(recruitBoard.recruitStatus, COMPLETED)
+                .where(exp)
+                .execute();
+    }
+
 //    @Override
 //    public Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition) {
 //        QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
@@ -209,37 +270,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 //                        .and(predicate));
 //
 //        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+
 //    }
-
-    @Override
-    public Page<RecruitBoard> findAllByCenterId(UUID centerId,
-            RecruitBoardSearchCondition condition) {
-
-        BooleanExpression exp = centerIdEq(centerId)
-                .and(keywordEq(condition.keyword()))
-                .and(volunteerCategoryEq(condition.category()))
-                .and(regionEq(condition.region()))
-                .and(admittedEq(condition.admitted()))
-                .and(statusEq(condition.status()))
-                .and(isNotDeleted());
-
-        Pageable pageable = condition.pageable();
-
-        List<RecruitBoard> content = queryFactory
-                .selectFrom(recruitBoard)
-                .where(exp)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(toOrderSpecifiers(pageable.getSort()))
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(recruitBoard.count())
-                .from(recruitBoard)
-                .where(exp);
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-    }
 
 //    @Override
 //    public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition) {
@@ -287,11 +319,6 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 //        documentRepository.saveAll(recruitBoardDocuments);
 //    }
 
-    @Override
-    public List<RecruitBoard> findAll() {
-        return recruitBoardJpaRepository.findAll();
-    }
-
 //    @Override
 //    public void deleteDocument(Long id) {
 //        documentRepository.deleteById(id);
@@ -310,7 +337,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     private BooleanExpression isNotCompleted() {
-        return recruitBoard.recruitStatus.in(RecruitStatus.RECRUITING, RecruitStatus.CLOSED);
+        return recruitBoard.recruitStatus.in(RECRUITING, CLOSED);
     }
 
     private BooleanExpression keywordEq(String keyword) {
@@ -352,6 +379,15 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
         return location.latitude.between(minLatitude, maxLatitude)
                 .and(location.longitude.between(minLongitude, maxLongitude));
+    }
+
+    private static BooleanExpression volunteerStartDateTimeBetween(LocalDateTime startTime,
+            LocalDateTime endTime) {
+        return recruitBoard.recruitmentInfo.volunteerStartDateTime.between(startTime, endTime);
+    }
+
+    private static BooleanExpression volunteerEndDateTimeBefore(LocalDateTime now) {
+        return recruitBoard.recruitmentInfo.volunteerEndDateTime.before(now);
     }
 
     private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {

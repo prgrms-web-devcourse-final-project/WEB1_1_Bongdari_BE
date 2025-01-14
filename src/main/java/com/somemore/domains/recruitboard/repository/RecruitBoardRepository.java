@@ -1,12 +1,12 @@
 package com.somemore.domains.recruitboard.repository;
 
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
-import com.somemore.domains.recruitboard.domain.RecruitBoard;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,17 +26,20 @@ public interface RecruitBoardRepository {
 
     Page<RecruitBoardDetail> findAllNearby(RecruitBoardNearByCondition condition);
 
-//    Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition);
-
-
     Page<RecruitBoard> findAllByCenterId(UUID centerId, RecruitBoardSearchCondition condition);
 
     List<Long> findNotCompletedIdsByCenterId(UUID centerId);
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
 
+    List<RecruitBoard> findAll();
+
+    long updateRecruitingToClosedByStartDate(LocalDateTime startTime, LocalDateTime endTime);
+
+    long updateClosedToCompletedByEndDate(LocalDateTime now);
+
+//    Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition);
 //    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition);
 //    void saveDocuments(List<RecruitBoard> recruitBoards);
-    List<RecruitBoard> findAll();
 //    void deleteDocument(Long id);
 }
