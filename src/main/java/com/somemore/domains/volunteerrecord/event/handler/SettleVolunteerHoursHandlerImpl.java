@@ -1,7 +1,7 @@
 package com.somemore.domains.volunteerrecord.event.handler;
 
 import com.somemore.domains.volunteerrecord.domain.VolunteerRecord;
-import com.somemore.domains.volunteerrecord.usecase.VolunteerRecordCreateUseCase;
+import com.somemore.domains.volunteerrecord.usecase.CreateVolunteerRecordUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SettleVolunteerHoursHandlerImpl implements SettleVolunteerHoursHandler {
 
-    private final VolunteerRecordCreateUseCase volunteerRecordCreateUseCase;
+    private final CreateVolunteerRecordUseCase createvolunteerRecordUseCase;
 
     @Override
     public void handle(VolunteerRecord volunteerRecord) {
 
-        volunteerRecordCreateUseCase.create(volunteerRecord);
+        createvolunteerRecordUseCase.create(volunteerRecord);
     }
 }
