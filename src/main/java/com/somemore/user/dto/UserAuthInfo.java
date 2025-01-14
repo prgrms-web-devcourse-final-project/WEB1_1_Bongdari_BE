@@ -7,6 +7,10 @@ import java.util.UUID;
 public record UserAuthInfo(String accountId,
                            String accountPassword) {
 
+    public static UserAuthInfo of(String accountId, String accountPassword) {
+        return new UserAuthInfo(accountId, accountPassword);
+    }
+
     public static UserAuthInfo createForOAuth(OAuthProvider provider) {
         String accountId = provider.getProviderName() + UUID.randomUUID();
         String accountPassword = String.valueOf(UUID.randomUUID());

@@ -32,7 +32,7 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     @BeforeEach
     void setup() {
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.com", "Test User");
-        user = userRepository.save(User.from(userAuthInfo, UserRole.VOLUNTEER));
+        user = userRepository.save(User.of(userAuthInfo, UserRole.VOLUNTEER));
     }
 
     @DisplayName("필수 입력 정보가 입력되었다면, true를 반환한다.")
