@@ -1,5 +1,7 @@
-package com.somemore.domains.volunteer.domain;
+package com.somemore.volunteer.domain;
 
+import com.somemore.domains.volunteer.domain.Gender;
+import com.somemore.domains.volunteer.domain.Tier;
 import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
