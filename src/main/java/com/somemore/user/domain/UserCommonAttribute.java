@@ -33,6 +33,9 @@ public class UserCommonAttribute extends BaseEntity {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
+    @Column(name = "contact_number", nullable = false)
+    private String contactNumber;
+
     @Column(name = "img_url", nullable = false)
     private String imgUrl;
 
@@ -51,6 +54,7 @@ public class UserCommonAttribute extends BaseEntity {
         return UserCommonAttribute.builder()
                 .userId(userId)
                 .nickname(String.valueOf(UUID.randomUUID()).substring(0, 8))
+                .contactNumber("")
                 .imgUrl(ImageUploadService.DEFAULT_IMAGE_URL)
                 .introduce("")
                 .isCustomized(false)
@@ -58,9 +62,10 @@ public class UserCommonAttribute extends BaseEntity {
     }
 
     @Builder
-    private UserCommonAttribute(UUID userId, String nickname, String imgUrl, String introduce, boolean isCustomized) {
+    private UserCommonAttribute(UUID userId, String nickname, String contactNumber, String imgUrl, String introduce, boolean isCustomized) {
         this.userId = userId;
         this.nickname = nickname;
+        this.contactNumber = contactNumber;
         this.imgUrl = imgUrl;
         this.introduce = introduce;
         this.isCustomized = isCustomized;
