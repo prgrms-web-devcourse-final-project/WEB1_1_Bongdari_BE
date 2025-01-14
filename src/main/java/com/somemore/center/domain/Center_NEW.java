@@ -1,4 +1,4 @@
-package com.somemore.domains.center.domain;
+package com.somemore.center.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
