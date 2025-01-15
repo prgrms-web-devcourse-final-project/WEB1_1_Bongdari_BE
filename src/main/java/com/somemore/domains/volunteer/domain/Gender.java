@@ -14,6 +14,10 @@ public enum Gender {
         this.code = code;
     }
 
+    public static Gender getDefault() {
+        return UNDEFINED;
+    }
+
     public static Gender from(String code) {
         for (Gender gender : Gender.values()) {
             if (gender.code.equalsIgnoreCase(code)) {
