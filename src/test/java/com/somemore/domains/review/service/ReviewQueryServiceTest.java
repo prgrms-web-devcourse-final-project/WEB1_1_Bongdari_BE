@@ -11,7 +11,7 @@ import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
 import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.NoSuchElementException;

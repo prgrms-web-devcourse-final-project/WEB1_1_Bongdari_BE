@@ -2,6 +2,7 @@ package com.somemore.domains.volunteer.repository;
 
 import com.somemore.domains.volunteer.domain.Gender;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
+import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class VolunteerDetailRepositoryTest extends IntegrationTestSupport {
+class VolunteerDetailRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerDetailRepository volunteerDetailRepository;

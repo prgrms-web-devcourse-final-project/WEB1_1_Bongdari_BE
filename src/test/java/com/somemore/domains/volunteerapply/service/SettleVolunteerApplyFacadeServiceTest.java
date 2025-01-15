@@ -3,7 +3,7 @@ package com.somemore.domains.volunteerapply.service;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;

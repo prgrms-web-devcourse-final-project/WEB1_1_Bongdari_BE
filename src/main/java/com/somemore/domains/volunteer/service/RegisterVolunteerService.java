@@ -4,7 +4,7 @@ import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
-import com.somemore.domains.volunteer.repository.old.VolunteerRepository;
+import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteer.usecase.RegisterVolunteerUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
