@@ -8,6 +8,7 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDt
 import com.somemore.domains.recruitboard.service.validator.RecruitBoardValidator;
 import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,13 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     private final RecruitBoardQueryUseCase recruitBoardQueryUseCase;
     private final UpdateLocationUseCase updateLocationUseCase;
     private final RecruitBoardValidator recruitBoardValidator;
+    private final Clock clock;
 
     @Override
     public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId,
-            String imgUrl, LocalDateTime current) {
+            String imgUrl) {
         RecruitBoard recruitBoard = getRecruitBoard(id);
-        validateUpdatableAndWriter(recruitBoard, centerId, current);
+        validateUpdatableAndWriter(recruitBoard, centerId);
 
         recruitBoardValidator.validateUpdateRecruitBoardTime(recruitBoard.getCreatedAt(),
                 dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
@@ -37,9 +39,9 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
 
     @Override
     public void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto, Long id,
-            UUID centerId, LocalDateTime current) {
+            UUID centerId) {
         RecruitBoard recruitBoard = getRecruitBoard(id);
-        validateUpdatableAndWriter(recruitBoard, centerId, current);
+        validateUpdatableAndWriter(recruitBoard, centerId);
 
         updateLocationUseCase.updateLocation(requestDto.toLocationUpdateRequestDto(),
                 recruitBoard.getLocationId());
@@ -47,17 +49,16 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     }
 
     @Override
-    public void updateRecruitBoardStatus(RecruitStatus status, Long id, UUID centerId,
-            LocalDateTime current) {
+    public void updateRecruitBoardStatus(RecruitStatus status, Long id, UUID centerId) {
         RecruitBoard recruitBoard = getRecruitBoard(id);
-        validateUpdatableAndWriter(recruitBoard, centerId, current);
+        validateUpdatableAndWriter(recruitBoard, centerId);
         recruitBoardValidator.validateRecruitStatus(status);
 
         recruitBoard.updateRecruitStatus(status);
     }
 
-    private void validateUpdatableAndWriter(RecruitBoard recruitBoard, UUID centerId,
-            LocalDateTime current) {
+    private void validateUpdatableAndWriter(RecruitBoard recruitBoard, UUID centerId) {
+        LocalDateTime current = LocalDateTime.now(clock);
         recruitBoardValidator.validateUpdatable(recruitBoard, current);
         recruitBoardValidator.validateWriter(recruitBoard, centerId);
     }
