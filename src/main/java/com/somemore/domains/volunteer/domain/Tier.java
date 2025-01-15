@@ -12,4 +12,9 @@ public enum Tier {
     INDIGO,
     VIOLET,
     RAINBOW
+    ;
+
+    public static Tier getDefault() {
+        return RED;
+    }
 }

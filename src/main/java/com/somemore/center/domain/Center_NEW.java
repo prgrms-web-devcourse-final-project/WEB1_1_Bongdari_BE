@@ -19,6 +19,7 @@ import java.util.UUID;
 @Table(name = "center_new") // TODO suffix 삭제
 public class Center_NEW {
 
+    public static final String DEFAULT_NAME = "기관";
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
@@ -40,13 +41,11 @@ public class Center_NEW {
         this.homepageUrl = homepageUrl;
     }
 
-    public static Center_NEW create(UUID userId,
-                                    String name,
-                                    String homepageUrl) {
+    public static Center_NEW createDefault(UUID userId) {
         return Center_NEW.builder()
                 .userId(userId)
-                .name(name)
-                .homepageUrl(homepageUrl)
+                .name(DEFAULT_NAME + userId.toString().substring(0, 8))
+                .homepageUrl("")
                 .build();
     }
 }

@@ -24,6 +24,7 @@ import java.util.UUID;
 @Table(name = "volunteer_new") // TODO suffix 삭제
 public class Volunteer_NEW extends BaseEntity {
 
+    public static final String DEFAULT_NAME = "봉사자";
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
@@ -56,15 +57,12 @@ public class Volunteer_NEW extends BaseEntity {
         this.tier = tier;
     }
 
-    public static Volunteer_NEW create(UUID userId,
-                                       String name,
-                                       Gender gender,
-                                       Tier tier) {
+    public static Volunteer_NEW createDefault(UUID userId) {
         return Volunteer_NEW.builder()
                 .userId(userId)
-                .name(name)
-                .gender(gender)
-                .tier(tier)
+                .name(DEFAULT_NAME + userId.toString().substring(0, 8))
+                .gender(Gender.getDefault())
+                .tier(Tier.getDefault())
                 .build();
     }
 }
