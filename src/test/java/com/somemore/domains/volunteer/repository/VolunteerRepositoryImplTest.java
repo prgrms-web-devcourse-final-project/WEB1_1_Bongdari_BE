@@ -3,6 +3,7 @@ package com.somemore.domains.volunteer.repository;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
+import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.support.IntegrationTestSupport;
@@ -22,7 +23,7 @@ import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class NEWVolunteerRepositoryTest extends IntegrationTestSupport {
+class VolunteerRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
@@ -210,9 +211,9 @@ class NEWVolunteerRepositoryTest extends IntegrationTestSupport {
     }
 
     private void createVolunteerAndUpdateVolunteerStats(int i) {
-        Volunteer newVolunteer = Volunteer.createDefault(NAVER, "oauth-id-" + i);
-        newVolunteer.updateVolunteerStats(i * 10, i);
-        volunteerRepository.save(newVolunteer);
+        Volunteer Volunteer = com.somemore.domains.volunteer.domain.Volunteer.createDefault(NAVER, "oauth-id-" + i);
+        Volunteer.updateVolunteerStats(i * 10, i);
+        volunteerRepository.save(Volunteer);
     }
 
     private static VolunteerRegisterRequestDto createVolunteerRegisterRequestDto(String name) {
