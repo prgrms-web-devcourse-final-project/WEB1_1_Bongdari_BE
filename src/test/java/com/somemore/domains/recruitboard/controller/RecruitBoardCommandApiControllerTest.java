@@ -150,7 +150,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
         given(imageUploadUseCase.uploadImage(any())).willReturn(mockImageUrl);
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoard(any(), any(), any(UUID.class), anyString(), any());
+                .updateRecruitBoard(any(), any(), any(UUID.class), anyString());
 
         MockMultipartHttpServletRequestBuilder builder = multipart("/api/recruit-board/{id}", 1);
         builder.with(new RequestPostProcessor() {
@@ -187,7 +187,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .build();
 
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoardLocation(any(), any(), any(UUID.class), any());
+                .updateRecruitBoardLocation(any(), any(), any(UUID.class));
 
         String requestBody = objectMapper.writeValueAsString(requestDto);
 
@@ -213,7 +213,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 status);
         String requestBody = objectMapper.writeValueAsString(dto);
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoardStatus(any(), any(), any(UUID.class), any(LocalDateTime.class));
+                .updateRecruitBoardStatus(any(), any(), any(UUID.class));
 
         // when
         mockMvc.perform(patch("/api/recruit-board/{id}", 1L)
