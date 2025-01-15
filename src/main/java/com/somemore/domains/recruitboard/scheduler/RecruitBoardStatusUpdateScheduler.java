@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class RecruitBoardStatusUpdateScheduler {
 
     private final RecruitBoardRepository recruitBoardRepository;
-    private final static String RECRUIT_BOARD_UPDATE_CRON = "0 0 0 * * ?";
+    private static final String RECRUIT_BOARD_UPDATE_CRON = "0 0 0 * * ?";
 
     @Retryable(
             retryFor = Exception.class,
