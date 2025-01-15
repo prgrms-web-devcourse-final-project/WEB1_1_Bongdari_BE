@@ -210,7 +210,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public long updateRecruitingToClosedByStartDate(LocalDateTime startTime,
+    public long updateStatusToClosedForDateRange(LocalDateTime startTime,
             LocalDateTime endTime) {
         return queryFactory.update(recruitBoard)
                 .set(recruitBoard.recruitStatus, CLOSED)
@@ -223,7 +223,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public long updateClosedToCompletedByEndDate(LocalDateTime startTime, LocalDateTime endTime) {
+    public long updateStatusToCompletedForDateRange(LocalDateTime startTime, LocalDateTime endTime) {
         return queryFactory.update(recruitBoard)
                 .set(recruitBoard.recruitStatus, COMPLETED)
                 .where(

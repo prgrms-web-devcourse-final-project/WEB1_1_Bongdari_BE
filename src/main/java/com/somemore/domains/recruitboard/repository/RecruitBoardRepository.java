@@ -34,9 +34,9 @@ public interface RecruitBoardRepository {
 
     List<RecruitBoard> findAll();
 
-    long updateRecruitingToClosedByStartDate(LocalDateTime startTime, LocalDateTime endTime);
+    long updateStatusToClosedForDateRange(LocalDateTime startTime, LocalDateTime endTime);
 
-    long updateClosedToCompletedByEndDate(LocalDateTime startTime, LocalDateTime endTime);
+    long updateStatusToCompletedForDateRange(LocalDateTime startTime, LocalDateTime endTime);
 
 //    Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition);
 //    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition);

@@ -390,7 +390,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
     @DisplayName("봉사 시작일 기준으로 모집중 상태 게시글을 모집 완료로 변경한다")
     @Test
-    void updateRecruitingToClosedByStartDate() {
+    void updateStatusToClosedForDateRange() {
         // given
         LocalDateTime today = LocalDateTime.of(2024, 1, 1, 0, 0); // 2024-01-01 00:00:00
         LocalDateTime startDateTime = today.plusHours(12); // 2024-01-01 12:00:00
@@ -402,7 +402,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.saveAll(List.of(boardOne, boardTwo));
 
         // when
-        long updateCnt = recruitBoardRepository.updateRecruitingToClosedByStartDate(today, tomorrow);
+        long updateCnt = recruitBoardRepository.updateStatusToClosedForDateRange(today, tomorrow);
         em.clear();
 
         // then
@@ -415,7 +415,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
     @DisplayName("봉사 종료일 기준으로 모집완료 상태 게시글을 종료로 변경한다")
     @Test
-    void updateClosedToCompletedByEndDate() {
+    void updateStatusToCompletedForDateRange() {
         // given
         LocalDateTime now = LocalDateTime.of(2024, 1, 2, 0, 0); // 2024-01-02 00:00:00
         LocalDateTime yesterday = now.minusDays(1); // 2024-01-01 00:00:00
@@ -427,7 +427,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.saveAll(List.of(boardOne, boardTwo));
 
         // when
-        long updateCnt = recruitBoardRepository.updateClosedToCompletedByEndDate(yesterday, now);
+        long updateCnt = recruitBoardRepository.updateStatusToCompletedForDateRange(yesterday, now);
         em.clear();
 
         // then
