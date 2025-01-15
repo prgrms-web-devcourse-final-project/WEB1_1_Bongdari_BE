@@ -223,12 +223,12 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public long updateClosedToCompletedByEndDate(LocalDateTime now) {
+    public long updateClosedToCompletedByEndDate(LocalDateTime startTime, LocalDateTime endTime) {
         return queryFactory.update(recruitBoard)
                 .set(recruitBoard.recruitStatus, COMPLETED)
                 .where(
                         statusEq(CLOSED),
-                        volunteerEndDateTimeBefore(now),
+                        volunteerEndDateTimeBetween(startTime, endTime),
                         isNotDeleted()
                 )
                 .execute();
@@ -389,8 +389,9 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         return recruitBoard.recruitmentInfo.volunteerStartDateTime.between(startTime, endTime);
     }
 
-    private static BooleanExpression volunteerEndDateTimeBefore(LocalDateTime now) {
-        return recruitBoard.recruitmentInfo.volunteerEndDateTime.before(now);
+    private static BooleanExpression volunteerEndDateTimeBetween(LocalDateTime startTime,
+            LocalDateTime endTime) {
+        return recruitBoard.recruitmentInfo.volunteerEndDateTime.between(startTime, endTime);
     }
 
     private OrderSpecifier<?>[] toOrderSpecifiers(Sort sort) {

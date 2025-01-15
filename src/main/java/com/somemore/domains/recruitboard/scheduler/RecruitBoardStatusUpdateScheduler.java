@@ -27,12 +27,12 @@ public class RecruitBoardStatusUpdateScheduler {
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateRecruitBoardStatusToClosed() {
         log.info("봉사 시작일에 해당하는 모집글 상태를 CLOSED로 변경하는 작업 시작");
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime startOfNextDay = LocalDate.now().plusDays(1).atStartOfDay();
+        LocalDateTime today = LocalDate.now().atStartOfDay();
+        LocalDateTime tomorrow = today.plusDays(1);
 
         try {
             long updatedCount = recruitBoardRepository.updateRecruitingToClosedByStartDate(
-                    startOfDay, startOfNextDay);
+                    today, tomorrow);
             log.info("총 {}개의 모집글 상태를 CLOSED로 변경 완료", updatedCount);
         } catch (Exception e) {
             log.error("봉사 시작일에 해당하는 모집글 상태를 CLOSED로 변경하는 중 오류 발생", e);
@@ -48,10 +48,11 @@ public class RecruitBoardStatusUpdateScheduler {
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateRecruitBoardStatusToCompleted() {
         log.info("봉사 종료일이 지난 모집글 상태를 COMPLETED로 변경하는 작업 시작");
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime today = LocalDate.now().atStartOfDay();
+        LocalDateTime yesterday = today.minusDays(1);
 
         try {
-            long updatedCount = recruitBoardRepository.updateClosedToCompletedByEndDate(now);
+            long updatedCount = recruitBoardRepository.updateClosedToCompletedByEndDate(yesterday, today);
             log.info("총 {}개의 모집글 상태를 COMPLETED로 변경 완료", updatedCount);
         } catch (Exception e) {
             log.error("봉사 종료일이 지난 모집글 상태를 COMPLETED로 변경하는 중 오류 발생", e);
