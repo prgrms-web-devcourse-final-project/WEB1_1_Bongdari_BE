@@ -22,7 +22,7 @@ import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class VolunteerRepositoryTest extends IntegrationTestSupport {
+class NEWVolunteerRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
