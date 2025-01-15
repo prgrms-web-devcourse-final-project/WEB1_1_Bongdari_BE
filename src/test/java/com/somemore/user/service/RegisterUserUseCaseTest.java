@@ -12,7 +12,6 @@ import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import com.somemore.user.repository.usersetting.UserSettingRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class RegisterUserServiceTest extends IntegrationTestSupport {
+class RegisterUserUseCaseTest extends IntegrationTestSupport {
 
     @Autowired
-    private RegisterUserService registerUserService;
+    private RegisterUserUseCase registerUserUseCase;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,7 +44,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
         CommonOAuthInfo commonOAuthInfo = new CommonOAuthInfo(provider, "test");
 
         // when
-        User registeredUser = registerUserService.registerOAuthUser(commonOAuthInfo, UserRole.getOAuthUserDefaultRole());
+        User registeredUser = registerUserUseCase.registerOAuthUser(commonOAuthInfo, UserRole.getOAuthUserDefaultRole());
 
         // then
         User savedUser = userRepository.findById(registeredUser.getId()).orElseThrow();
@@ -79,7 +78,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
         UserRole role = UserRole.CENTER;
 
         // when
-        User registeredUser = registerUserService.registerLocalUser(userAuthInfo, role);
+        User registeredUser = registerUserUseCase.registerLocalUser(userAuthInfo, role);
 
         // then
         User savedUser = userRepository.findById(registeredUser.getId()).orElseThrow();
