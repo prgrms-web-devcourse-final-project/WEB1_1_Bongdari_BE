@@ -1,22 +1,22 @@
 package com.somemore.domains.recruitboard.service;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.support.IntegrationTestSupport;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
@@ -73,6 +73,7 @@ class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
                 .content("봉사모집내용")
                 .imgUrl("https://image.domain.com/links")
                 .recruitmentInfo(recruitmentInfo)
+                .status(RECRUITING)
                 .build();
     }
 }

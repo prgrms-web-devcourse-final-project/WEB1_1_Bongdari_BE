@@ -1,5 +1,14 @@
 package com.somemore.domains.recruitboard.service;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createUpdateStartDateTime;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+
 import com.somemore.domains.location.domain.Location;
 import com.somemore.domains.location.repository.LocationRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
@@ -10,20 +19,17 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDt
 import com.somemore.domains.recruitboard.repository.RecruitBoardJpaRepository;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.support.IntegrationTestSupport;
+import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
@@ -40,7 +46,11 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     @Autowired
     private LocationRepository locationRepository;
 
+    @SpyBean
+    private Clock clock;
+
     private RecruitBoard recruitBoard;
+
     private UUID centerId;
 
     @BeforeEach
@@ -56,6 +66,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     @Test
     void updateRecruitBoard() {
         // given
+        LocalDateTime current = createCurrentDateTime();
         LocalDateTime newStartDateTime = createUpdateStartDateTime();
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
         String newImgUrl = "https://image.domain.com/updates";
@@ -71,8 +82,11 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .admitted(false)
                 .build();
 
+        setMockClock(current);
+
         // when
-        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId, newImgUrl);
+        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId,
+                newImgUrl);
 
         // then
         RecruitBoard updatedRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())
@@ -97,12 +111,15 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
     @Test
     void updateRecruitBoardLocation() {
         // given
+        LocalDateTime current = createCurrentDateTime();
         RecruitBoardLocationUpdateRequestDto dto = RecruitBoardLocationUpdateRequestDto.builder()
                 .region("새로새로지역지역")
                 .address("새로새로주소주소")
                 .latitude(BigDecimal.valueOf(37.2222222))
                 .longitude(BigDecimal.valueOf(127.2222222))
                 .build();
+
+        setMockClock(current);
 
         // when
         updateRecruitBoardService.updateRecruitBoardLocation(dto, recruitBoard.getId(), centerId);
@@ -127,10 +144,12 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         // given
         Long recruitBoardId = recruitBoard.getId();
         RecruitStatus newStatus = RecruitStatus.CLOSED;
-        LocalDateTime currentDateTime = createCurrentDateTime();
+        LocalDateTime current = createCurrentDateTime();
+
+        setMockClock(current);
 
         // when
-        updateRecruitBoardService.updateRecruitBoardStatus(newStatus, recruitBoardId, centerId, currentDateTime);
+        updateRecruitBoardService.updateRecruitBoardStatus(newStatus, recruitBoardId, centerId);
 
         // then
         RecruitBoard findBoard = recruitBoardRepository.findById(recruitBoardId).orElseThrow();
@@ -144,7 +163,8 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         return createRecruitBoard(centerId, locationId, startDateTime, endDateTime);
     }
 
-    private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId,
+            LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region("경기")
@@ -163,6 +183,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .content("봉사모집내용")
                 .imgUrl("https://image.domain.com/links")
                 .recruitmentInfo(recruitmentInfo)
+                .status(RECRUITING)
                 .build();
     }
 
@@ -172,5 +193,11 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .longitude(BigDecimal.valueOf(37.11111))
                 .latitude(BigDecimal.valueOf(127.11111))
                 .build();
+    }
+
+    private void setMockClock(LocalDateTime current) {
+        doReturn(current.atZone(ZoneId.systemDefault()).toInstant())
+                .when(clock)
+                .instant();
     }
 }

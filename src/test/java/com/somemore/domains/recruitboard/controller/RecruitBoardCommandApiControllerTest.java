@@ -213,7 +213,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 status);
         String requestBody = objectMapper.writeValueAsString(dto);
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoardStatus(any(), any(), any(UUID.class), any(LocalDateTime.class));
+                .updateRecruitBoardStatus(any(), any(), any(UUID.class));
 
         // when
         mockMvc.perform(patch("/api/recruit-board/{id}", 1L)

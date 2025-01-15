@@ -1,5 +1,14 @@
 package com.somemore.domains.recruitboard.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.LocationFixture.createLocation;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.repository.center.CenterRepository;
 import com.somemore.domains.location.domain.Location;
@@ -15,6 +24,8 @@ import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithLocationRe
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,19 +35,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
-import static com.somemore.support.fixture.CenterFixture.createCenter;
-import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.support.fixture.LocationFixture.createLocation;
-import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
@@ -236,12 +234,12 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         recruitBoardRepository.save(recruitingBoard);
 
         RecruitBoard deletedClosedBoard = createRecruitBoard(centerId);
-        deletedClosedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
+        deletedClosedBoard.updateRecruitStatus(RecruitStatus.CLOSED);
         deletedClosedBoard.markAsDeleted();
         recruitBoardRepository.save(deletedClosedBoard);
 
         RecruitBoard closedBoard = createRecruitBoard(centerId);
-        closedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
+        closedBoard.updateRecruitStatus(RecruitStatus.CLOSED);
         recruitBoardRepository.save(closedBoard);
 
         RecruitBoard deletedCompletedRecruitBoard = createCompletedRecruitBoard();
@@ -252,7 +250,8 @@ class RecruitBoardQueryServiceTest extends IntegrationTestSupport {
         recruitBoardRepository.save(completedRecruitBoard);
 
         // when
-        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(centerId);
+        List<Long> notCompletedBoardIds = recruitBoardQueryService.getNotCompletedIdsByCenterIds(
+                centerId);
 
         // then
         assertThat(notCompletedBoardIds)

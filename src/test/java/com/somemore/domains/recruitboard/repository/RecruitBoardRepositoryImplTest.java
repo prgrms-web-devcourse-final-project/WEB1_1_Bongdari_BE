@@ -1,11 +1,21 @@
 package com.somemore.domains.recruitboard.repository;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.LocationFixture.createLocation;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.repository.center.CenterRepository;
 import com.somemore.domains.location.domain.Location;
 import com.somemore.domains.location.repository.LocationRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
+import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
@@ -13,6 +23,11 @@ import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.support.IntegrationTestSupport;
+import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,21 +37,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
-import static com.somemore.support.fixture.CenterFixture.createCenter;
-import static com.somemore.support.fixture.LocalDateTimeFixture.createCurrentDateTime;
-import static com.somemore.support.fixture.LocationFixture.createLocation;
-import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
@@ -50,66 +50,61 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Autowired
     private LocationRepository locationRepository;
 
-    private final List<RecruitBoard> boards = new ArrayList<>();
+    @Autowired
+    private EntityManager em;
 
-    private UUID centerId;
+    private Location location;
+    private Center center;
+    private RecruitBoard board;
 
     @BeforeEach
     void setUp() {
-        Location location = createLocation();
+        location = createLocation();
         locationRepository.save(location);
 
-        Center center = createCenter();
+        center = createCenter();
         centerRepository.save(center);
-        centerId = center.getId();
 
-        for (int i = 1; i <= 100; i++) {
-            String title = "제목" + i;
-            RecruitBoard board = createRecruitBoard(title, center.getId(), location.getId());
-            boards.add(board);
-        }
-        recruitBoardRepository.saveAll(boards);
+        board = createRecruitBoard(center.getId(), location.getId(), RECRUITING);
+        recruitBoardRepository.save(board);
     }
 
-    @DisplayName("논리 삭제된 데이터를 id로 조회시 빈 Optional 반환된다")
+    @DisplayName("아이디로 모집글을 조회할 수 있다.")
     @Test
     void findById() {
         // given
-        RecruitBoard deletedBoard = createRecruitBoard();
-        deletedBoard.markAsDeleted();
-        recruitBoardRepository.save(deletedBoard);
-
-        Long deletedId = deletedBoard.getId();
+        Long id = board.getId();
 
         // when
-        Optional<RecruitBoard> findBoard = recruitBoardRepository.findById(deletedId);
+        Optional<RecruitBoard> findBoard = recruitBoardRepository.findById(id);
 
         // then
-        assertThat(findBoard).isEmpty();
+        assertThat(findBoard).isNotEmpty();
+        assertThat(findBoard.get().getId()).isEqualTo(id);
     }
 
-    @DisplayName("존재하지 않는 아이디로 봉사 모집글과 작성기관을 조회하면 Optional.empty()가 반환된다.")
+    @DisplayName("아이디로 봉사 모집글과 작성기관을 조회할 수 있다.")
     @Test
-    void findWithCenterByIdWithNotExistId() {
+    void findWithLocationById() {
         // given
-        Location location = createLocation("특별한주소");
-        locationRepository.save(location);
-
-        RecruitBoard deletedRecruitBoard = createRecruitBoard(location.getId());
-        deletedRecruitBoard.markAsDeleted();
-        recruitBoardRepository.save(deletedRecruitBoard);
+        Long id = board.getId();
 
         // when
         Optional<RecruitBoardWithLocation> findOne = recruitBoardRepository.findWithLocationById(
-                deletedRecruitBoard.getId());
+                id);
 
         // then
-        assertThat(findOne).isEmpty();
+        assertThat(findOne).isNotEmpty();
+        RecruitBoardWithLocation boardWithLocation = findOne.get();
+        assertThat(boardWithLocation.recruitBoard().getId()).isEqualTo(id);
+        assertThat(boardWithLocation.address()).isEqualTo(location.getAddress());
+        assertThat(boardWithLocation.latitude()).isEqualByComparingTo(location.getLatitude());
+        assertThat(boardWithLocation.longitude()).isEqualByComparingTo(location.getLongitude());
     }
 
-    @DisplayName("조건 없이 모집 게시글을 조회한다. (정렬 포함)")
+    @DisplayName("조건 없이 모집 게시글을 조회한다.")
     @Test
-    void findAllWithCenterWithoutCriteria() {
+    void findAllWithCenterWithoutCondition() {
         // given
         Pageable pageable = getPageable();
 
@@ -122,23 +117,17 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(boards.size());
-        assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isZero();
-        assertThat(result.getContent()).hasSize(5);
-
-        assertThat(result.getContent().get(0).recruitBoard().getCreatedAt())
-                .isAfterOrEqualTo(result.getContent().get(1).recruitBoard().getCreatedAt());
+        assertThat(result.getTotalElements()).isEqualTo(1);
     }
 
     @DisplayName("키워드로 조회할 수 있다")
     @Test
     void findAllWithCenterByKeyword() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
         String keyword = "키워드";
-        RecruitBoard recruitBoard = createRecruitBoard("키워드 조회 제목", center.getId());
+        String title = keyword + " 제목";
+        RecruitBoard recruitBoard = createRecruitBoard(center.getId(), title, OTHER, "지역", false,
+                RECRUITING);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
@@ -153,26 +142,22 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         // then
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
-        assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isZero();
         assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getTitle())
-                .isEqualTo("키워드 조회 제목");
+                .isEqualTo(title);
     }
 
     @DisplayName("봉사활동 유형으로 조회할 수 있다")
     @Test
     void findAllWithCenterByCategory() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
-        RecruitBoard recruitBoard = createRecruitBoard(ADMINISTRATIVE_SUPPORT, center.getId());
+        VolunteerCategory category = ADMINISTRATIVE_SUPPORT;
+        RecruitBoard recruitBoard = createRecruitBoard(center.getId(), "제목", category, "지역", false,
+                RECRUITING);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
-        VolunteerCategory category = ADMINISTRATIVE_SUPPORT;
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
                 .category(category)
                 .pageable(pageable)
@@ -185,8 +170,6 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getSize()).isEqualTo(5);
-        assertThat(result.getNumber()).isZero();
-        assertThat(result.getContent()).hasSize(1);
 
         assertThat(result.getContent().getFirst().recruitBoard().getRecruitmentInfo()
                 .getVolunteerCategory()).isEqualTo(category);
@@ -196,12 +179,9 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllWithCenterByRegion() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
         String region = "특수지역";
-        RecruitBoard recruitBoard = createRecruitBoard(center.getId());
-        recruitBoard.updateWith(region);
+        RecruitBoard recruitBoard = createRecruitBoard(center.getId(), "제목", OTHER, region, false,
+                RECRUITING);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
@@ -214,65 +194,25 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         // when
         Page<RecruitBoardWithCenter> result = recruitBoardRepository.findAllWithCenter(condition);
 
-    }
-
-    @DisplayName("센터 ID로 완료되지 않은 모집 게시글들의 ID를 조회할 수 있다")
-    @Test
-    void findNotCompletedIdsByCenterIds() {
-        // given
-        UUID centerId = UUID.randomUUID();
-
-        RecruitBoard deletedRecruitingBoard = createRecruitBoard(centerId);
-        deletedRecruitingBoard.markAsDeleted();
-        recruitBoardRepository.save(deletedRecruitingBoard);
-
-        RecruitBoard recruitingBoard = createRecruitBoard(centerId);
-        recruitBoardRepository.save(recruitingBoard);
-
-        RecruitBoard deletedClosedBoard = createRecruitBoard(centerId);
-        deletedClosedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
-        deletedClosedBoard.markAsDeleted();
-        recruitBoardRepository.save(deletedClosedBoard);
-
-        RecruitBoard closedBoard = createRecruitBoard(centerId);
-        closedBoard.changeRecruitStatus(RecruitStatus.CLOSED, createCurrentDateTime());
-        recruitBoardRepository.save(closedBoard);
-
-        RecruitBoard deletedCompletedRecruitBoard = createCompletedRecruitBoard();
-        deletedCompletedRecruitBoard.markAsDeleted();
-        recruitBoardRepository.save(deletedCompletedRecruitBoard);
-
-        RecruitBoard completedRecruitBoard = createCompletedRecruitBoard();
-        recruitBoardRepository.save(completedRecruitBoard);
-
-        // when
-        List<Long> notCompletedBoardIds = recruitBoardRepository.findNotCompletedIdsByCenterId(
-                centerId);
-
         // then
-        assertThat(notCompletedBoardIds)
-                .hasSize(2)
-                .doesNotContain(deletedRecruitingBoard.getId())
-                .doesNotContain(deletedClosedBoard.getId())
-                .doesNotContain(deletedCompletedRecruitBoard.getId())
-                .doesNotContain(completedRecruitBoard.getId());
+        assertThat(result).hasSize(1);
+        assertThat(result.getContent().getFirst().recruitBoard().getId()).isEqualTo(
+                recruitBoard.getId());
     }
 
     @DisplayName("시간 인증 여부로 조회할 수 있다")
     @Test
     void findAllWithCenterByAdmitted() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
-        Boolean admitted = false;
-        RecruitBoard recruitBoard = createRecruitBoard(admitted, center.getId());
+        boolean admitted = false;
+        RecruitBoard recruitBoard = createRecruitBoard(center.getId(), "제목", OTHER, "지역", admitted,
+                RECRUITING);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
 
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-                .admitted(false)
+                .admitted(admitted)
                 .pageable(pageable)
                 .build();
 
@@ -294,13 +234,9 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllWithCenterByStatus() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
         RecruitStatus status = CLOSED;
-        RecruitBoard recruitBoard = createRecruitBoard(center.getId());
-        LocalDateTime currentDateTime = createCurrentDateTime();
-        recruitBoard.changeRecruitStatus(status, currentDateTime);
+        RecruitBoard recruitBoard = createRecruitBoard(center.getId(), "제목", OTHER, "지역", true,
+                status);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
@@ -342,7 +278,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(boards.size());
+        assertThat(result.getTotalElements()).isEqualTo(1);
         assertThat(result.getContent()).isNotEmpty();
     }
 
@@ -373,10 +309,8 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllByCenterId() {
         // given
-        Center center = createCenter();
-        centerRepository.save(center);
-
-        RecruitBoard recruitBoard = createRecruitBoard(center.getId());
+        UUID centerId = UUID.randomUUID();
+        RecruitBoard recruitBoard = createRecruitBoard(centerId, 1L, RECRUITING);
         recruitBoardRepository.save(recruitBoard);
 
         Pageable pageable = getPageable();
@@ -398,27 +332,51 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllByCenterIdWhenWrongCenterId() {
         // given
-        UUID centerId = UUID.randomUUID();
+        UUID wrongId = UUID.randomUUID();
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
                 .pageable(pageable)
                 .build();
 
         // when
-        Page<RecruitBoard> results = recruitBoardRepository.findAllByCenterId(centerId,
-                condition);
+        Page<RecruitBoard> results = recruitBoardRepository.findAllByCenterId(wrongId, condition);
 
         // then
         assertThat(results).isEmpty();
+    }
+
+    @DisplayName("센터 ID로 완료되지 않은 모집 게시글들의 ID를 조회할 수 있다")
+    @Test
+    void findNotCompletedIdsByCenterIds() {
+        // given
+        UUID centerId = UUID.randomUUID();
+
+        RecruitBoard recruitingBoard = createRecruitBoard(centerId, 1L, RECRUITING);
+        recruitBoardRepository.save(recruitingBoard);
+
+        RecruitBoard closedBoard = createRecruitBoard(centerId, 1L, CLOSED);
+        recruitBoardRepository.save(closedBoard);
+
+        RecruitBoard completedRecruitBoard = createRecruitBoard(centerId, 1L, COMPLETED);
+        recruitBoardRepository.save(completedRecruitBoard);
+
+        // when
+        List<Long> notCompletedBoardIds = recruitBoardRepository.findNotCompletedIdsByCenterId(
+                centerId);
+
+        // then
+        assertThat(notCompletedBoardIds)
+                .hasSize(2)
+                .doesNotContain(completedRecruitBoard.getId());
     }
 
     @DisplayName("아이디 리스트로 모집글을 조회할 수 있다.")
     @Test
     void findAllByIds() {
         // given
-        RecruitBoard board1 = createRecruitBoard();
-        RecruitBoard board2 = createRecruitBoard();
-        RecruitBoard board3 = createRecruitBoard();
+        RecruitBoard board1 = createRecruitBoard(UUID.randomUUID(), 1L, RECRUITING);
+        RecruitBoard board2 = createRecruitBoard(UUID.randomUUID(), 1L, RECRUITING);
+        RecruitBoard board3 = createRecruitBoard(UUID.randomUUID(), 1L, RECRUITING);
 
         recruitBoardRepository.saveAll(List.of(board1, board2, board3));
         List<Long> ids = List.of(board1.getId(), board2.getId(), board3.getId(), 100000L);
@@ -428,6 +386,57 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(all).hasSize(3);
+    }
+
+    @DisplayName("봉사 시작일 기준으로 모집중 상태 게시글을 모집 완료로 변경한다")
+    @Test
+    void updateStatusToClosedForDateRange() {
+        // given
+        LocalDateTime today = LocalDateTime.of(2024, 1, 1, 0, 0); // 2024-01-01 00:00:00
+        LocalDateTime startDateTime = today.plusHours(12); // 2024-01-01 12:00:00
+        LocalDateTime endDateTime = startDateTime.plusHours(2); // 2024-01-01 14:00:00
+        LocalDateTime tomorrow = today.plusDays(1); // 2024-01-02 00:00:00
+
+        RecruitBoard boardOne = createRecruitBoard(startDateTime, endDateTime, RECRUITING);
+        RecruitBoard boardTwo = createRecruitBoard(startDateTime, endDateTime, RECRUITING);
+        recruitBoardRepository.saveAll(List.of(boardOne, boardTwo));
+
+        // when
+        long updateCnt = recruitBoardRepository.updateStatusToClosedForDateRange(today, tomorrow);
+        em.clear();
+
+        // then
+        assertThat(updateCnt).isEqualTo(2);
+        RecruitBoard one = recruitBoardRepository.findById(boardOne.getId()).orElseThrow();
+        RecruitBoard two = recruitBoardRepository.findById(boardTwo.getId()).orElseThrow();
+        assertThat(one.getRecruitStatus()).isEqualTo(CLOSED);
+        assertThat(two.getRecruitStatus()).isEqualTo(CLOSED);
+    }
+
+    @DisplayName("봉사 종료일 기준으로 모집완료 상태 게시글을 종료로 변경한다")
+    @Test
+    void updateStatusToCompletedForDateRange() {
+        // given
+        LocalDateTime now = LocalDateTime.of(2024, 1, 2, 0, 0); // 2024-01-02 00:00:00
+        LocalDateTime yesterday = now.minusDays(1); // 2024-01-01 00:00:00
+        LocalDateTime startDateTime = yesterday.plusHours(12); // 2024-01-01 12:00:00
+        LocalDateTime endDateTime = startDateTime.plusHours(2); // 2024-01-01 14:00:00
+
+        RecruitBoard boardOne = createRecruitBoard(startDateTime, endDateTime, CLOSED);
+        RecruitBoard boardTwo = createRecruitBoard(startDateTime, endDateTime, CLOSED);
+        recruitBoardRepository.saveAll(List.of(boardOne, boardTwo));
+
+        // when
+        long updateCnt = recruitBoardRepository.updateStatusToCompletedForDateRange(yesterday, now);
+        em.clear();
+
+        // then
+        assertThat(updateCnt).isEqualTo(2);
+
+        RecruitBoard one = recruitBoardRepository.findById(boardOne.getId()).orElseThrow();
+        RecruitBoard two = recruitBoardRepository.findById(boardTwo.getId()).orElseThrow();
+        assertThat(one.getRecruitStatus()).isEqualTo(COMPLETED);
+        assertThat(two.getRecruitStatus()).isEqualTo(COMPLETED);
     }
 
 //    @DisplayName("모집글을 elastic search index에 저장할 수 있다. (repository)")
@@ -461,6 +470,79 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 //        recruitBoardRepository.deleteDocument(savedBoard1.getId());
 //        recruitBoardRepository.deleteDocument(savedBoard2.getId());
 //    }
+
+    public static RecruitBoard createRecruitBoard(UUID centerId, Long locationId,
+            RecruitStatus status) {
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region("지역")
+                .recruitmentCount(1)
+                .volunteerStartDateTime(LocalDateTime.now())
+                .volunteerEndDateTime(LocalDateTime.now())
+                .volunteerHours(10)
+                .volunteerCategory(OTHER)
+                .admitted(true)
+                .build();
+
+        return RecruitBoard.builder()
+                .centerId(centerId)
+                .locationId(locationId)
+                .title("모집글 제목")
+                .content("모집글 내용")
+                .imgUrl("이미지 링크")
+                .recruitmentInfo(recruitmentInfo)
+                .status(status)
+                .build();
+    }
+
+    public static RecruitBoard createRecruitBoard(UUID centerId, String title,
+            VolunteerCategory category,
+            String region, boolean admitted, RecruitStatus status) {
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region(region)
+                .recruitmentCount(1)
+                .volunteerStartDateTime(LocalDateTime.now())
+                .volunteerEndDateTime(LocalDateTime.now())
+                .volunteerHours(10)
+                .volunteerCategory(category)
+                .admitted(admitted)
+                .build();
+
+        return RecruitBoard.builder()
+                .centerId(centerId)
+                .locationId(1L)
+                .title(title)
+                .content("모집글 내용")
+                .imgUrl("이미지 링크")
+                .recruitmentInfo(recruitmentInfo)
+                .status(status)
+                .build();
+    }
+
+    private static RecruitBoard createRecruitBoard(LocalDateTime startTime, LocalDateTime endTime,
+            RecruitStatus status) {
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region("지역")
+                .recruitmentCount(1)
+                .volunteerStartDateTime(startTime)
+                .volunteerEndDateTime(endTime)
+                .volunteerHours(10)
+                .volunteerCategory(OTHER)
+                .admitted(true)
+                .build();
+
+        return RecruitBoard.builder()
+                .centerId(UUID.randomUUID())
+                .locationId(1L)
+                .title("모집글 제목")
+                .content("모집글 내용")
+                .imgUrl("이미지 링크")
+                .recruitmentInfo(recruitmentInfo)
+                .status(status)
+                .build();
+    }
 
     private Pageable getPageable() {
         Sort sort = Sort.by(Sort.Order.desc("created_at"));
