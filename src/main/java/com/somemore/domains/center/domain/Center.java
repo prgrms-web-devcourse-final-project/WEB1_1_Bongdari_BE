@@ -27,7 +27,8 @@ public class Center extends BaseEntity {
     @Column(name = "img_url", nullable = false)
     private String imgUrl;
 
-    @Column(name = "introduce", columnDefinition = "TEXT", nullable = false)
+    @Lob
+    @Column(name = "introduce", length = 500, nullable = false)
     private String introduce;
 
     @Column(name = "homepage_link", nullable = false)

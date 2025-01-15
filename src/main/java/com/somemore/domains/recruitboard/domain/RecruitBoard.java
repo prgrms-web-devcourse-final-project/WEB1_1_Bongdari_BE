@@ -34,7 +34,7 @@ public class RecruitBoard extends BaseEntity {
     private String title;
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", length = 1000, nullable = false)
     private String content;
 
     @Embedded
