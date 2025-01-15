@@ -14,12 +14,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
-@Repository
+@Repository("oldVolunteerRepository")
 public class VolunteerRepositoryImpl implements VolunteerRepository {
 
+    @Qualifier("oldVolunteerJpaRepository")
     private final VolunteerJpaRepository volunteerJpaRepository;
     private final JPAQueryFactory queryFactory;
 

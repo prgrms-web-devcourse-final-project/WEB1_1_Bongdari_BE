@@ -21,8 +21,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "volunteer_new") // TODO suffix 삭제
-public class Volunteer_NEW extends BaseEntity {
+@Table(name = "new_volunteer") // TODO suffix 삭제
+public class NEWVolunteer extends BaseEntity {
 
     public static final String DEFAULT_NAME = "봉사자";
     @Id
@@ -45,7 +45,7 @@ public class Volunteer_NEW extends BaseEntity {
     private Tier tier;
 
     @Builder
-    private Volunteer_NEW(
+    private NEWVolunteer(
             UUID userId,
             String name,
             Gender gender,
@@ -57,8 +57,8 @@ public class Volunteer_NEW extends BaseEntity {
         this.tier = tier;
     }
 
-    public static Volunteer_NEW createDefault(UUID userId) {
-        return Volunteer_NEW.builder()
+    public static NEWVolunteer createDefault(UUID userId) {
+        return NEWVolunteer.builder()
                 .userId(userId)
                 .name(DEFAULT_NAME + userId.toString().substring(0, 8))
                 .gender(Gender.getDefault())

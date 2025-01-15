@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
 public interface CenterRepository {
     Center save(Center center);
     boolean existsById(UUID id);

@@ -16,8 +16,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "center_new") // TODO suffix 삭제
-public class Center_NEW {
+@Table(name = "new_center") // TODO suffix 삭제
+public class NEWCenter {
 
     public static final String DEFAULT_NAME = "기관";
     @Id
@@ -35,14 +35,14 @@ public class Center_NEW {
     private String homepageUrl;
 
     @Builder
-    private Center_NEW(UUID userId, String name, String homepageUrl) {
+    private NEWCenter(UUID userId, String name, String homepageUrl) {
         this.userId = userId;
         this.name = name;
         this.homepageUrl = homepageUrl;
     }
 
-    public static Center_NEW createDefault(UUID userId) {
-        return Center_NEW.builder()
+    public static NEWCenter createDefault(UUID userId) {
+        return NEWCenter.builder()
                 .userId(userId)
                 .name(DEFAULT_NAME + userId.toString().substring(0, 8))
                 .homepageUrl("")

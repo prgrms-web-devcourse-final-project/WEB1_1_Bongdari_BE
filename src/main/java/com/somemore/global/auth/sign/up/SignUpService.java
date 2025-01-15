@@ -1,11 +1,11 @@
 package com.somemore.global.auth.sign.up;
 
-import com.somemore.center.usecase.RegisterCenterUseCase;
+import com.somemore.center.usecase.NEWRegisterCenterUseCase;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.service.RegisterUserUseCase;
-import com.somemore.volunteer.usecase.RegisterVolunteerUseCase;
+import com.somemore.volunteer.usecase.NEWRegisterVolunteerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,8 @@ import java.util.UUID;
 public class SignUpService implements SignUpUseCase {
 
     private final RegisterUserUseCase registerUserUseCase;
-    private final RegisterVolunteerUseCase registerVolunteerUseCase;
-    private final RegisterCenterUseCase registerCenterUseCase;
+    private final NEWRegisterVolunteerUseCase NEWRegisterVolunteerUseCase;
+    private final NEWRegisterCenterUseCase NEWRegisterCenterUseCase;
 
     @Override
     public void signUp(SignUpRequestDto signUpRequestDto) {
@@ -37,10 +37,10 @@ public class SignUpService implements SignUpUseCase {
         UserRole role = user.getRole();
 
         if (role == UserRole.VOLUNTEER) {
-            registerVolunteerUseCase.register(userId);
+            NEWRegisterVolunteerUseCase.register(userId);
             return;
         }
 
-        registerCenterUseCase.register(userId);
+        NEWRegisterCenterUseCase.register(userId);
     }
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class InterestCenterRepositoryImplTest extends IntegrationTestSupport {
+class InterestNEWCenterRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private InterestCenterRepository interestCenterRepository;

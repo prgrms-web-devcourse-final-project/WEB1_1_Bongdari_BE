@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Repository
+@Repository("centerRepository")
 public class CenterRepositoryImpl implements CenterRepository {
 
     private final JPAQueryFactory queryFactory;
