@@ -14,6 +14,6 @@ public class CenterRepositoryImpl implements CenterRepository {
 
     @Override
     public Center_NEW save(Center_NEW center) {
-        return center;
+        return centerJpaRepository.save(center);
     }
 }
