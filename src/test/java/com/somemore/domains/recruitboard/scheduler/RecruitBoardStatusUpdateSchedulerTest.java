@@ -60,8 +60,8 @@ class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
     @Test
     void updateRecruitBoardStatusToCompleted() {
         // given
-        LocalDateTime now = LocalDate.now().atStartOfDay(); // today 00:00:00
-        LocalDateTime yesterday = now.minusDays(1); // yesterday 00:00:00
+        LocalDateTime today = LocalDate.now().atStartOfDay(); // today 00:00:00
+        LocalDateTime yesterday = today.minusDays(1); // yesterday 00:00:00
         LocalDateTime startDateTime = yesterday.plusHours(12); // yesterday 12:00:00
         LocalDateTime endDateTime = startDateTime.plusHours(2); // yesterday 14:00:00
 
@@ -80,7 +80,7 @@ class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
         assertThat(two.getRecruitStatus()).isEqualTo(COMPLETED);
     }
 
-    public static RecruitBoard createRecruitBoard(LocalDateTime startTime, LocalDateTime endTime,
+    private static RecruitBoard createRecruitBoard(LocalDateTime startTime, LocalDateTime endTime,
             RecruitStatus status) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()

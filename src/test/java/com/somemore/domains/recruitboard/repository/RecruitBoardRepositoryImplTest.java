@@ -392,17 +392,17 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void updateRecruitingToClosedByStartDate() {
         // given
-        LocalDateTime now = LocalDateTime.of(2024, 1, 1, 0, 0); // 2024-01-01 00:00:00
-        LocalDateTime nextDay = now.plusDays(1); // 2024-01-02 00:00:00
-        LocalDateTime startDateTime = now.plusHours(12); // 2024-01-01 12:00:00
+        LocalDateTime today = LocalDateTime.of(2024, 1, 1, 0, 0); // 2024-01-01 00:00:00
+        LocalDateTime startDateTime = today.plusHours(12); // 2024-01-01 12:00:00
         LocalDateTime endDateTime = startDateTime.plusHours(2); // 2024-01-01 14:00:00
+        LocalDateTime tomorrow = today.plusDays(1); // 2024-01-02 00:00:00
 
         RecruitBoard boardOne = createRecruitBoard(startDateTime, endDateTime, RECRUITING);
         RecruitBoard boardTwo = createRecruitBoard(startDateTime, endDateTime, RECRUITING);
         recruitBoardRepository.saveAll(List.of(boardOne, boardTwo));
 
         // when
-        long updateCnt = recruitBoardRepository.updateRecruitingToClosedByStartDate(now, nextDay);
+        long updateCnt = recruitBoardRepository.updateRecruitingToClosedByStartDate(today, tomorrow);
         em.clear();
 
         // then
@@ -427,7 +427,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         recruitBoardRepository.saveAll(List.of(boardOne, boardTwo));
 
         // when
-        long updateCnt = recruitBoardRepository.updateClosedToCompletedByEndDate(now);
+        long updateCnt = recruitBoardRepository.updateClosedToCompletedByEndDate(yesterday, now);
         em.clear();
 
         // then
@@ -520,7 +520,7 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
                 .build();
     }
 
-    public static RecruitBoard createRecruitBoard(LocalDateTime startTime, LocalDateTime endTime,
+    private static RecruitBoard createRecruitBoard(LocalDateTime startTime, LocalDateTime endTime,
             RecruitStatus status) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
