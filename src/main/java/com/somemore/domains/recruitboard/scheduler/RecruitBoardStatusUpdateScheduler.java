@@ -18,13 +18,14 @@ import org.springframework.stereotype.Component;
 public class RecruitBoardStatusUpdateScheduler {
 
     private final RecruitBoardRepository recruitBoardRepository;
+    private final static String RECRUIT_BOARD_UPDATE_CRON = "0 0 0 * * ?";
 
     @Retryable(
             retryFor = Exception.class,
             maxAttempts = 3,
             backoff = @Backoff(delay = 2000)
     )
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = RECRUIT_BOARD_UPDATE_CRON)
     public void updateRecruitBoardStatusToClosed() {
         log.info("봉사 시작일에 해당하는 모집글 상태를 CLOSED로 변경하는 작업 시작");
         LocalDateTime today = LocalDate.now().atStartOfDay();
@@ -45,7 +46,7 @@ public class RecruitBoardStatusUpdateScheduler {
             maxAttempts = 3,
             backoff = @Backoff(delay = 2000)
     )
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = RECRUIT_BOARD_UPDATE_CRON)
     public void updateRecruitBoardStatusToCompleted() {
         log.info("봉사 종료일이 지난 모집글 상태를 COMPLETED로 변경하는 작업 시작");
         LocalDateTime today = LocalDate.now().atStartOfDay();
