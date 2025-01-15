@@ -15,4 +15,6 @@ public interface UserRepository {
     Optional<User> findByAccountId(String accountId);
 
     User save(User user);
+
+    boolean existsByAccountId(String accountId);
 }

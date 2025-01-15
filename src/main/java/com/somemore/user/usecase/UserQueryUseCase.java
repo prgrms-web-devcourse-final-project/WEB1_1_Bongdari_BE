@@ -9,8 +9,14 @@ import java.util.UUID;
 public interface UserQueryUseCase {
 
     User getById(UUID id);
+
     UserRole getRoleById(UUID userId);
+
     User getByAccountId(String accountId);
+
     UserCommonAttribute getCommonAttributeByUserId(UUID userId);
+
     boolean getIsCustomizedByUserId(UUID userId);
+
+    boolean isDuplicateAccountId(String accountId);
 }
