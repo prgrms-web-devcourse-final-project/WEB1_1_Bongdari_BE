@@ -10,7 +10,6 @@ import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,7 +20,6 @@ import java.util.UUID;
 @Repository("oldVolunteerRepository")
 public class VolunteerRepositoryImpl implements VolunteerRepository {
 
-    @Qualifier("oldVolunteerJpaRepository")
     private final VolunteerJpaRepository volunteerJpaRepository;
     private final JPAQueryFactory queryFactory;
 

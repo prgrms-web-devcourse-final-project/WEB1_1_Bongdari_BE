@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.domain.QNEWVolunteer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,7 +14,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
 
-    @Qualifier("newVolunteerJpaRepository")
     private final NEWVolunteerJpaRepository NEWVolunteerJpaRepository;
     private final JPAQueryFactory queryFactory;
 

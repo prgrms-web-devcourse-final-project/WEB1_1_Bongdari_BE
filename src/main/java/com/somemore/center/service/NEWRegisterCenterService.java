@@ -4,7 +4,6 @@ import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.center.usecase.NEWRegisterCenterUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,6 @@ import java.util.UUID;
 @Transactional
 public class NEWRegisterCenterService implements NEWRegisterCenterUseCase {
 
-    @Qualifier("newCenterRepository")
     private final NEWCenterRepository NEWCenterRepository;
 
     @Override

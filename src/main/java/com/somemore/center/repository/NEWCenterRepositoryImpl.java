@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.domain.QNEWCenter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,7 +13,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class NEWCenterRepositoryImpl implements NEWCenterRepository {
 
-    @Qualifier("newCenterJpaRepository")
     private final NEWCenterJpaRepository NEWCenterJpaRepository;
     private final JPAQueryFactory queryFactory;
 
