@@ -9,6 +9,7 @@ import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import com.somemore.user.repository.usersetting.UserSettingRepository;
+import com.somemore.user.usecase.RegisterUserUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class RegisterUserUseCase implements com.somemore.user.usecase.RegisterUserUseCase {
+public class RegisterUserService implements RegisterUserUseCase {
 
     private final UserRepository userRepository;
     private final UserSettingRepository userSettingRepository;

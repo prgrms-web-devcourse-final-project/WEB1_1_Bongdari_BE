@@ -22,10 +22,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class RegisterUserUseCaseTest extends IntegrationTestSupport {
+class RegisterUserServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private RegisterUserUseCase registerUserUseCase;
+    private RegisterUserService registerUserService;
 
     @Autowired
     private UserRepository userRepository;
@@ -44,7 +44,7 @@ class RegisterUserUseCaseTest extends IntegrationTestSupport {
         CommonOAuthInfo commonOAuthInfo = new CommonOAuthInfo(provider, "test");
 
         // when
-        User registeredUser = registerUserUseCase.registerOAuthUser(commonOAuthInfo, UserRole.getOAuthUserDefaultRole());
+        User registeredUser = registerUserService.registerOAuthUser(commonOAuthInfo, UserRole.getOAuthUserDefaultRole());
 
         // then
         User savedUser = userRepository.findById(registeredUser.getId()).orElseThrow();
@@ -78,7 +78,7 @@ class RegisterUserUseCaseTest extends IntegrationTestSupport {
         UserRole role = UserRole.CENTER;
 
         // when
-        User registeredUser = registerUserUseCase.registerLocalUser(userAuthInfo, role);
+        User registeredUser = registerUserService.registerLocalUser(userAuthInfo, role);
 
         // then
         User savedUser = userRepository.findById(registeredUser.getId()).orElseThrow();

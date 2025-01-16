@@ -4,7 +4,7 @@ import com.somemore.center.usecase.NEWRegisterCenterUseCase;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.dto.UserAuthInfo;
-import com.somemore.user.service.RegisterUserUseCase;
+import com.somemore.user.service.RegisterUserService;
 import com.somemore.volunteer.usecase.NEWRegisterVolunteerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Transactional
 public class SignUpService implements SignUpUseCase {
 
-    private final RegisterUserUseCase registerUserUseCase;
+    private final RegisterUserService registerUserUseCase;
     private final NEWRegisterVolunteerUseCase NEWRegisterVolunteerUseCase;
     private final NEWRegisterCenterUseCase NEWRegisterCenterUseCase;
 
