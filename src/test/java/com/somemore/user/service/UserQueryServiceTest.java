@@ -36,7 +36,7 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         UserAuthInfo userAuthInfo = UserAuthInfo.createForOAuth(OAuthProvider.NAVER);
 
         user = userRepository.save(User.of(userAuthInfo, UserRole.VOLUNTEER));
-        userCommonAttribute = userCommonAttributeRepository.save(UserCommonAttribute.createDefault(user.getId()));
+        userCommonAttribute = userCommonAttributeRepository.save(UserCommonAttribute.createDefault(user.getId(),UserRole.VOLUNTEER));
     }
 
 

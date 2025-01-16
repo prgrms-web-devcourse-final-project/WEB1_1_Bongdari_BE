@@ -24,7 +24,6 @@ import java.util.UUID;
 @Table(name = "new_volunteer") // TODO prefix 삭제
 public class NEWVolunteer extends BaseEntity {
 
-    public static final String DEFAULT_NAME = "봉사자";
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
@@ -33,8 +32,8 @@ public class NEWVolunteer extends BaseEntity {
     @Column(name = "user_id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID userId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false, length = 10)
@@ -47,12 +46,12 @@ public class NEWVolunteer extends BaseEntity {
     @Builder
     private NEWVolunteer(
             UUID userId,
-            String name,
+            String nickname,
             Gender gender,
             Tier tier
     ) {
         this.userId = userId;
-        this.name = name;
+        this.nickname = nickname;
         this.gender = gender;
         this.tier = tier;
     }
@@ -60,7 +59,7 @@ public class NEWVolunteer extends BaseEntity {
     public static NEWVolunteer createDefault(UUID userId) {
         return NEWVolunteer.builder()
                 .userId(userId)
-                .name(DEFAULT_NAME + userId.toString().substring(0, 8))
+                .nickname(userId.toString().substring(0, 8))
                 .gender(Gender.getDefault())
                 .tier(Tier.getDefault())
                 .build();

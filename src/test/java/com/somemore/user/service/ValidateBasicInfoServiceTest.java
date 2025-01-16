@@ -39,7 +39,7 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     @Test
     void isBasicInfoComplete_ReturnsTrue() {
         // given
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId());
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER);
         userCommonAttribute.customize();
         userCommonAttributeRepository.save(userCommonAttribute);
 
@@ -54,7 +54,7 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     @Test
     void isNotBasicInfoComplete_ReturnsFalse() {
         // given
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId());
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER);
         userCommonAttributeRepository.save(userCommonAttribute);
 
         // when

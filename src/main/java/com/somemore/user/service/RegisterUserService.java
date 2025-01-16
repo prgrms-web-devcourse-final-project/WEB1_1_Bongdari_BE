@@ -46,7 +46,7 @@ public class RegisterUserService implements RegisterUserUseCase {
         UserSetting userSetting = UserSetting.from(userId);
         userSettingRepository.save(userSetting);
 
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId);
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, role);
         userCommonAttributeRepository.save(userCommonAttribute);
 
         return user;

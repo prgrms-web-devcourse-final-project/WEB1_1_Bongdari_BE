@@ -3,6 +3,7 @@ package com.somemore.user.repository.usercommonattribute;
 import com.somemore.global.imageupload.service.ImageUploadService;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ class UserCommonAttributeRepositoryImplTest extends IntegrationTestSupport {
     void saveUserCommonAttribute() {
         // given
         UUID userId = UUID.randomUUID();
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId);
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, UserRole.VOLUNTEER);
 
         // when
         UserCommonAttribute savedUserCommonAttribute = userCommonAttributeRepository.save(userCommonAttribute);

@@ -20,7 +20,6 @@ import java.util.UUID;
 @Table(name = "new_center") // TODO prefix 삭제
 public class NEWCenter extends BaseEntity {
 
-    public static final String DEFAULT_NAME = "기관";
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
@@ -29,23 +28,18 @@ public class NEWCenter extends BaseEntity {
     @Column(name = "user_id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID userId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
     @Column(name = "homepage_url", nullable = false)
     private String homepageUrl;
 
     @Builder
     private NEWCenter(UUID userId, String name, String homepageUrl) {
         this.userId = userId;
-        this.name = name;
         this.homepageUrl = homepageUrl;
     }
 
     public static NEWCenter createDefault(UUID userId) {
         return NEWCenter.builder()
                 .userId(userId)
-                .name(DEFAULT_NAME + userId.toString().substring(0, 8))
                 .homepageUrl("")
                 .build();
     }

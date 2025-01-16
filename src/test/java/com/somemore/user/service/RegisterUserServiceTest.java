@@ -63,7 +63,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedCommonAttribute).isNotNull();
         assertThat(savedCommonAttribute.getUserId()).isEqualTo(savedUser.getId());
-        assertThat(savedCommonAttribute.getNickname()).hasSize(8);
+        assertThat(savedCommonAttribute.getName()).contains(UserRole.getOAuthUserDefaultRole().getDescription());
         assertThat(savedCommonAttribute.getIntroduce()).isEqualTo("");
         assertThat(savedCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
         assertThat(savedCommonAttribute.isCustomized()).isEqualTo(userDefaultSetting);
@@ -97,7 +97,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedCommonAttribute).isNotNull();
         assertThat(savedCommonAttribute.getUserId()).isEqualTo(savedUser.getId());
-        assertThat(savedCommonAttribute.getNickname()).hasSize(8);
+        assertThat(savedCommonAttribute.getName()).contains(role.getDescription());
         assertThat(savedCommonAttribute.getIntroduce()).isEqualTo("");
         assertThat(savedCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
         assertThat(savedCommonAttribute.isCustomized()).isEqualTo(userDefaultSetting);
