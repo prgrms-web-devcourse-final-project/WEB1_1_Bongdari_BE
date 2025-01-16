@@ -1,5 +1,6 @@
 package com.somemore.center.domain;
 
+import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "new_center") // TODO suffix 삭제
-public class NEWCenter {
+public class NEWCenter extends BaseEntity {
 
     public static final String DEFAULT_NAME = "기관";
     @Id
