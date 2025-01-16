@@ -17,8 +17,8 @@ public class NEWRegisterCenterService implements NEWRegisterCenterUseCase {
     private final NEWCenterRepository NEWCenterRepository;
 
     @Override
-    public NEWCenter register(UUID userId) {
+    public void register(UUID userId) {
         NEWCenter center = NEWCenter.createDefault(userId);
-        return NEWCenterRepository.save(center);
+        NEWCenterRepository.save(center);
     }
 }

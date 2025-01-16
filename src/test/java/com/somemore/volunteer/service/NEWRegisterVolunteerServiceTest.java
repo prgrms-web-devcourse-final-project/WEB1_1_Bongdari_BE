@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,10 +29,10 @@ class NEWRegisterVolunteerServiceTest extends IntegrationTestSupport {
         UUID userId = UUID.randomUUID();
 
         // when
-        NEWVolunteer savedVolunteer = registerVolunteerService.register(userId);
+        registerVolunteerService.register(userId);
 
         // then
-        NEWVolunteer foundVolunteer = volunteerRepository.findByUserId(userId).orElseThrow();
-        assertThat(savedVolunteer).isEqualTo(foundVolunteer);
+        Optional<NEWVolunteer> foundVolunteer = volunteerRepository.findByUserId(userId);
+        assertThat(foundVolunteer).isNotEmpty();
     }
 }

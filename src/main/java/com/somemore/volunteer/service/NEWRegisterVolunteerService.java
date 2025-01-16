@@ -17,9 +17,9 @@ public class NEWRegisterVolunteerService implements NEWRegisterVolunteerUseCase 
     private final NEWVolunteerRepository NEWVolunteerRepository;
 
     @Override
-    public NEWVolunteer register(UUID userId) {
+    public void register(UUID userId) {
         NEWVolunteer volunteer = NEWVolunteer.createDefault(userId);
 
-        return NEWVolunteerRepository.save(volunteer);
+        NEWVolunteerRepository.save(volunteer);
     }
 }

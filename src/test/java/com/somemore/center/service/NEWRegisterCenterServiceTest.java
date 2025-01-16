@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,11 +29,11 @@ class NEWRegisterCenterServiceTest extends IntegrationTestSupport {
         UUID userId = UUID.randomUUID();
 
         // when
-        NEWCenter savedCenter = registerCenterService.register(userId);
+        registerCenterService.register(userId);
 
         // then
-        NEWCenter foundCenter = centerRepository.findByUserId(userId).orElseThrow();
-        assertThat(savedCenter).isEqualTo(foundCenter);
+        Optional<NEWCenter> foundCenter = centerRepository.findByUserId(userId);
+        assertThat(foundCenter).isNotEmpty();
     }
 
 }

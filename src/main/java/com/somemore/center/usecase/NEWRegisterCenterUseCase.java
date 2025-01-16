@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface NEWRegisterCenterUseCase {
 
-    NEWCenter register(UUID userId);
+    void register(UUID userId);
 }
