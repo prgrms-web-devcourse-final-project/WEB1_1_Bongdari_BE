@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 
 @Builder
 public record RecruitBoardSearchCondition(
-    String keyword,
-    VolunteerCategory category,
-    String region,
-    Boolean admitted,
-    RecruitStatus status,
-    Pageable pageable
+        String keyword,
+        VolunteerCategory category,
+        String region,
+        Boolean admitted,
+        RecruitStatus status,
+        Pageable pageable
 ) {
 
 }

@@ -20,16 +20,16 @@ public record CommunityCommentResponseDto(
         @Schema(description = "커뮤니티 댓글 수정 일시", example = "2023-12-02T11:00:00")
         LocalDateTime updatedAt,
         @Schema(description = "대댓글 목록", example = """
-    [
-        {
-            "id": 3,
-            "content": "첫 번째 댓글의 답글입니다.",
-            "writerNickname": "사용자2",
-            "createdAt": "2023-12-02T11:00:00",
-            "replies": []
-        }
-    ]
-""")
+                    [
+                        {
+                            "id": 3,
+                            "content": "첫 번째 댓글의 답글입니다.",
+                            "writerNickname": "사용자2",
+                            "createdAt": "2023-12-02T11:00:00",
+                            "replies": []
+                        }
+                    ]
+                """)
         List<CommunityCommentResponseDto> replies
 ) {
     public CommunityCommentResponseDto {

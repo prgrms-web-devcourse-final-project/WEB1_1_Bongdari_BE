@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface GenerateTokensOnLoginUseCase {
     EncodedToken generateLoginToken(UUID userId, UserRole role);
+
     EncodedToken generateAuthTokensAndReturnAccessToken(UUID userId, UserRole role);
 }

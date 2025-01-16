@@ -27,7 +27,7 @@ public class RegisterInterestCenterService implements RegisterInterestCenterUseC
         centerQueryUseCase.validateCenterExists(requestDto.centerId());
 
         boolean isDuplicate = repository.existsByVolunteerIdAndCenterId(volunteerId, requestDto.centerId());
-        if(isDuplicate){
+        if (isDuplicate) {
             throw new DuplicateException(DUPLICATE_INTEREST_CENTER.getMessage());
         }
 

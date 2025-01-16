@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface OAuthInfoRepository {
     Optional<UUID> findUserIdByOAuthProviderAndOauthId(OAuthProvider provider, String oauthId);
+
     boolean existsByOAuthProviderAndOauthId(OAuthProvider provider, String oauthId);
+
     OAuthInfo save(OAuthInfo oauthInfo);
 }

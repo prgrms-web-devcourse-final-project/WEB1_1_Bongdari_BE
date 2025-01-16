@@ -13,9 +13,14 @@ import java.util.UUID;
 
 public interface NoteRepository {
     Note save(Note note);
+
     Optional<Note> findById(Long noteId);
+
     Page<NoteReceiverViewForCenter> findNotesByReceiverIsCenter(UUID centerId, Pageable pageable);
+
     Page<NoteReceiverViewForVolunteer> findNotesByReceiverIsVolunteer(UUID volunteerId, Pageable pageable);
+
     Optional<NoteDetailViewForCenter> findNoteDetailViewReceiverIsCenter(Long noteId);
+
     Optional<NoteDetailViewForVolunteer> findNoteDetailViewReceiverIsVolunteer(Long noteId);
 }

@@ -15,4 +15,5 @@ public record CommunityBoardUpdateRequestDto(
         @Schema(description = "커뮤니티 게시글 내용", example = "저 포함 5명이 같이 가면 좋을 거 같아요")
         @NotBlank(message = "게시글 내용은 필수 값입니다.")
         String content
-) {}
+) {
+}

@@ -45,7 +45,7 @@ public class Review extends BaseEntity {
 
     @Builder
     public Review(Long volunteerApplyId, UUID volunteerId, String title,
-            String content, String imgUrl) {
+                  String content, String imgUrl) {
         this.volunteerApplyId = volunteerApplyId;
         this.volunteerId = volunteerId;
         this.title = title;

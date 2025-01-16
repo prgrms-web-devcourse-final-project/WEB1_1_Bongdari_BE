@@ -54,7 +54,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     @Override
     public Page<Review> findAllByVolunteerIdAndSearch(UUID volunteerId,
-            ReviewSearchCondition condition) {
+                                                      ReviewSearchCondition condition) {
 
         BooleanExpression exp = volunteerIdEq(volunteerId)
                 .and(volunteerCategoryEq(condition.category()))

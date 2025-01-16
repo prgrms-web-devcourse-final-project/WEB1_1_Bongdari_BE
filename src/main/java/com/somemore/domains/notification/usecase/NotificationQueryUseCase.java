@@ -8,5 +8,6 @@ import java.util.UUID;
 public interface NotificationQueryUseCase {
 
     List<NotificationResponseDto> getUnreadNotifications(UUID userId);
+
     List<NotificationResponseDto> getReadNotifications(UUID userId);
 }

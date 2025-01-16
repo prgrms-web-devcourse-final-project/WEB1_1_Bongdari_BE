@@ -71,5 +71,7 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
     }
 
     @Override
-    public void deleteAllInBatch() { communityCommentJpaRepository.deleteAllInBatch(); }
+    public void deleteAllInBatch() {
+        communityCommentJpaRepository.deleteAllInBatch();
+    }
 }

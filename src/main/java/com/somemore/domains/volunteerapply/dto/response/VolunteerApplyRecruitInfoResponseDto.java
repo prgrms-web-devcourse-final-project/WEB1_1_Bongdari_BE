@@ -33,7 +33,7 @@ public record VolunteerApplyRecruitInfoResponseDto(
 ) {
 
     public static VolunteerApplyRecruitInfoResponseDto of(VolunteerApply apply,
-            RecruitBoard board) {
+                                                          RecruitBoard board) {
         RecruitBoardOverViewResponseDto recruitBoard = RecruitBoardOverViewResponseDto.from(board);
         return VolunteerApplyRecruitInfoResponseDto.builder()
                 .id(apply.getId())

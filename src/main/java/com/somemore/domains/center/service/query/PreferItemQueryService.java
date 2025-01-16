@@ -27,7 +27,7 @@ public class PreferItemQueryService implements PreferItemQueryUseCase {
     //프론트와 의논후 private으로 전환 예정
     @Override
     public List<PreferItem> getPreferItemsByCenterId(UUID centerId) {
-       return preferItemRepository.findByCenterId(centerId);
+        return preferItemRepository.findByCenterId(centerId);
     }
 
     private static List<PreferItemResponseDto> preferItemConvertToDtos(List<PreferItem> preferItems) {

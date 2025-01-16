@@ -41,7 +41,7 @@ public class VolunteerApply extends BaseEntity {
 
     @Builder
     public VolunteerApply(UUID volunteerId, Long recruitBoardId, ApplyStatus status,
-            Boolean attended) {
+                          Boolean attended) {
         this.volunteerId = volunteerId;
         this.recruitBoardId = recruitBoardId;
         this.status = status;

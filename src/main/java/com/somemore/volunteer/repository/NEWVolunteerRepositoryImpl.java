@@ -47,7 +47,8 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                                 isNotDeleted()
                         )
                         .fetchOne()
-        );    }
+        );
+    }
 
     private static BooleanExpression isNotDeleted() {
         return volunteer.deleted.eq(false);

@@ -37,7 +37,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
     @Override
     public Page<CommunityBoardResponseDto> getCommunityBoardsByWriterId(UUID writerId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId ,pageable);
+        Page<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId, pageable);
         return boards.map(CommunityBoardResponseDto::from);
     }
 

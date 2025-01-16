@@ -6,11 +6,11 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record PreferItemResponseDto (
+public record PreferItemResponseDto(
         Long id,
         UUID centerId,
         String itemName
-){
+) {
     public static PreferItemResponseDto from(PreferItem preferItem) {
         return PreferItemResponseDto.builder()
                 .id(preferItem.getId())

@@ -9,11 +9,16 @@ import java.util.UUID;
 
 public interface CenterRepository {
     Center save(Center center);
+
     boolean existsById(UUID id);
+
     default boolean doesNotExistById(UUID id) {
         return !existsById(id);
     }
+
     Optional<Center> findCenterById(UUID id);
+
     List<CenterOverviewInfo> findCenterOverviewsByIds(List<UUID> ids);
+
     void deleteAllInBatch();
 }

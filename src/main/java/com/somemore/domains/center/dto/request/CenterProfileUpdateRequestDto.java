@@ -21,4 +21,5 @@ public record CenterProfileUpdateRequestDto(
         @Schema(description = "센터 소개", example = "저희 도서관은 유명해요")
         @NotBlank(message = "센터 소개는 필수 값입니다.")
         String introduce
-) {}
+) {
+}

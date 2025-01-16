@@ -28,10 +28,10 @@ public interface VolunteerApplyRepository {
     List<VolunteerApply> findAllByRecruitId(Long recruitId);
 
     Page<VolunteerApply> findAllByRecruitId(Long recruitId,
-            VolunteerApplySearchCondition condition);
+                                            VolunteerApplySearchCondition condition);
 
     Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
-            VolunteerApplySearchCondition condition);
+                                              VolunteerApplySearchCondition condition);
 
     List<VolunteerApply> findAllByIds(List<Long> ids);
 }

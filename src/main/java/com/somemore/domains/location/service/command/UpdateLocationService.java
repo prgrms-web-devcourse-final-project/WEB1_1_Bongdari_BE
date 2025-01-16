@@ -27,6 +27,6 @@ public class UpdateLocationService implements UpdateLocationUseCase {
 
     private Location getLocation(Long locationId) {
         return locationRepository.findById(locationId)
-            .orElseThrow(() -> new BadRequestException(NOT_EXISTS_LOCATION.getMessage()));
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_LOCATION.getMessage()));
     }
 }

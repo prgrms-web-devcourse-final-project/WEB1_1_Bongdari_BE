@@ -91,7 +91,7 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
 
     @Override
     public Page<VolunteerApply> findAllByRecruitId(Long recruitId,
-            VolunteerApplySearchCondition condition) {
+                                                   VolunteerApplySearchCondition condition) {
 
         BooleanExpression exp = recruitIdEq(recruitId)
                 .and(attendedEq(condition.attended()))
@@ -117,7 +117,7 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
 
     @Override
     public Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
-            VolunteerApplySearchCondition condition) {
+                                                     VolunteerApplySearchCondition condition) {
 
         BooleanExpression exp = volunteerIdEq(volunteerId)
                 .and(attendedEq(condition.attended()))
@@ -154,7 +154,7 @@ public class VolunteerApplyRepositoryImpl implements VolunteerApplyRepository {
 
     @Override
     public Optional<VolunteerApply> findByRecruitIdAndVolunteerId(Long recruitId,
-            UUID volunteerId) {
+                                                                  UUID volunteerId) {
         BooleanExpression exp = recruitIdEq(recruitId)
                 .and(volunteerApply.volunteerId.eq(volunteerId));
         return findOne(exp);

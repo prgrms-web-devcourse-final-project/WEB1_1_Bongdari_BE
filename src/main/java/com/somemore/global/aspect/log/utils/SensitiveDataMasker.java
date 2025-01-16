@@ -62,7 +62,8 @@ public class SensitiveDataMasker {
 
     private String maskSensitiveDataInJson(String json, ObjectMapper objectMapper) {
         try {
-            Map<String, Object> jsonMap = objectMapper.readValue(json, new TypeReference<>() {});
+            Map<String, Object> jsonMap = objectMapper.readValue(json, new TypeReference<>() {
+            });
             Map<String, Object> maskedMap = maskSensitiveDataInMap(jsonMap);
             return objectMapper.writeValueAsString(maskedMap);
         } catch (Exception e) {

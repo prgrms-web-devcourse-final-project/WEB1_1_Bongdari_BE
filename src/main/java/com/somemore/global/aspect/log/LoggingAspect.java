@@ -28,7 +28,8 @@ public class LoggingAspect {
     private final ParameterExtractor parameterExtractor;
 
     @Pointcut("execution(* com.somemore.domains.*.controller..*.*(..))")
-    private void controllerPointCut() {}
+    private void controllerPointCut() {
+    }
 
     @Around("controllerPointCut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {

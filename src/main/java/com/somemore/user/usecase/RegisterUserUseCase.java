@@ -7,5 +7,6 @@ import com.somemore.user.dto.UserAuthInfo;
 
 public interface RegisterUserUseCase {
     User registerOAuthUser(CommonOAuthInfo commonOAuthInfo, UserRole role);
+
     User registerLocalUser(UserAuthInfo userAuthInfo, UserRole role);
 }

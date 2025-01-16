@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface CenterQueryUseCase {
     CenterProfileResponseDto getCenterProfileByCenterId(UUID centerId);
+
     List<CenterOverviewInfo> getCenterOverviewsByIds(List<UUID> centerIds);
+
     void validateCenterExists(UUID centerId);
 }

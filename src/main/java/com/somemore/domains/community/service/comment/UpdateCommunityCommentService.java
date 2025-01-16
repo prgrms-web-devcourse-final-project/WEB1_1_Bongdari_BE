@@ -53,7 +53,7 @@ public class UpdateCommunityCommentService implements UpdateCommunityCommentUseC
         if (communityComment.isWriter(writerId)) {
             return;
         }
-        
+
         throw new BadRequestException(UNAUTHORIZED_COMMUNITY_COMMENT.getMessage());
     }
 }

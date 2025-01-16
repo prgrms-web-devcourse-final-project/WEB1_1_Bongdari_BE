@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository
-public class PreferItemRepositoryImpl implements PreferItemRepository{
+public class PreferItemRepositoryImpl implements PreferItemRepository {
 
     private final PreferItemJpaRepository preferItemJpaRepository;
 

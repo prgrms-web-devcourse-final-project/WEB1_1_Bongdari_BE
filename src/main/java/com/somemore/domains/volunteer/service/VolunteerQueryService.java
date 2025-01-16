@@ -50,7 +50,7 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     @Override
     public VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId,
-            UUID centerId) {
+                                                                   UUID centerId) {
         volunteerDetailAccessValidator.validateByCenterId(centerId, volunteerId);
 
         return VolunteerProfileResponseDto.from(

@@ -10,7 +10,7 @@ public class GeoUtils {
     private static final double EARTH_RADIUS = 6371.0;
 
     public static double[] calculateMaxMinCoordinates(double latitude, double longitude,
-        double radius) {
+                                                      double radius) {
         double latRad = Math.toRadians(latitude);
         double latDiff = radius / EARTH_RADIUS;
         double maxLatRad = latRad + latDiff;

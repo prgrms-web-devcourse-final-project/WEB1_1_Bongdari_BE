@@ -24,7 +24,7 @@ public class LocationQueryService implements LocationQueryUseCase {
 
     private Location getLocation(Long id) {
         return locationRepository.findById(id).orElseThrow(
-            () -> new BadRequestException(NOT_EXISTS_LOCATION.getMessage())
+                () -> new BadRequestException(NOT_EXISTS_LOCATION.getMessage())
         );
     }
 

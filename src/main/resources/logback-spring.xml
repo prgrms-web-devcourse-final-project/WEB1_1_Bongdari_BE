@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <property name="LOG_PATH" value="./logs" />
-    <property name="LOG_FILE_NAME" value="application" />
+    <property name="LOG_PATH" value="./logs"/>
+    <property name="LOG_FILE_NAME" value="application"/>
 
     <!-- 공통 로그 패턴 -->
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
@@ -45,7 +45,8 @@
 
             <format>
                 <label>
-                    <pattern>app=my-app,host=${HOSTNAME},environment=${ENV:-local},service=${SERVICE_NAME:-somemore}</pattern>
+                    <pattern>app=my-app,host=${HOSTNAME},environment=${ENV:-local},service=${SERVICE_NAME:-somemore}
+                    </pattern>
                 </label>
                 <message class="com.github.loki4j.logback.JsonLayout">
                     <includeTimestamp>true</includeTimestamp>
@@ -67,17 +68,17 @@
     </springProfile>
 
     <logger name="com.somemore.application" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
-        <appender-ref ref="LOKI" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="LOKI"/>
     </logger>
 
-    <logger name="org.springframework" level="INFO" />
-    <logger name="org.hibernate" level="INFO" />
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.hibernate" level="INFO"/>
 
     <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
-        <appender-ref ref="LOKI" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="LOKI"/>
     </root>
 </configuration>

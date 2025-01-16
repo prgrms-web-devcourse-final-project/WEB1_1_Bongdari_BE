@@ -20,11 +20,11 @@ public record RegisterInterestCenterResponseDto(
         @Schema(description = "기관 ID", example = "123e4567-e89b-12d3-a456-426614174000")
         UUID centerId
 ) {
-        public static RegisterInterestCenterResponseDto from(InterestCenter interestCenter) {
-                return RegisterInterestCenterResponseDto.builder()
-                        .id(interestCenter.getId())
-                        .volunteerId(interestCenter.getVolunteerId())
-                        .centerId(interestCenter.getCenterId())
-                        .build();
-        }
+    public static RegisterInterestCenterResponseDto from(InterestCenter interestCenter) {
+        return RegisterInterestCenterResponseDto.builder()
+                .id(interestCenter.getId())
+                .volunteerId(interestCenter.getVolunteerId())
+                .centerId(interestCenter.getCenterId())
+                .build();
+    }
 }
