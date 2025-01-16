@@ -1,15 +1,15 @@
 package com.somemore.domains.location.service.command;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_LOCATION;
-
+import com.somemore.domains.location.domain.Location;
 import com.somemore.domains.location.dto.request.LocationUpdateRequestDto;
 import com.somemore.domains.location.repository.LocationRepository;
 import com.somemore.domains.location.usecase.command.UpdateLocationUseCase;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.location.domain.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_LOCATION;
 
 @RequiredArgsConstructor
 @Transactional

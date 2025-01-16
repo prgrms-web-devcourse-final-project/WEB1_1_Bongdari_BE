@@ -1,11 +1,11 @@
 package com.somemore.domains.community.controller;
 
+import com.somemore.domains.community.dto.request.CommunityBoardCreateRequestDto;
+import com.somemore.domains.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.domains.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.UpdateCommunityBoardUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
-import com.somemore.domains.community.dto.request.CommunityBoardCreateRequestDto;
-import com.somemore.domains.community.dto.request.CommunityBoardUpdateRequestDto;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
@@ -14,7 +14,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;

@@ -1,10 +1,10 @@
 package com.somemore.domains.center.service.query;
 
 import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.domains.center.dto.response.CenterProfileResponseDto;
 import com.somemore.domains.center.dto.response.PreferItemResponseDto;
 import com.somemore.domains.center.repository.center.CenterRepository;
+import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
 import com.somemore.domains.center.usecase.query.PreferItemQueryUseCase;
 import com.somemore.global.exception.BadRequestException;

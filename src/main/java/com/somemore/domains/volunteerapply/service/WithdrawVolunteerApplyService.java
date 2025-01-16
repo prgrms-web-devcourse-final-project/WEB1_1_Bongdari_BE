@@ -1,17 +1,17 @@
 package com.somemore.domains.volunteerapply.service;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_APPLY;
-
+import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.domains.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.domains.volunteerapply.domain.VolunteerApply;
-
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_APPLY;
 
 @RequiredArgsConstructor
 @Transactional

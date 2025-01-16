@@ -1,11 +1,11 @@
 package com.somemore.global.auth.jwt.refresher;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
-import com.somemore.global.auth.jwt.parser.JwtParser;
-import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.manager.TokenManager;
+import com.somemore.global.auth.jwt.parser.JwtParser;
 import com.somemore.global.auth.jwt.validator.JwtValidator;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

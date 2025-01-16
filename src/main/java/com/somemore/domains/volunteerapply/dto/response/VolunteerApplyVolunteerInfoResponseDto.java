@@ -7,8 +7,9 @@ import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
 import lombok.Builder;
+
+import java.time.LocalDateTime;
 
 @Schema(description = "봉사 지원자 상세 정보 응답 DTO")
 @JsonNaming(SnakeCaseStrategy.class)

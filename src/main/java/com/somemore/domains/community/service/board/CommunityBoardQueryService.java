@@ -1,10 +1,10 @@
 package com.somemore.domains.community.service.board;
 
 import com.somemore.domains.community.domain.CommunityBoard;
-import com.somemore.domains.community.repository.mapper.CommunityBoardView;
 import com.somemore.domains.community.dto.response.CommunityBoardDetailResponseDto;
 import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
+import com.somemore.domains.community.repository.mapper.CommunityBoardView;
 import com.somemore.domains.community.usecase.board.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;

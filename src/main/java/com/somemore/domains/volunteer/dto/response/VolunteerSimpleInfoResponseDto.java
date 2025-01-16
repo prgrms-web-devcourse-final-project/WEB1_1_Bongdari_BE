@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import lombok.Builder;
+
+import java.util.UUID;
 
 @Schema(description = "봉사자 간단 정보 응답 DTO")
 @JsonNaming(SnakeCaseStrategy.class)

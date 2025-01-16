@@ -2,9 +2,10 @@ package com.somemore.domains.location.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.domains.location.domain.Location;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository

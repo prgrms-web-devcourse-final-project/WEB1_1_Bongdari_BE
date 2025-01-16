@@ -1,10 +1,10 @@
 package com.somemore.domains.note.repository;
 
-import com.somemore.domains.note.repository.mapper.NoteDetailViewForCenter;
-import com.somemore.domains.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.domains.note.domain.Note;
+import com.somemore.domains.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.domains.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.domains.note.repository.mapper.NoteReceiverViewForCenter;
+import com.somemore.domains.note.repository.mapper.NoteReceiverViewForVolunteer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

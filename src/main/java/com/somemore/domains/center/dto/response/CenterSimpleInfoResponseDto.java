@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.center.domain.Center;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import lombok.Builder;
+
+import java.util.UUID;
 
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)

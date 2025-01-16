@@ -1,9 +1,9 @@
 package com.somemore.global.auth.jwt.manager;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
 import com.somemore.global.auth.jwt.exception.JwtException;
-import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,16 +1,13 @@
 package com.somemore.domains.review.controller;
 
-import static org.springframework.data.domain.Sort.Direction.DESC;
-
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
-import com.somemore.global.common.response.ApiResponse;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
 import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
 import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.usecase.ReviewQueryUseCase;
+import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Tag(name = "Review Query API", description = "리뷰 조회 API")
 @RequiredArgsConstructor

@@ -3,20 +3,20 @@ package com.somemore.domains.volunteerapply.repository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.somemore.domains.volunteerapply.domain.QVolunteerApply;
-import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
+import com.somemore.domains.volunteerapply.domain.QVolunteerApply;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository

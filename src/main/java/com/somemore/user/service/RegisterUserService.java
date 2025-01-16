@@ -1,9 +1,9 @@
 package com.somemore.user.service;
 
-import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.oauth.domain.CommonOAuthInfo;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
 import com.somemore.user.domain.UserSetting;
 import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;

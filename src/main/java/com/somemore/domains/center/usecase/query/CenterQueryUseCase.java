@@ -1,7 +1,7 @@
 package com.somemore.domains.center.usecase.query;
 
-import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.domains.center.dto.response.CenterProfileResponseDto;
+import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
 
 import java.util.List;
 import java.util.UUID;

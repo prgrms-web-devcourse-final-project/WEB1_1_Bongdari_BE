@@ -2,9 +2,9 @@ package com.somemore.global.aspect.log.extractor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.global.common.response.LoggedResponse;
+import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.DuplicateException;
 import com.somemore.global.exception.ImageUploadException;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

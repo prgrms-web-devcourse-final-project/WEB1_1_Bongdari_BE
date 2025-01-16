@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.global.common.event.ServerEvent;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
+import com.somemore.global.common.event.ServerEvent;
+import com.somemore.global.common.event.ServerEventType;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

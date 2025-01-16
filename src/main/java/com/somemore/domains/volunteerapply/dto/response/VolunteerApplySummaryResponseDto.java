@@ -1,18 +1,19 @@
 package com.somemore.domains.volunteerapply.dto.response;
 
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.Builder;
+
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder

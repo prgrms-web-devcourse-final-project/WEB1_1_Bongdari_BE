@@ -1,6 +1,5 @@
 package com.somemore.global.auth.jwt.service;
 
-import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;

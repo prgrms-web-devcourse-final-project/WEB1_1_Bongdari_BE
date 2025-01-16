@@ -2,9 +2,9 @@ package com.somemore.domains.interestcenter.service;
 
 import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
-import com.somemore.domains.interestcenter.usecase.InterestCenterQueryUseCase;
 import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.domains.interestcenter.repository.InterestCenterRepository;
+import com.somemore.domains.interestcenter.usecase.InterestCenterQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

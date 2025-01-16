@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.location.domain.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import lombok.Builder;
+
+import java.math.BigDecimal;
 
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)

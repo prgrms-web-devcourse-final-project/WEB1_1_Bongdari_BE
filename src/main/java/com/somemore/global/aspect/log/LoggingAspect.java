@@ -15,7 +15,6 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-
 import java.util.UUID;
 
 @RequiredArgsConstructor

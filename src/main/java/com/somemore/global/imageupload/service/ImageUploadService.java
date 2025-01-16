@@ -2,9 +2,9 @@ package com.somemore.global.imageupload.service;
 
 import com.somemore.global.exception.ImageUploadException;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
+import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.global.imageupload.util.ImageUploadUtils;
 import com.somemore.global.imageupload.validator.ImageUploadValidator;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

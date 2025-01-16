@@ -1,7 +1,7 @@
 package com.somemore.domains.interestcenter.repository;
 
-import com.somemore.domains.interestcenter.dto.response.RegisterInterestCenterResponseDto;
 import com.somemore.domains.interestcenter.domain.InterestCenter;
+import com.somemore.domains.interestcenter.dto.response.RegisterInterestCenterResponseDto;
 
 import java.util.List;
 import java.util.Optional;

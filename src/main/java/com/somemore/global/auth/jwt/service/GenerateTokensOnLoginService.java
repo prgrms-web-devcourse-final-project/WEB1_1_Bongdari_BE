@@ -1,12 +1,12 @@
 package com.somemore.global.auth.jwt.service;
 
-import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
-import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.manager.TokenManager;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
+import com.somemore.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

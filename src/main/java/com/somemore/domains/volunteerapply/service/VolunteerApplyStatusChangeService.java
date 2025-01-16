@@ -18,7 +18,9 @@ import java.util.UUID;
 
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
-import static com.somemore.global.exception.ExceptionMessage.*;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_APPLY;
+import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ALREADY_COMPLETED;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
 
 @RequiredArgsConstructor
 @Transactional
