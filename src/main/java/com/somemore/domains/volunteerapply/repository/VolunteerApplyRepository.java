@@ -1,13 +1,13 @@
 package com.somemore.domains.volunteerapply.repository;
 
-import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
+import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 public interface VolunteerApplyRepository {
 
@@ -28,10 +28,10 @@ public interface VolunteerApplyRepository {
     List<VolunteerApply> findAllByRecruitId(Long recruitId);
 
     Page<VolunteerApply> findAllByRecruitId(Long recruitId,
-            VolunteerApplySearchCondition condition);
+                                            VolunteerApplySearchCondition condition);
 
     Page<VolunteerApply> findAllByVolunteerId(UUID volunteerId,
-            VolunteerApplySearchCondition condition);
+                                              VolunteerApplySearchCondition condition);
 
     List<VolunteerApply> findAllByIds(List<Long> ids);
 }

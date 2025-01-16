@@ -1,9 +1,9 @@
 package com.somemore.global.sse.repository;
 
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 import java.util.Map;
 import java.util.UUID;
-
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface EmitterRepository {
     SseEmitter save(String emitterId, SseEmitter sseEmitter);

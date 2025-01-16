@@ -56,6 +56,16 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.save(user);
     }
 
+    @Override
+    public boolean existsByAccountId(String accountId) {
+        return queryFactory.select(user.accountId)
+                .from(user)
+                .where(
+                        user.accountId.eq(accountId),
+                        isNotDeleted())
+                .fetchFirst() != null;
+    }
+
     private static BooleanExpression isNotDeleted() {
         return user.deleted.eq(false);
     }

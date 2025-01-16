@@ -2,10 +2,11 @@ package com.somemore.domains.review.repository;
 
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
 
 public interface ReviewRepository {
 

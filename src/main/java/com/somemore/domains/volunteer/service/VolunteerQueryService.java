@@ -1,24 +1,25 @@
 package com.somemore.domains.volunteer.service;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
-import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.domains.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
+import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
 import com.somemore.domains.volunteer.validator.VolunteerDetailAccessValidator;
-import java.util.List;
-import java.util.UUID;
+import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
 
 @Slf4j
 @Service
@@ -49,7 +50,7 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     @Override
     public VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId,
-            UUID centerId) {
+                                                                   UUID centerId) {
         volunteerDetailAccessValidator.validateByCenterId(centerId, volunteerId);
 
         return VolunteerProfileResponseDto.from(

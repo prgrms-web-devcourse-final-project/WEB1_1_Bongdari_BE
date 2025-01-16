@@ -18,27 +18,28 @@ public class OAuthResponseConverterImpl implements OAuthResponseConverter {
     @Override
     public CommonOAuthInfo convert(CustomOAuth2User oAuth2User) {
         OAuthProvider provider = oAuth2User.getProvider();
-        switch (provider) {
-            case KAKAO:
+        return switch (provider) {
+            case KAKAO -> {
                 KakaoUserProfileResponseDto kakaoUserProfile = objectMapper.convertValue(
                         oAuth2User.getAttributes(),
                         KakaoUserProfileResponseDto.class
                 );
-                return  CommonOAuthInfo.of(
+                yield CommonOAuthInfo.of(
                         OAuthProvider.KAKAO,
                         kakaoUserProfile.id()
                 );
-            case NAVER:
+            }
+            case NAVER -> {
                 NaverUserProfileResponseDto naverUserProfile = objectMapper.convertValue(
                         oAuth2User.getAttributes(),
                         NaverUserProfileResponseDto.class
                 );
-                return CommonOAuthInfo.of(
+                yield CommonOAuthInfo.of(
                         OAuthProvider.NAVER,
                         naverUserProfile.response().id()
                 );
-            default:
-                throw new IllegalArgumentException("지원하지 않는 OAuth Provider입니다.");
-        }
+            }
+            default -> throw new IllegalArgumentException("지원하지 않는 OAuth Provider입니다.");
+        };
     }
 }

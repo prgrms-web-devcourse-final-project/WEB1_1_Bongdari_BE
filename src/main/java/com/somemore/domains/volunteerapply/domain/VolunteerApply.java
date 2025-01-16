@@ -9,11 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,7 +41,7 @@ public class VolunteerApply extends BaseEntity {
 
     @Builder
     public VolunteerApply(UUID volunteerId, Long recruitBoardId, ApplyStatus status,
-            Boolean attended) {
+                          Boolean attended) {
         this.volunteerId = volunteerId;
         this.recruitBoardId = recruitBoardId;
         this.status = status;

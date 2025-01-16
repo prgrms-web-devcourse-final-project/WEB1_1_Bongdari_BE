@@ -55,4 +55,9 @@ public class UserQueryService implements UserQueryUseCase {
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
     }
 
+    @Override
+    public boolean isDuplicateAccountId(String accountId) {
+        return userRepository.existsByAccountId(accountId);
+    }
+
 }

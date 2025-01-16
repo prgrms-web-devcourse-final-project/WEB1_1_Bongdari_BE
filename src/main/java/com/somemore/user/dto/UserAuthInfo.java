@@ -5,11 +5,15 @@ import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import java.util.UUID;
 
 public record UserAuthInfo(String accountId,
-                           String password) {
+                           String accountPassword) {
+
+    public static UserAuthInfo of(String accountId, String accountPassword) {
+        return new UserAuthInfo(accountId, accountPassword);
+    }
 
     public static UserAuthInfo createForOAuth(OAuthProvider provider) {
         String accountId = provider.getProviderName() + UUID.randomUUID();
-        String password = String.valueOf(UUID.randomUUID());
-        return new UserAuthInfo(accountId, password);
+        String accountPassword = String.valueOf(UUID.randomUUID());
+        return new UserAuthInfo(accountId, accountPassword);
     }
 }

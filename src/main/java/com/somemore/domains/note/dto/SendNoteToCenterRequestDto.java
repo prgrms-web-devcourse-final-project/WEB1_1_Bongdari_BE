@@ -23,7 +23,7 @@ public record SendNoteToCenterRequestDto(
         @NotNull(message = "쪽지 내용은 필수 값입니다.")
         String content
 ) {
-        public Note toEntity(UUID senderId){
-                return Note.create(senderId, receiverId, title, content);
-        }
+    public Note toEntity(UUID senderId) {
+        return Note.create(senderId, receiverId, title, content);
+    }
 }

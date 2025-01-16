@@ -32,7 +32,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         User user = userQueryUseCase.getByAccountId(accountId);
 
-        validatePassword(rawAccountPassword, user.getPassword());
+        validatePassword(rawAccountPassword, user.getAccountPassword());
 
         EncodedToken accessToken = generateAccessToken(user);
 

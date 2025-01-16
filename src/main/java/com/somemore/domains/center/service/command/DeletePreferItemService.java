@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static com.somemore.global.exception.ExceptionMessage.*;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_PREFER_ITEM;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_PREFER_ITEM;
 
 @RequiredArgsConstructor
 @Service

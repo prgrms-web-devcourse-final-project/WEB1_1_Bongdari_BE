@@ -1,16 +1,17 @@
 package com.somemore.domains.interestcenter.controller;
 
+import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.domains.interestcenter.usecase.InterestCenterQueryUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController

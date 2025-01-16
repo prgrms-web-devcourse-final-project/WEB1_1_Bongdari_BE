@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface PreferItemQueryUseCase {
     List<PreferItemResponseDto> getPreferItemDtosByCenterId(UUID centerId);
+
     List<PreferItem> getPreferItemsByCenterId(UUID centerId);
 }

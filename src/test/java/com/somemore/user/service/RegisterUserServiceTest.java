@@ -12,7 +12,6 @@ import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import com.somemore.user.repository.usersetting.UserSettingRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedCommonAttribute).isNotNull();
         assertThat(savedCommonAttribute.getUserId()).isEqualTo(savedUser.getId());
-        assertThat(savedCommonAttribute.getNickname()).hasSize(8);
+        assertThat(savedCommonAttribute.getName()).contains(UserRole.getOAuthUserDefaultRole().getDescription());
         assertThat(savedCommonAttribute.getIntroduce()).isEqualTo("");
         assertThat(savedCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
         assertThat(savedCommonAttribute.isCustomized()).isEqualTo(userDefaultSetting);
@@ -98,7 +97,7 @@ class RegisterUserServiceTest extends IntegrationTestSupport {
 
         assertThat(savedCommonAttribute).isNotNull();
         assertThat(savedCommonAttribute.getUserId()).isEqualTo(savedUser.getId());
-        assertThat(savedCommonAttribute.getNickname()).hasSize(8);
+        assertThat(savedCommonAttribute.getName()).contains(role.getDescription());
         assertThat(savedCommonAttribute.getIntroduce()).isEqualTo("");
         assertThat(savedCommonAttribute.getImgUrl()).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
         assertThat(savedCommonAttribute.isCustomized()).isEqualTo(userDefaultSetting);

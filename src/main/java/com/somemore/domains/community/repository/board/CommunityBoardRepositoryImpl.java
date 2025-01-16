@@ -161,7 +161,9 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         return communityBoard.deleted.eq(false);
     }
 
-    private BooleanExpression isWriter(UUID writerId) {return communityBoard.writerId.eq(writerId); }
+    private BooleanExpression isWriter(UUID writerId) {
+        return communityBoard.writerId.eq(writerId);
+    }
 
     private BooleanExpression keywordEq(String keyword) {
         return StringUtils.isNotBlank(keyword)

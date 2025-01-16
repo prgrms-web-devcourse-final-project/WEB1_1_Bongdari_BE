@@ -3,16 +3,15 @@ package com.somemore.domains.interestcenter.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.somemore.domains.interestcenter.domain.InterestCenter;
 import com.somemore.domains.interestcenter.domain.QInterestCenter;
 import com.somemore.domains.interestcenter.dto.response.RegisterInterestCenterResponseDto;
-import com.somemore.domains.interestcenter.domain.InterestCenter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository

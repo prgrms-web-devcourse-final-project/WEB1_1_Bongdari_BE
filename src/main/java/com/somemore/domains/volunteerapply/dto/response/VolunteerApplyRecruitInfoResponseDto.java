@@ -7,9 +7,10 @@ import com.somemore.domains.recruitboard.dto.response.RecruitBoardOverViewRespon
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.Builder;
 
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
@@ -32,7 +33,7 @@ public record VolunteerApplyRecruitInfoResponseDto(
 ) {
 
     public static VolunteerApplyRecruitInfoResponseDto of(VolunteerApply apply,
-            RecruitBoard board) {
+                                                          RecruitBoard board) {
         RecruitBoardOverViewResponseDto recruitBoard = RecruitBoardOverViewResponseDto.from(board);
         return VolunteerApplyRecruitInfoResponseDto.builder()
                 .id(apply.getId())

@@ -7,8 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SseEventType {
     INITIALIZATION("초기화"),
-    NOTIFICATION("알림")
-    ;
+    NOTIFICATION("알림");
 
     private final String description;
 }

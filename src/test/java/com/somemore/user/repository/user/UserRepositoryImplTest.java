@@ -26,7 +26,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void saveOAuthVolunteerUser() {
         // given
         UserAuthInfo userAuthInfo = UserAuthInfo.createForOAuth(OAuthProvider.NAVER);
-        User user = User.from(userAuthInfo, UserRole.VOLUNTEER);
+        User user = User.of(userAuthInfo, UserRole.VOLUNTEER);
 
         // when
         User savedUser = userRepository.save(user);
@@ -42,7 +42,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void saveOAuthCenterUser() {
         // given
         UserAuthInfo userAuthInfo = UserAuthInfo.createForOAuth(OAuthProvider.NAVER);
-        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User user = User.of(userAuthInfo, UserRole.CENTER);
 
         // when
         User savedUser = userRepository.save(user);
@@ -58,7 +58,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void saveLocalCenterUser() {
         // given
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
-        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User user = User.of(userAuthInfo, UserRole.CENTER);
 
         // when
         User savedUser = userRepository.save(user);
@@ -74,7 +74,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void findById() {
         // given
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
-        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User user = User.of(userAuthInfo, UserRole.CENTER);
         User savedUser = userRepository.save(user);
 
         // when
@@ -90,7 +90,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void findByInvalidId() {
         // given
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
-        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User user = User.of(userAuthInfo, UserRole.CENTER);
         userRepository.save(user);
         UUID invalidUserId = UUID.randomUUID();
 
@@ -106,7 +106,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void findRoleById() {
         // given
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
-        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User user = User.of(userAuthInfo, UserRole.CENTER);
         User savedUser = userRepository.save(user);
 
         // when
@@ -122,7 +122,7 @@ class UserRepositoryImplTest extends IntegrationTestSupport {
     void findByAccountId() {
         // given
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.test", "test");
-        User user = User.from(userAuthInfo, UserRole.CENTER);
+        User user = User.of(userAuthInfo, UserRole.CENTER);
         User savedUser = userRepository.save(user);
 
         // when

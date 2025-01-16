@@ -9,15 +9,15 @@ import com.somemore.domains.volunteer.domain.QVolunteerDetail;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
-@Repository
+@Repository("oldVolunteerRepository")
 public class VolunteerRepositoryImpl implements VolunteerRepository {
 
     private final VolunteerJpaRepository volunteerJpaRepository;

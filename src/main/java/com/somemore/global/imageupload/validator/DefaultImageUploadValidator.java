@@ -4,7 +4,8 @@ import com.somemore.global.exception.ImageUploadException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.somemore.global.exception.ExceptionMessage.*;
+import static com.somemore.global.exception.ExceptionMessage.FILE_SIZE_EXCEEDED;
+import static com.somemore.global.exception.ExceptionMessage.INVALID_FILE_TYPE;
 
 @Component
 public class DefaultImageUploadValidator implements ImageUploadValidator {

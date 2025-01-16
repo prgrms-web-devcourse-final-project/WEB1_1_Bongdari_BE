@@ -28,7 +28,7 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
-//    private final CookieUseCase cookieUseCase;
+    //    private final CookieUseCase cookieUseCase;
     private final ObjectMapper objectMapper;
 
     @Override

@@ -15,7 +15,7 @@ public record RegisterInterestCenterRequestDto(
         @NotNull(message = "기관 ID는 필수값입니다.")
         UUID centerId
 ) {
-    public InterestCenter toEntity(UUID volunteerId){
+    public InterestCenter toEntity(UUID volunteerId) {
         return InterestCenter.create(volunteerId, centerId);
     }
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Repository
+@Repository("centerRepository")
 public class CenterRepositoryImpl implements CenterRepository {
 
     private final JPAQueryFactory queryFactory;
@@ -59,28 +59,6 @@ public class CenterRepositoryImpl implements CenterRepository {
                         .and(isNotDeleted())
                 )
                 .fetch();
-    }
-
-    @Override
-    public UUID findIdByAccountId(String accountId) {
-
-        return queryFactory
-                .select(center.id)
-                .from(center)
-                .where(center.accountId.eq(accountId)
-                        .and(isNotDeleted()))
-                .fetchOne();
-    }
-
-    @Override
-    public String findPasswordByAccountId(String accountId) {
-
-        return queryFactory
-                .select(center.accountPw)
-                .from(center)
-                .where(center.accountId.eq(accountId)
-                        .and(isNotDeleted()))
-                .fetchOne();
     }
 
     @Override

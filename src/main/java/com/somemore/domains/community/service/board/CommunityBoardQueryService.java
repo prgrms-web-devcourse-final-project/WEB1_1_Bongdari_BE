@@ -1,10 +1,10 @@
 package com.somemore.domains.community.service.board;
 
 import com.somemore.domains.community.domain.CommunityBoard;
-import com.somemore.domains.community.repository.mapper.CommunityBoardView;
 import com.somemore.domains.community.dto.response.CommunityBoardDetailResponseDto;
 import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
+import com.somemore.domains.community.repository.mapper.CommunityBoardView;
 import com.somemore.domains.community.usecase.board.CommunityBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
     @Override
     public Page<CommunityBoardResponseDto> getCommunityBoardsByWriterId(UUID writerId, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId ,pageable);
+        Page<CommunityBoardView> boards = communityBoardRepository.findByWriterId(writerId, pageable);
         return boards.map(CommunityBoardResponseDto::from);
     }
 

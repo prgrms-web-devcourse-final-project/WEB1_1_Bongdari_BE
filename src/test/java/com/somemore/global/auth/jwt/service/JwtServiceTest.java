@@ -1,14 +1,14 @@
 package com.somemore.global.auth.jwt.service;
 
-import com.somemore.support.IntegrationTestSupport;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
-import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
 import com.somemore.global.auth.jwt.exception.JwtException;
-import com.somemore.global.auth.jwt.refresh.domain.RefreshToken;
-import com.somemore.global.auth.jwt.refresh.manager.RefreshTokenManager;
+import com.somemore.global.auth.jwt.manager.TokenManager;
 import com.somemore.global.auth.jwt.validator.JwtValidator;
+import com.somemore.support.IntegrationTestSupport;
+import com.somemore.user.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 class JwtServiceTest extends IntegrationTestSupport {
@@ -35,7 +36,7 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Autowired
     private SecretKey secretKey;
     @Autowired
-    private RefreshTokenManager refreshTokenManager;
+    private TokenManager tokenManager;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -128,7 +129,7 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         EncodedToken expiredRefreshToken = createExpiredToken(userId, role);
         RefreshToken refreshToken = new RefreshToken(userId, expiredAccessToken, expiredRefreshToken);
-        refreshTokenManager.save(refreshToken);
+        tokenManager.save(refreshToken);
 
         // when
         // then
@@ -156,28 +157,6 @@ class JwtServiceTest extends IntegrationTestSupport {
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }
 
-    @DisplayName("리프레시된 AccessToken은 쿠키에 올바르게 저장된다")
-    @Test
-    void refreshedAccessTokenIsSetInCookie() {
-        // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-
-        EncodedToken expiredAccessToken = createExpiredToken(userId, role);
-        createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
-
-        MockHttpServletResponse mockResponse = new MockHttpServletResponse();
-
-        // when
-        jwtService.processAccessToken(expiredAccessToken, mockResponse);
-
-        // then
-        String cookieHeader = mockResponse.getHeader("Set-Cookie");
-        assertThat(cookieHeader).contains("ACCESS_TOKEN=");
-        assertThat(cookieHeader).contains("HttpOnly");
-        assertThat(cookieHeader).contains("Secure");
-    }
-
     @DisplayName("기존 RefreshToken이 갱신된다")
     @Test
     void refreshTokenIsUpdated() {
@@ -193,7 +172,7 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         // when
         // then
-        assertThatThrownBy(() -> refreshTokenManager.findRefreshTokenByAccessToken(expiredAccessToken))
+        assertThatThrownBy(() -> tokenManager.getRefreshTokenByAccessToken(expiredAccessToken))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
 
@@ -207,7 +186,7 @@ class JwtServiceTest extends IntegrationTestSupport {
     void invalidTokenThrowsJwtException() {
         // given
         String invalidToken = "invalid.token.value";
-        EncodedToken encodedToken = new EncodedToken(invalidToken);
+        EncodedToken encodedToken = EncodedToken.from(invalidToken);
 
         // when
         // then
@@ -252,7 +231,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         Instant now = Instant.now();
         Instant expiration = now.plusMillis(-1); // 과거
 
-        return new EncodedToken(Jwts.builder()
+        return EncodedToken.from(Jwts.builder()
                 .claims(claims)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expiration))
@@ -268,7 +247,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         RefreshToken refreshToken = new RefreshToken(
                 userId,
                 accessToken,
-                new EncodedToken(Jwts.builder()
+                EncodedToken.from(Jwts.builder()
                         .claims(claims)
                         .id(uniqueId)
                         .issuedAt(Date.from(now))
@@ -276,7 +255,7 @@ class JwtServiceTest extends IntegrationTestSupport {
                         .signWith(secretKey, Jwts.SIG.HS256)
                         .compact()));
 
-        refreshTokenManager.save(refreshToken);
+        tokenManager.save(refreshToken);
 
         return refreshToken;
     }

@@ -5,13 +5,14 @@ import com.somemore.domains.community.dto.request.CommunityBoardUpdateRequestDto
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.usecase.board.UpdateCommunityBoardUseCase;
 import com.somemore.global.exception.BadRequestException;
-
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.somemore.global.exception.ExceptionMessage.*;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_COMMUNITY_BOARD;
 
 
 @RequiredArgsConstructor

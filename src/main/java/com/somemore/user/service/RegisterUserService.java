@@ -1,9 +1,9 @@
 package com.somemore.user.service;
 
-import com.somemore.user.domain.UserRole;
 import com.somemore.global.auth.oauth.domain.CommonOAuthInfo;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
 import com.somemore.user.domain.UserSetting;
 import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
@@ -39,14 +39,14 @@ public class RegisterUserService implements RegisterUserUseCase {
     }
 
     private User createAndRegisterUser(UserRole role, UserAuthInfo userAuthInfo) {
-        User user = User.from(userAuthInfo, role);
+        User user = User.of(userAuthInfo, role);
         userRepository.save(user);
         UUID userId = user.getId();
 
         UserSetting userSetting = UserSetting.from(userId);
         userSettingRepository.save(userSetting);
 
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId);
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, role);
         userCommonAttributeRepository.save(userCommonAttribute);
 
         return user;

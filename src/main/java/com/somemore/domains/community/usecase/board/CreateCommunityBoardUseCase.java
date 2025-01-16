@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface CreateCommunityBoardUseCase {
     Long createCommunityBoard(
-        CommunityBoardCreateRequestDto requestDto,
-        UUID writerId,
-        String imgUrl);
+            CommunityBoardCreateRequestDto requestDto,
+            UUID writerId,
+            String imgUrl);
 }

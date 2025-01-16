@@ -1,9 +1,9 @@
 package com.somemore.domains.note.service;
 
+import com.somemore.domains.note.domain.Note;
 import com.somemore.domains.note.repository.NoteRepository;
 import com.somemore.domains.note.usecase.NoteMarkAsReadUseCase;
 import com.somemore.global.exception.NoSuchElementException;
-import com.somemore.domains.note.domain.Note;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

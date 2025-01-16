@@ -50,8 +50,8 @@ public record VolunteerRankingResponseDto(
     public static VolunteerRankingResponseDto from(List<VolunteerOverviewForRankingByHours> sources) {
         return VolunteerRankingResponseDto.builder()
                 .rankings(sources.stream()
-                                .map(VolunteerOverview::from)
-                                .toList())
+                        .map(VolunteerOverview::from)
+                        .toList())
                 .build();
     }
 }

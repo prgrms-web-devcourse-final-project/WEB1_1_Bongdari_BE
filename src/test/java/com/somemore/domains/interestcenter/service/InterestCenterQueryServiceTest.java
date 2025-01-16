@@ -125,18 +125,13 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         assertThat(result).isEmpty();
     }
 
-
-
-
     private Center createCenter() {
         return Center.create(
                 "기본 기관 이름",
                 "010-1234-5678",
                 "http://image.jpg",
                 "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
+                "http://example.com"
         );
     }
 

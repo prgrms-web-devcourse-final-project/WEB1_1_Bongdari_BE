@@ -11,7 +11,10 @@ import java.util.UUID;
 
 public interface NoteQueryUseCase {
     Page<NoteReceiverViewForCenter> getNotesForCenter(UUID centerId, Pageable pageable);
+
     Page<NoteReceiverViewForVolunteer> getNotesForVolunteer(UUID volunteerId, Pageable pageable);
+
     NoteDetailViewForCenter getNoteDetailForCenter(Long noteId);
+
     NoteDetailViewForVolunteer getNoteDetailForVolunteer(Long noteId);
 }

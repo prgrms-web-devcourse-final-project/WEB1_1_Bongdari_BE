@@ -1,17 +1,14 @@
 package com.somemore.domains.volunteer.controller;
 
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
+import com.somemore.domains.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import com.somemore.domains.volunteer.usecase.UpdateVolunteerProfileUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
-import com.somemore.domains.volunteer.dto.request.VolunteerProfileUpdateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
@@ -20,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @Slf4j

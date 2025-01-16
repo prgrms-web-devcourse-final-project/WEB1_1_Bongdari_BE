@@ -10,7 +10,10 @@ import java.util.UUID;
 
 public interface CommunityBoardQueryUseCase {
     Page<CommunityBoardResponseDto> getCommunityBoards(String keyword, int page);
+
     Page<CommunityBoardResponseDto> getCommunityBoardsByWriterId(UUID writerId, int page);
+
     CommunityBoardDetailResponseDto getCommunityBoardDetail(Long id);
+
     List<CommunityBoard> getAllCommunityBoards();
 }

@@ -4,6 +4,7 @@ import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
+
 import java.util.List;
 import java.util.UUID;
 

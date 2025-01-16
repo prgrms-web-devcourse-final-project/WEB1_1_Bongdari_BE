@@ -9,5 +9,6 @@ import java.util.UUID;
 @Repository
 public interface VolunteerDetailRepository {
     VolunteerDetail save(VolunteerDetail volunteerDetail);
+
     Optional<VolunteerDetail> findByVolunteerId(UUID volunteerId);
 }

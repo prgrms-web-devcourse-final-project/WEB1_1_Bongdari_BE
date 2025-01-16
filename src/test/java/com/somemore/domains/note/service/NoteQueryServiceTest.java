@@ -181,9 +181,7 @@ class NoteQueryServiceTest extends IntegrationTestSupport {
                 "010-1234-5678",
                 "http://example.com/image.jpg",
                 "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
+                "http://example.com"
         );
 
         centerJpaRepository.save(center);

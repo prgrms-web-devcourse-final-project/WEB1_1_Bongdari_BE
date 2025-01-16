@@ -32,14 +32,14 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     @BeforeEach
     void setup() {
         UserAuthInfo userAuthInfo = new UserAuthInfo("test@test.com", "Test User");
-        user = userRepository.save(User.from(userAuthInfo, UserRole.VOLUNTEER));
+        user = userRepository.save(User.of(userAuthInfo, UserRole.VOLUNTEER));
     }
 
     @DisplayName("필수 입력 정보가 입력되었다면, true를 반환한다.")
     @Test
     void isBasicInfoComplete_ReturnsTrue() {
         // given
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId());
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER);
         userCommonAttribute.customize();
         userCommonAttributeRepository.save(userCommonAttribute);
 
@@ -54,7 +54,7 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     @Test
     void isNotBasicInfoComplete_ReturnsFalse() {
         // given
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId());
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER);
         userCommonAttributeRepository.save(userCommonAttribute);
 
         // when

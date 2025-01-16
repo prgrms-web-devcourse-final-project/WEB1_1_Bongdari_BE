@@ -36,8 +36,6 @@ class CenterRepositoryTest extends IntegrationTestSupport {
         assertThat(foundCenter.get().getImgUrl()).isEqualTo("http://example.com/image.jpg");
         assertThat(foundCenter.get().getIntroduce()).isEqualTo("기관 소개 내용");
         assertThat(foundCenter.get().getHomepageLink()).isEqualTo("http://example.com");
-        assertThat(foundCenter.get().getAccountId()).isEqualTo("account123");
-        assertThat(foundCenter.get().getAccountPw()).isEqualTo("password123");
     }
 
     @DisplayName("기관 id로 기관이 존재하는지 확인할 수 있다.")
@@ -67,71 +65,13 @@ class CenterRepositoryTest extends IntegrationTestSupport {
         assertThat(isExist).isFalse();
     }
 
-    @DisplayName("기관 계정 ID로 기관 ID를 조회할 수 있다.")
-    @Test
-    void findIdByAccountId() {
-        //given
-        Center center = createCenter();
-        centerRepository.save(center);
-
-        //when
-        UUID foundId = centerRepository.findIdByAccountId("account123");
-
-        //then
-        assertThat(foundId).isNotNull();
-        assertThat(foundId).isEqualTo(center.getId());
-    }
-
-    @DisplayName("기관 계정 ID로 비밀번호를 조회할 수 있다.")
-    @Test
-    void findPasswordByAccountId() {
-        //given
-        Center center = createCenter();
-        centerRepository.save(center);
-
-        //when
-        String foundPassword = centerRepository.findPasswordByAccountId("account123");
-
-        //then
-        assertThat(foundPassword).isNotNull();
-        assertThat(foundPassword).isEqualTo("password123");
-    }
-
-    @DisplayName("존재하지 않는 계정 ID로 기관 ID 조회 시 null을 반환한다.")
-    @Test
-    void findIdByNonExistentAccountId() {
-        //given
-        String nonExistentAccountId = "nonExistentAccount123";
-
-        //when
-        UUID foundId = centerRepository.findIdByAccountId(nonExistentAccountId);
-
-        //then
-        assertThat(foundId).isNull();
-    }
-
-    @DisplayName("존재하지 않는 계정 ID로 비밀번호 조회 시 null을 반환한다.")
-    @Test
-    void findPasswordByNonExistentAccountId() {
-        //given
-        String nonExistentAccountId = "nonExistentAccount123";
-
-        //when
-        String foundPassword = centerRepository.findPasswordByAccountId(nonExistentAccountId);
-
-        //then
-        assertThat(foundPassword).isNull();
-    }
-
     private static Center createCenter() {
         return Center.create(
                 "기본 기관 이름",
                 "010-1234-5678",
                 "http://example.com/image.jpg",
                 "기관 소개 내용",
-                "http://example.com",
-                "account123",
-                "password123"
+                "http://example.com"
         );
     }
 }

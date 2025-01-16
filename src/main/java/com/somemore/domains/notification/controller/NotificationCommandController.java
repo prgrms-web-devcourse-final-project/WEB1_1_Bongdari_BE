@@ -1,9 +1,9 @@
 package com.somemore.domains.notification.controller;
 
+import com.somemore.domains.notification.dto.NotificationIdsRequestDto;
 import com.somemore.domains.notification.usecase.NotificationCommandUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.domains.notification.dto.NotificationIdsRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -10,7 +10,10 @@ import java.util.UUID;
 @Repository
 public interface PreferItemRepository {
     void save(PreferItem preferItem);
+
     void deleteById(Long preferItemId);
+
     Optional<PreferItem> findById(Long preferItemId);
+
     List<PreferItem> findByCenterId(UUID centerId);
 }

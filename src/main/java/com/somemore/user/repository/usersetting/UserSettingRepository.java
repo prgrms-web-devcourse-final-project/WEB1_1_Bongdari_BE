@@ -8,5 +8,6 @@ import java.util.UUID;
 public interface UserSettingRepository {
 
     Optional<UserSetting> findByUserId(UUID userId);
+
     UserSetting save(UserSetting userSetting);
 }

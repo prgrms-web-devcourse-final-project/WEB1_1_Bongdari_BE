@@ -15,7 +15,6 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -29,7 +28,8 @@ public class LoggingAspect {
     private final ParameterExtractor parameterExtractor;
 
     @Pointcut("execution(* com.somemore.domains.*.controller..*.*(..))")
-    private void controllerPointCut() {}
+    private void controllerPointCut() {
+    }
 
     @Around("controllerPointCut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
