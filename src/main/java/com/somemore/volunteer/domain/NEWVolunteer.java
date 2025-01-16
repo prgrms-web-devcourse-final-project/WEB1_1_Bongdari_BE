@@ -21,7 +21,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "new_volunteer") // TODO suffix 삭제
+@Table(name = "new_volunteer") // TODO prefix 삭제
 public class NEWVolunteer extends BaseEntity {
 
     public static final String DEFAULT_NAME = "봉사자";
