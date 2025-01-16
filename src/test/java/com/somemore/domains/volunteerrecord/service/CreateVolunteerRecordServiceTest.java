@@ -12,10 +12,10 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class VolunteerRecordCreateServiceTest extends IntegrationTestSupport {
+class CreateVolunteerRecordServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private VolunteerRecordCreateService volunteerRecordCreateService;
+    private CreateVolunteerRecordService createVolunteerRecordService;
 
     @Autowired
     private VolunteerRecordJpaRepository volunteerRecordJpaRepository;
@@ -33,7 +33,7 @@ class VolunteerRecordCreateServiceTest extends IntegrationTestSupport {
         );
 
         //when
-        volunteerRecordCreateService.create(volunteerRecord);
+        createVolunteerRecordService.create(volunteerRecord);
 
         //then
         VolunteerRecord savedRecord = volunteerRecordJpaRepository.findById(volunteerRecord.getId())
