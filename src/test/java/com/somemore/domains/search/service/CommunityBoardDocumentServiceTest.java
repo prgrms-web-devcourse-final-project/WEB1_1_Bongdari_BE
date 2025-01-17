@@ -8,6 +8,7 @@ import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,31 +31,44 @@ class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private CommunityBoardDocumentService communityBoardDocumentService;
-
-    @Autowired
-    private CommunityBoardRepository communityBoardRepository;
-
     @Autowired
     private SearchBoardRepository searchBoardRepository;
-
+    @Autowired
+    private CommunityBoardRepository communityBoardRepository;
     @Autowired
     private VolunteerRepository volunteerRepository;
 
-    private UUID writerId;
+    private UUID volunteerId;
 
     @BeforeEach
     void setUp() {
-        String oAuthId1 = "example-oauth-id1";
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
-        volunteerRepository.save(volunteer1);
-        writerId = volunteer1.getId();
+        List<CommunityBoard> communityBoards = new ArrayList<>();
 
-        for (int i = 1; i <= 18; i++) {
+        String oAuthId1 = "example-oauth-id1";
+        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
+        volunteerRepository.save(volunteer);
+        volunteerId = volunteer.getId();
+
+        for (int i = 1; i <= 11; i++) {
             String title = "제목" + i;
-            CommunityBoard communityBoard = createCommunityBoard(title, writerId);
-            communityBoardRepository.save(communityBoard);
+            CommunityBoard communityBoard = createCommunityBoard(title, volunteerId);
+            CommunityBoard savedBoard = communityBoardRepository.save(communityBoard);
+            communityBoards.add(savedBoard);
         }
+
+        for (int i = 1; i <= 11; i++) {
+            String title = "봉사" + i;
+            CommunityBoard communityBoard = createCommunityBoard(title, volunteerId);
+            CommunityBoard savedBoard = communityBoardRepository.save(communityBoard);
+            communityBoards.add(savedBoard);
+        }
+
+        searchBoardRepository.saveCommunityBoardDocuments(communityBoards);
+
     }
+
+    @AfterEach
+    void tearDown() { searchBoardRepository.deleteAllCommunityBoardDocument(); }
 
     @DisplayName("검색 키워드가 포함된 게시글을 조회한다. (ealsticsearch)")
     @Test
@@ -66,9 +80,9 @@ class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
         //then
         assertThat(dtos).isNotNull();
         assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(10);
+        assertThat(dtos.getTotalElements()).isEqualTo(11);
         assertThat(dtos.getSize()).isEqualTo(10);
-        assertThat(dtos.getTotalPages()).isEqualTo(1);
+        assertThat(dtos.getTotalPages()).isEqualTo(2);
     }
 
     @DisplayName("검색 키워드 없이 조회시 전체 게시글을 조회한다. (elasticsearch)")
@@ -81,33 +95,28 @@ class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
         //then
         assertThat(dtos).isNotNull();
         assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(18);
+        assertThat(dtos.getTotalElements()).isEqualTo(22);
         assertThat(dtos.getSize()).isEqualTo(10);
-        assertThat(dtos.getTotalPages()).isEqualTo(2);
+        assertThat(dtos.getTotalPages()).isEqualTo(3);
     }
 
     @DisplayName("게시글을 elastic search index에 저장한다. (service)")
     @Test
     void saveCommunityBoardDocuments() {
         //given
-        List<CommunityBoard> communityBoards = new ArrayList<>();
-
-        CommunityBoard communityBoard = createCommunityBoard("저장 잘 되나요?", "안녕하세요",  UUID.randomUUID());
+        CommunityBoard communityBoard = createCommunityBoard("저장 잘 되나요?", "안녕하세요", volunteerId);
         CommunityBoard savedBoard = communityBoardRepository.save(communityBoard);
-        communityBoards.add(savedBoard);
 
         //when
-        communityBoardDocumentService.saveCommunityBoardDocuments(communityBoards);
+        communityBoardDocumentService.saveCommunityBoardDocuments(List.of(savedBoard));
 
         //then
-        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("", 0);
+        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("저장", 0);
 
         assertThat(dtos).isNotNull();
         assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(18);
+        assertThat(dtos.getTotalElements()).isEqualTo(1);
         assertThat(dtos.getSize()).isEqualTo(10);
-        assertThat(dtos.getTotalPages()).isEqualTo(2);
-
-        searchBoardRepository.deleteCommunityBoardDocument(savedBoard.getId());
+        assertThat(dtos.getTotalPages()).isEqualTo(1);
     }
 }

@@ -2,6 +2,7 @@ package com.somemore.domains.search.scheduler;
 
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.repository.mapper.CommunityBoardView;
+import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.support.IntegrationTestSupport;
 import org.awaitility.Awaitility;
@@ -36,7 +37,7 @@ class CommunityBoardUpdateSchedulerTest extends IntegrationTestSupport {
 
         // when
         // then
-        Page<CommunityBoardView> communityBoards = searchBoardRepository
+        Page<CommunityBoardDocument> communityBoards = searchBoardRepository
                 .findByCommunityBoardsContaining(null, pageable);
 
         Awaitility.await()
