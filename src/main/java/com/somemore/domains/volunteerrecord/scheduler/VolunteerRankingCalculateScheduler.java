@@ -4,9 +4,11 @@ import com.somemore.domains.volunteerrecord.dto.response.VolunteerRankingRespons
 import com.somemore.domains.volunteerrecord.usecase.CalculateRankingUseCase;
 import com.somemore.domains.volunteerrecord.usecase.RankingCacheUseCase;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class VolunteerRankingCalculateScheduler {
@@ -18,9 +20,12 @@ public class VolunteerRankingCalculateScheduler {
 
     @Scheduled(cron = CALCULATE_RANK_TIME)
     public void cacheVolunteerRanking() {
+        log.info("봉사 시간 랭킹 집계 시작");
 
         VolunteerRankingResponseDto rankings = calculateRankingUseCase.calculateRanking();
 
         rankingCacheUseCase.cacheRanking(rankings);
+
+        log.info("봉사 시간 랭킹 집계 종료");
     }
 }
