@@ -7,6 +7,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Document(indexName = "community_board")
 public class CommunityBoardDocument {
@@ -20,10 +22,19 @@ public class CommunityBoardDocument {
     @Field(type = FieldType.Text, analyzer = "nori_analyzer")
     private String content;
 
+    @Field(type = FieldType.Text, analyzer = "nori_analyzer")
+    private String writerNickname;
+
+    @Field(type = FieldType.Date, format = {}, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    private LocalDateTime createdAt;
+
     @Builder
-    public CommunityBoardDocument(Long id, String title, String content) {
+    public CommunityBoardDocument(Long id, String title, String content,
+                                  String writerNickname, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.writerNickname = writerNickname;
+        this.createdAt = createdAt;
     }
 }
