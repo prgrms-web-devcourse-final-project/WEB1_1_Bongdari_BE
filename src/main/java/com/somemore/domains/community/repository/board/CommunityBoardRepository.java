@@ -19,5 +19,5 @@ public interface CommunityBoardRepository {
         return !existsById(id);
     }
     void deleteAllInBatch();
-    List<CommunityBoard> findAll();
+    List<CommunityBoard> findAllByDeletedFalse();
 }

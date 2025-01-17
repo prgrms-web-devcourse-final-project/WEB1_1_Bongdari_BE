@@ -102,8 +102,8 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     }
 
     @Override
-    public List<CommunityBoard> findAll() {
-        return communityBoardJpaRepository.findAll();
+    public List<CommunityBoard> findAllByDeletedFalse() {
+        return communityBoardJpaRepository.findAllByDeletedFalse();
     }
 
     private BooleanExpression isNotDeleted() {
