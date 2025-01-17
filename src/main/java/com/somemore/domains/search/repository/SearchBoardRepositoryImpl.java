@@ -150,8 +150,8 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
     }
 
     @Override
-    public void deleteCommunityBoardDocument(Long id) {
-        communityBoardDocumentRepository.deleteById(id);
+    public void deleteAllCommunityBoardDocument() {
+        communityBoardDocumentRepository.deleteAll();
     }
 
     private List<RecruitBoardDocument> convertRecruitBoardToDocuments(List<RecruitBoard> recruitBoards) {
@@ -185,6 +185,7 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
                     .content(communityboard.getContent())
                     .writerNickname(nickname)
                     .createdAt(communityboard.getCreatedAt())
+                    .updatedAt(communityboard.getUpdatedAt())
                     .build();
             communityBoardDocuments.add(document);
         }

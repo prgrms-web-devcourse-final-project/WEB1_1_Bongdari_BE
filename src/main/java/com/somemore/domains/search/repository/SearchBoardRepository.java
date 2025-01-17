@@ -22,5 +22,5 @@ public interface SearchBoardRepository {
 
     Page<CommunityBoardDocument> findByCommunityBoardsContaining(String keyword, Pageable pageable);
     void saveCommunityBoardDocuments(List<CommunityBoard> communityBoards);
-    void deleteCommunityBoardDocument(Long id);
+    void deleteAllCommunityBoardDocument();
 }
