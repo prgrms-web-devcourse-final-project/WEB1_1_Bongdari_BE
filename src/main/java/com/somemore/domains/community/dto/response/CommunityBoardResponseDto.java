@@ -37,6 +37,4 @@ public record CommunityBoardResponseDto(
                 board.getCreatedAt()
         );
     }
-
 }
-

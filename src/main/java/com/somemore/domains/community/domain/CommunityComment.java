@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import static lombok.AccessLevel.PROTECTED;
 
-
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
