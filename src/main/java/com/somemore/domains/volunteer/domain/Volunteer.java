@@ -22,8 +22,9 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "volunteer_old") // TODO 삭제될 엔티티(테이블)
+@Table(name = "volunteer") // TODO 삭제될 엔티티(테이블)
 public class Volunteer extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
