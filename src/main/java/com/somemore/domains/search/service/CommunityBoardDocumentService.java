@@ -2,7 +2,7 @@ package com.somemore.domains.search.service;
 
 import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
-import com.somemore.domains.community.repository.mapper.CommunityBoardView;
+import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.domains.search.usecase.CommunityBoardDocumentUseCase;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ public class CommunityBoardDocumentService implements CommunityBoardDocumentUseC
     @Override
     public Page<CommunityBoardResponseDto> getCommunityBoardBySearch(String keyword, int page) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<CommunityBoardView> boards = searchBoardRepository.findByCommunityBoardsContaining(keyword, pageable);
-        return boards.map(CommunityBoardResponseDto::from);
+        Page<CommunityBoardDocument> boards = searchBoardRepository.findByCommunityBoardsContaining(keyword, pageable);
+        return boards.map(CommunityBoardResponseDto::fromDocument);
     }
 
     @Transactional

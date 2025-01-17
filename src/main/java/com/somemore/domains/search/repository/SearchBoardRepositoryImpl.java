@@ -8,8 +8,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.domains.center.domain.QCenter;
 import com.somemore.domains.community.domain.CommunityBoard;
-import com.somemore.domains.community.domain.QCommunityBoard;
-import com.somemore.domains.community.repository.mapper.CommunityBoardView;
 import com.somemore.domains.location.domain.QLocation;
 import com.somemore.domains.location.utils.GeoUtils;
 import com.somemore.domains.recruitboard.domain.QRecruitBoard;
@@ -22,7 +20,7 @@ import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.domain.RecruitBoardDocument;
-import com.somemore.domains.volunteer.domain.QVolunteer;
+import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -44,12 +42,11 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
     private final CommunityBoardDocumentRepository communityBoardDocumentRepository;
     private final JPAQueryFactory queryFactory;
 
+    private final VolunteerQueryUseCase volunteerQueryUseCase;
+
     private static final QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
     private static final QLocation location = QLocation.location;
     private static final QCenter center = QCenter.center;
-
-    private static final QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
-    private static final QVolunteer volunteer = QVolunteer.volunteer;
 
     @Override
     public Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition) {
@@ -135,36 +132,15 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
         recruitBoardDocumentRepository.saveAll(recruitBoardDocuments);
     }
 
-
     @Override
     public void deleteRecruitBoardDocument(Long id) {
         recruitBoardDocumentRepository.deleteById(id);
     }
 
-
     @Override
-    public Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable) {
+    public Page<CommunityBoardDocument> findByCommunityBoardsContaining(String keyword, Pageable pageable) {
         List<CommunityBoardDocument> boardDocuments = getCommunityBoardDocuments(keyword);
-
-        List<Long> boardIds = boardDocuments.stream()
-                .map(CommunityBoardDocument::getId)
-                .toList();
-
-        List<CommunityBoardView> content = getCommunityBoardsQuery()
-                .where(communityBoard.id.in(boardIds)
-                        .and(isNotDeletedCommunityBoard()))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(communityBoard.count())
-                .from(communityBoard)
-                .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-                .where(communityBoard.id.in(boardIds)
-                    .and(isNotDeletedCommunityBoard()));
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(boardDocuments, pageable, boardDocuments::size);
     }
 
     @Override
@@ -184,8 +160,13 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
         for (RecruitBoard recruitBoard : recruitBoards) {
             RecruitBoardDocument document = RecruitBoardDocument.builder()
                     .id(recruitBoard.getId())
+                    .centerId(recruitBoard.getCenterId())
+                    .locationId(recruitBoard.getLocationId())
                     .title(recruitBoard.getTitle())
                     .content(recruitBoard.getContent())
+                    .createdAt(recruitBoard.getCreatedAt())
+                    .updatedAt(recruitBoard.getUpdatedAt())
+                    .deleted(recruitBoard.getDeleted())
                     .build();
             communityBoardDocuments.add(document);
         }
@@ -196,32 +177,22 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
         List<CommunityBoardDocument> communityBoardDocuments = new ArrayList<>();
 
         for (CommunityBoard communityboard : communityBoards) {
+            String nickname = volunteerQueryUseCase.getNicknameById(communityboard.getWriterId());
+
             CommunityBoardDocument document = CommunityBoardDocument.builder()
                     .id(communityboard.getId())
                     .title(communityboard.getTitle())
                     .content(communityboard.getContent())
+                    .writerNickname(nickname)
+                    .createdAt(communityboard.getCreatedAt())
                     .build();
             communityBoardDocuments.add(document);
         }
         return communityBoardDocuments;
     }
 
-    private JPAQuery<CommunityBoardView> getCommunityBoardsQuery() {
-        return queryFactory
-                .select(Projections.constructor(CommunityBoardView.class,
-                        communityBoard,
-                        volunteer.nickname))
-                .from(communityBoard)
-                .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
-                .orderBy(communityBoard.createdAt.desc());
-    }
-
     private BooleanExpression isNotDeletedRecruitBoard() {
         return recruitBoard.deleted.eq(false);
-    }
-
-    private BooleanExpression isNotDeletedCommunityBoard() {
-        return communityBoard.deleted.eq(false);
     }
 
     private BooleanExpression volunteerCategoryEq(VolunteerCategory category) {
