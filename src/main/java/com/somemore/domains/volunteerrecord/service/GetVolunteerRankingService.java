@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER_RANKING;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +20,7 @@ public class GetVolunteerRankingService implements GetVolunteerRankingUseCase {
     @Override
     public VolunteerRankingResponseDto getVolunteerRanking() {
         return volunteerRankingRedisRepository.getRankings()
-                .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_VOLUNTEER));
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_VOLUNTEER_RANKING));
     }
 
 }
