@@ -4,6 +4,7 @@ import com.somemore.domains.volunteerrecord.dto.response.VolunteerMonthlyRanking
 import com.somemore.domains.volunteerrecord.dto.response.VolunteerTotalRankingResponseDto;
 import com.somemore.domains.volunteerrecord.dto.response.VolunteerWeeklyRankingResponseDto;
 
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class VolunteerRankingMapper {
@@ -14,7 +15,7 @@ public class VolunteerRankingMapper {
 
     public static VolunteerTotalRankingResponseDto toTotalRankingResponse(Object[] result) {
         return new VolunteerTotalRankingResponseDto(
-                (UUID) result[0],
+                toUUID(result[0]),
                 ((Number) result[1]).intValue(),
                 ((Number) result[2]).longValue()
         );
@@ -22,7 +23,7 @@ public class VolunteerRankingMapper {
 
     public static VolunteerWeeklyRankingResponseDto toWeeklyRankingResponse(Object[] result) {
         return new VolunteerWeeklyRankingResponseDto(
-                (UUID) result[0],
+                toUUID(result[0]),
                 ((Number) result[1]).intValue(),
                 ((Number) result[2]).longValue()
         );
@@ -30,9 +31,21 @@ public class VolunteerRankingMapper {
 
     public static VolunteerMonthlyRankingResponseDto toMonthlyRankingResponse(Object[] result) {
         return new VolunteerMonthlyRankingResponseDto(
-                (UUID) result[0],
+                toUUID(result[0]),
                 ((Number) result[1]).intValue(),
                 ((Number) result[2]).longValue()
         );
     }
+
+    private static UUID toUUID(Object uuidObject) {
+        return switch (uuidObject) {
+            case UUID uuid -> uuid;
+            case byte[] bytes -> {
+                ByteBuffer bb = ByteBuffer.wrap(bytes);
+                yield new UUID(bb.getLong(), bb.getLong());
+            }
+            default -> throw new IllegalArgumentException("UUID 변환이 불가능한 데이터 타입: " + uuidObject.getClass().getName());
+        };
+    }
+
 }

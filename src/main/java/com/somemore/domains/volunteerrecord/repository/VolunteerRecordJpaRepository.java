@@ -8,49 +8,48 @@ import java.util.List;
 
 public interface VolunteerRecordJpaRepository extends JpaRepository<VolunteerRecord, Long> {
 
-    @Query("""
-        SELECT ranked.volunteerId, ranked.totalHours, ranked.ranking
+    @Query(value = """
+        SELECT volunteerId, totalHours, ranking
         FROM (
             SELECT 
-                vr.volunteerId AS volunteerId, 
-                SUM(vr.volunteerHours) AS totalHours,
-                DENSE_RANK() OVER (ORDER BY SUM(vr.volunteerHours) DESC) AS ranking
-            FROM VolunteerRecord vr
-            GROUP BY vr.volunteerId
+                vr.volunteer_id AS volunteerId, 
+                SUM(vr.volunteer_hours) AS totalHours,
+                DENSE_RANK() OVER (ORDER BY SUM(vr.volunteer_hours) DESC) AS ranking
+            FROM volunteer_record vr
+            GROUP BY vr.volunteer_id
         ) ranked
-        WHERE ranked.ranking <= 4
-    """)
+        WHERE ranking <= 4
+        """, nativeQuery = true)
     List<Object[]> findTotalTopRankingWithTies();
 
-    @Query("""
-        SELECT ranked.volunteerId, ranked.totalHours, ranked.ranking
+    @Query(value = """
+        SELECT volunteerId, totalHours, ranking
         FROM (
             SELECT 
-                vr.volunteerId AS volunteerId, 
-                SUM(vr.volunteerHours) AS totalHours,
-                DENSE_RANK() OVER (ORDER BY SUM(vr.volunteerHours) DESC) AS ranking
-            FROM VolunteerRecord vr
-            WHERE YEARWEEK(vr.volunteerDate, 1) = YEARWEEK(CURDATE(), 1)
-            GROUP BY vr.volunteerId
+                vr.volunteer_id AS volunteerId, 
+                SUM(vr.volunteer_hours) AS totalHours,
+                DENSE_RANK() OVER (ORDER BY SUM(vr.volunteer_hours) DESC) AS ranking
+            FROM volunteer_record vr
+            WHERE YEARWEEK(vr.volunteer_date, 1) = YEARWEEK(CURDATE(), 1)
+            GROUP BY vr.volunteer_id
         ) ranked
-        WHERE ranked.ranking <= 4
-    """)
+        WHERE ranking <= 4
+        """, nativeQuery = true)
     List<Object[]> findWeeklyTopRankingWithTies();
 
-    @Query("""
-        SELECT ranked.volunteerId, ranked.totalHours, ranked.ranking
+    @Query(value = """
+        SELECT volunteerId, totalHours, ranking
         FROM (
             SELECT 
-                vr.volunteerId AS volunteerId, 
-                SUM(vr.volunteerHours) AS totalHours,
-                DENSE_RANK() OVER (ORDER BY SUM(vr.volunteerHours) DESC) AS ranking
-            FROM VolunteerRecord vr
-            WHERE MONTH(vr.volunteerDate) = MONTH(CURDATE())
-              AND YEAR(vr.volunteerDate) = YEAR(CURDATE())
-            GROUP BY vr.volunteerId
+                vr.volunteer_id AS volunteerId, 
+                SUM(vr.volunteer_hours) AS totalHours,
+                DENSE_RANK() OVER (ORDER BY SUM(vr.volunteer_hours) DESC) AS ranking
+            FROM volunteer_record vr
+            WHERE MONTH(vr.volunteer_date) = MONTH(CURDATE())
+              AND YEAR(vr.volunteer_date) = YEAR(CURDATE())
+            GROUP BY vr.volunteer_id
         ) ranked
-        WHERE ranked.ranking <= 4
-    """)
+        WHERE ranking <= 4
+        """, nativeQuery = true)
     List<Object[]> findMonthlyTopRankingWithTies();
-
 }
