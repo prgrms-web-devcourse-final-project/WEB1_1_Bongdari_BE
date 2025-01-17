@@ -20,7 +20,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "volunteer_detail_old") // TODO 삭제될 엔티티(테이블)
+@Table(name = "volunteer_detail") // TODO 삭제될 엔티티(테이블)
 public class VolunteerDetail extends BaseEntity {
 
     @Id
