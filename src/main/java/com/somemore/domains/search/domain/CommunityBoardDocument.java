@@ -28,13 +28,17 @@ public class CommunityBoardDocument {
     @Field(type = FieldType.Date, format = {}, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private LocalDateTime createdAt;
 
+    @Field(type = FieldType.Date, format = {}, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    private LocalDateTime updatedAt;
+
     @Builder
-    public CommunityBoardDocument(Long id, String title, String content,
-                                  String writerNickname, LocalDateTime createdAt) {
+    public CommunityBoardDocument(Long id, String title, String content, String writerNickname,
+                                  LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.writerNickname = writerNickname;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
