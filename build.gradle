@@ -80,6 +80,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.20.4'
+    testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.20.4'
+
+    testImplementation group: 'org.testcontainers', name: 'mysql', version: '1.20.4'
+
+
 }
 
 // Querydsl 설정
