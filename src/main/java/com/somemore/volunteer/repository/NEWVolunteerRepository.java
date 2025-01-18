@@ -1,6 +1,7 @@
 package com.somemore.volunteer.repository;
 
 import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.record.VolunteerNickname;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +15,5 @@ public interface NEWVolunteerRepository {
 
     Optional<NEWVolunteer> findByUserId(UUID userId);
 
-    List<String> findNicknamesByIds(List<UUID> ids);
+    List<VolunteerNickname> findNicknamesByIds(List<UUID> ids);
 }

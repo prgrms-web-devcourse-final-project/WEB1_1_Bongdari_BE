@@ -1,6 +1,7 @@
 package com.somemore.volunteer.service;
 
 import com.somemore.volunteer.repository.NEWVolunteerRepository;
+import com.somemore.volunteer.repository.record.VolunteerNickname;
 import com.somemore.volunteer.usecase.GetVolunteerNicknamesByIdsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class GetVolunteerNicknamesByIdsService implements GetVolunteerNicknamesB
     private final NEWVolunteerRepository volunteerRepository;
 
     @Override
-    public List<String> getNicknamesByIds(List<UUID> ids) {
+    public List<VolunteerNickname> getNicknamesByIds(List<UUID> ids) {
 
         return volunteerRepository.findNicknamesByIds(ids);
     }
