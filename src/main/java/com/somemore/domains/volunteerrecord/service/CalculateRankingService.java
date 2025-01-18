@@ -7,12 +7,14 @@ import com.somemore.domains.volunteerrecord.dto.response.VolunteerWeeklyRankingR
 import com.somemore.domains.volunteerrecord.repository.VolunteerRecordRepository;
 import com.somemore.domains.volunteerrecord.repository.mapper.VolunteerRankingMapper;
 import com.somemore.domains.volunteerrecord.usecase.CalculateRankingUseCase;
+import com.somemore.volunteer.repository.record.VolunteerNickname;
 import com.somemore.volunteer.service.GetVolunteerNicknamesByIdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,27 +27,50 @@ public class CalculateRankingService implements CalculateRankingUseCase {
 
     @Override
     public VolunteerRankingResponseDto calculateRanking() {
-
         List<Object[]> volunteerTotalRanking = volunteerRecordRepository.findTotalTopRankingWithTies();
         List<Object[]> volunteerMonthlyRanking = volunteerRecordRepository.findMonthlyTopRankingWithTies();
         List<Object[]> volunteerWeeklyRanking = volunteerRecordRepository.findWeeklyTopRankingWithTies();
 
-        List<VolunteerTotalRankingResponseDto> totalRankingDtos = volunteerTotalRanking.stream()
-                .map(VolunteerRankingMapper::toTotalRankingResponse)
-                .toList();
+        List<List<Object[]>> rankings = List.of(volunteerTotalRanking, volunteerMonthlyRanking, volunteerWeeklyRanking);
 
-        List<VolunteerMonthlyRankingResponseDto> monthlyRankingDtos = volunteerMonthlyRanking.stream()
-                .map(VolunteerRankingMapper::toMonthlyRankingResponse)
-                .toList();
-
-        List<VolunteerWeeklyRankingResponseDto> weeklyRankingDtos = volunteerWeeklyRanking.stream()
-                .map(VolunteerRankingMapper::toWeeklyRankingResponse)
-                .toList();
+        Map<UUID, String> nicknameMap = createNicknameMap(rankings);
 
         return VolunteerRankingResponseDto.of(
-                totalRankingDtos,
-                monthlyRankingDtos,
-                weeklyRankingDtos
+                mapToTotalRankingDtos(volunteerTotalRanking, nicknameMap),
+                mapToMonthlyRankingDtos(volunteerMonthlyRanking, nicknameMap),
+                mapToWeeklyRankingDtos(volunteerWeeklyRanking, nicknameMap)
         );
+    }
+
+    private Map<UUID, String> createNicknameMap(List<List<Object[]>> rankings) {
+        Set<UUID> allVolunteerIds = rankings.stream()
+                .flatMap(List::stream)
+                .map(result -> VolunteerRankingMapper.toUUID(result[0]))
+                .collect(Collectors.toSet());
+
+        return getNicknamesByIdsService.getNicknamesByIds(new ArrayList<>(allVolunteerIds))
+                .stream()
+                .collect(Collectors.toMap(
+                        VolunteerNickname::volunteerId,
+                        VolunteerNickname::nickname
+                ));
+    }
+
+    private List<VolunteerTotalRankingResponseDto> mapToTotalRankingDtos(List<Object[]> ranking, Map<UUID, String> nicknameMap) {
+        return ranking.stream()
+                .map(result -> VolunteerRankingMapper.toTotalRankingResponse(result, nicknameMap))
+                .toList();
+    }
+
+    private List<VolunteerMonthlyRankingResponseDto> mapToMonthlyRankingDtos(List<Object[]> ranking, Map<UUID, String> nicknameMap) {
+        return ranking.stream()
+                .map(result -> VolunteerRankingMapper.toMonthlyRankingResponse(result, nicknameMap))
+                .toList();
+    }
+
+    private List<VolunteerWeeklyRankingResponseDto> mapToWeeklyRankingDtos(List<Object[]> ranking, Map<UUID, String> nicknameMap) {
+        return ranking.stream()
+                .map(result -> VolunteerRankingMapper.toWeeklyRankingResponse(result, nicknameMap))
+                .toList();
     }
 }
