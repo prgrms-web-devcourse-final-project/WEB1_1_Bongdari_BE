@@ -48,18 +48,18 @@ class GetVolunteerRankingServiceTest extends IntegrationTestSupport {
         UUID id6 = UUID.randomUUID();
 
         List<VolunteerTotalRankingResponseDto> totalRanking = List.of(
-                new VolunteerTotalRankingResponseDto(id1, 100, 1),
-                new VolunteerTotalRankingResponseDto(id2, 90, 2)
+                new VolunteerTotalRankingResponseDto(id1, 100, 1, "봉사자1"),
+                new VolunteerTotalRankingResponseDto(id2, 90, 2, "봉사자2")
         );
 
         List<VolunteerMonthlyRankingResponseDto> monthlyRanking = List.of(
-                new VolunteerMonthlyRankingResponseDto(id3, 50, 1),
-                new VolunteerMonthlyRankingResponseDto(id4, 40, 2)
+                new VolunteerMonthlyRankingResponseDto(id3, 50, 1, "봉사자3"),
+                new VolunteerMonthlyRankingResponseDto(id4, 40, 2, "봉사자4")
         );
 
         List<VolunteerWeeklyRankingResponseDto> weeklyRanking = List.of(
-                new VolunteerWeeklyRankingResponseDto(id5, 30, 1),
-                new VolunteerWeeklyRankingResponseDto(id6, 20, 2)
+                new VolunteerWeeklyRankingResponseDto(id5, 30, 1, "봉사자5"),
+                new VolunteerWeeklyRankingResponseDto(id6, 20, 2, "봉사자6")
         );
 
         VolunteerRankingResponseDto rankings = VolunteerRankingResponseDto.of(
@@ -76,26 +76,26 @@ class GetVolunteerRankingServiceTest extends IntegrationTestSupport {
         // then
         assertThat(result.volunteerTotalRankingResponse())
                 .hasSize(2)
-                .extracting("volunteerId", "totalHours", "ranking")
+                .extracting("volunteerId", "totalHours", "ranking", "nickname")
                 .containsExactly(
-                        tuple(id1.toString(), 100, 1),
-                        tuple(id2.toString(), 90, 2)
+                        tuple(id1.toString(), 100, 1, "봉사자1"),
+                        tuple(id2.toString(), 90, 2, "봉사자2")
                 );
 
         assertThat(result.volunteerMonthlyResponse())
                 .hasSize(2)
-                .extracting("volunteerId", "totalHours", "ranking")
+                .extracting("volunteerId", "totalHours", "ranking", "nickname")
                 .containsExactly(
-                        tuple(id3.toString(), 50, 1),
-                        tuple(id4.toString(), 40, 2)
+                        tuple(id3.toString(), 50, 1, "봉사자3"),
+                        tuple(id4.toString(), 40, 2, "봉사자4")
                 );
 
         assertThat(result.volunteerWeeklyRankingResponse())
                 .hasSize(2)
-                .extracting("volunteerId", "totalHours", "ranking")
+                .extracting("volunteerId", "totalHours", "ranking", "nickname")
                 .containsExactly(
-                        tuple(id5.toString(), 30, 1),
-                        tuple(id6.toString(), 20, 2)
+                        tuple(id5.toString(), 30, 1, "봉사자5"),
+                        tuple(id6.toString(), 20, 2, "봉사자6")
                 );
 
     }

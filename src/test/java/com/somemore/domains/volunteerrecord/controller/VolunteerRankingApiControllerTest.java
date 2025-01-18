@@ -34,18 +34,18 @@ class VolunteerRankingApiControllerTest extends ControllerTestSupport {
         UUID id6 = UUID.randomUUID();
 
         List<VolunteerTotalRankingResponseDto> totalRankings = List.of(
-                new VolunteerTotalRankingResponseDto(id1, 150, 1),
-                new VolunteerTotalRankingResponseDto(id2, 120, 2)
+                new VolunteerTotalRankingResponseDto(id1, 150, 1, "봉사자1"),
+                new VolunteerTotalRankingResponseDto(id2, 120, 2, "봉사자2")
         );
 
         List<VolunteerMonthlyRankingResponseDto> monthlyRankings = List.of(
-                new VolunteerMonthlyRankingResponseDto(id3, 50, 1),
-                new VolunteerMonthlyRankingResponseDto(id4, 40, 2)
+                new VolunteerMonthlyRankingResponseDto(id3, 50, 1, "봉사자1"),
+                new VolunteerMonthlyRankingResponseDto(id4, 40, 2, "봉사자2")
         );
 
         List<VolunteerWeeklyRankingResponseDto> weeklyRankings = List.of(
-                new VolunteerWeeklyRankingResponseDto(id5, 15, 1),
-                new VolunteerWeeklyRankingResponseDto(id6, 10, 2)
+                new VolunteerWeeklyRankingResponseDto(id5, 15, 1, "봉사자1"),
+                new VolunteerWeeklyRankingResponseDto(id6, 10, 2, "봉사자2")
         );
 
         VolunteerRankingResponseDto responseDto = VolunteerRankingResponseDto.of(totalRankings, monthlyRankings, weeklyRankings);

@@ -2,6 +2,7 @@ package com.somemore.volunteer.repository;
 
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.record.VolunteerNickname;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +59,13 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
         List<UUID> ids = List.of(volunteer1.getId(), volunteer2.getId(), volunteer3.getId());
 
         // when
-        List<String> nicknames = volunteerRepository.findNicknamesByIds(ids);
+        List<VolunteerNickname> nicknames = volunteerRepository.findNicknamesByIds(ids);
 
         // then
-        assertThat(nicknames).containsExactlyInAnyOrder(
-                volunteer1.getNickname(),
-                volunteer2.getNickname(),
-                volunteer3.getNickname());
+        assertThat(nicknames).extracting(VolunteerNickname::nickname)
+                .containsExactlyInAnyOrder(
+                        volunteer1.getNickname(),
+                        volunteer2.getNickname(),
+                        volunteer3.getNickname());
     }
 }

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,16 +41,19 @@ class VolunteerRankingMapperTest {
 
         // given
         UUID id = UUID.randomUUID();
-        Object[] result = {id, 100L, 1};
+        Object[] result = {id, 100, 1L};
+        Map<UUID, String> nicknameMap = new HashMap<>();
+        nicknameMap.put(id, "테스트봉사자");
 
         // when
-        VolunteerTotalRankingResponseDto dto = VolunteerRankingMapper.toTotalRankingResponse(result);
+        VolunteerTotalRankingResponseDto dto = VolunteerRankingMapper.toTotalRankingResponse(result, nicknameMap);
 
         // then
         assertThat(dto).isNotNull();
         assertThat(dto.volunteerId()).isEqualTo(id);
-        assertThat(dto.ranking()).isEqualTo(1);
-        assertThat(dto.totalHours()).isEqualTo(100L);
+        assertThat(dto.totalHours()).isEqualTo(100);
+        assertThat(dto.ranking()).isEqualTo(1L);
+        assertThat(dto.nickname()).isEqualTo("테스트봉사자");
     }
 
     @DisplayName("toWeeklyRankingResponse 메서드가 올바른 VolunteerWeeklyRankingResponseDto를 반환한다")
@@ -57,16 +62,19 @@ class VolunteerRankingMapperTest {
 
         // given
         UUID id = UUID.randomUUID();
-        Object[] result = {id, 50L, 2};
+        Object[] result = {id, 50, 2L};
+        Map<UUID, String> nicknameMap = new HashMap<>();
+        nicknameMap.put(id, "테스트봉사자");
 
         // when
-        VolunteerWeeklyRankingResponseDto dto = VolunteerRankingMapper.toWeeklyRankingResponse(result);
+        VolunteerWeeklyRankingResponseDto dto = VolunteerRankingMapper.toWeeklyRankingResponse(result, nicknameMap);
 
         // then
         assertThat(dto).isNotNull();
         assertThat(dto.volunteerId()).isEqualTo(id);
-        assertThat(dto.ranking()).isEqualTo(2);
-        assertThat(dto.totalHours()).isEqualTo(50L);
+        assertThat(dto.totalHours()).isEqualTo(50);
+        assertThat(dto.ranking()).isEqualTo(2L);
+        assertThat(dto.nickname()).isEqualTo("테스트봉사자");
     }
 
     @DisplayName("toMonthlyRankingResponse 메서드가 올바른 VolunteerMonthlyRankingResponseDto를 반환한다")
@@ -75,15 +83,34 @@ class VolunteerRankingMapperTest {
 
         // given
         UUID id = UUID.randomUUID();
-        Object[] result = {id, 200L, 3};
+        Object[] result = {id, 200, 3L};
+        Map<UUID, String> nicknameMap = new HashMap<>();
+        nicknameMap.put(id, "테스트봉사자");
 
         // when
-        VolunteerMonthlyRankingResponseDto dto = VolunteerRankingMapper.toMonthlyRankingResponse(result);
+        VolunteerMonthlyRankingResponseDto dto = VolunteerRankingMapper.toMonthlyRankingResponse(result, nicknameMap);
 
         // then
         assertThat(dto).isNotNull();
         assertThat(dto.volunteerId()).isEqualTo(id);
-        assertThat(dto.ranking()).isEqualTo(3);
-        assertThat(dto.totalHours()).isEqualTo(200L);
+        assertThat(dto.totalHours()).isEqualTo(200);
+        assertThat(dto.ranking()).isEqualTo(3L);
+        assertThat(dto.nickname()).isEqualTo("테스트봉사자");
+    }
+
+    @DisplayName("nicknameMap에 해당 ID가 없을 경우 nickname은 null을 반환한다")
+    @Test
+    void returnNullWhenIdNotExistInNicknameMap() {
+
+        // given
+        UUID id = UUID.randomUUID();
+        Object[] result = {id, 100, 1L};
+        Map<UUID, String> emptyNicknameMap = new HashMap<>();
+
+        // when
+        VolunteerTotalRankingResponseDto dto = VolunteerRankingMapper.toTotalRankingResponse(result, emptyNicknameMap);
+
+        // then
+        assertThat(dto.nickname()).isNull();
     }
 }
