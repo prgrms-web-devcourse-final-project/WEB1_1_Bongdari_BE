@@ -5,7 +5,7 @@ import java.util.UUID;
 public record VolunteerTotalRankingResponseDto(
         UUID volunteerId,
         int totalHours,
-        long ranking
+        long ranking,
+        String nickname
 ) {
-
 }
