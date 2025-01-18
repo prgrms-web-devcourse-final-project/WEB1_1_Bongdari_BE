@@ -7,6 +7,7 @@ import com.somemore.volunteer.domain.QNEWVolunteer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,6 +47,18 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                         )
                         .fetchOne()
         );
+    }
+
+    @Override
+    public List<String> findNicknamesByIds(List<UUID> ids) {
+        return queryFactory
+                .select(volunteer.nickname)
+                .from(volunteer)
+                .where(
+                        volunteer.id.in(ids),
+                        isNotDeleted()
+                )
+                .fetch(); // 결과를 리스트로 반환
     }
 
     private static BooleanExpression isNotDeleted() {
