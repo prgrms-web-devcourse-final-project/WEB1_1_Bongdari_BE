@@ -1,7 +1,7 @@
 package com.somemore.volunteer.service;
 
 import com.somemore.volunteer.repository.NEWVolunteerRepository;
-import com.somemore.volunteer.usecase.GetNicknamesByIdsUseCase;
+import com.somemore.volunteer.usecase.GetVolunteerNicknamesByIdsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class GetNicknamesByIdsService implements GetNicknamesByIdsUseCase {
+public class GetVolunteerNicknamesByIdsService implements GetVolunteerNicknamesByIdsUseCase {
 
     private final NEWVolunteerRepository volunteerRepository;
 

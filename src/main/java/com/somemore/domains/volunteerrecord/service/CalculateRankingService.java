@@ -7,6 +7,7 @@ import com.somemore.domains.volunteerrecord.dto.response.VolunteerWeeklyRankingR
 import com.somemore.domains.volunteerrecord.repository.VolunteerRecordRepository;
 import com.somemore.domains.volunteerrecord.repository.mapper.VolunteerRankingMapper;
 import com.somemore.domains.volunteerrecord.usecase.CalculateRankingUseCase;
+import com.somemore.volunteer.service.GetVolunteerNicknamesByIdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class CalculateRankingService implements CalculateRankingUseCase {
+
+    private final GetVolunteerNicknamesByIdsService getNicknamesByIdsService;
 
     private final VolunteerRecordRepository volunteerRecordRepository;
 

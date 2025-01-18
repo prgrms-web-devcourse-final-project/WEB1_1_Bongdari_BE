@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GetNicknamesByIdsServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private GetNicknamesByIdsService getNicknamesByIdsService;
+    private GetVolunteerNicknamesByIdsService getNicknamesByIdsService;
 
     @Autowired
     private NEWVolunteerRepository volunteerRepository;
