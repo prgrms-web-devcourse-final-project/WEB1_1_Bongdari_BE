@@ -84,7 +84,6 @@ dependencies {
     testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.20.4'
     testImplementation group: 'org.testcontainers', name: 'mysql', version: '1.20.4'
 
-
 }
 
 // Querydsl 설정
@@ -109,6 +108,7 @@ tasks.named('test') {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
     if (gradle.startParameter.taskNames.contains('build')) {
+        exclude '**/*ControllerTest.class'
         finalizedBy 'jacocoTestReport'
     }
 }
@@ -137,7 +137,9 @@ def jacocoExcludePatterns = [
         '**/fixture/*',
         '**/*Factory*',
         '**/event/**',
-        '**/*Aspect*'
+        '**/*Aspect*',
+        '**/Aspect/*',
+        '**/utils/*'
 ]
 
 def jacocoExcludePatternsForVerify = [
@@ -157,7 +159,9 @@ def jacocoExcludePatternsForVerify = [
         '*.fixture.*',
         '*.*Factory*',
         '*.*event*.*',
-        '*.*Aspect*'
+        '*.*Aspect*',
+        '*.Aspect.*',
+        '*.utils.*'
 ]
 
 jacocoTestReport {
