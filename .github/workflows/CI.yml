@@ -40,11 +40,27 @@ jobs:
       ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
       LOKI_URL: ${{ secrets.LOKI_URL }}
 
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
+      DOCKER_HOST: unix:///var/run/docker.sock
+
     services:
       redis:
         image: redis
         ports:
           - 6379:6379
+
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       - name: Github Repository 파일 불러오기
@@ -75,9 +91,11 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Docker 권한 설정
+      - name: Docker 설정
         run: |
-          sudo chmod 666 /var/run/docker.sock
+            sudo chmod 666 /var/run/docker.sock
+            sudo systemctl start docker
+            docker --version
 
       - name: 빌드 권한 부여
         run: chmod +x ./gradlew
@@ -85,6 +103,10 @@ jobs:
 
       - name: 빌드 및 테스트
         run: ./gradlew build
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/test
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
 
       - name: Close PR, if build fail
         if: ${{ failure() }}
