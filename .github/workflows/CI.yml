@@ -1,9 +1,6 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      [ main ]
   pull_request:
     branches:
       [ main ]
@@ -13,14 +10,6 @@ on:
 jobs:
   Continuous-Integration:
     runs-on: ubuntu-latest
-
-    #Action 환경에서 Redis 실행을 위한 설정 추후 서버 배포시 제거 예정
-    services:
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-
 
     env:
       DB_URL: ${{ secrets.DB_URL }}
@@ -51,6 +40,11 @@ jobs:
       ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
       LOKI_URL: ${{ secrets.LOKI_URL }}
 
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
 
     steps:
       - name: Github Repository 파일 불러오기
@@ -80,6 +74,10 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
+      - name: Docker 권한 설정
+        run: |
+          sudo chmod 666 /var/run/docker.sock
 
       - name: 빌드 권한 부여
         run: chmod +x ./gradlew
