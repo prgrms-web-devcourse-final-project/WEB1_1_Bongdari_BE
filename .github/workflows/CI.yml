@@ -87,11 +87,14 @@ jobs:
         shell: bash
 
       - name: 빌드 및 테스트
-        run: ./gradlew build
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/test
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: root
+        run: ./gradlew build --info
+
+      - name: Save test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: build/reports/tests/test
 
       - name: Close PR, if build fail
         if: ${{ failure() }}
