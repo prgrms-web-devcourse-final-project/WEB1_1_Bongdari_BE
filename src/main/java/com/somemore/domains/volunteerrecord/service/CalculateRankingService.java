@@ -8,7 +8,7 @@ import com.somemore.domains.volunteerrecord.repository.VolunteerRecordRepository
 import com.somemore.domains.volunteerrecord.repository.mapper.VolunteerRankingMapper;
 import com.somemore.domains.volunteerrecord.usecase.CalculateRankingUseCase;
 import com.somemore.volunteer.repository.record.VolunteerNickname;
-import com.somemore.volunteer.service.GetVolunteerNicknamesByIdsService;
+import com.somemore.volunteer.usecase.GetVolunteerNicknamesByIdsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CalculateRankingService implements CalculateRankingUseCase {
 
-    private final GetVolunteerNicknamesByIdsService getNicknamesByIdsService;
+    private final GetVolunteerNicknamesByIdsUseCase getVolunteerNicknamesByIdsUseCase;
 
     private final VolunteerRecordRepository volunteerRecordRepository;
 
@@ -48,7 +48,7 @@ public class CalculateRankingService implements CalculateRankingUseCase {
                 .map(result -> VolunteerRankingMapper.toUUID(result[0]))
                 .collect(Collectors.toSet());
 
-        return getNicknamesByIdsService.getNicknamesByIds(new ArrayList<>(allVolunteerIds))
+        return getVolunteerNicknamesByIdsUseCase.getNicknamesByIds(new ArrayList<>(allVolunteerIds))
                 .stream()
                 .collect(Collectors.toMap(
                         VolunteerNickname::volunteerId,

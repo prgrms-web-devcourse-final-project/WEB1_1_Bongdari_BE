@@ -28,7 +28,7 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerDetailRepository volunteerDetailRepository;
-    
+
     @DisplayName("봉사자의 id로 닉네임을 조회한다.")
     @Test
     void findNicknameById() {
