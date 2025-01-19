@@ -1,5 +1,6 @@
 package com.somemore.global.auth.jwt.service;
 
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
@@ -25,8 +26,8 @@ public class JwtService implements JwtUseCase {
     private final JwtRefresher jwtRefresher;
 
     @Override
-    public EncodedToken generateToken(String userId, String role, TokenType tokenType) {
-        return jwtGenerator.generateToken(userId, role, tokenType);
+    public EncodedToken generateToken(UserIdentity userIdentity, TokenType tokenType) {
+        return jwtGenerator.generateToken(userIdentity, tokenType);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.somemore.global.auth.jwt.refresher;
 
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
@@ -37,8 +38,7 @@ public class DefaultJwtRefresher implements JwtRefresher {
 
     private EncodedToken generateAccessToken(Claims claims) {
         return jwtGenerator.generateToken(
-                claims.get("id", String.class),
-                claims.get("role", String.class),
+                UserIdentity.from(claims),
                 TokenType.ACCESS
         );
     }

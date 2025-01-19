@@ -1,11 +1,15 @@
 package com.somemore.global.auth.idpw.provider;
 
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.global.auth.authentication.JwtAuthenticationToken;
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
 import com.somemore.user.domain.User;
+import com.somemore.user.domain.UserRole;
 import com.somemore.user.usecase.UserQueryUseCase;
+import com.somemore.volunteer.usecase.NEWVolunteerQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,6 +30,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final JwtUseCase jwtUseCase;
     private final PasswordEncoder passwordEncoder;
     private final UserQueryUseCase userQueryUseCase;
+    private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
+    private final NEWCenterQueryUseCase centerQueryUseCase;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -34,9 +42,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         validatePassword(rawAccountPassword, user.getAccountPassword());
 
-        EncodedToken accessToken = generateAccessToken(user);
+        UUID userId = user.getId();
+        UserRole role = user.getRole();
+        UUID roleId = getRoleIdByUserId(role, user.getId());
 
-        return JwtAuthenticationToken.of(user, accessToken);
+        UserIdentity userIdentity = UserIdentity.of(userId, roleId, role);
+
+        EncodedToken accessToken = generateAccessToken(userIdentity, role);
+
+        return JwtAuthenticationToken.of(userIdentity, accessToken);
     }
 
     @Override
@@ -44,10 +58,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    private EncodedToken generateAccessToken(User user) {
+    private UUID getRoleIdByUserId(UserRole role, UUID userId) {
+        if (role.equals(UserRole.VOLUNTEER)) {
+            return volunteerQueryUseCase.getIdByUserId(userId);
+        }
+        return centerQueryUseCase.getIdByUserId(userId);
+    }
+
+    private EncodedToken generateAccessToken(UserIdentity userIdentity, UserRole role) {
         return jwtUseCase.generateToken(
-                user.getId().toString(),
-                user.getRole().getAuthority(),
+                userIdentity,
                 TokenType.ACCESS
         );
     }
