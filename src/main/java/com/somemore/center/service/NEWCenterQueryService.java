@@ -1,7 +1,8 @@
-package com.somemore.center.usecase;
+package com.somemore.center.service;
 
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.repository.NEWCenterRepository;
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
