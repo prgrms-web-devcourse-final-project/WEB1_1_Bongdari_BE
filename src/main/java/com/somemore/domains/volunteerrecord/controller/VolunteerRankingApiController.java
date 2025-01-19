@@ -18,7 +18,7 @@ public class VolunteerRankingApiController {
 
     @Operation(summary = "봉사 시간 랭킹", description = "봉사 시간 랭킹을 반환합니다.")
     @GetMapping("/ranking")
-    public ApiResponse<VolunteerRankingResponseDto> updateCenterProfile() {
+    public ApiResponse<VolunteerRankingResponseDto> getVolunteerRanking() {
 
         VolunteerRankingResponseDto volunteerRankings = getVolunteerRankingUseCase.getVolunteerRanking();
 
