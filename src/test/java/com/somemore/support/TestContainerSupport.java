@@ -28,21 +28,14 @@ public abstract class TestContainerSupport {
 
     @DynamicPropertySource
     public static void overrideProps(DynamicPropertyRegistry registry){
-//        registry.add("spring.data.redis.host", REDIS::getHost);
-//        registry.add("spring.data.redis.port", () -> String.valueOf(REDIS.getMappedPort(REDIS_PORT)));
-
-        registry.add("spring.data.redis.host", () -> "localhost");
-        registry.add("spring.data.redis.port", () -> "6379");
+        registry.add("spring.data.redis.host", REDIS::getHost);
+        registry.add("spring.data.redis.port", () -> String.valueOf(REDIS.getMappedPort(REDIS_PORT)));
     }
     @DynamicPropertySource
     public static void overrideProps2(DynamicPropertyRegistry registry){
-//        registry.add("spring.datasource.driver-class-name", MYSQL::getDriverClassName);
-//        registry.add("spring.datasource.url", MYSQL::getJdbcUrl);
-//        registry.add("spring.datasource.~username", MYSQL::getUsername);
-//        registry.add("spring.datasource.password", MYSQL::getPassword);
-        registry.add("spring.datasource.driver-class-name", () -> "com.mysql.cj.jdbc.Driver");
-        registry.add("spring.datasource.url", () -> "jdbc:mysql://localhost:3306/test");
-        registry.add("spring.datasource.username", () -> "root");
-        registry.add("spring.datasource.password", () -> "root");
+        registry.add("spring.datasource.driver-class-name", MYSQL::getDriverClassName);
+        registry.add("spring.datasource.url", MYSQL::getJdbcUrl);
+        registry.add("spring.datasource.~username", MYSQL::getUsername);
+        registry.add("spring.datasource.password", MYSQL::getPassword);
     }
 }

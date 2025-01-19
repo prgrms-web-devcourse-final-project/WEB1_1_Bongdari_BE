@@ -4,7 +4,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test-mysql")
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public abstract class IntegrationTestSupport extends TestContainerSupport{
