@@ -37,6 +37,10 @@ jobs:
       ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
       LOKI_URL: ${{ secrets.LOKI_URL }}
 
+      TESTCONTAINERS_REUSE_ENABLE: true
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
+      DOCKER_HOST: unix:///var/run/docker.sock
+
     services:
       redis:
         image: redis
@@ -64,10 +68,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: Docker 권한 설정
-        run: |
-          sudo chmod 666 /var/run/docker.sock
 
       - name: 빌드 권한 부여
         run: chmod +x ./gradlew

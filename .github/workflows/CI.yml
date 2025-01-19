@@ -87,9 +87,9 @@ jobs:
         shell: bash
 
       - name: 빌드 및 테스트
-        run: ./gradlew build --info
+        run: ./gradlew build
 
-      - name: Save test reports
+      - name: 테스트 레포트 저장
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
