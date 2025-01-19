@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +53,7 @@ class VolunteerRecordRepositoryTest extends IntegrationTestSupport {
     void findVolunteerWeeklyRanking() {
 
         // given
-        LocalDate currentDate = LocalDate.now();
+        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         // 이번 주 데이터
         volunteerRecordrepository.save(VolunteerRecord.create(UUID.randomUUID(), "이번주 봉사1", currentDate, 100));
@@ -85,7 +87,7 @@ class VolunteerRecordRepositoryTest extends IntegrationTestSupport {
     void fineVolunteerMonthlyRanking() {
 
         // given
-        LocalDate currentDate = LocalDate.now();
+        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         // 이번 달 데이터
         volunteerRecordrepository.save(VolunteerRecord.create(UUID.randomUUID(), "이번달 봉사1", currentDate, 100));

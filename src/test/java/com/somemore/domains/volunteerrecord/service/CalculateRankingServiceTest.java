@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +58,7 @@ class CalculateRankingServiceTest extends IntegrationTestSupport {
     void calculateWeeklyVolunteerRanking() {
 
         // given
-        LocalDate currentDate = LocalDate.now();
+        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         // 이번 주 데이터
         volunteerRecordRepository.save(VolunteerRecord.create(UUID.randomUUID(), "이번주봉사1", currentDate, 100));
@@ -89,7 +91,7 @@ class CalculateRankingServiceTest extends IntegrationTestSupport {
     void calculateMonthlyVolunteerRanking() {
 
         // given
-        LocalDate currentDate = LocalDate.now();
+        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         // 이번 달 데이터
         volunteerRecordRepository.save(VolunteerRecord.create(UUID.randomUUID(), "이번달봉사1", currentDate, 100));

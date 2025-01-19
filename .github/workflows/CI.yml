@@ -15,7 +15,7 @@ jobs:
       DB_URL: ${{ secrets.DB_URL }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST}}
       REDIS_PORT: ${{ secrets.REDIS_PORT }}
       NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
       NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
@@ -35,11 +35,12 @@ jobs:
       S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       DEFAULT_IMG_URL: ${{ secrets.DEFAULT_IMG_URL }}
       APP_DEVELOP_MODE: ${{ secrets.APP_DEVELOP_MODE }}
-      ELASTIC_URI: ${{ secrets.ELASTIC_URI }}
+      ELASTIC_URI=localhost: ${{ secrets.ELASTIC_URI }}
       ELASTIC_USERNAME: ${{ secrets.ELASTIC_USERNAME }}
       ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
       LOKI_URL: ${{ secrets.LOKI_URL }}
 
+      TESTCONTAINERS_REUSE_ENABLE: true
       TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
       DOCKER_HOST: unix:///var/run/docker.sock
 
@@ -49,24 +50,14 @@ jobs:
         ports:
           - 6379:6379
 
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
     steps:
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
 
       - name: JDK 21 버전 설치
         uses: actions/setup-java@v4
@@ -91,11 +82,6 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Docker 설정 확인
-        run: |
-          sudo chmod 666 /var/run/docker.sock
-          docker info
-
       - name: 빌드 권한 부여
         run: chmod +x ./gradlew
         shell: bash
@@ -112,7 +98,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           github-token: ${{ github.TOKEN }}
-          script: |
+          script: | 
             const pull_number = ${{ github.event.pull_request.number }}
             const updated_title = `[BUILD FAIL] ${{ github.event.pull_request.title }}`
             await github.rest.pulls.createReview({
