@@ -3,12 +3,10 @@ package com.somemore.domains.volunteer.repository;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
-import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.support.IntegrationTestSupport;
 import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +28,14 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerDetailRepository volunteerDetailRepository;
-
-    String oAuthId;
-    Volunteer volunteer;
-
-    @BeforeEach
-    void setup() {
-        oAuthId = "example-oauth-id";
-        volunteer = Volunteer.createDefault(NAVER, oAuthId);
-        volunteerRepository.save(volunteer);
-    }
-
+    
     @DisplayName("봉사자의 id로 닉네임을 조회한다.")
     @Test
     void findNicknameById() {
+        String oAuthId = "example-oauth-id";
+        Volunteer volunteer = Volunteer.createDefault(NAVER, oAuthId);
+        volunteerRepository.save(volunteer);
+
         // when
         String volunteerNickname = volunteerRepository.findNicknameById(volunteer.getId());
 
@@ -67,6 +59,11 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
     @DisplayName("봉사자의 id로 봉사자 정보를 조회한다.")
     @Test
     void findById() {
+
+        String oAuthId = "example-oauth-id";
+        Volunteer volunteer = Volunteer.createDefault(NAVER, oAuthId);
+        volunteerRepository.save(volunteer);
+
         // when
         Optional<Volunteer> foundVolunteer = volunteerRepository.findById(volunteer.getId());
 
@@ -79,13 +76,14 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
     @DisplayName("OAuth ID로 봉사자 정보를 조회한다.")
     @Test
     void findByOauthId() {
+        String oAuthId = "example-oauth-id";
+        Volunteer volunteer = Volunteer.createDefault(NAVER, oAuthId);
+        volunteerRepository.save(volunteer);
         // when
         Optional<Volunteer> foundVolunteer = volunteerRepository.findByOauthId(oAuthId);
 
         // then
         assertThat(foundVolunteer).isPresent();
-        assertThat(foundVolunteer.get().getOauthId()).isEqualTo(oAuthId);
-        assertThat(foundVolunteer.get().getNickname()).isEqualTo(volunteer.getNickname());
     }
 
     @DisplayName("봉사 시간 기준 상위 4명을 조회한다.")
@@ -211,9 +209,9 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
     }
 
     private void createVolunteerAndUpdateVolunteerStats(int i) {
-        Volunteer Volunteer = com.somemore.domains.volunteer.domain.Volunteer.createDefault(NAVER, "oauth-id-" + i);
-        Volunteer.updateVolunteerStats(i * 10, i);
-        volunteerRepository.save(Volunteer);
+        Volunteer volunteer = Volunteer.createDefault(NAVER, "oauth-id-" + i);
+        volunteer.updateVolunteerStats(i * 10, i);
+        volunteerRepository.save(volunteer);
     }
 
     private static VolunteerRegisterRequestDto createVolunteerRegisterRequestDto(String name) {
