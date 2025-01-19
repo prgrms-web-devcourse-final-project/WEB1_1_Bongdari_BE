@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public abstract class ControllerTestSupport extends MySQLContainerSupport{
+public abstract class ControllerTestSupport extends TestContainerSupport{
 
     @Autowired
     protected MockMvc mockMvc;

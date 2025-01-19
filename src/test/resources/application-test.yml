@@ -1,0 +1,80 @@
+app:
+  front-url: "http://localhost:3000"
+  back-url: "http://localhost:8080"
+  develop:
+    mode: false
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  sql:
+    init:
+      mode: never
+
+  data:
+    redis:
+      host: localhost  # 로컬 Redis 사용
+      port: 6379
+      password:  # 테스트에서는 비밀번호 없이 연결
+
+    elasticsearch:
+      repositories:
+        enabled: true
+
+  web:
+    locale: ko_KR
+    locale-resolver: fixed
+
+  schedules:
+    cron:
+      updateCommunityBoardDocuments: "0/10 * * * * ?"
+      updateRecruitBoardDocuments: "0/10 * * * * ?"
+
+jwt:
+  secret: 63bf2c80266cd25072e53b3482e318c30d1cd18d8c98d0f5d278530a94fe28d9fbbec531e5ccb58c725c125738182357786b71f43a7172c5d0c94a17f0da44f2  # 테스트용 JWT 시크릿 키
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: test-access-key
+      secret-key: test-secret-key
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: somemore
+      base-url: https://somemore-image.s3.ap-northeast-2.amazonaws.com
+    stack:
+      auto: false
+
+default:
+  image:
+    url: ""
+
+elastic:
+  search:
+    uri: ec2-43-201-249-131.ap-northeast-2.compute.amazonaws.com:9200
+    username: elastic
+    password: changeme
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
