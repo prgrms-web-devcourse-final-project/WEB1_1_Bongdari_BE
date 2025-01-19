@@ -1,5 +1,6 @@
 package com.somemore.global.auth.jwt.service;
 
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.RefreshToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
@@ -26,7 +28,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-
+@Transactional
 class JwtServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -40,6 +42,11 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    private final UUID userId = UUID.randomUUID();
+    private final UUID roleId = UUID.randomUUID();
+    private final UserRole role = UserRole.VOLUNTEER;
+    private final UserIdentity userIdentity = UserIdentity.of(userId, roleId, role);;
+
     @AfterEach
     void tearDown() {
         redisTemplate.keys("*")
@@ -50,16 +57,14 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Test
     void generateAndValidateAccessToken() {
         // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-        TokenType tokenType = TokenType.ACCESS;
 
         // when
-        EncodedToken token = jwtService.generateToken(userId, role.getAuthority(), tokenType);
+        EncodedToken token = jwtService.generateToken(userIdentity, TokenType.ACCESS);
 
         // then
         Claims claims = jwtService.getClaims(token);
-        assertThat(claims.get("id", String.class)).isEqualTo(userId);
+        assertThat(claims.get("userId", String.class)).isEqualTo(userId.toString());
+        assertThat(claims.get("roleId", String.class)).isEqualTo(roleId.toString());
         assertThat(claims.get("role", String.class)).isEqualTo(role.getAuthority());
         assertThat(claims.getExpiration()).isNotNull();
     }
@@ -68,16 +73,14 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Test
     void generateAndValidateLoginToken() {
         // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-        TokenType tokenType = TokenType.ACCESS;
 
         // when
-        EncodedToken token = jwtService.generateToken(userId, role.getAuthority(), tokenType);
+        EncodedToken token = jwtService.generateToken(userIdentity, TokenType.SIGN_IN);
 
         // then
         Claims claims = jwtService.getClaims(token);
-        assertThat(claims.get("id", String.class)).isEqualTo(userId);
+        assertThat(claims.get("userId", String.class)).isEqualTo(userId.toString());
+        assertThat(claims.get("roleId", String.class)).isEqualTo(roleId.toString());
         assertThat(claims.get("role", String.class)).isEqualTo(role.getAuthority());
         assertThat(claims.getExpiration()).isNotNull();
     }
@@ -86,12 +89,10 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Test
     void tokenExpirationPeriodIsExact() {
         // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
 
         // when
-        EncodedToken accessToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
-        EncodedToken refreshToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.REFRESH);
+        EncodedToken accessToken = jwtService.generateToken(userIdentity, TokenType.ACCESS);
+        EncodedToken refreshToken = jwtService.generateToken(userIdentity, TokenType.REFRESH);
 
         // then
         Claims accessClaims = jwtService.getClaims(accessToken);
@@ -108,12 +109,10 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Test
     void multipleTokensForSameUserAreDifferent() {
         // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
 
         // when
-        EncodedToken token1 = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
-        EncodedToken token2 = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
+        EncodedToken token1 = jwtService.generateToken(userIdentity, TokenType.ACCESS);
+        EncodedToken token2 = jwtService.generateToken(userIdentity, TokenType.ACCESS);
 
         // then
         assertThat(token1.value()).isNotEqualTo(token2.value());
@@ -123,12 +122,10 @@ class JwtServiceTest extends IntegrationTestSupport {
     @Test
     void throwExceptionWhenRefreshTokenIsInvalid() {
         // given
-        String userId = UUID.randomUUID().toString();
-        UserRole role = UserRole.VOLUNTEER;
-        EncodedToken expiredAccessToken = createExpiredToken(userId, role);
+        EncodedToken expiredAccessToken = createExpiredToken(userId.toString(), role);
+        EncodedToken expiredRefreshToken = createExpiredToken(userId.toString(), role);
 
-        EncodedToken expiredRefreshToken = createExpiredToken(userId, role);
-        RefreshToken refreshToken = new RefreshToken(userId, expiredAccessToken, expiredRefreshToken);
+        RefreshToken refreshToken = new RefreshToken(userId.toString(), expiredAccessToken, expiredRefreshToken);
         tokenManager.save(refreshToken);
 
         // when
@@ -167,7 +164,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         EncodedToken expiredAccessToken = createExpiredToken(userId, role);
         RefreshToken oldRefreshToken = createAndSaveRefreshToken(userId, expiredAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
-        EncodedToken newAccessToken = jwtService.generateToken(userId, role.getAuthority(), TokenType.ACCESS);
+        EncodedToken newAccessToken = jwtService.generateToken(userIdentity, TokenType.ACCESS);
         RefreshToken newRefreshToken = createAndSaveRefreshToken(userId, newAccessToken, Instant.now().plusMillis(TokenType.REFRESH.getPeriodInMillis()));
 
         // when
