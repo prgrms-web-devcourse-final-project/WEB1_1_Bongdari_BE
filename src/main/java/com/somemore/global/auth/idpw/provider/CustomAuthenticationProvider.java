@@ -48,7 +48,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserIdentity userIdentity = UserIdentity.of(userId, roleId, role);
 
-        EncodedToken accessToken = generateAccessToken(userIdentity, role);
+        EncodedToken accessToken = generateAccessToken(userIdentity);
 
         return JwtAuthenticationToken.of(userIdentity, accessToken);
     }
@@ -65,7 +65,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         return centerQueryUseCase.getIdByUserId(userId);
     }
 
-    private EncodedToken generateAccessToken(UserIdentity userIdentity, UserRole role) {
+    private EncodedToken generateAccessToken(UserIdentity userIdentity) {
         return jwtUseCase.generateToken(
                 userIdentity,
                 TokenType.ACCESS
