@@ -58,7 +58,7 @@ class CalculateRankingServiceTest extends IntegrationTestSupport {
     void calculateWeeklyVolunteerRanking() {
 
         // given
-        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         // 이번 주 데이터
         volunteerRecordRepository.save(VolunteerRecord.create(UUID.randomUUID(), "이번주봉사1", currentDate, 100));
@@ -107,15 +107,15 @@ class CalculateRankingServiceTest extends IntegrationTestSupport {
         VolunteerRankingResponseDto ranking = calculateRankingService.calculateRanking();
 
         // then
-        assertThat(ranking.volunteerMonthlyResponse()).hasSize(5);
+        assertThat(ranking.volunteerMonthlyRankingResponse()).hasSize(5);
 
-        assertThat(ranking.volunteerMonthlyResponse().get(0).totalHours()).isEqualTo(100L);
-        assertThat(ranking.volunteerMonthlyResponse().get(0).ranking()).isEqualTo(1);
+        assertThat(ranking.volunteerMonthlyRankingResponse().get(0).totalHours()).isEqualTo(100L);
+        assertThat(ranking.volunteerMonthlyRankingResponse().get(0).ranking()).isEqualTo(1);
 
-        assertThat(ranking.volunteerMonthlyResponse().get(1).totalHours()).isEqualTo(100L);
-        assertThat(ranking.volunteerMonthlyResponse().get(1).ranking()).isEqualTo(1);
+        assertThat(ranking.volunteerMonthlyRankingResponse().get(1).totalHours()).isEqualTo(100L);
+        assertThat(ranking.volunteerMonthlyRankingResponse().get(1).ranking()).isEqualTo(1);
 
-        assertThat(ranking.volunteerMonthlyResponse().get(3).totalHours()).isEqualTo(60L);
-        assertThat(ranking.volunteerMonthlyResponse().get(3).ranking()).isEqualTo(3);
+        assertThat(ranking.volunteerMonthlyRankingResponse().get(3).totalHours()).isEqualTo(60L);
+        assertThat(ranking.volunteerMonthlyRankingResponse().get(3).ranking()).isEqualTo(3);
     }
 }

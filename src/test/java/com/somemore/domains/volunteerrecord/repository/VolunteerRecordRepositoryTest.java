@@ -53,7 +53,7 @@ class VolunteerRecordRepositoryTest extends IntegrationTestSupport {
     void findVolunteerWeeklyRanking() {
 
         // given
-        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate currentDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         // 이번 주 데이터
         volunteerRecordrepository.save(VolunteerRecord.create(UUID.randomUUID(), "이번주 봉사1", currentDate, 100));

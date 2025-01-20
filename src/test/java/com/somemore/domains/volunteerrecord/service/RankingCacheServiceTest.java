@@ -77,7 +77,7 @@ class RankingCacheServiceTest extends IntegrationTestSupport {
                                     tuple(id2.toString(), 90, 2)
                             );
 
-                    assertThat(dto.volunteerMonthlyResponse())
+                    assertThat(dto.volunteerMonthlyRankingResponse())
                             .hasSize(2)
                             .extracting("volunteerId", "totalHours", "ranking")
                             .containsExactly(

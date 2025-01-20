@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public record VolunteerRankingResponseDto(
         List<VolunteerTotalRankingResponseDto> volunteerTotalRankingResponse,
-        List<VolunteerMonthlyRankingResponseDto> volunteerMonthlyResponse,
+        List<VolunteerMonthlyRankingResponseDto> volunteerMonthlyRankingResponse,
         List<VolunteerWeeklyRankingResponseDto> volunteerWeeklyRankingResponse
 ) {
     public static VolunteerRankingResponseDto of(
@@ -21,7 +21,7 @@ public record VolunteerRankingResponseDto(
 
         return VolunteerRankingResponseDto.builder()
                 .volunteerTotalRankingResponse(totalRanking)
-                .volunteerMonthlyResponse(monthlyRanking)
+                .volunteerMonthlyRankingResponse(monthlyRanking)
                 .volunteerWeeklyRankingResponse(weeklyRanking)
                 .build();
     }

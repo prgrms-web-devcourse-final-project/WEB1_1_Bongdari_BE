@@ -82,7 +82,7 @@ class GetVolunteerRankingServiceTest extends IntegrationTestSupport {
                         tuple(id2.toString(), 90, 2, "봉사자2")
                 );
 
-        assertThat(result.volunteerMonthlyResponse())
+        assertThat(result.volunteerMonthlyRankingResponse())
                 .hasSize(2)
                 .extracting("volunteerId", "totalHours", "ranking", "nickname")
                 .containsExactly(

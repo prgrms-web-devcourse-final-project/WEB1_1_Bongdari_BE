@@ -51,7 +51,7 @@ class VolunteerRankingRedisRepositoryTest {
 
         // then
         verify(valueOperations, times(1)).set("volunteer:total_ranking", rankings.volunteerTotalRankingResponse(), Duration.ofMinutes(60));
-        verify(valueOperations, times(1)).set("volunteer:monthly_ranking", rankings.volunteerMonthlyResponse(), Duration.ofMinutes(60));
+        verify(valueOperations, times(1)).set("volunteer:monthly_ranking", rankings.volunteerMonthlyRankingResponse(), Duration.ofMinutes(60));
         verify(valueOperations, times(1)).set("volunteer:weekly_ranking", rankings.volunteerWeeklyRankingResponse(), Duration.ofMinutes(60));
     }
 
@@ -62,7 +62,7 @@ class VolunteerRankingRedisRepositoryTest {
         // given
         VolunteerRankingResponseDto rankings = createVolunteerRankingResponseDto();
         when(valueOperations.get("volunteer:total_ranking")).thenReturn(rankings.volunteerTotalRankingResponse());
-        when(valueOperations.get("volunteer:monthly_ranking")).thenReturn(rankings.volunteerMonthlyResponse());
+        when(valueOperations.get("volunteer:monthly_ranking")).thenReturn(rankings.volunteerMonthlyRankingResponse());
         when(valueOperations.get("volunteer:weekly_ranking")).thenReturn(rankings.volunteerWeeklyRankingResponse());
 
         // when

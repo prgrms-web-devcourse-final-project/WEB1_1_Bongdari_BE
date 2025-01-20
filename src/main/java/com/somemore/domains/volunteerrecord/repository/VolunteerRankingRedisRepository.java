@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class VolunteerRankingRedisRepository {
+public class VolunteerRankingRedisRepository implements VolunteerRankingCacheRepository{
 
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -25,7 +25,7 @@ public class VolunteerRankingRedisRepository {
 
     public void saveRanking(VolunteerRankingResponseDto rankings) {
         redisTemplate.opsForValue().set(TOTAL_RANKING_KEY, rankings.volunteerTotalRankingResponse(), CACHE_TTL);
-        redisTemplate.opsForValue().set(MONTHLY_RANKING_KEY, rankings.volunteerMonthlyResponse(), CACHE_TTL);
+        redisTemplate.opsForValue().set(MONTHLY_RANKING_KEY, rankings.volunteerMonthlyRankingResponse(), CACHE_TTL);
         redisTemplate.opsForValue().set(WEEKLY_RANKING_KEY, rankings.volunteerWeeklyRankingResponse(), CACHE_TTL);
     }
 
