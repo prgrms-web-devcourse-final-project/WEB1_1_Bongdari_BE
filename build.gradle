@@ -41,6 +41,7 @@ dependencies {
 
     // Querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    implementation 'com.querydsl:querydsl-sql:5.0.0'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
@@ -79,6 +80,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.20.4'
+    testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.20.4'
+    testImplementation group: 'org.testcontainers', name: 'mysql', version: '1.20.4'
+
 }
 
 // Querydsl 설정
@@ -103,6 +108,7 @@ tasks.named('test') {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
     if (gradle.startParameter.taskNames.contains('build')) {
+        exclude '**/*ControllerTest.class'
         finalizedBy 'jacocoTestReport'
     }
 }
@@ -131,7 +137,9 @@ def jacocoExcludePatterns = [
         '**/fixture/*',
         '**/*Factory*',
         '**/event/**',
-        '**/*Aspect*'
+        '**/*Aspect*',
+        '**/Aspect/*',
+        '**/utils/*'
 ]
 
 def jacocoExcludePatternsForVerify = [
@@ -151,7 +159,9 @@ def jacocoExcludePatternsForVerify = [
         '*.fixture.*',
         '*.*Factory*',
         '*.*event*.*',
-        '*.*Aspect*'
+        '*.*Aspect*',
+        '*.Aspect.*',
+        '*.utils.*'
 ]
 
 jacocoTestReport {

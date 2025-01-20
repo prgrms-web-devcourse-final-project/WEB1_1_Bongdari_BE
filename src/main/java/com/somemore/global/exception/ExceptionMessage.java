@@ -69,6 +69,9 @@ public enum ExceptionMessage {
     // NOTE
     NOT_EXISTS_NOTE("존재하지 않는 쪽지입니다."),
 
+    // VOLUNTEER RECORD
+    NOT_EXISTS_VOLUNTEER_RANKING("랭킹 정보가 존재하지 않습니다.")
+
     ;
     private final String message;
 }

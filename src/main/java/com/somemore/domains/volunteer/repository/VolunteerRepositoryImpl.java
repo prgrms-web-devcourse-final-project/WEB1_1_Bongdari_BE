@@ -103,7 +103,7 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
                                 condition,
                                 isNotDeleted()
                         )
-                        .fetchOne()
+                        .fetchFirst()
         );
     }
 

@@ -1,9 +1,6 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      [ main ]
   pull_request:
     branches:
       [ main ]
@@ -13,14 +10,6 @@ on:
 jobs:
   Continuous-Integration:
     runs-on: ubuntu-latest
-
-    #Action 환경에서 Redis 실행을 위한 설정 추후 서버 배포시 제거 예정
-    services:
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-
 
     env:
       DB_URL: ${{ secrets.DB_URL }}
@@ -51,12 +40,24 @@ jobs:
       ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
       LOKI_URL: ${{ secrets.LOKI_URL }}
 
+      TESTCONTAINERS_REUSE_ENABLE: true
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
+      DOCKER_HOST: unix:///var/run/docker.sock
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
 
     steps:
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
 
       - name: JDK 21 버전 설치
         uses: actions/setup-java@v4
@@ -88,6 +89,13 @@ jobs:
       - name: 빌드 및 테스트
         run: ./gradlew build
 
+      - name: 테스트 레포트 저장
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: build/reports/tests/test
+
       - name: Close PR, if build fail
         if: ${{ failure() }}
         uses: actions/github-script@v6
@@ -113,6 +121,6 @@ jobs:
 
       - name: SonarCloud 빌드및 분석
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonar --info

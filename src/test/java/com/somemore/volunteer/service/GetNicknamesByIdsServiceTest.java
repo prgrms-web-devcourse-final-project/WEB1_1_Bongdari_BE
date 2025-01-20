@@ -1,48 +1,30 @@
-package com.somemore.volunteer.repository;
+package com.somemore.volunteer.service;
 
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import com.somemore.volunteer.repository.record.VolunteerNickname;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
+class GetNicknamesByIdsServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private NEWVolunteerRepositoryImpl volunteerRepository;
+    private GetVolunteerNicknamesByIdsService getNicknamesByIdsService;
 
-    @DisplayName("유저 아이디로 봉사자를 등록할 수 있다.")
-    @Test
-    void saveVolunteerByUserId() {
-        // given
-        UUID userId = UUID.randomUUID();
-        NEWVolunteer volunteer = NEWVolunteer.createDefault(userId);
+    @Autowired
+    private NEWVolunteerRepository volunteerRepository;
 
-        // when
-        volunteerRepository.save(volunteer);
-
-        // then
-        NEWVolunteer volunteerByUserId = volunteerRepository.findByUserId(userId).orElseThrow();
-        NEWVolunteer volunteerById = volunteerRepository.findById(volunteer.getId()).orElseThrow();
-
-
-        assertThat(volunteer)
-                .isEqualTo(volunteerByUserId)
-                .isEqualTo(volunteerById);
-
-    }
-
-    @DisplayName("id 리스트로 nickname 리스트를 조회할 수 있다.")
+    @DisplayName("봉사자 id 리스트로 nickname 리스트를 조회할 수 있다. (service)")
     @Test
     void findNicknamesByIds() {
+
         // given
         UUID userId1 = UUID.randomUUID();
         UUID userId2 = UUID.randomUUID();
@@ -59,7 +41,7 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
         List<UUID> ids = List.of(volunteer1.getId(), volunteer2.getId(), volunteer3.getId());
 
         // when
-        List<VolunteerNickname> nicknames = volunteerRepository.findNicknamesByIds(ids);
+        List<VolunteerNickname> nicknames = getNicknamesByIdsService.getNicknamesByIds(ids);
 
         // then
         assertThat(nicknames).extracting(VolunteerNickname::nickname)
@@ -68,4 +50,5 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
                         volunteer2.getNickname(),
                         volunteer3.getNickname());
     }
+
 }

@@ -1,12 +1,15 @@
 package com.somemore.volunteer.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.domain.QNEWVolunteer;
+import com.somemore.volunteer.repository.record.VolunteerNickname;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,6 +49,21 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                         )
                         .fetchOne()
         );
+    }
+
+    @Override
+    public List<VolunteerNickname> findNicknamesByIds(List<UUID> ids) {
+
+        return queryFactory
+                .select(Projections.constructor(VolunteerNickname.class,
+                        volunteer.id,
+                        volunteer.nickname))
+                .from(volunteer)
+                .where(
+                        volunteer.id.in(ids),
+                        isNotDeleted()
+                )
+                .fetch();
     }
 
     private static BooleanExpression isNotDeleted() {

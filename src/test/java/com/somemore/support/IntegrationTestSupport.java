@@ -7,6 +7,6 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public abstract class IntegrationTestSupport {
+public abstract class IntegrationTestSupport extends TestContainerSupport{
 
 }
