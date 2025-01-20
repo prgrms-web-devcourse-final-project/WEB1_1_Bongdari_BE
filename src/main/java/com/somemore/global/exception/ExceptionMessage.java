@@ -69,6 +69,10 @@ public enum ExceptionMessage {
     // NOTE
     NOT_EXISTS_NOTE("존재하지 않는 쪽지입니다."),
 
+    // AUTH
+    AUTHENTICATION_MISSING("사용자가 인증되지 않았습니다."),
+    INVALID_PRINCIPAL_TYPE("인증 객체 타입이 올바르지 않습니다."),
+
     // VOLUNTEER RECORD
     NOT_EXISTS_VOLUNTEER_RANKING("랭킹 정보가 존재하지 않습니다.")
 
