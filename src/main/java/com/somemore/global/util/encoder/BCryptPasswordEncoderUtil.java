@@ -1,4 +1,4 @@
-package com.somemore.global.encoder;
+package com.somemore.global.util.encoder;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

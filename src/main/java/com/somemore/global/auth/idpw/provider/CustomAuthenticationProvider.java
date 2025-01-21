@@ -6,7 +6,7 @@ import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
-import com.somemore.global.encoder.BCryptPasswordEncoderUtil;
+import com.somemore.global.util.encoder.BCryptPasswordEncoderUtil;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.usecase.UserQueryUseCase;

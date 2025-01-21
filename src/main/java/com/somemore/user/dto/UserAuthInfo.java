@@ -1,7 +1,7 @@
 package com.somemore.user.dto;
 
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
-import com.somemore.global.encoder.BCryptPasswordEncoderUtil;
+import com.somemore.global.util.encoder.BCryptPasswordEncoderUtil;
 
 import java.util.UUID;
 
