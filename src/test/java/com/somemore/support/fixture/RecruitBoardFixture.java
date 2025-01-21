@@ -1,19 +1,17 @@
 package com.somemore.support.fixture;
 
-import com.somemore.domains.recruitboard.domain.RecruitBoard;
-import com.somemore.domains.recruitboard.domain.RecruitStatus;
-import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
-import com.somemore.domains.recruitboard.domain.VolunteerCategory;
-
-import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.recruitboard.domain.RecruitStatus;
+import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
+import com.somemore.domains.recruitboard.domain.VolunteerCategory;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class RecruitBoardFixture {
 
@@ -231,7 +229,8 @@ public class RecruitBoardFixture {
                 .build();
     }
 
-    public static RecruitBoard createRecruitBoard(String region, VolunteerCategory volunteerCategory) {
+    public static RecruitBoard createRecruitBoard(String region,
+            VolunteerCategory volunteerCategory) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(region)
@@ -298,7 +297,7 @@ public class RecruitBoardFixture {
     }
 
     public static RecruitBoard createCompletedRecruitBoard(UUID centerId,
-                                                           VolunteerCategory category) {
+            VolunteerCategory category) {
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(REGION)
                 .recruitmentCount(RECRUITMENT_COUNT)
@@ -309,47 +308,32 @@ public class RecruitBoardFixture {
                 .admitted(ADMITTED)
                 .build();
 
-        RecruitBoard recruitBoard = RecruitBoard.builder()
+        return RecruitBoard.builder()
                 .centerId(centerId)
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
                 .recruitmentInfo(recruitmentInfo)
-                .status(STATUS)
+                .status(COMPLETED)
                 .build();
-
-        setRecruitStatus(recruitBoard, COMPLETED);
-
-        return recruitBoard;
     }
 
     public static RecruitBoard createCompletedRecruitBoard(VolunteerCategory category) {
-        RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(), category);
-        setRecruitStatus(recruitBoard, COMPLETED);
-        return recruitBoard;
+        return createCompletedRecruitBoard(UUID.randomUUID(), category);
     }
 
     public static RecruitBoard createCompletedRecruitBoard() {
         RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
                 VOLUNTEER_CATEGORY);
-        setRecruitStatus(recruitBoard, COMPLETED);
+        recruitBoard.updateRecruitStatus(COMPLETED);
         return recruitBoard;
     }
 
     public static RecruitBoard createCloseRecruitBoard() {
         RecruitBoard recruitBoard = createCompletedRecruitBoard(UUID.randomUUID(),
                 VOLUNTEER_CATEGORY);
-        setRecruitStatus(recruitBoard, CLOSED);
+        recruitBoard.updateRecruitStatus(CLOSED);
         return recruitBoard;
     }
 
-    private static void setRecruitStatus(RecruitBoard recruitBoard, RecruitStatus status) {
-        try {
-            Field recruitStatusField = RecruitBoard.class.getDeclaredField("recruitStatus");
-            recruitStatusField.setAccessible(true); // private 필드 접근 가능 설정
-            recruitStatusField.set(recruitBoard, status); // 필드 값 설정
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("리플렉션으로 recruitStatus를 설정하는 것에 실패했습니다", e);
-        }
-    }
 }

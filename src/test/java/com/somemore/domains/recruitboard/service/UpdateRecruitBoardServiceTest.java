@@ -69,7 +69,6 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         LocalDateTime current = createCurrentDateTime();
         LocalDateTime newStartDateTime = createUpdateStartDateTime();
         LocalDateTime newEndDateTime = newStartDateTime.plusHours(3);
-        String newImgUrl = "https://image.domain.com/updates";
         RecruitBoardUpdateRequestDto dto = RecruitBoardUpdateRequestDto.builder()
                 .title("업데이트 제목")
                 .content("업데이트 내용")
@@ -85,8 +84,7 @@ class UpdateRecruitBoardServiceTest extends IntegrationTestSupport {
         setMockClock(current);
 
         // when
-        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId
-        );
+        updateRecruitBoardService.updateRecruitBoard(dto, recruitBoard.getId(), centerId);
 
         // then
         RecruitBoard updatedRecruitBoard = recruitBoardRepository.findById(recruitBoard.getId())

@@ -68,7 +68,6 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         UUID centerId = UUID.randomUUID();
-        String imgUrl = "https://image.domain.com/links";
 
         // when
         Long saveId = createRecruitBoardService.createRecruitBoard(dto, centerId);
