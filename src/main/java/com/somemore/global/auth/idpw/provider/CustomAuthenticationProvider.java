@@ -6,6 +6,7 @@ import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
+import com.somemore.global.encoder.BCryptPasswordEncoderUtil;
 import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.usecase.UserQueryUseCase;
@@ -16,7 +17,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +28,6 @@ import java.util.UUID;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtUseCase jwtUseCase;
-    private final PasswordEncoder passwordEncoder;
     private final UserQueryUseCase userQueryUseCase;
     private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
     private final NEWCenterQueryUseCase centerQueryUseCase;
@@ -73,7 +72,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     private void validatePassword(String rawPassword, String encodedPassword) {
-        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+        if (!BCryptPasswordEncoderUtil.matches(rawPassword, encodedPassword)) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
