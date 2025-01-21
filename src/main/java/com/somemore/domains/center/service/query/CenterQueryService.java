@@ -46,6 +46,17 @@ public class CenterQueryService implements CenterQueryUseCase {
         }
     }
 
+    @Override
+    public String getNameById(UUID id) {
+        String name = centerRepository.findNameById(id);
+
+        if (name == null || name.isBlank()) {
+            throw new BadRequestException(NOT_EXISTS_CENTER);
+        }
+
+        return name;
+    }
+
     private Center getCenterById(UUID centerId) {
         return centerRepository.findCenterById(centerId)
                 .orElseThrow(() -> new BadRequestException(NOT_EXISTS_CENTER.getMessage()));

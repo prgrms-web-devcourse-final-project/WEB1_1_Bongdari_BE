@@ -21,4 +21,6 @@ public interface CenterRepository {
     List<CenterOverviewInfo> findCenterOverviewsByIds(List<UUID> ids);
 
     void deleteAllInBatch();
+
+    String findNameById(UUID id);
 }
