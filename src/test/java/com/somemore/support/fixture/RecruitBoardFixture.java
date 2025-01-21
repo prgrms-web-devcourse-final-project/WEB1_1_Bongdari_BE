@@ -24,7 +24,6 @@ public class RecruitBoardFixture {
     private static final long LOCATION_ID = 1L;
     private static final String TITLE = "봉사모집제목";
     private static final String CONTENT = "봉사모집내용";
-    private static final String IMG_URL = "https://image.domain.com/links";
     private static final VolunteerCategory VOLUNTEER_CATEGORY = OTHER;
     private static final RecruitStatus STATUS = RECRUITING;
 

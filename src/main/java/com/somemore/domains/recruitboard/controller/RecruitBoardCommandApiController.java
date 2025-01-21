@@ -1,8 +1,6 @@
 package com.somemore.domains.recruitboard.controller;
 
 
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDto;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardLocationUpdateRequestDto;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardStatusUpdateRequestDto;
@@ -12,8 +10,6 @@ import com.somemore.domains.recruitboard.usecase.DeleteRecruitBoardUseCase;
 import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
 import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
-import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,9 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Recruit Board Command API", description = "봉사 활동 모집글 생성 수정 삭제 API")
 @RequiredArgsConstructor
