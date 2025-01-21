@@ -1,9 +1,12 @@
 package com.somemore.global.util.encoder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.InvocationTargetException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BCryptPasswordEncoderUtilTest {
 
@@ -32,5 +35,19 @@ class BCryptPasswordEncoderUtilTest {
 
         // then
         assertThat(BCryptPasswordEncoderUtil.matches(rawPassword, encodedPassword)).isTrue();
+    }
+
+    @Test
+    @DisplayName("인스턴스화 할 수 없다.")
+    void testConstruct() throws Exception {
+        // given
+        var constructor = BCryptPasswordEncoderUtil.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        // when & then
+        assertThatThrownBy(constructor::newInstance)
+                .isInstanceOf(InvocationTargetException.class)
+                .extracting(Throwable::getCause)
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 }
