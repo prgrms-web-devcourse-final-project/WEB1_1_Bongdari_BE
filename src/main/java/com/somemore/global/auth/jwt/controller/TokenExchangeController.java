@@ -1,6 +1,7 @@
 package com.somemore.global.auth.jwt.controller;
 
 import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.manager.TokenManager;
 import com.somemore.global.common.response.ApiResponse;
@@ -23,7 +24,7 @@ public class TokenExchangeController {
 
     @GetMapping("/exchange")
     public ApiResponse<String> exchangeToken(
-            @CurrentUser UUID userId
+            @UserId UUID userId
     ) {
         EncodedToken accessToken = tokenManager.getAccessTokenByUserId(userId);
 
