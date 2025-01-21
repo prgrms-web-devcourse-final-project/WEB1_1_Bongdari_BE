@@ -1,6 +1,7 @@
 package com.somemore.global.auth.jwt.filter;
 
 import com.somemore.global.auth.authentication.JwtAuthenticationToken;
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
@@ -14,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -49,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwtUseCase.processAccessToken(accessToken, response);
 
         Claims claims = jwtUseCase.getClaims(accessToken);
-        Authentication auth = createAuthenticationToken(claims, accessToken);
+        JwtAuthenticationToken auth = createAuthenticationToken(claims, accessToken);
 
         SecurityContextHolder.getContext().setAuthentication(auth);
         filterChain.doFilter(request, response);
@@ -96,9 +96,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private JwtAuthenticationToken createAuthenticationToken(Claims claims,
                                                              EncodedToken accessToken) {
-        String userId = claims.get("id", String.class);
-        String role = claims.get("role", String.class);
+        UserIdentity userIdentity = UserIdentity.from(claims);
 
-        return JwtAuthenticationToken.of(userId, role, accessToken);
+        return JwtAuthenticationToken.of(userIdentity, accessToken);
     }
 }

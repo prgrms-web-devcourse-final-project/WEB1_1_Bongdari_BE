@@ -1,5 +1,6 @@
 package com.somemore.global.auth.sign;
 
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.exception.JwtErrorType;
@@ -17,12 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Transactional
 class SignOutServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -35,15 +38,15 @@ class SignOutServiceTest extends IntegrationTestSupport {
     private RedisTemplate<String, Object> redisTemplate;
 
     private MockHttpServletResponse response;
-    private UUID userId;
-    private UserRole role;
 
+    private final UUID userId = UUID.randomUUID();
+    private final UUID roleId = UUID.randomUUID();
+    private final UserRole role = UserRole.VOLUNTEER;
+    private final UserIdentity userIdentity = UserIdentity.of(userId, roleId, role);;
 
     @BeforeEach
     void setUp() {
         response = new MockHttpServletResponse();
-        userId = UUID.randomUUID();
-        role = UserRole.VOLUNTEER;
     }
 
     @AfterEach
@@ -53,15 +56,15 @@ class SignOutServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("로그아웃 시 액세스 토큰 쿠키를 삭제하고 리프레시 토큰을 제거해야 한다.")
+    @DisplayName("로그아웃 시 리프레시 토큰을 제거해야 한다.")
     void signOutDeletesTokens() {
         // Given
-        EncodedToken accessToken = jwtGenerator.generateToken(userId.toString(), role.getAuthority(), TokenType.ACCESS);
+        EncodedToken accessToken = jwtGenerator.generateToken(userIdentity, TokenType.ACCESS);
 
         RefreshToken refreshToken = new RefreshToken(
                 userId.toString(),
                 accessToken,
-                jwtGenerator.generateToken(userId.toString(), role.getAuthority(), TokenType.REFRESH));
+                jwtGenerator.generateToken(userIdentity, TokenType.REFRESH));
 
         tokenManager.save(refreshToken);
 

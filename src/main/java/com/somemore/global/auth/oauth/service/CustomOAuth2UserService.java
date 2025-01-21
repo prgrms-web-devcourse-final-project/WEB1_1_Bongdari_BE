@@ -36,6 +36,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private OAuthProvider extractOAuthProvider(OAuth2UserRequest userRequest) {
-        return OAuthProvider.from(userRequest.getClientRegistration().getRegistrationId());
+        String providerName = userRequest.getClientRegistration().getRegistrationId();
+        return OAuthProvider.from(providerName);
     }
 }

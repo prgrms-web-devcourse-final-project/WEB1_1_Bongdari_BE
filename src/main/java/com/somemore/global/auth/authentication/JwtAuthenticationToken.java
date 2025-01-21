@@ -1,22 +1,20 @@
 package com.somemore.global.auth.authentication;
 
 import com.somemore.global.auth.jwt.domain.EncodedToken;
-import com.somemore.user.domain.User;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
-    private final Serializable principal;
+    private final UserIdentity principal;
     private final transient Object credentials;
 
-    public JwtAuthenticationToken(Serializable principal,
+    public JwtAuthenticationToken(UserIdentity principal,
                                   Object credentials,
                                   Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
@@ -35,19 +33,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         return principal;
     }
 
-    public static JwtAuthenticationToken of(User user, EncodedToken accessToken) {
+    public static JwtAuthenticationToken of(UserIdentity userIdentity, EncodedToken accessToken) {
         return new JwtAuthenticationToken(
-                user.getId(),
+                userIdentity,
                 accessToken,
-                List.of(new SimpleGrantedAuthority(user.getRole().getAuthority()))
-        );
-    }
-
-    public static JwtAuthenticationToken of(String userId, String role, EncodedToken accessToken) {
-        return new JwtAuthenticationToken(
-                userId,
-                accessToken,
-                List.of(new SimpleGrantedAuthority(role))
+                List.of(new SimpleGrantedAuthority(userIdentity.role().getAuthority()))
         );
     }
 }

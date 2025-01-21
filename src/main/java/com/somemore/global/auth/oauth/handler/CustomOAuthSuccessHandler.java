@@ -1,5 +1,6 @@
 package com.somemore.global.auth.oauth.handler;
 
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
@@ -8,6 +9,7 @@ import com.somemore.global.auth.oauth.domain.CustomOAuth2User;
 import com.somemore.global.auth.oauth.processor.OAuthUserProcessor;
 import com.somemore.global.auth.redirect.RedirectUseCase;
 import com.somemore.user.domain.UserRole;
+import com.somemore.volunteer.usecase.NEWVolunteerQueryUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import java.util.UUID;
 public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final OAuthUserProcessor oauthUserProcessor;
+    private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
     private final CookieUseCase cookieUseCase;
     private final RedirectUseCase redirectUseCase;
@@ -37,9 +40,14 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                         HttpServletResponse response,
                                         Authentication authentication) {
         CustomOAuth2User oauthUser = extractOAuthUser(authentication);
-        UUID userId = oauthUserProcessor.fetchUserIdByOAuthUser(oauthUser);
 
-        processAccessToken(response, userId);
+        UUID userId = oauthUserProcessor.fetchUserIdByOAuthUser(oauthUser);
+        UUID volunteerId = volunteerQueryUseCase.getIdByUserId(userId);
+        UserRole role = UserRole.getOAuthUserDefaultRole();
+
+        UserIdentity userIdentity = UserIdentity.of(userId, volunteerId, role);
+
+        processToken(response, userIdentity);
         redirect(request, response);
     }
 
@@ -48,13 +56,10 @@ public class CustomOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         redirectUseCase.redirect(request, response, SUCCESS_PATH);
     }
 
-    private void processAccessToken(HttpServletResponse response, UUID userId) {
-        generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(
-                userId, UserRole.getOAuthUserDefaultRole());
+    private void processToken(HttpServletResponse response, UserIdentity userIdentity) {
+        generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(userIdentity);
 
-        EncodedToken loginToken =
-                generateTokensOnLoginUseCase.generateLoginToken(
-                        userId, UserRole.getOAuthUserDefaultRole());
+        EncodedToken loginToken = generateTokensOnLoginUseCase.generateLoginToken(userIdentity);
 
         cookieUseCase.setToken(response, loginToken.value(), TokenType.SIGN_IN);
     }

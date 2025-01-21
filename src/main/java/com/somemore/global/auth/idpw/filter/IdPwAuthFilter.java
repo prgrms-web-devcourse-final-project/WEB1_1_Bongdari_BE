@@ -1,9 +1,9 @@
 package com.somemore.global.auth.idpw.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
-import com.somemore.user.domain.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,11 +16,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +26,6 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
-    //    private final CookieUseCase cookieUseCase;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -43,22 +40,11 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
         response.setStatus(HttpServletResponse.SC_OK);
-        String userId = authResult.getName();
-        String role = extractRole(authResult);
-        EncodedToken accessToken =
-                generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(
-                        UUID.fromString(userId),
-                        UserRole.from(role));
+
+        UserIdentity userIdentity = (UserIdentity) authResult.getPrincipal();
+        EncodedToken accessToken = generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(userIdentity);
 
         response.setHeader("Authorization", accessToken.getValueWithPrefix());
-        // cookieUseCase.setAccessToken(response, accessToken.value());
-    }
-
-    private static String extractRole(Authentication authResult) {
-        return authResult.getAuthorities().stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElseThrow(() -> new IllegalStateException("유저 권한 자체가 존재하지 않습니다."));
     }
 
     @Override

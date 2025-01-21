@@ -1,5 +1,6 @@
 package com.somemore.global.auth.jwt.generator;
 
+import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
 import io.jsonwebtoken.Claims;
@@ -20,8 +21,8 @@ public class HmacJwtGenerator implements JwtGenerator {
     public static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
     private final SecretKey secretKey;
 
-    public EncodedToken generateToken(String userId, String role, TokenType tokenType) {
-        Claims claims = buildClaims(userId, role);
+    public EncodedToken generateToken(UserIdentity userIdentity, TokenType tokenType) {
+        Claims claims = buildClaims(userIdentity);
         Instant now = Instant.now();
         Instant expiration = now.plusMillis(tokenType.getPeriodInMillis());
         String uniqueId = UUID.randomUUID().toString(); // JTI
@@ -37,11 +38,11 @@ public class HmacJwtGenerator implements JwtGenerator {
         );
     }
 
-    private static Claims buildClaims(String userId, String role) {
-
+    private static Claims buildClaims(UserIdentity userIdentity) {
         return Jwts.claims()
-                .add("id", userId)
-                .add("role", role)
+                .add("userId", userIdentity.userId())
+                .add("roleId", userIdentity.roleId())
+                .add("role", userIdentity.role().getAuthority())
                 .build();
     }
 }
