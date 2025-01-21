@@ -7,8 +7,7 @@ import java.util.UUID;
 
 public interface UpdateRecruitBoardUseCase {
 
-    void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId,
-            String imgUrl);
+    void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId);
 
     void updateRecruitBoardLocation(RecruitBoardLocationUpdateRequestDto requestDto, Long id,
             UUID centerId);

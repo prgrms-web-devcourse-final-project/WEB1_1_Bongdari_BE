@@ -10,7 +10,6 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDt
 import com.somemore.domains.recruitboard.usecase.CreateRecruitBoardUseCase;
 import com.somemore.domains.recruitboard.usecase.DeleteRecruitBoardUseCase;
 import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
@@ -41,35 +40,30 @@ public class RecruitBoardCommandApiController {
     private final CreateRecruitBoardUseCase createRecruitBoardUseCase;
     private final UpdateRecruitBoardUseCase updateRecruitBoardUseCase;
     private final DeleteRecruitBoardUseCase deleteRecruitBoardUseCase;
-    private final ImageUploadUseCase imageUploadUseCase;
 
     @Secured("ROLE_CENTER")
     @Operation(summary = "봉사 활동 모집글 등록", description = "봉사 활동 모집글을 등록합니다.")
-    @PostMapping(value = "/recruit-board", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/recruit-board")
     public ApiResponse<Long> createRecruitBoard(
             @RoleId UUID centerId,
-            @Valid @RequestPart("data") RecruitBoardCreateRequestDto requestDto,
-            @RequestPart(value = "img_file", required = false) MultipartFile image
+            @Valid @RequestBody RecruitBoardCreateRequestDto requestDto
     ) {
-        String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
         return ApiResponse.ok(
                 201,
-                createRecruitBoardUseCase.createRecruitBoard(requestDto, centerId, imgUrl),
+                createRecruitBoardUseCase.createRecruitBoard(requestDto, centerId),
                 "봉사 활동 모집글 등록 성공"
         );
     }
 
     @Secured("ROLE_CENTER")
     @Operation(summary = "봉사 활동 모집글 수정", description = "봉사 활동 모집글을 수정합니다.")
-    @PutMapping(value = "/recruit-board/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/recruit-board/{id}")
     public ApiResponse<String> updateRecruitBoard(
             @RoleId UUID centerId,
             @PathVariable Long id,
-            @Valid @RequestPart("data") RecruitBoardUpdateRequestDto requestDto,
-            @RequestPart(value = "img_file", required = false) MultipartFile image
+            @Valid @RequestBody RecruitBoardUpdateRequestDto requestDto
     ) {
-        String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
-        updateRecruitBoardUseCase.updateRecruitBoard(requestDto, id, centerId, imgUrl);
+        updateRecruitBoardUseCase.updateRecruitBoard(requestDto, id, centerId);
         return ApiResponse.ok("봉사 활동 모집글 수정 성공");
     }
 

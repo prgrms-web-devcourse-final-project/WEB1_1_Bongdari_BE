@@ -28,11 +28,11 @@ public class CreateRecruitBoardService implements CreateRecruitBoardUseCase {
     private final ServerEventPublisher serverEventPublisher;
 
     @Override
-    public Long createRecruitBoard(RecruitBoardCreateRequestDto dto, UUID centerId, String imgUrl) {
+    public Long createRecruitBoard(RecruitBoardCreateRequestDto dto, UUID centerId) {
         recruitBoardValidator.validateRecruitBoardTime(dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
 
         Long locationId = createLocationUseCase.createLocation(dto.location());
-        RecruitBoard recruitBoard = dto.toEntity(centerId, locationId, imgUrl);
+        RecruitBoard recruitBoard = dto.toEntity(centerId, locationId);
 
         recruitBoardRepository.save(recruitBoard);
 

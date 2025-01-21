@@ -50,30 +50,25 @@ public class RecruitBoard extends BaseEntity {
     @Column(name = "recruit_status", nullable = false, length = 20)
     private RecruitStatus recruitStatus;
 
-    @Column(name = "img_url", nullable = false)
-    private String imgUrl;
-
     @Builder
     public RecruitBoard(UUID centerId, Long locationId, String title, String content,
-            RecruitmentInfo recruitmentInfo, RecruitStatus status, String imgUrl) {
+            RecruitmentInfo recruitmentInfo, RecruitStatus status) {
         this.centerId = centerId;
         this.locationId = locationId;
         this.title = title;
         this.content = content;
         this.recruitmentInfo = recruitmentInfo;
         this.recruitStatus = status;
-        this.imgUrl = imgUrl;
     }
 
     public boolean isWriter(UUID centerId) {
         return this.centerId.equals(centerId);
     }
 
-    public void updateWith(RecruitBoardUpdateRequestDto dto, String imgUrl) {
+    public void updateWith(RecruitBoardUpdateRequestDto dto) {
         updateRecruitmentInfo(dto);
         this.title = dto.title();
         this.content = dto.content();
-        this.imgUrl = imgUrl;
     }
 
     public void updateWith(String region) {

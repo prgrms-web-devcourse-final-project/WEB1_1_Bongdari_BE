@@ -45,9 +45,7 @@ public record RecruitBoardResponseDto(
         @Schema(description = "봉사 시간", example = "4")
         Integer volunteerHours,
         @Schema(description = "시간 인정 여부", example = "true")
-        Boolean admitted,
-        @Schema(description = "이미지 URL", example = "https://image.domain.com/links")
-        String imgUrl
+        Boolean admitted
 ) {
 
     public static RecruitBoardResponseDto from(RecruitBoard board) {
@@ -68,7 +66,6 @@ public record RecruitBoardResponseDto(
                 .volunteerCategory(info.getVolunteerCategory())
                 .volunteerHours(info.getVolunteerHours())
                 .admitted(info.getAdmitted())
-                .imgUrl(board.getImgUrl())
                 .build();
     }
 }
