@@ -11,5 +11,5 @@ import java.util.List;
 public interface CommunityBoardDocumentRepository extends ElasticsearchRepository<CommunityBoardDocument, Long> {
     List<CommunityBoardDocument> findAll();
     @Query("{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"title^3\", \"content^2\", \"writerNickname\"]}}")
-    List<CommunityBoardDocument> findIdsByTitleOrContentContaining(String keyword);
+    List<CommunityBoardDocument> findDocumentsByTitleOrContentOrNicknameContaining(String keyword);
 }
