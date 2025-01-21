@@ -11,6 +11,7 @@ import com.somemore.domains.recruitboard.usecase.DeleteRecruitBoardUseCase;
 import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
 import com.somemore.support.annotation.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @Test
     @DisplayName("봉사 활동 모집글 등록 성공 테스트")
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void createRecruitBoard_success() throws Exception {
         // given
         LocalDateTime startDateTime = createStartDateTime();
@@ -114,7 +115,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 수정 성공 테스트")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void updateRecruitBoard() throws Exception {
         // given
         LocalDateTime startDateTime = createStartDateTime();
@@ -176,7 +177,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 위치 수정 성공 테스트")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void updateRecruitBoardLocation() throws Exception {
         // given
         RecruitBoardLocationUpdateRequestDto requestDto = RecruitBoardLocationUpdateRequestDto.builder()
@@ -205,7 +206,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 상태 변경 성공")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void updateRecruitBoardStatus() throws Exception {
         // given
         RecruitStatus status = CLOSED;
@@ -229,7 +230,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 삭제 성공")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void deleteRecruitBoard() throws Exception {
         // given
         Long recruitBoardId = 1L;
