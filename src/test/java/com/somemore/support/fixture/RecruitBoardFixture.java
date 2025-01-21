@@ -50,7 +50,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -73,7 +72,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(title)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -96,7 +94,6 @@ public class RecruitBoardFixture {
                 .locationId(locationId)
                 .title(title)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -119,7 +116,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(title)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -142,7 +138,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -165,7 +160,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -188,7 +182,6 @@ public class RecruitBoardFixture {
                 .locationId(locationId)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -211,7 +204,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(RECRUITING)
                 .build();
@@ -234,7 +226,6 @@ public class RecruitBoardFixture {
                 .locationId(locationId)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -257,7 +248,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -280,7 +270,6 @@ public class RecruitBoardFixture {
                 .locationId(locationId)
                 .title(title)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -303,7 +292,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();
@@ -326,7 +314,6 @@ public class RecruitBoardFixture {
                 .locationId(LOCATION_ID)
                 .title(TITLE)
                 .content(CONTENT)
-                .imgUrl(IMG_URL)
                 .recruitmentInfo(recruitmentInfo)
                 .status(STATUS)
                 .build();

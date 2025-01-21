@@ -98,7 +98,6 @@ class RecruitBoardStatusUpdateSchedulerTest extends IntegrationTestSupport {
                 .locationId(1L)
                 .title("모집글 제목")
                 .content("모집글 내용")
-                .imgUrl("이미지 링크")
                 .recruitmentInfo(recruitmentInfo)
                 .status(status)
                 .build();

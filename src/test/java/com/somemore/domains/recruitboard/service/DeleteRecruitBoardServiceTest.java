@@ -71,7 +71,6 @@ class DeleteRecruitBoardServiceTest extends IntegrationTestSupport {
                 .locationId(1L)
                 .title("봉사모집제목")
                 .content("봉사모집내용")
-                .imgUrl("https://image.domain.com/links")
                 .recruitmentInfo(recruitmentInfo)
                 .status(RECRUITING)
                 .build();

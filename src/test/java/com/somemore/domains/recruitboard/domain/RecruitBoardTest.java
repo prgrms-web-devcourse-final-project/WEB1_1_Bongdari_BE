@@ -30,7 +30,6 @@ class RecruitBoardTest {
     @Test
     void updateRecruitBoard() {
         // given
-        String imgUrl = "https://image.domain.com/updates";
         LocalDateTime updateStartDateTime = createUpdateStartDateTime();
         LocalDateTime updateEndDateTime = updateStartDateTime.plusHours(2);
 
@@ -45,12 +44,11 @@ class RecruitBoardTest {
                 .admitted(true).build();
 
         // when
-        board.updateWith(dto, imgUrl);
+        board.updateWith(dto);
 
         // then
         assertThat(board.getTitle()).isEqualTo(dto.title());
         assertThat(board.getContent()).isEqualTo(dto.content());
-        assertThat(board.getImgUrl()).isEqualTo(imgUrl);
     }
 
     @DisplayName("봉사 활동 지역을 수정할 수 있다.")
@@ -152,7 +150,6 @@ class RecruitBoardTest {
                 .content("내용")
                 .recruitmentInfo(recruitmentInfo)
                 .status(RECRUITING)
-                .imgUrl("이미지 링크")
                 .build();
     }
 }

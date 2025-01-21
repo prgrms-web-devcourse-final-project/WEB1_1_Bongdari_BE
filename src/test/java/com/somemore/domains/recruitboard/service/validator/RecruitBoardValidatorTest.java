@@ -168,7 +168,6 @@ class RecruitBoardValidatorTest {
                 .content("내용")
                 .recruitmentInfo(recruitmentInfo)
                 .status(RECRUITING)
-                .imgUrl("이미지 링크")
                 .build();
     }
 
