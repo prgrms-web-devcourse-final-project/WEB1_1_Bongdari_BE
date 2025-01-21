@@ -1,6 +1,6 @@
 package com.somemore.global.auth.sign.out;
 
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ public class SignOutController {
     @PostMapping("/sign-out")
     public ApiResponse<String> signOut(
             HttpServletResponse response,
-            @CurrentUser UUID userId) {
+            @UserId UUID userId) {
 
         signOutUseCase.signOut(response, userId);
 
