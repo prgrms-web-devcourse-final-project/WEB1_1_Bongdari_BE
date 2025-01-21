@@ -65,6 +65,32 @@ class CenterRepositoryTest extends IntegrationTestSupport {
         assertThat(isExist).isFalse();
     }
 
+    @DisplayName("기관 Id로 기관명을 조회할 수 있다.")
+    @Test
+    void findNameById() {
+        //given
+        Center center = createCenter();
+        centerRepository.save(center);
+
+        //when
+        String foundName = centerRepository.findNameById(center.getId());
+
+        //then
+        assertThat(foundName).isNotNull();
+        assertThat(foundName).isEqualTo("기본 기관 이름");
+    }
+
+    @DisplayName("존재하지 않는 기관 id로 기관명 조회 시 null을 반환한다.")
+    @Test
+    void findNameByNonExistentId() {
+        //given
+        //when
+        String foundName = centerRepository.findNameById(UUID.randomUUID());
+
+        //then
+        assertThat(foundName).isNull();
+    }
+
     private static Center createCenter() {
         return Center.create(
                 "기본 기관 이름",
