@@ -1,16 +1,16 @@
 package com.somemore.domains.recruitboard.repository;
 
+import static com.somemore.center.domain.NEWCenter.createDefault;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
 import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.support.fixture.LocationFixture.createLocation;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.center.CenterRepository;
+import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.domains.location.domain.Location;
 import com.somemore.domains.location.repository.LocationRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
@@ -23,6 +23,9 @@ import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
+import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,7 +48,10 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     private RecruitBoardRepositoryImpl recruitBoardRepository;
 
     @Autowired
-    private CenterRepository centerRepository;
+    private NEWCenterRepository centerRepository;
+
+    @Autowired
+    private UserCommonAttributeRepository userCommonAttributeRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -54,7 +60,8 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
     private EntityManager em;
 
     private Location location;
-    private Center center;
+    private UserCommonAttribute userCommonAttribute;
+    private NEWCenter center;
     private RecruitBoard board;
 
     @BeforeEach
@@ -62,7 +69,12 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         location = createLocation();
         locationRepository.save(location);
 
-        center = createCenter();
+        UUID userId = UUID.randomUUID();
+
+        userCommonAttribute = createUserCommonAttribute(userId);
+        userCommonAttributeRepository.save(userCommonAttribute);
+
+        center = createCenter(userId);
         centerRepository.save(center);
 
         board = createRecruitBoard(center.getId(), location.getId(), RECRUITING);
@@ -471,7 +483,15 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
 //        recruitBoardRepository.deleteDocument(savedBoard2.getId());
 //    }
 
-    public static RecruitBoard createRecruitBoard(UUID centerId, Long locationId,
+    private static UserCommonAttribute createUserCommonAttribute(UUID userId) {
+        return UserCommonAttribute.createDefault(userId, UserRole.CENTER);
+    }
+
+    private static NEWCenter createCenter(UUID userId) {
+        return createDefault(userId);
+    }
+
+    private static RecruitBoard createRecruitBoard(UUID centerId, Long locationId,
             RecruitStatus status) {
 
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
@@ -489,13 +509,12 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
                 .locationId(locationId)
                 .title("모집글 제목")
                 .content("모집글 내용")
-                .imgUrl("이미지 링크")
                 .recruitmentInfo(recruitmentInfo)
                 .status(status)
                 .build();
     }
 
-    public static RecruitBoard createRecruitBoard(UUID centerId, String title,
+    private static RecruitBoard createRecruitBoard(UUID centerId, String title,
             VolunteerCategory category,
             String region, boolean admitted, RecruitStatus status) {
 
@@ -514,7 +533,6 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
                 .locationId(1L)
                 .title(title)
                 .content("모집글 내용")
-                .imgUrl("이미지 링크")
                 .recruitmentInfo(recruitmentInfo)
                 .status(status)
                 .build();
@@ -538,7 +556,6 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
                 .locationId(1L)
                 .title("모집글 제목")
                 .content("모집글 내용")
-                .imgUrl("이미지 링크")
                 .recruitmentInfo(recruitmentInfo)
                 .status(status)
                 .build();

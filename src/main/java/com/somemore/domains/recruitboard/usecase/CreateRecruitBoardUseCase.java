@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface CreateRecruitBoardUseCase {
 
-    Long createRecruitBoard(RecruitBoardCreateRequestDto requestDto, UUID centerId, String imgUrl);
+    Long createRecruitBoard(RecruitBoardCreateRequestDto requestDto, UUID centerId);
 }

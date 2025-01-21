@@ -1,6 +1,7 @@
 package com.somemore.domains.recruitboard.service;
 
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
+
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
@@ -14,15 +15,12 @@ import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCente
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
 import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_BOARD;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,7 +28,6 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_RECRUIT_
 public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     private final RecruitBoardRepository recruitBoardRepository;
-    private final CenterQueryUseCase centerQueryUseCase;
 
     @Override
     public RecruitBoard getById(Long id) {
@@ -70,9 +67,7 @@ public class RecruitBoardQueryService implements RecruitBoardQueryUseCase {
 
     @Override
     public Page<RecruitBoardResponseDto> getRecruitBoardsByCenterId(UUID centerId,
-                                                                    RecruitBoardSearchCondition condition) {
-        centerQueryUseCase.validateCenterExists(centerId);
-
+            RecruitBoardSearchCondition condition) {
         Page<RecruitBoard> boards = recruitBoardRepository.findAllByCenterId(centerId, condition);
         return boards.map(RecruitBoardResponseDto::from);
     }

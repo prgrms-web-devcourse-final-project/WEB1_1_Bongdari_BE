@@ -26,15 +26,14 @@ public class UpdateRecruitBoardService implements UpdateRecruitBoardUseCase {
     private final Clock clock;
 
     @Override
-    public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId,
-            String imgUrl) {
+    public void updateRecruitBoard(RecruitBoardUpdateRequestDto dto, Long id, UUID centerId) {
         RecruitBoard recruitBoard = getRecruitBoard(id);
         validateUpdatableAndWriter(recruitBoard, centerId);
 
         recruitBoardValidator.validateUpdateRecruitBoardTime(recruitBoard.getCreatedAt(),
                 dto.volunteerStartDateTime(), dto.volunteerEndDateTime());
 
-        recruitBoard.updateWith(dto, imgUrl);
+        recruitBoard.updateWith(dto);
     }
 
     @Override

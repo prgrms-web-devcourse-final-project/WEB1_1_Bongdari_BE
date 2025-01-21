@@ -45,8 +45,6 @@ public record RecruitBoardWithCenterResponseDto(
         Integer volunteerHours,
         @Schema(description = "시간 인정 여부", example = "true")
         Boolean admitted,
-        @Schema(description = "이미지 URL", example = "https://image.domain.com/links")
-        String imgUrl,
         @Schema(description = "센터 간단 정보")
         CenterSimpleInfoResponseDto center
 ) {
@@ -71,7 +69,6 @@ public record RecruitBoardWithCenterResponseDto(
                 .volunteerCategory(info.getVolunteerCategory())
                 .volunteerHours(info.getVolunteerHours())
                 .admitted(info.getAdmitted())
-                .imgUrl(board.getImgUrl())
                 .center(CenterSimpleInfoResponseDto.of(board.getCenterId(),
                         recruitBoardWithCenter.centerName()))
                 .build();

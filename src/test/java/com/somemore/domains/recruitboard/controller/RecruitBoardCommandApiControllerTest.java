@@ -1,5 +1,19 @@
 package com.somemore.domains.recruitboard.controller;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.location.dto.request.LocationCreateRequestDto;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.dto.request.RecruitBoardCreateRequestDto;
@@ -9,33 +23,14 @@ import com.somemore.domains.recruitboard.dto.request.RecruitBoardUpdateRequestDt
 import com.somemore.domains.recruitboard.usecase.CreateRecruitBoardUseCase;
 import com.somemore.domains.recruitboard.usecase.DeleteRecruitBoardUseCase;
 import com.somemore.domains.recruitboard.usecase.UpdateRecruitBoardUseCase;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-
+import com.somemore.support.annotation.MockUser;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
-import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
@@ -48,12 +43,10 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
     @MockBean
     private DeleteRecruitBoardUseCase deleteRecruitBoardUseCase;
 
-    @MockBean
-    private ImageUploadUseCase imageUploadUseCase;
 
     @Test
     @DisplayName("봉사 활동 모집글 등록 성공 테스트")
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void createRecruitBoard_success() throws Exception {
         // given
         LocalDateTime startDateTime = createStartDateTime();
@@ -65,7 +58,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .longitude(BigDecimal.valueOf(127.010842267696))
                 .build();
 
-        RecruitBoardCreateRequestDto dto = RecruitBoardCreateRequestDto.builder()
+        RecruitBoardCreateRequestDto requestDto = RecruitBoardCreateRequestDto.builder()
                 .title("봉사 모집글 작성")
                 .content("봉사 하실분을 모집합니다. <br>")
                 .region("지역")
@@ -78,43 +71,27 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .location(location)
                 .build();
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "img_file",
-                "test-image.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "test image content".getBytes()
-        );
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+        long boardId = 1L;
 
-        MockMultipartFile requestData = new MockMultipartFile(
-                "data",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(dto)
-        );
-
-        String mockImageUrl = "http://example.com/image/test-image.jpg";
-        long mockRecruitBoardId = 1L;
-
-        given(imageUploadUseCase.uploadImage(any())).willReturn(mockImageUrl);
-        given(createRecruitBoardUseCase.createRecruitBoard(any(), any(UUID.class),
-                anyString())).willReturn(mockRecruitBoardId);
+        given(createRecruitBoardUseCase.createRecruitBoard(any(), any(UUID.class)))
+                .willReturn(boardId);
 
         // when
-        mockMvc.perform(multipart("/api/recruit-board")
-                        .file(requestData)
-                        .file(imageFile)
-                        .contentType(MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/api/recruit-board")
+                        .content(requestBody)
+                        .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 // then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(201))
-                .andExpect(jsonPath("$.data").value(mockRecruitBoardId))
+                .andExpect(jsonPath("$.data").value(boardId))
                 .andExpect(jsonPath("$.message").value("봉사 활동 모집글 등록 성공"));
     }
 
     @DisplayName("봉사 활동 모집글 수정 성공 테스트")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void updateRecruitBoard() throws Exception {
         // given
         LocalDateTime startDateTime = createStartDateTime();
@@ -132,40 +109,15 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
                 .admitted(true)
                 .build();
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "img_file",
-                "test-image.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "test image content".getBytes()
-        );
-
-        MockMultipartFile requestData = new MockMultipartFile(
-                "data",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(requestDto)
-        );
-
-        String mockImageUrl = "http://example.com/image/test-image.jpg";
-
-        given(imageUploadUseCase.uploadImage(any())).willReturn(mockImageUrl);
         willDoNothing().given(updateRecruitBoardUseCase)
-                .updateRecruitBoard(any(), any(), any(UUID.class), anyString());
+                .updateRecruitBoard(any(), any(), any(UUID.class));
 
-        MockMultipartHttpServletRequestBuilder builder = multipart("/api/recruit-board/{id}", 1);
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
+        String requestBody = objectMapper.writeValueAsString(requestDto);
 
         // when
-        mockMvc.perform(builder
-                        .file(requestData)
-                        .file(imageFile)
-                        .contentType(MULTIPART_FORM_DATA)
+        mockMvc.perform(put("/api/recruit-board/{id}", 1)
+                        .content(requestBody)
+                        .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 //then
                 .andExpect(status().isOk())
@@ -176,7 +128,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 위치 수정 성공 테스트")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void updateRecruitBoardLocation() throws Exception {
         // given
         RecruitBoardLocationUpdateRequestDto requestDto = RecruitBoardLocationUpdateRequestDto.builder()
@@ -194,7 +146,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
         // when
         mockMvc.perform(put("/api/recruit-board/{id}/location", 1L)
                         .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 // then
                 .andExpect(status().isOk())
@@ -205,7 +157,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 상태 변경 성공")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void updateRecruitBoardStatus() throws Exception {
         // given
         RecruitStatus status = CLOSED;
@@ -218,7 +170,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
         // when
         mockMvc.perform(patch("/api/recruit-board/{id}", 1L)
                         .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 //then
                 .andExpect(status().isOk())
@@ -229,7 +181,7 @@ class RecruitBoardCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사 활동 모집글 삭제 성공")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void deleteRecruitBoard() throws Exception {
         // given
         Long recruitBoardId = 1L;

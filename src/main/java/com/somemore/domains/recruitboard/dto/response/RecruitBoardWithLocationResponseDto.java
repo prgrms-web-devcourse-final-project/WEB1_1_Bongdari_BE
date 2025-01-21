@@ -46,8 +46,6 @@ public record RecruitBoardWithLocationResponseDto(
         Integer volunteerHours,
         @Schema(description = "시간 인정 여부", example = "true")
         Boolean admitted,
-        @Schema(description = "이미지 URL", example = "https://image.domain.com/links")
-        String imgUrl,
         @Schema(description = "위치 정보 DTO")
         LocationResponseDto location
 ) {
@@ -72,7 +70,6 @@ public record RecruitBoardWithLocationResponseDto(
                 .volunteerCategory(info.getVolunteerCategory())
                 .volunteerHours(info.getVolunteerHours())
                 .admitted(info.getAdmitted())
-                .imgUrl(board.getImgUrl())
                 .location(
                         LocationResponseDto.of(recruitBoardWithLocation.address(),
                                 recruitBoardWithLocation.latitude(),

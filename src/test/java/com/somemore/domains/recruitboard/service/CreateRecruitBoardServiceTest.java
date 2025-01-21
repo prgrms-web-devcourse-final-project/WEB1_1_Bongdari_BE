@@ -68,10 +68,9 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         UUID centerId = UUID.randomUUID();
-        String imgUrl = "https://image.domain.com/links";
 
         // when
-        Long saveId = createRecruitBoardService.createRecruitBoard(dto, centerId, imgUrl);
+        Long saveId = createRecruitBoardService.createRecruitBoard(dto, centerId);
 
         // then
         Optional<RecruitBoard> recruitBoard = recruitBoardRepository.findById(saveId);
@@ -79,7 +78,6 @@ class CreateRecruitBoardServiceTest extends IntegrationTestSupport {
         assertThat(recruitBoard).isPresent();
         assertThat(recruitBoard.get().getId()).isEqualTo(saveId);
         assertThat(recruitBoard.get().getCenterId()).isEqualTo(centerId);
-        assertThat(recruitBoard.get().getImgUrl()).isEqualTo(imgUrl);
     }
 
 }

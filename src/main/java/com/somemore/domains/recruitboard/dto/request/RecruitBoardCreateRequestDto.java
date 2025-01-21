@@ -52,7 +52,7 @@ public record RecruitBoardCreateRequestDto(
         LocationCreateRequestDto location
 ) {
 
-    public RecruitBoard toEntity(UUID centerId, Long locationId, String imgUrl) {
+    public RecruitBoard toEntity(UUID centerId, Long locationId) {
         RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
                 .region(region)
                 .recruitmentCount(recruitmentCount)
@@ -68,7 +68,6 @@ public record RecruitBoardCreateRequestDto(
                 .locationId(locationId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .recruitmentInfo(recruitmentInfo)
                 .status(RECRUITING)
                 .build();

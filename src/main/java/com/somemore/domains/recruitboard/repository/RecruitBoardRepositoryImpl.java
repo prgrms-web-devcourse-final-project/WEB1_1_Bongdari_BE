@@ -10,7 +10,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.somemore.domains.center.domain.QCenter;
+import com.somemore.center.domain.QNEWCenter;
 import com.somemore.domains.location.domain.QLocation;
 import com.somemore.domains.location.utils.GeoUtils;
 import com.somemore.domains.recruitboard.domain.QRecruitBoard;
@@ -22,6 +22,7 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchConditi
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithLocation;
+import com.somemore.user.domain.QUserCommonAttribute;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +45,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private static final QRecruitBoard recruitBoard = QRecruitBoard.recruitBoard;
     private static final QLocation location = QLocation.location;
-    private static final QCenter center = QCenter.center;
+    private static final QNEWCenter center = QNEWCenter.nEWCenter;
+    private static final QUserCommonAttribute userCommonAttribute = QUserCommonAttribute.userCommonAttribute;
 
     @Override
     public RecruitBoard save(RecruitBoard recruitBoard) {
@@ -79,8 +81,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
         RecruitBoardWithLocation result = queryFactory
                 .select(getRecruitBoardWithLocationConstructorExpression())
                 .from(recruitBoard)
-                .join(location)
-                .on(recruitBoard.locationId.eq(location.id))
+                .join(location).on(recruitBoard.locationId.eq(location.id))
                 .where(exp)
                 .fetchOne();
 
@@ -104,6 +105,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .from(recruitBoard)
                 .where(exp)
                 .join(center).on(recruitBoard.centerId.eq(center.id))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(toOrderSpecifiers(pageable.getSort()))
@@ -113,7 +115,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .select(recruitBoard.count())
                 .from(recruitBoard)
                 .where(exp)
-                .join(center).on(recruitBoard.centerId.eq(center.id));
+                .join(center).on(recruitBoard.centerId.eq(center.id))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
@@ -133,6 +136,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
                 .join(center).on(recruitBoard.centerId.eq(center.id))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId))
                 .where(exp)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -144,6 +148,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
                 .from(recruitBoard)
                 .join(location).on(recruitBoard.locationId.eq(location.id))
                 .join(center).on(recruitBoard.centerId.eq(center.id))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId))
                 .where(exp);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
@@ -223,7 +228,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public long updateStatusToCompletedForDateRange(LocalDateTime startTime, LocalDateTime endTime) {
+    public long updateStatusToCompletedForDateRange(LocalDateTime startTime,
+            LocalDateTime endTime) {
         return queryFactory.update(recruitBoard)
                 .set(recruitBoard.recruitStatus, COMPLETED)
                 .where(
@@ -415,7 +421,7 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private static ConstructorExpression<RecruitBoardWithCenter> getRecruitBoardWithCenterConstructorExpression() {
         return Projections.constructor(RecruitBoardWithCenter.class,
-                recruitBoard, center.name);
+                recruitBoard, userCommonAttribute.name);
     }
 
     private static ConstructorExpression<RecruitBoardWithLocation> getRecruitBoardWithLocationConstructorExpression() {
@@ -425,7 +431,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
 
     private static ConstructorExpression<RecruitBoardDetail> getRecruitBoardDetailConstructorExpression() {
         return Projections.constructor(RecruitBoardDetail.class,
-                recruitBoard, location.address, location.latitude, location.longitude, center.name);
+                recruitBoard, location.address, location.latitude, location.longitude,
+                userCommonAttribute.name);
     }
 
 //    private List<RecruitBoardDocument> convertEntityToDocuments(List<RecruitBoard> recruitBoards) {
