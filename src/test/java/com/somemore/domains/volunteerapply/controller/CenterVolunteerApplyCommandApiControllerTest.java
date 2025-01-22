@@ -13,7 +13,7 @@ import com.somemore.domains.volunteerapply.usecase.ApproveVolunteerApplyUseCase;
 import com.somemore.domains.volunteerapply.usecase.RejectVolunteerApplyUseCase;
 import com.somemore.domains.volunteerapply.usecase.SettleVolunteerApplyFacadeUseCase;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.support.annotation.MockUser;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +33,7 @@ class CenterVolunteerApplyCommandApiControllerTest extends ControllerTestSupport
 
     @Test
     @DisplayName("봉사 활동 지원 승인 성공 테스트")
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void approve() throws Exception {
         // given
         Long id = 1L;
@@ -52,7 +52,7 @@ class CenterVolunteerApplyCommandApiControllerTest extends ControllerTestSupport
 
     @Test
     @DisplayName("봉사 활동 지원 거절 성공 테스트")
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void reject() throws Exception {
         // given
         Long id = 1L;
@@ -71,7 +71,7 @@ class CenterVolunteerApplyCommandApiControllerTest extends ControllerTestSupport
 
     @Test
     @DisplayName("봉사 활동 지원 정산 성공 테스트")
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void settle() throws Exception {
         // given
         VolunteerApplySettleRequestDto dto = VolunteerApplySettleRequestDto.builder()
