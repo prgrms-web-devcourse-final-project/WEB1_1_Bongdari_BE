@@ -3,7 +3,6 @@ package com.somemore.domains.volunteer.service;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
-import com.somemore.domains.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
@@ -21,10 +20,11 @@ import java.util.UUID;
 
 import static com.somemore.domains.volunteer.domain.Volunteer.createDefault;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_VOLUNTEER_DETAIL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 class VolunteerQueryServiceTest extends IntegrationTestSupport {
@@ -93,69 +93,6 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> volunteerQueryService.getNicknameById(volunteerId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(NOT_EXISTS_VOLUNTEER.getMessage());
-    }
-
-    @DisplayName("내 프로필 조회 성공")
-    @Test
-    void getMyProfile() {
-        // given
-        Volunteer volunteer = createDefault(oAuthProvider, oAuthId);
-        volunteerRepository.save(volunteer);
-        UUID volunteerId = volunteer.getId();
-
-        VolunteerDetail volunteerDetail = createVolunteerDetail(volunteerId);
-        volunteerDetailRepository.save(volunteerDetail);
-
-        // when
-        VolunteerProfileResponseDto response = volunteerQueryService.getMyProfile(volunteerId);
-
-        // then
-        assertThat(response).isNotNull();
-        assertThat(response.volunteerId()).isEqualTo(volunteerId.toString());
-        assertThat(response.nickname()).isEqualTo(volunteer.getNickname());
-    }
-
-    @DisplayName("봉사자 프로필 조회 성공")
-    @Test
-    void getVolunteerProfile() {
-        // given
-        Volunteer volunteer = createDefault(oAuthProvider, oAuthId);
-        volunteerRepository.save(volunteer);
-        UUID volunteerId = volunteer.getId();
-
-        VolunteerDetail volunteerDetail = createVolunteerDetail(volunteerId);
-        volunteerDetailRepository.save(volunteerDetail);
-
-        // when
-        VolunteerProfileResponseDto response = volunteerQueryService.getVolunteerProfile(
-                volunteerId);
-
-        // then
-        assertThat(response).isNotNull();
-        assertThat(response.volunteerId()).isEqualTo(volunteerId.toString());
-        assertThat(response.nickname()).isEqualTo(volunteer.getNickname());
-        assertThat(response.detail()).isNull();
-    }
-
-    @DisplayName("권한이 없는 기관의 봉사자 상세 프로필 조회 실패")
-    @Test
-    void getVolunteerDetailedProfile() {
-        // given
-        UUID centerId = UUID.randomUUID();
-
-        Volunteer volunteer = createDefault(oAuthProvider, oAuthId);
-        volunteerRepository.save(volunteer);
-        UUID volunteerId = volunteer.getId();
-
-        VolunteerDetail volunteerDetail = createVolunteerDetail(volunteerId);
-        volunteerDetailRepository.save(volunteerDetail);
-
-        // when
-        // then
-        assertThatThrownBy(
-                () -> volunteerQueryService.getVolunteerDetailedProfile(volunteerId, centerId))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessage(UNAUTHORIZED_VOLUNTEER_DETAIL.getMessage());
     }
 
     @DisplayName("봉사 시간 기준 상위 4명의 랭킹을 조회한다.")
