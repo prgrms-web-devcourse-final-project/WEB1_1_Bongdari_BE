@@ -1,8 +1,6 @@
 package com.somemore.volunteer.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -112,7 +110,7 @@ class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
 
     @DisplayName("존재하지 않는 봉사자의 봉사활동을 업데이트하려는 경우 예외가 발생한다.")
     @Test
-    void UpdateVolunteerStatsWhenDoesNotExistsVolunteer() throws InterruptedException {
+    void UpdateVolunteerStatsWhenDoesNotExistsVolunteer() {
         // given
         UUID wrongVolunteerId = UUID.randomUUID();
         int hours = 5;
