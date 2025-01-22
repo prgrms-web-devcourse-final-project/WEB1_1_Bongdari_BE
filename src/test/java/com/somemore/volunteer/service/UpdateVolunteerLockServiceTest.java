@@ -1,11 +1,15 @@
 package com.somemore.volunteer.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
+import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.repository.NEWVolunteerJpaRepository;
@@ -90,7 +94,7 @@ class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
 
     @DisplayName("봉사활동 정보 업데이트 중 인터럽트 예외 발생")
     @Test
-    void UpdateVolunteerStats_InterruptedException() throws InterruptedException {
+    void UpdateVolunteerStatsWhenInterruptedException() throws InterruptedException {
         // given
         UUID id = UUID.randomUUID();
         int hours = 5;
@@ -104,6 +108,21 @@ class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
                 () -> updateVolunteerLockService.updateVolunteerStats(id, hours))
                 .isInstanceOf(RuntimeException.class);
 
+    }
+
+    @DisplayName("존재하지 않는 봉사자의 봉사활동을 업데이트하려는 경우 예외가 발생한다.")
+    @Test
+    void UpdateVolunteerStatsWhenDoesNotExistsVolunteer() throws InterruptedException {
+        // given
+        UUID wrongVolunteerId = UUID.randomUUID();
+        int hours = 5;
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> updateVolunteerLockService.updateVolunteerStats(wrongVolunteerId, hours))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(ExceptionMessage.NOT_EXISTS_VOLUNTEER.getMessage());
     }
 
     private static NEWVolunteer createVolunteer() {
