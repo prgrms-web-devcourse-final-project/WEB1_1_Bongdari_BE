@@ -1,9 +1,9 @@
-package com.somemore.domains.volunteer.controller;
+package com.somemore.volunteer.controller;
 
-import com.somemore.domains.volunteer.dto.response.VolunteerProfileResponseDto;
-import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.common.response.ApiResponse;
+import com.somemore.volunteer.dto.VolunteerProfileResponseDto;
+import com.somemore.volunteer.usecase.GetVolunteerProfileUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,43 +23,27 @@ import java.util.UUID;
 @Tag(name = "GET Volunteer Profile", description = "봉사자 조회")
 public class VolunteerProfileQueryController {
 
-    private final VolunteerQueryUseCase volunteerQueryUseCase;
+    private final GetVolunteerProfileUseCase getVolunteerProfileUseCase;
 
     @Operation(summary = "본인 상세 프로필 조회", description = "현재 로그인된 사용자의 상세 프로필을 조회합니다.")
     @Secured("ROLE_VOLUNTEER")
     @GetMapping("/me")
     public ApiResponse<VolunteerProfileResponseDto> getMyProfile(
-            @CurrentUser UUID volunteerId) {
-
+            @UserId UUID userId) {
         return ApiResponse.ok(
                 200,
-                volunteerQueryUseCase.getMyProfile(volunteerId),
-                "본인 상세 프로필 조회 성공");
+                getVolunteerProfileUseCase.getProfile(userId),
+                "본인 프로필 조회 성공");
     }
 
     @GetMapping("/{volunteerId}")
-    @Operation(summary = "타인 프로필 조회", description = "특정 봉사자의 프로필을 조회합니다. 상세 정보는 포함되지 않습니다.")
+    @Operation(summary = "타인 프로필 조회", description = "특정 봉사자의 상세 프로필을 조회합니다.")
     public ApiResponse<VolunteerProfileResponseDto> getVolunteerProfile(
             @PathVariable UUID volunteerId) {
-
         return ApiResponse.ok(
                 200,
-                volunteerQueryUseCase.getVolunteerProfile(volunteerId),
+                getVolunteerProfileUseCase.getProfile(volunteerId),
                 "타인 프로필 조회 성공"
-        );
-    }
-
-    @GetMapping("/{volunteerId}/detailed")
-    @Secured("ROLE_CENTER")
-    @Operation(summary = "지원자 상세 프로필 조회", description = "기관이 작성한 모집 글에 지원한 봉사자의 상세 프로필을 조회합니다.")
-    public ApiResponse<VolunteerProfileResponseDto> getVolunteerDetailedProfile(
-            @PathVariable UUID volunteerId,
-            @CurrentUser UUID centerId) {
-
-        return ApiResponse.ok(
-                200,
-                volunteerQueryUseCase.getVolunteerDetailedProfile(volunteerId, centerId),
-                "지원자 상세 프로필 조회 성공"
         );
     }
 }
