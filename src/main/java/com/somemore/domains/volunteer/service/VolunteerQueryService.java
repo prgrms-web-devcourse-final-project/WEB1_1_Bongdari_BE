@@ -1,7 +1,6 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
@@ -70,15 +69,4 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
             throw new BadRequestException(NOT_EXISTS_VOLUNTEER.getMessage());
         }
     }
-
-    private Volunteer findVolunteer(UUID volunteerId) {
-        return volunteerRepository.findById(volunteerId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
-    }
-
-    private VolunteerDetail findVolunteerDetail(UUID volunteerId) {
-        return volunteerDetailRepository.findByVolunteerId(volunteerId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
-    }
-
 }

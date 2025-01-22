@@ -14,12 +14,12 @@ import java.util.UUID;
 @Transactional
 public class RegisterNEWVolunteerService implements NEWRegisterVolunteerUseCase {
 
-    private final NEWVolunteerRepository NEWVolunteerRepository;
+    private final NEWVolunteerRepository volunteerRepository;
 
     @Override
     public void register(UUID userId) {
         NEWVolunteer volunteer = NEWVolunteer.createDefault(userId);
 
-        NEWVolunteerRepository.save(volunteer);
+        volunteerRepository.save(volunteer);
     }
 }
