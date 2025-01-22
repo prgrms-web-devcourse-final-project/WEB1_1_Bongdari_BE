@@ -21,10 +21,16 @@ public class GetVolunteerProfileService implements GetVolunteerProfileUseCase {
     private final UserQueryUseCase userQueryUseCase;
 
     @Override
-    public VolunteerProfileResponseDto getProfile(UUID userId) {
+    public VolunteerProfileResponseDto getProfileByUserId(UUID userId) {
         NEWVolunteer volunteer = volunteerQueryUseCase.getByUserId(userId);
         UserCommonAttribute commonAttribute = userQueryUseCase.getCommonAttributeByUserId(userId);
 
         return VolunteerProfileResponseDto.of(volunteer, commonAttribute);
+    }
+
+    @Override
+    public VolunteerProfileResponseDto getProfileByVolunteerId(UUID volunteerId) {
+        UUID userId = volunteerQueryUseCase.getUserIdById(volunteerId);
+        return getProfileByUserId(userId);
     }
 }

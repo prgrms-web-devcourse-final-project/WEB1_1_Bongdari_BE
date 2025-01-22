@@ -6,5 +6,7 @@ import java.util.UUID;
 
 public interface GetVolunteerProfileUseCase {
 
-    VolunteerProfileResponseDto getProfile(UUID userId);
+    VolunteerProfileResponseDto getProfileByUserId(UUID userId);
+
+    VolunteerProfileResponseDto getProfileByVolunteerId(UUID volunteerId);
 }

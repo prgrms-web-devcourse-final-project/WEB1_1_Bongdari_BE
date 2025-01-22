@@ -32,17 +32,28 @@ public class VolunteerProfileQueryController {
             @UserId UUID userId) {
         return ApiResponse.ok(
                 200,
-                getVolunteerProfileUseCase.getProfile(userId),
+                getVolunteerProfileUseCase.getProfileByUserId(userId),
                 "본인 프로필 조회 성공");
     }
 
-    @GetMapping("/{volunteerId}")
-    @Operation(summary = "타인 프로필 조회", description = "특정 봉사자의 상세 프로필을 조회합니다.")
-    public ApiResponse<VolunteerProfileResponseDto> getVolunteerProfile(
+    @GetMapping("/user-id/{userId}")
+    @Operation(summary = "타인 프로필 조회 (유저 아이디)", description = "유저 아이디로 특정 봉사자의 상세 프로필을 조회합니다.")
+    public ApiResponse<VolunteerProfileResponseDto> getVolunteerProfileByUserId(
+            @PathVariable UUID userId) {
+        return ApiResponse.ok(
+                200,
+                getVolunteerProfileUseCase.getProfileByUserId(userId),
+                "타인 프로필 조회 성공"
+        );
+    }
+
+    @GetMapping("/volunteer-id/{volunteerId}")
+    @Operation(summary = "타인 프로필 조회 (봉사자 아아디)", description = "봉사자 아이디특정 봉사자의 상세 프로필을 조회합니다.")
+    public ApiResponse<VolunteerProfileResponseDto> getVolunteerProfileByVolunteerId(
             @PathVariable UUID volunteerId) {
         return ApiResponse.ok(
                 200,
-                getVolunteerProfileUseCase.getProfile(volunteerId),
+                getVolunteerProfileUseCase.getProfileByVolunteerId(volunteerId),
                 "타인 프로필 조회 성공"
         );
     }
