@@ -13,7 +13,7 @@ import com.somemore.domains.volunteerapply.dto.request.VolunteerApplyCreateReque
 import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import com.somemore.domains.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.support.annotation.MockUser;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
 
     @Test
     @DisplayName("봉사 활동 지원 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void apply() throws Exception {
         // given
         VolunteerApplyCreateRequestDto dto = VolunteerApplyCreateRequestDto.builder()
@@ -57,7 +57,7 @@ class VolunteerApplyCommandApiControllerTest extends ControllerTestSupport {
 
     @Test
     @DisplayName("봉사 활동 철회 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void withdraw() throws Exception {
         // given
         Long id = 1L;

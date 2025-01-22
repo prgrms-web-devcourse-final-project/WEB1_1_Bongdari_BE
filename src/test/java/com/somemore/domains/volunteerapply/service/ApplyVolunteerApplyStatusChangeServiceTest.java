@@ -1,26 +1,31 @@
 package com.somemore.domains.volunteerapply.service;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
+import static com.somemore.global.exception.ExceptionMessage.DUPLICATE_APPLICATION;
+import static com.somemore.global.exception.ExceptionMessage.RECRUITMENT_NOT_OPEN;
+import static com.somemore.support.fixture.LocalDateTimeFixture.createStartDateTime;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.recruitboard.domain.RecruitStatus;
+import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.IntegrationTestSupport;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
-import static com.somemore.global.exception.ExceptionMessage.RECRUITMENT_NOT_OPEN;
-import static com.somemore.support.fixture.RecruitBoardFixture.createCloseRecruitBoard;
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport {
@@ -38,7 +43,7 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
     @Test
     void apply() {
         // given
-        RecruitBoard board = createRecruitBoard();
+        RecruitBoard board = createRecruitBoard(RECRUITING);
         recruitBoardRepository.save(board);
 
         VolunteerApplyCreateRequestDto dto = VolunteerApplyCreateRequestDto.builder()
@@ -61,7 +66,7 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
     @Test
     void applyWhenCLOSE() {
         // given
-        RecruitBoard board = createCloseRecruitBoard();
+        RecruitBoard board = createRecruitBoard(CLOSED);
         recruitBoardRepository.save(board);
 
         VolunteerApplyCreateRequestDto dto = VolunteerApplyCreateRequestDto.builder()
@@ -73,8 +78,8 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
         // when
         // then
         assertThatThrownBy(
-                () -> volunteerApplyCommandService.apply(dto, volunteerId)
-        ).isInstanceOf(BadRequestException.class)
+                () -> volunteerApplyCommandService.apply(dto, volunteerId))
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage(RECRUITMENT_NOT_OPEN.getMessage());
     }
 
@@ -82,7 +87,7 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
     @Test
     void applyWhenDuplicate() {
         // given
-        RecruitBoard board = createCloseRecruitBoard();
+        RecruitBoard board = createRecruitBoard(RECRUITING);
         recruitBoardRepository.save(board);
 
         UUID volunteerId = UUID.randomUUID();
@@ -101,9 +106,34 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
         // when
         // then
         assertThatThrownBy(
-                () -> volunteerApplyCommandService.apply(dto, volunteerId)
-        ).isInstanceOf(BadRequestException.class)
-                .hasMessage(RECRUITMENT_NOT_OPEN.getMessage());
+                () -> volunteerApplyCommandService.apply(dto, volunteerId))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage(DUPLICATE_APPLICATION.getMessage());
+    }
+
+    private static RecruitBoard createRecruitBoard(RecruitStatus status) {
+
+        LocalDateTime startDateTime = createStartDateTime();
+        LocalDateTime endDateTime = startDateTime.plusHours(2);
+
+        RecruitmentInfo recruitmentInfo = RecruitmentInfo.builder()
+                .region("지역")
+                .recruitmentCount(1)
+                .volunteerStartDateTime(startDateTime)
+                .volunteerEndDateTime(endDateTime)
+                .volunteerHours(2)
+                .volunteerCategory(OTHER)
+                .admitted(true)
+                .build();
+
+        return RecruitBoard.builder()
+                .centerId(UUID.randomUUID())
+                .locationId(1L)
+                .title("제목")
+                .content("내용")
+                .recruitmentInfo(recruitmentInfo)
+                .status(status)
+                .build();
     }
 
 }

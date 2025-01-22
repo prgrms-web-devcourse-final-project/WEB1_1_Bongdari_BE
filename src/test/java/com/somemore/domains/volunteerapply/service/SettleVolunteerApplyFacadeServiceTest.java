@@ -1,29 +1,29 @@
 package com.somemore.domains.volunteerapply.service;
 
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.COUNSELING;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
+import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplySettleRequestDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.COUNSELING;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
-import static com.somemore.global.exception.ExceptionMessage.*;
-import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
@@ -38,7 +38,7 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
     private VolunteerApplyRepository volunteerApplyRepository;
 
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
 
     @DisplayName("봉사 활동 지원을 정산할 수 있다.")
     @Test
@@ -46,9 +46,9 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // given
         UUID centerId = UUID.randomUUID();
 
-        Volunteer volunteer1 = volunteerRepository.save(createVolunteer());
-        Volunteer volunteer2 = volunteerRepository.save(createVolunteer());
-        Volunteer volunteer3 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer1 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer2 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer3 = volunteerRepository.save(createVolunteer());
 
         RecruitBoard board = createCompletedRecruitBoard(centerId, COUNSELING);
         recruitBoardRepository.save(board);
@@ -75,9 +75,12 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         assertThat(findApply2.getAttended()).isTrue();
         assertThat(findApply3.getAttended()).isTrue();
 
-        Volunteer findVolunteer1 = volunteerRepository.findById(volunteer1.getId()).orElseThrow();
-        Volunteer findVolunteer2 = volunteerRepository.findById(volunteer2.getId()).orElseThrow();
-        Volunteer findVolunteer3 = volunteerRepository.findById(volunteer3.getId()).orElseThrow();
+        NEWVolunteer findVolunteer1 = volunteerRepository.findById(volunteer1.getId())
+                .orElseThrow();
+        NEWVolunteer findVolunteer2 = volunteerRepository.findById(volunteer2.getId())
+                .orElseThrow();
+        NEWVolunteer findVolunteer3 = volunteerRepository.findById(volunteer3.getId())
+                .orElseThrow();
 
         assertThat(findVolunteer1.getTotalVolunteerHours()).isEqualTo(hour);
         assertThat(findVolunteer2.getTotalVolunteerHours()).isEqualTo(hour);
@@ -94,7 +97,7 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // given
         UUID centerId = UUID.randomUUID();
 
-        Volunteer volunteer = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer = volunteerRepository.save(createVolunteer());
 
         RecruitBoard board = createCompletedRecruitBoard(centerId, COUNSELING);
         recruitBoardRepository.save(board);
@@ -109,8 +112,8 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> settleVolunteerApplyFacadeService.settleVolunteerApplies(dto, centerId)
-        ).isInstanceOf(BadRequestException.class)
+                () -> settleVolunteerApplyFacadeService.settleVolunteerApplies(dto, centerId))
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage(VOLUNTEER_APPLY_LIST_MISMATCH.getMessage());
 
     }
@@ -121,8 +124,8 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // given
         UUID centerId = UUID.randomUUID();
 
-        Volunteer volunteer1 = volunteerRepository.save(createVolunteer());
-        Volunteer volunteer2 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer1 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer2 = volunteerRepository.save(createVolunteer());
 
         RecruitBoard board = createCompletedRecruitBoard(centerId, COUNSELING);
         recruitBoardRepository.save(board);
@@ -138,8 +141,8 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> settleVolunteerApplyFacadeService.settleVolunteerApplies(dto, centerId)
-        ).isInstanceOf(BadRequestException.class)
+                () -> settleVolunteerApplyFacadeService.settleVolunteerApplies(dto, centerId))
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage(RECRUIT_BOARD_ID_MISMATCH.getMessage());
     }
 
@@ -149,8 +152,8 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // given
         UUID wrongId = UUID.randomUUID();
 
-        Volunteer volunteer1 = volunteerRepository.save(createVolunteer());
-        Volunteer volunteer2 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer1 = volunteerRepository.save(createVolunteer());
+        NEWVolunteer volunteer2 = volunteerRepository.save(createVolunteer());
 
         RecruitBoard board = createCompletedRecruitBoard(UUID.randomUUID(), COUNSELING);
         recruitBoardRepository.save(board);
@@ -166,13 +169,13 @@ class SettleVolunteerApplyFacadeServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> settleVolunteerApplyFacadeService.settleVolunteerApplies(dto, wrongId)
-        ).isInstanceOf(BadRequestException.class)
+                () -> settleVolunteerApplyFacadeService.settleVolunteerApplies(dto, wrongId))
+                .isInstanceOf(BadRequestException.class)
                 .hasMessage(UNAUTHORIZED_RECRUIT_BOARD.getMessage());
     }
 
-    private static Volunteer createVolunteer() {
-        return Volunteer.createDefault(NAVER, "naver");
+    private static NEWVolunteer createVolunteer() {
+        return NEWVolunteer.createDefault(UUID.randomUUID());
     }
 
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {

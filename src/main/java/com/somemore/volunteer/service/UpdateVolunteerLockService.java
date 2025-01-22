@@ -1,26 +1,25 @@
-package com.somemore.domains.volunteer.service;
+package com.somemore.volunteer.service;
 
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.domains.volunteer.usecase.UpdateVolunteerUseCase;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+
 import com.somemore.global.exception.BadRequestException;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
+import com.somemore.volunteer.usecase.UpdateVolunteerUseCase;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class UpdateVolunteerLockService implements UpdateVolunteerUseCase {
 
-    private final VolunteerRepository volunteerRepository;
+    private final NEWVolunteerRepository volunteerRepository;
     private final RedissonClient redissonClient;
 
     @Override
@@ -47,7 +46,7 @@ public class UpdateVolunteerLockService implements UpdateVolunteerUseCase {
     }
 
     private void updateStatsWithLock(UUID id, int hours) {
-        Volunteer volunteer = volunteerRepository.findById(id).orElseThrow(
+        NEWVolunteer volunteer = volunteerRepository.findById(id).orElseThrow(
                 () -> new BadRequestException(NOT_EXISTS_VOLUNTEER)
         );
 
