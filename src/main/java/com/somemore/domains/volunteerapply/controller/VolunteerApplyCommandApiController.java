@@ -3,11 +3,12 @@ package com.somemore.domains.volunteerapply.controller;
 import com.somemore.domains.volunteerapply.dto.request.VolunteerApplyCreateRequestDto;
 import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import com.somemore.domains.volunteerapply.usecase.WithdrawVolunteerApplyUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 @Tag(name = "Volunteer Apply Command API", description = "봉사 활동 지원, 철회 관련 API")
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class VolunteerApplyCommandApiController {
     @Operation(summary = "봉사 활동 지원", description = "봉사 활동에 지원합니다.")
     @PostMapping("/volunteer-apply")
     public ApiResponse<Long> apply(
-            @CurrentUser UUID volunteerId,
+            @RoleId UUID volunteerId,
             @Valid @RequestBody VolunteerApplyCreateRequestDto requestDto
     ) {
         return ApiResponse.ok(
@@ -46,7 +45,7 @@ public class VolunteerApplyCommandApiController {
     @Operation(summary = "봉사 활동 지원 철회", description = "봉사 활동 지원을 철회합니다.")
     @DeleteMapping("/volunteer-apply/{id}")
     public ApiResponse<String> withdraw(
-            @CurrentUser UUID volunteerId,
+            @RoleId UUID volunteerId,
             @PathVariable Long id
     ) {
         withdrawVolunteerApplyUseCase.withdraw(id, volunteerId);
