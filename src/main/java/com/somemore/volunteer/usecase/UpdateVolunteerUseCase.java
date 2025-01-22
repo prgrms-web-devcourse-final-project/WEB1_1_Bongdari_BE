@@ -1,4 +1,4 @@
-package com.somemore.domains.volunteer.usecase;
+package com.somemore.volunteer.usecase;
 
 import java.util.UUID;
 

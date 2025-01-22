@@ -43,17 +43,27 @@ public class NEWVolunteer extends BaseEntity {
     @Column(name = "tier", nullable = false, length = 20)
     private Tier tier;
 
+    @Column(name = "total_volunteer_hours", nullable = false)
+    private int totalVolunteerHours;
+
+    @Column(name = "total_volunteer_count", nullable = false)
+    private int totalVolunteerCount;
+
     @Builder
     private NEWVolunteer(
             UUID userId,
             String nickname,
             Gender gender,
-            Tier tier
+            Tier tier,
+            int totalVolunteerHours,
+            int totalVolunteerCount
     ) {
         this.userId = userId;
         this.nickname = nickname;
         this.gender = gender;
         this.tier = tier;
+        this.totalVolunteerHours = totalVolunteerHours;
+        this.totalVolunteerCount = totalVolunteerCount;
     }
 
     public static NEWVolunteer createDefault(UUID userId) {
@@ -62,6 +72,14 @@ public class NEWVolunteer extends BaseEntity {
                 .nickname(userId.toString().substring(0, 8))
                 .gender(Gender.getDefault())
                 .tier(Tier.getDefault())
+                .totalVolunteerHours(0)
+                .totalVolunteerCount(0)
                 .build();
     }
+
+    public void updateVolunteerStats(int hours, int count) {
+        this.totalVolunteerHours += hours;
+        this.totalVolunteerCount += count;
+    }
+
 }
