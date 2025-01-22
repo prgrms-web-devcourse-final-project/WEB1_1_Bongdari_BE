@@ -1,6 +1,10 @@
 package com.somemore.volunteer.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
@@ -12,7 +16,9 @@ import java.util.concurrent.Executors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
 
@@ -21,6 +27,9 @@ class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private NEWVolunteerJpaRepository volunteerRepository;
+
+    @MockBean
+    private RLock lock;
 
     @AfterEach
     void tearDown() {
@@ -77,6 +86,24 @@ class UpdateVolunteerLockServiceTest extends IntegrationTestSupport {
         NEWVolunteer find = volunteerRepository.findById(id).orElseThrow();
         assertThat(find.getTotalVolunteerCount()).isEqualTo(threadCnt);
         assertThat(find.getTotalVolunteerHours()).isEqualTo(hours * threadCnt);
+    }
+
+    @DisplayName("봉사활동 정보 업데이트 중 인터럽트 예외 발생")
+    @Test
+    void UpdateVolunteerStats_InterruptedException() throws InterruptedException {
+        // given
+        UUID id = UUID.randomUUID();
+        int hours = 5;
+
+        given(lock.tryLock(anyLong(), anyLong(), any()))
+                .willThrow(new InterruptedException());
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> updateVolunteerLockService.updateVolunteerStats(id, hours))
+                .isInstanceOf(RuntimeException.class);
+
     }
 
     private static NEWVolunteer createVolunteer() {
