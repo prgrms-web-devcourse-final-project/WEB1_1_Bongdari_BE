@@ -52,7 +52,7 @@ public record VolunteerProfileResponseDto(
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     @Schema(description = "봉사자 상세 프로필")
     @Builder
-    private record Detail(
+    public record Detail(
             @Schema(description = "이름", example = "홍길동")
             String name,
 
