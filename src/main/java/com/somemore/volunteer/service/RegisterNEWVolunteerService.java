@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class NEWRegisterVolunteerService implements NEWRegisterVolunteerUseCase {
+public class RegisterNEWVolunteerService implements NEWRegisterVolunteerUseCase {
 
     private final NEWVolunteerRepository NEWVolunteerRepository;
 

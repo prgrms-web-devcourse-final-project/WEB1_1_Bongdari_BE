@@ -14,10 +14,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class NEWRegisterVolunteerServiceTest extends IntegrationTestSupport {
+class RegisterNEWVolunteerServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private NEWRegisterVolunteerService registerVolunteerService;
+    private RegisterNEWVolunteerService registerVolunteerService;
 
     @Autowired
     private NEWVolunteerRepository volunteerRepository;
