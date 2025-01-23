@@ -47,7 +47,6 @@ class DeleteReviewServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .build();
     }
 }

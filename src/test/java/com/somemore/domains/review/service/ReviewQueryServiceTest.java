@@ -121,7 +121,6 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         assertThat(findOne).extracting("volunteerId").isEqualTo(review.getVolunteerId());
         assertThat(findOne).extracting("title").isEqualTo(review.getTitle());
         assertThat(findOne).extracting("content").isEqualTo(review.getContent());
-        assertThat(findOne).extracting("imgUrl").isEqualTo(review.getImgUrl());
     }
 
 
@@ -230,7 +229,6 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .title("리뷰 제목")
                 .content("리뷰 내용")
-                .imgUrl("")
                 .build();
     }
 
@@ -241,7 +239,6 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .build();
     }
 

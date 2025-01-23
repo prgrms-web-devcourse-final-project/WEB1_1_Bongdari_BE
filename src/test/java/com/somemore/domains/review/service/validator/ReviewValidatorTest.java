@@ -1,15 +1,14 @@
 package com.somemore.domains.review.service.validator;
 
-import com.somemore.domains.review.domain.Review;
-import com.somemore.global.exception.BadRequestException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_REVIEW;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.somemore.domains.review.domain.Review;
+import com.somemore.global.exception.BadRequestException;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class ReviewValidatorTest {
 
@@ -50,7 +49,6 @@ class ReviewValidatorTest {
                 .volunteerId(volunteerId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .build();
     }
 }

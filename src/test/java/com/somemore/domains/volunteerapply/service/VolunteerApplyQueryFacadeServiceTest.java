@@ -1,5 +1,10 @@
 package com.somemore.domains.volunteerapply.service;
 
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.review.domain.Review;
@@ -16,6 +21,8 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerI
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +30,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
@@ -140,7 +139,6 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .title("리뷰 제목")
                 .content("리뷰 내용")
-                .imgUrl("리뷰 이미지")
                 .build();
     }
 
