@@ -73,24 +73,24 @@ class RankingCacheServiceTest extends IntegrationTestSupport {
                             .hasSize(2)
                             .extracting("volunteerId", "totalHours", "ranking")
                             .containsExactly(
-                                    tuple(id1.toString(), 100, 1),
-                                    tuple(id2.toString(), 90, 2)
+                                    tuple(id1, 100, 1L),
+                                    tuple(id2, 90, 2L)
                             );
 
                     assertThat(dto.volunteerMonthlyRankingResponse())
                             .hasSize(2)
                             .extracting("volunteerId", "totalHours", "ranking")
                             .containsExactly(
-                                    tuple(id3.toString(), 50, 1),
-                                    tuple(id4.toString(), 40, 2)
+                                    tuple(id3, 50, 1L),
+                                    tuple(id4, 40, 2L)
                             );
 
                     assertThat(dto.volunteerWeeklyRankingResponse())
                             .hasSize(2)
                             .extracting("volunteerId", "totalHours", "ranking")
                             .containsExactly(
-                                    tuple(id5.toString(), 30, 1),
-                                    tuple(id6.toString(), 20, 2)
+                                    tuple(id5, 30, 1L),
+                                    tuple(id6, 20, 2L)
                             );
                 });
     }
