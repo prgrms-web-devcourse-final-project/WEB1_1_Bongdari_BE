@@ -5,11 +5,10 @@ import com.somemore.domains.review.dto.request.ReviewUpdateRequestDto;
 import com.somemore.domains.review.service.validator.ReviewValidator;
 import com.somemore.domains.review.usecase.ReviewQueryUseCase;
 import com.somemore.domains.review.usecase.UpdateReviewUseCase;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Transactional
@@ -24,13 +23,6 @@ public class UpdateReviewService implements UpdateReviewUseCase {
         Review review = reviewQueryUseCase.getById(id);
         reviewValidator.validateWriter(review, volunteerId);
         review.updateWith(requestDto);
-    }
-
-    @Override
-    public void updateReviewImageUrl(Long id, UUID volunteerId, String imgUrl) {
-        Review review = reviewQueryUseCase.getById(id);
-        reviewValidator.validateWriter(review, volunteerId);
-        review.updateWith(imgUrl);
     }
 
 }

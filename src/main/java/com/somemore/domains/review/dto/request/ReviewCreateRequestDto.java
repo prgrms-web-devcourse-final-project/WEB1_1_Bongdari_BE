@@ -24,13 +24,12 @@ public record ReviewCreateRequestDto(
         String content
 ) {
 
-    public Review toEntity(UUID volunteerId, String imgUrl) {
+    public Review toEntity(UUID volunteerId) {
         return Review.builder()
                 .volunteerApplyId(volunteerApplyId)
                 .volunteerId(volunteerId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .build();
     }
 }
