@@ -1,5 +1,17 @@
 package com.somemore.domains.review.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.somemore.domains.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.domains.review.dto.request.ReviewUpdateRequestDto;
@@ -8,25 +20,14 @@ import com.somemore.domains.review.usecase.DeleteReviewUseCase;
 import com.somemore.domains.review.usecase.UpdateReviewUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.support.annotation.MockUser;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-
-import java.util.UUID;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
@@ -44,7 +45,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 생성 성공")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void createReview() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
@@ -84,7 +85,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 생성 유효성 테스트 - 모집글 아이디")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void createReviewValidateTestRecruitBoardId() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
@@ -110,7 +111,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 생성 유효성 테스트 - 제목")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void createReviewValidateTestTitle() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
@@ -136,7 +137,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 생성 유효성 테스트 - 내용")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void createReviewValidateTestContent() throws Exception {
         // given
         ReviewCreateRequestDto requestDto = ReviewCreateRequestDto.builder()
@@ -162,7 +163,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 수정 성공")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void updateReview() throws Exception {
         // given
         ReviewUpdateRequestDto requestDto = ReviewUpdateRequestDto.builder()
@@ -188,7 +189,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 수정 유효성 테스트 - 제목")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void updateReviewValidateTitle() throws Exception {
         // given
         ReviewUpdateRequestDto requestDto = ReviewUpdateRequestDto.builder()
@@ -212,7 +213,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 수정 유효성 테스트 - 내용")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void updateReviewValidateContent() throws Exception {
         // given
         ReviewUpdateRequestDto requestDto = ReviewUpdateRequestDto.builder()
@@ -236,7 +237,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 이미지 수정 성공")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void updateReviewImage() throws Exception {
         // given
         Long reviewId = 1L;
@@ -252,7 +253,8 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
         given(imageUploadUseCase.uploadImage(any())).willReturn(imgUrl);
 
-        willDoNothing().given(updateReviewUseCase).updateReviewImageUrl(any(), any(UUID.class), anyString());
+        willDoNothing().given(updateReviewUseCase)
+                .updateReviewImageUrl(any(), any(UUID.class), anyString());
 
         // when
         mockMvc.perform(createMultipartPutRequest("/api/review/{id}", reviewId)
@@ -267,7 +269,7 @@ class ReviewCommandApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("리뷰 삭제 성공 테스트")
     @Test
-    @WithMockCustomUser()
+    @MockUser
     void deleteReview() throws Exception {
         // given
         Long id = 1L;
