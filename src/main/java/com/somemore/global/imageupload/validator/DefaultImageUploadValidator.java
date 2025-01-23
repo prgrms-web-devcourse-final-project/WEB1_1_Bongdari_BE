@@ -26,6 +26,11 @@ public class DefaultImageUploadValidator implements ImageUploadValidator {
     }
 
     @Override
+    public boolean isEmptyFileName(String fileName) {
+        return fileName == null || fileName.isEmpty();
+    }
+
+    @Override
     public boolean isEmptyFile(MultipartFile file) {
         return file == null || file.isEmpty();
     }

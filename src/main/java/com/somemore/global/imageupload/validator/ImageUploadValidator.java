@@ -9,4 +9,6 @@ public interface ImageUploadValidator {
     void validateFileType(MultipartFile file);
 
     boolean isEmptyFile(MultipartFile file);
+
+    boolean isEmptyFileName(String fileName);
 }

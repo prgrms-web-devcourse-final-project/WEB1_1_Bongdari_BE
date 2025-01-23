@@ -1,9 +1,7 @@
 package com.somemore.global.imageupload.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
@@ -17,6 +15,8 @@ import com.somemore.global.imageupload.validator.ImageUploadValidator;
 import com.somemore.support.IntegrationTestSupport;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 class ImageUploadServiceTest extends IntegrationTestSupport {
 
@@ -98,5 +101,57 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(imgUrl).isEqualTo(ImageUploadService.DEFAULT_IMAGE_URL);
+    }
+
+    @DisplayName("유효한 파일명으로 사전 서명된 URL을 생성할 수 있다.")
+    @Test
+    void getPresignedUrl_success() {
+        // given
+        String filename = "testImage.jpg";
+
+        // Mock the validator to return false (file name is valid)
+        when(imageUploadValidator.isEmptyFileName(filename)).thenReturn(false);
+
+        // Mock the S3Presigner to return a URL
+        S3Presigner mockPresigner = mock(S3Presigner.class);
+        ReflectionTestUtils.setField(imageUploadService, "s3Presigner", mockPresigner);
+
+        PresignedGetObjectRequest mockPresignedRequest = mock(PresignedGetObjectRequest.class);
+        URL mockUrl = mock(URL.class);
+
+        when(mockUrl.toString()).thenReturn("https://test-bucket.s3.amazonaws.com/unique-test-image.jpg");
+        when(mockPresignedRequest.url()).thenReturn(mockUrl);
+        when(mockPresigner.presignGetObject(any(GetObjectPresignRequest.class))).thenReturn(mockPresignedRequest);
+
+        // when
+        String presignedUrl = imageUploadService.getPresignedUrl(filename);
+
+        // then
+        assertNotNull(presignedUrl);
+        assertTrue(presignedUrl.startsWith("https://test-bucket.s3.amazonaws.com/"));
+        assertTrue(presignedUrl.endsWith(".jpg"));
+
+        // Verify interactions
+        verify(imageUploadValidator, times(1)).isEmptyFileName(filename);
+        verify(mockPresigner, times(1)).presignGetObject(any(GetObjectPresignRequest.class));
+    }
+
+    @DisplayName("파일명 검증에 실패하면 null을 반환한다.")
+    @Test
+    void getPresignedUrl_invalidFileName() {
+
+        // given
+        String filename = "";
+
+        when(imageUploadValidator.isEmptyFileName(filename)).thenReturn(true);
+
+        // when
+        String presignedUrl = imageUploadService.getPresignedUrl(filename);
+
+        // then
+        assertNull(presignedUrl);
+
+        // Verify interactions
+        verify(imageUploadValidator, times(1)).isEmptyFileName(filename);
     }
 }

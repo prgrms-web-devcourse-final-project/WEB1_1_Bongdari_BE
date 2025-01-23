@@ -11,9 +11,14 @@ public class ImageUploadUtils {
     }
 
     public static String generateUniqueFileName(String originalFileName) {
+
         String uuid = UUID.randomUUID().toString();
+
         String fileExtension = extractFileExtension(originalFileName);
-        return uuid + fileExtension;
+
+        String fileNameWithoutExtension = originalFileName.substring(0, originalFileName.lastIndexOf("."));
+
+        return uuid + "_" + fileNameWithoutExtension + fileExtension;
     }
 
     private static String extractFileExtension(String fileName) {
