@@ -79,6 +79,7 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
     @DisplayName("이미지 형식이 올바르지 않다면 업로드 할 수 없다.")
     @Test
     void testUploadImage_failure() throws IOException {
+
         // given
         when(multipartFile.getInputStream()).thenThrow(new IOException());
 
@@ -91,6 +92,7 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
     @DisplayName("이미지 파일이 없다면 기본 이미지 링크를 반환한다.")
     @Test
     void uploadImageWithEmptyFile() {
+
         // given
         MultipartFile emptyFile = new MockMultipartFile("file", new byte[0]);
         given(imageUploadValidator.isEmptyFile(emptyFile)).willReturn(true);
@@ -106,13 +108,12 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
     @DisplayName("유효한 파일명으로 사전 서명된 URL을 생성할 수 있다.")
     @Test
     void getPresignedUrl_success() {
+
         // given
         String filename = "testImage.jpg";
 
-        // Mock the validator to return false (file name is valid)
         when(imageUploadValidator.isEmptyFileName(filename)).thenReturn(false);
 
-        // Mock the S3Presigner to return a URL
         S3Presigner mockPresigner = mock(S3Presigner.class);
         ReflectionTestUtils.setField(imageUploadService, "s3Presigner", mockPresigner);
 
@@ -131,7 +132,6 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
         assertTrue(presignedUrl.startsWith("https://test-bucket.s3.amazonaws.com/"));
         assertTrue(presignedUrl.endsWith(".jpg"));
 
-        // Verify interactions
         verify(imageUploadValidator, times(1)).isEmptyFileName(filename);
         verify(mockPresigner, times(1)).presignGetObject(any(GetObjectPresignRequest.class));
     }
@@ -151,7 +151,6 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
         // then
         assertNull(presignedUrl);
 
-        // Verify interactions
         verify(imageUploadValidator, times(1)).isEmptyFileName(filename);
     }
 }

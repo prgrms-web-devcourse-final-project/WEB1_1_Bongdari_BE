@@ -37,12 +37,9 @@ public class ImageUploadService implements ImageUploadUseCase {
     @Value("${default.image.url}")
     private String defaultImageUrl;
 
-    public static final String DEFAULT_IMAGE_URL;
+    public static final String DEFAULT_IMAGE_URL = "";
     private static final Duration GET_URL_EXPIRATION_DURATION = Duration.ofMinutes(3);
 
-    static {
-        DEFAULT_IMAGE_URL = "your-default-image-url"; // defaultImageUrl 값을 설정
-    }
 
     @Override
     public String getPresignedUrl(String filename) {
