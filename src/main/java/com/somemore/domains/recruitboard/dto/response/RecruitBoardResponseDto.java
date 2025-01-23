@@ -54,6 +54,7 @@ public record RecruitBoardResponseDto(
         return RecruitBoardResponseDto.builder()
                 .id(board.getId())
                 .centerId(board.getCenterId())
+                .locationId(board.getLocationId())
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())
                 .title(board.getTitle())
