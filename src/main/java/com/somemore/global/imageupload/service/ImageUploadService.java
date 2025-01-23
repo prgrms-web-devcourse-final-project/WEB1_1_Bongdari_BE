@@ -5,7 +5,6 @@ import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.global.imageupload.util.ImageUploadUtils;
 import com.somemore.global.imageupload.validator.ImageUploadValidator;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import static com.somemore.global.exception.ExceptionMessage.UPLOAD_FAILED;
 
@@ -23,6 +25,7 @@ import static com.somemore.global.exception.ExceptionMessage.UPLOAD_FAILED;
 public class ImageUploadService implements ImageUploadUseCase {
 
     private final S3Client s3Client;
+    private final S3Presigner s3Presigner;
     private final ImageUploadValidator imageUploadValidator;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -34,11 +37,28 @@ public class ImageUploadService implements ImageUploadUseCase {
     @Value("${default.image.url}")
     private String defaultImageUrl;
 
-    public static String DEFAULT_IMAGE_URL;
+    public static final String DEFAULT_IMAGE_URL = "";
+    private static final Duration GET_URL_EXPIRATION_DURATION = Duration.ofMinutes(3);
 
-    @PostConstruct
-    private void init() {
-        DEFAULT_IMAGE_URL = defaultImageUrl;
+
+    @Override
+    public String getPresignedUrl(String filename) {
+        if(imageUploadValidator.isEmptyFileName(filename)) {
+            return null;
+        }
+
+        String uniqueFilename = ImageUploadUtils.generateUniqueFileName(filename);
+
+        GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(GET_URL_EXPIRATION_DURATION)
+                .getObjectRequest(builder -> builder
+                        .bucket(bucket)
+                        .key(uniqueFilename))
+                .build();
+
+        return s3Presigner.presignGetObject(getObjectPresignRequest)
+                .url()
+                .toString();
     }
 
     @Override

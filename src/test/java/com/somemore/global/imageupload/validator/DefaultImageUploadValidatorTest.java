@@ -93,4 +93,43 @@ class DefaultImageUploadValidatorTest {
         // then
         assertEquals(ImageUploadException.class, exception.getClass());
     }
+
+    @Test
+    @DisplayName("파일 이름이 비어있는지 확인할 수 있다.")
+    void shouldReturnTrueWhenFileNameIsEmpty() {
+        // given
+        String emptyFileName = "";
+
+        // when
+        boolean isEmptyFileName = imageUploadValidator.isEmptyFileName(emptyFileName);
+
+        // then
+        assertThat(isEmptyFileName).isTrue();
+    }
+
+    @Test
+    @DisplayName("파일 이름이 null이면 true를 반환한다.")
+    void shouldReturnTrueWhenFileNameIsNull() {
+        // given
+        String nullFileName = null;
+
+        // when
+        boolean isEmptyFileName = imageUploadValidator.isEmptyFileName(nullFileName);
+
+        // then
+        assertThat(isEmptyFileName).isTrue();
+    }
+
+    @Test
+    @DisplayName("파일 이름이 비어있지 않으면 false를 반환한다.")
+    void shouldReturnFalseWhenFileNameIsNotEmpty() {
+        // given
+        String validFileName = "testImage.jpg";
+
+        // when
+        boolean isEmptyFileName = imageUploadValidator.isEmptyFileName(validFileName);
+
+        // then
+        assertThat(isEmptyFileName).isFalse();
+    }
 }
