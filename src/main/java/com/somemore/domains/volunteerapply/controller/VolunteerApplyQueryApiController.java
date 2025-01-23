@@ -9,6 +9,7 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReview
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.NoSuchElementException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,11 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -37,17 +34,18 @@ public class VolunteerApplyQueryApiController {
     private final VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
     private final VolunteerApplyQueryFacadeUseCase volunteerApplyQueryFacadeUseCase;
 
-    @Operation(summary = "특정 모집글 봉사자 지원 단건 조회", description = "특정 모집글에 대한 봉사자 지원을 조회합니다.")
-    @GetMapping("/volunteer-apply/recruit-board/{recruitBoardId}/volunteer/{volunteerId}")
-    public ApiResponse<VolunteerApplyWithReviewStatusResponseDto> getVolunteerApplyByRecruitIdAndVolunteerId(
+    @Secured("ROLE_VOLUNTEER")
+    @Operation(summary = "특정 모집글 봉사 지원 단건 조회", description = "특정 모집글에 대한 봉사 지원을 조회합니다.")
+    @GetMapping("/volunteer-apply/recruit-board/{recruitBoardId}")
+    public ApiResponse<VolunteerApplyWithReviewStatusResponseDto> getVolunteerApplyByRecruitBoardId(
             @PathVariable Long recruitBoardId,
-            @PathVariable UUID volunteerId
+            @RoleId UUID volunteerId
     ) {
         try {
             return ApiResponse.ok(
                     200,
                     volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId, volunteerId),
-                    "특정 모집글에 대한 봉사자 지원 단건 조회 성공"
+                    "특정 모집글에 대한 봉사 지원 단건 조회 성공"
             );
         } catch (NoSuchElementException e) {
             return ApiResponse.ok(210, null, "지원 내역이 없습니다.");

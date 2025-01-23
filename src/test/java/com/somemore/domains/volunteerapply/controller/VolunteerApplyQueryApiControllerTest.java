@@ -2,13 +2,14 @@ package com.somemore.domains.volunteerapply.controller;
 
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
-import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplySummaryResponseDto;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerInfoResponseDto;
+import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
 import com.somemore.support.annotation.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,12 +38,13 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
     private VolunteerApplyQueryFacadeUseCase volunteerApplyQueryFacadeUseCase;
 
 
-    @DisplayName("특정 모집글 봉사자 지원 단건 조회 성공 테스트")
+    @MockUser
+    @DisplayName("특정 모집글 봉사 지원 단건 조회 성공 테스트")
     @Test
-    void getVolunteerApplyByRecruitIdAndVolunteerId() throws Exception {
+    void getVolunteerApplyByRecruitBoardId() throws Exception {
         // given
         Long recruitBoardId = 1L;
-        UUID volunteerId = UUID.randomUUID();
+        UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
         VolunteerApplyWithReviewStatusResponseDto response = VolunteerApplyWithReviewStatusResponseDto.builder()
                 .id(1L)
@@ -52,18 +54,15 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
                 .attended(false)
                 .build();
 
-        given(volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
-                volunteerId))
+        given(volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId, volunteerId))
                 .willReturn(response);
 
         // when & then
-        mockMvc.perform(
-                        get("/api/volunteer-apply/recruit-board/{recruitBoardId}/volunteer/{volunteerId}",
-                                recruitBoardId, volunteerId)
-                                .accept(APPLICATION_JSON))
+        mockMvc.perform(get("/api/volunteer-apply/recruit-board/{recruitBoardId}", recruitBoardId)
+                        .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.message").value("특정 모집글에 대한 봉사자 지원 단건 조회 성공"))
+                .andExpect(jsonPath("$.message").value("특정 모집글에 대한 봉사 지원 단건 조회 성공"))
                 .andExpect(jsonPath("$.data.id").value(1))
                 .andExpect(jsonPath("$.data.volunteer_id").value(volunteerId.toString()))
                 .andExpect(jsonPath("$.data.recruit_board_id").value(recruitBoardId))
@@ -71,21 +70,20 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data.attended").value(false));
     }
 
+    @MockUser
     @DisplayName("특정 모집글 봉사자 지원 단건 조회 성공 테스트 - 지원 내역이 없는 경우")
     @Test
-    void getVolunteerApplyByRecruitIdAndVolunteerIdWhenDoesNotExist() throws Exception {
+    void getVolunteerApplyByRecruitBoardIdWhenDoesNotExist() throws Exception {
         // given
         Long recruitBoardId = 1L;
-        UUID volunteerId = UUID.randomUUID();
+        UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
-        given(volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId,
-                volunteerId))
+        given(volunteerApplyQueryFacadeUseCase.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId, volunteerId))
                 .willThrow(new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY));
 
         // when & then
         mockMvc.perform(
-                        get("/api/volunteer-apply/recruit-board/{recruitBoardId}/volunteer/{volunteerId}",
-                                recruitBoardId, volunteerId)
+                        get("/api/volunteer-apply/recruit-board/{recruitBoardId}", recruitBoardId)
                                 .accept(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(210))
