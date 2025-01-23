@@ -1,5 +1,8 @@
 package com.somemore.domains.volunteerrecord.repository;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.domains.volunteerrecord.dto.response.VolunteerMonthlyRankingResponseDto;
 import com.somemore.domains.volunteerrecord.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteerrecord.dto.response.VolunteerTotalRankingResponseDto;
@@ -31,13 +34,29 @@ public class VolunteerRankingRedisRepository implements VolunteerRankingCacheRep
 
     @SuppressWarnings("unchecked")
     public Optional<VolunteerRankingResponseDto> getRankings() {
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
         List<VolunteerTotalRankingResponseDto> totalRanking =
-                (List<VolunteerTotalRankingResponseDto>) redisTemplate.opsForValue().get(TOTAL_RANKING_KEY);
+                (List<VolunteerTotalRankingResponseDto>) Optional.ofNullable(redisTemplate.opsForValue().get(TOTAL_RANKING_KEY))
+                        .map(obj -> mapper.convertValue(obj,
+                                mapper.getTypeFactory().constructCollectionType(List.class, VolunteerTotalRankingResponseDto.class)))
+                        .orElse(null);
+
         List<VolunteerMonthlyRankingResponseDto> monthlyRanking =
-                (List<VolunteerMonthlyRankingResponseDto>) redisTemplate.opsForValue().get(MONTHLY_RANKING_KEY);
+                (List<VolunteerMonthlyRankingResponseDto>) Optional.ofNullable(redisTemplate.opsForValue().get(MONTHLY_RANKING_KEY))
+                        .map(obj -> mapper.convertValue(obj,
+                                mapper.getTypeFactory().constructCollectionType(List.class, VolunteerMonthlyRankingResponseDto.class)))
+                        .orElse(null);
+
         List<VolunteerWeeklyRankingResponseDto> weeklyRanking =
-                (List<VolunteerWeeklyRankingResponseDto>) redisTemplate.opsForValue().get(WEEKLY_RANKING_KEY);
+                (List<VolunteerWeeklyRankingResponseDto>) Optional.ofNullable(redisTemplate.opsForValue().get(WEEKLY_RANKING_KEY))
+                        .map(obj -> mapper.convertValue(obj,
+                                mapper.getTypeFactory().constructCollectionType(List.class, VolunteerWeeklyRankingResponseDto.class)))
+                        .orElse(null);
 
         if (totalRanking == null || monthlyRanking == null || weeklyRanking == null) {
             return Optional.empty();
@@ -49,4 +68,6 @@ public class VolunteerRankingRedisRepository implements VolunteerRankingCacheRep
                 weeklyRanking
         ));
     }
+
+
 }
