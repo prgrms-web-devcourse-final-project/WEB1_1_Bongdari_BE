@@ -1,6 +1,10 @@
 package com.somemore.global.auth.sign.up;
 
+import com.somemore.global.auth.oauth.domain.CommonOAuthInfo;
+
 public interface SignUpUseCase {
 
-    void signUp(SignUpRequestDto signUpRequestDto);
+    void signUpLocalUser(SignUpRequestDto signUpRequestDto);
+
+    void signUpOAuthUser(CommonOAuthInfo oAuthInfo);
 }
