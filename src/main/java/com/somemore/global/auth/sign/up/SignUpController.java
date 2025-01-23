@@ -20,7 +20,7 @@ public class SignUpController {
     public ApiResponse<String> signUp(
             @RequestBody SignUpRequestDto signUpRequestDto
     ) {
-        signUpUseCase.signUp(signUpRequestDto);
+        signUpUseCase.signUpLocalUser(signUpRequestDto);
 
         return ApiResponse.ok("회원가입 되었습니다");
     }
