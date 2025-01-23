@@ -1,5 +1,6 @@
 package com.somemore.global.redis.config;
 
+import com.somemore.domains.volunteerrecord.dto.response.VolunteerRankingResponseDto;
 import com.somemore.global.common.event.ServerEventType;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +51,10 @@ public class RedisConfig {
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new CustomJacksonRedisSerializer<>(Object.class));
+
+
+        template.setValueSerializer(new CustomJacksonRedisSerializer<>(VolunteerRankingResponseDto.class));
+        template.setHashValueSerializer(new CustomJacksonRedisSerializer<>(VolunteerRankingResponseDto.class));
 
         return template;
     }
