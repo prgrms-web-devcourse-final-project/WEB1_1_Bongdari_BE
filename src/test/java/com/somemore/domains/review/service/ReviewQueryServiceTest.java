@@ -1,5 +1,17 @@
 package com.somemore.domains.review.service;
 
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.COUNSELING;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.CULTURAL_EVENT;
+import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
+import static com.somemore.support.fixture.CenterFixture.createCenter;
+import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+
 import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.repository.center.CenterRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
@@ -16,6 +28,8 @@ import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,19 +38,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.domains.recruitboard.domain.VolunteerCategory.*;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
-import static com.somemore.support.fixture.CenterFixture.createCenter;
-import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 class ReviewQueryServiceTest extends IntegrationTestSupport {
 
@@ -145,11 +146,9 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.saveAll(List.of(apply1, apply2));
 
         Review review1 = createReview(apply1.getId(), volunteerId, "제 인생 최고의 봉사활동",
-                "정말 유익했습니다. 더보기..",
-                "https://image.domain.com/links1");
+                "정말 유익했습니다. 더보기..");
         Review review2 = createReview(apply2.getId(), volunteerId, "보람있는 봉사활동",
-                "많은 사람들에게 도움을 주었어요.",
-                "https://image.domain.com/links2");
+                "많은 사람들에게 도움을 주었어요.");
         reviewRepository.saveAll(List.of(review1, review2));
 
         ReviewSearchCondition conditionWithoutCategory = ReviewSearchCondition.builder()
@@ -195,11 +194,9 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         volunteerApplyRepository.saveAll(List.of(apply1, apply2));
 
         Review review1 = createReview(apply1.getId(), volunteer1.getId(), "제 인생 최고의 봉사활동",
-                "정말 유익했습니다. 더보기..",
-                "https://image.domain.com/links1");
+                "정말 유익했습니다. 더보기..");
         Review review2 = createReview(apply2.getId(), volunteer2.getId(), "보람있는 봉사활동",
-                "많은 사람들에게 도움을 주었어요.",
-                "https://image.domain.com/links2");
+                "많은 사람들에게 도움을 주었어요.");
         reviewRepository.saveAll(List.of(review1, review2));
 
         ReviewSearchCondition condition = ReviewSearchCondition.builder()
@@ -232,8 +229,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private Review createReview(Long applyId, UUID volunteerId, String title, String content,
-                                String imgUrl) {
+    private Review createReview(Long applyId, UUID volunteerId, String title, String content) {
         return Review.builder()
                 .volunteerApplyId(applyId)
                 .volunteerId(volunteerId)

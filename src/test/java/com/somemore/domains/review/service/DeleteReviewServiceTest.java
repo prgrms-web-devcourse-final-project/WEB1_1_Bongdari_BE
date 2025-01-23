@@ -28,9 +28,8 @@ class DeleteReviewServiceTest extends IntegrationTestSupport {
         UUID volunteerId = UUID.randomUUID();
         String title = "리뷰 제목";
         String content = "리뷰 내용";
-        String imgUrl = "리뷰 이미지";
 
-        Review review = createReview(volunteerId, title, content, imgUrl);
+        Review review = createReview(volunteerId, title, content);
         reviewRepository.save(review);
 
         // when
@@ -41,7 +40,7 @@ class DeleteReviewServiceTest extends IntegrationTestSupport {
         assertThat(findReview).isEmpty();
     }
 
-    private Review createReview(UUID volunteerId, String title, String content, String imgUrl) {
+    private Review createReview(UUID volunteerId, String title, String content) {
         return Review.builder()
                 .volunteerApplyId(1L)
                 .volunteerId(volunteerId)
