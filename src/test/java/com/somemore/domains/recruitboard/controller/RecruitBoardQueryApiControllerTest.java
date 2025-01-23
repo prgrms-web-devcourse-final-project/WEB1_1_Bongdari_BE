@@ -8,6 +8,7 @@ import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResp
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithLocationResponseDto;
 import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -141,9 +142,34 @@ class RecruitBoardQueryApiControllerTest extends ControllerTestSupport {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").exists())
-                .andExpect(jsonPath("$.message").value("기관 봉사 활동 모집글 조회 성공"));
+                .andExpect(jsonPath("$.message").value("특정 기관 봉사 활동 모집글 조회 성공"));
 
         verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsByCenterId(eq(centerId),
                 any(RecruitBoardSearchCondition.class));
+    }
+
+    @MockUser(role = "ROLE_CENTER")
+    @DisplayName("본인(기관)이 작성한 게시글 리스트를 조회할 수 있다.")
+    @Test
+    void getMyRecruitBoards() throws Exception {
+        // given
+        Page<RecruitBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
+
+        given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(any(),
+                any(RecruitBoardSearchCondition.class)))
+                .willReturn(page);
+
+        // when
+        // then
+        mockMvc.perform(get("/api/recruit-boards/me")
+                        .param("keyword", "volunteer")
+                        .param("category", ADMINISTRATIVE_SUPPORT.name())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("기관 봉사 활동 모집글 조회 성공"));
+
+        verify(recruitBoardQueryUseCase, times(1))
+                .getRecruitBoardsByCenterId(any(), any(RecruitBoardSearchCondition.class));
     }
 }
