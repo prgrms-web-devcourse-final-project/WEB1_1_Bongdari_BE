@@ -19,9 +19,20 @@ public class NEWVolunteerQueryService implements NEWVolunteerQueryUseCase {
     private final NEWVolunteerRepository volunteerRepository;
 
     @Override
+    public NEWVolunteer getById(UUID id) {
+        return volunteerRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_VOLUNTEER));
+    }
+
+    @Override
     public NEWVolunteer getByUserId(UUID userId) {
         return volunteerRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_VOLUNTEER));
+    }
+
+    @Override
+    public UUID getUserIdById(UUID id) {
+        return getById(id).getUserId();
     }
 
     @Override

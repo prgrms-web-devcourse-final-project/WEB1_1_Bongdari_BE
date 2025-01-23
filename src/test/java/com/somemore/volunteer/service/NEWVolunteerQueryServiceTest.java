@@ -33,7 +33,15 @@ class NEWVolunteerQueryServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("사용자 ID로 봉사자를 조회한다")
+    @DisplayName("봉사자 ID로 봉사자를 조회한다")
+    void getById() {
+        NEWVolunteer foundVolunteer = volunteerQueryService.getById(volunteer.getId());
+
+        assertThat(foundVolunteer).isEqualTo(volunteer);
+    }
+
+    @Test
+    @DisplayName("유저 ID로 봉사자를 조회한다")
     void getByUserId() {
         NEWVolunteer foundVolunteer = volunteerQueryService.getByUserId(userId);
 
@@ -41,10 +49,18 @@ class NEWVolunteerQueryServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("사용자 ID로 봉사자 ID를 조회한다")
+    @DisplayName("유저 ID로 봉사자 ID를 조회한다")
     void getIdByUserId() {
         UUID foundVolunteerId = volunteerQueryService.getIdByUserId(userId);
 
         assertThat(foundVolunteerId).isEqualTo(volunteer.getId());
+    }
+
+    @Test
+    @DisplayName("봉사자 ID로 유저 ID를 조회한다")
+    void getUserIdById() {
+        UUID foundUserId = volunteerQueryService.getUserIdById(volunteer.getId());
+
+        assertThat(foundUserId).isEqualTo(volunteer.getUserId());
     }
 }

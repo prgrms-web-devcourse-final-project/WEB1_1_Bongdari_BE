@@ -1,8 +1,6 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.domain.VolunteerDetail;
-import com.somemore.domains.volunteer.dto.response.VolunteerProfileResponseDto;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
@@ -30,34 +28,6 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDetailRepository volunteerDetailRepository;
     private final VolunteerDetailAccessValidator volunteerDetailAccessValidator;
-
-    @Override
-    public VolunteerProfileResponseDto getMyProfile(UUID volunteerId) {
-
-        return VolunteerProfileResponseDto.from(
-                findVolunteer(volunteerId),
-                findVolunteerDetail(volunteerId)
-        );
-    }
-
-    @Override
-    public VolunteerProfileResponseDto getVolunteerProfile(UUID volunteerId) {
-
-        return VolunteerProfileResponseDto.from(
-                findVolunteer(volunteerId)
-        );
-    }
-
-    @Override
-    public VolunteerProfileResponseDto getVolunteerDetailedProfile(UUID volunteerId,
-                                                                   UUID centerId) {
-        volunteerDetailAccessValidator.validateByCenterId(centerId, volunteerId);
-
-        return VolunteerProfileResponseDto.from(
-                findVolunteer(volunteerId),
-                findVolunteerDetail(volunteerId)
-        );
-    }
 
     @Override
     public UUID getVolunteerIdByOAuthId(String oAuthId) {
@@ -99,15 +69,4 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
             throw new BadRequestException(NOT_EXISTS_VOLUNTEER.getMessage());
         }
     }
-
-    private Volunteer findVolunteer(UUID volunteerId) {
-        return volunteerRepository.findById(volunteerId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
-    }
-
-    private VolunteerDetail findVolunteerDetail(UUID volunteerId) {
-        return volunteerDetailRepository.findByVolunteerId(volunteerId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_VOLUNTEER));
-    }
-
 }
