@@ -1,9 +1,11 @@
 package com.somemore.user.repository.usercommonattribute;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.user.domain.QUserCommonAttribute;
 import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -42,6 +44,26 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
                         .where(
                                 eqUserId(userId),
                                 isNotDeleted())
+                        .fetchOne()
+        );
+    }
+
+    @Override
+    public Optional<UserProfileDto> findUserProfileByUserId(UUID userId) {
+        return Optional.ofNullable(
+                queryFactory.select(Projections.constructor(UserProfileDto.class,
+                                userCommonAttribute.id,
+                                userCommonAttribute.userId,
+                                userCommonAttribute.name,
+                                userCommonAttribute.contactNumber,
+                                userCommonAttribute.imgUrl,
+                                userCommonAttribute.introduce
+                        ))
+                        .from(userCommonAttribute)
+                        .where(
+                                eqUserId(userId),
+                                isNotDeleted()
+                        )
                         .fetchOne()
         );
     }

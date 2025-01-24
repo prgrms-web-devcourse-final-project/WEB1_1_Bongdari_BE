@@ -1,4 +1,4 @@
-package com.somemore.domains.center.controller;
+package com.somemore.center.controller;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static org.mockito.Mockito.times;
@@ -8,8 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.somemore.domains.center.dto.response.CenterProfileResponseDto;
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import com.somemore.center.dto.response.CenterProfileResponseDto;
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.ControllerTestSupport;
 import java.util.List;
@@ -23,7 +23,7 @@ import org.springframework.http.MediaType;
 class CenterQueryApiControllerTest extends ControllerTestSupport {
 
     @MockBean
-    protected CenterQueryUseCase centerQueryUseCase;
+    protected NEWCenterQueryUseCase centerQueryUseCase;
 
     private UUID centerId;
     private CenterProfileResponseDto responseDto;
@@ -32,12 +32,13 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
     void setUp() {
         centerId = UUID.randomUUID();
         responseDto = CenterProfileResponseDto.builder()
-                .centerId(centerId)
+                .id(centerId)
+                .userId(UUID.randomUUID())
+                .homepageUrl("http://example.com")
                 .name("Test Center")
                 .contactNumber("010-1234-5678")
                 .imgUrl("http://example.com/image.jpg")
                 .introduce("This is a test center.")
-                .homepageLink("http://example.com")
                 .preferItems(List.of())
                 .build();
     }
@@ -46,9 +47,9 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
     @Test
     void getCenterProfile() throws Exception {
         // given
-        when(centerQueryUseCase.getCenterProfileByCenterId(centerId)).thenReturn(responseDto);
+        when(centerQueryUseCase.getCenterProfileById(centerId)).thenReturn(responseDto);
 
-        // when // then
+        // when & then
         mockMvc.perform(
                         get("/api/center/profile/{centerId}", centerId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -56,39 +57,36 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.message").value("기관 프로필 조회 성공"))
-                .andExpect(jsonPath("$.data.center_id").value(centerId.toString())) // center_id로 수정
-                .andExpect(jsonPath("$.data.name").value("Test Center"))
-                .andExpect(jsonPath("$.data.contact_number").value(
-                        "010-1234-5678")) // contact_number로 수정
-                .andExpect(jsonPath("$.data.img_url").value(
-                        "http://example.com/image.jpg")) // img_url로 수정
-                .andExpect(jsonPath("$.data.introduce").value("This is a test center."))
-                .andExpect(jsonPath("$.data.homepage_link").value(
-                        "http://example.com")) // homepage_link로 수정
-                .andExpect(jsonPath("$.data.prefer_items").isArray()); // prefer_items로 수정
+                .andExpect(jsonPath("$.data.id").value(centerId.toString()))
+                .andExpect(jsonPath("$.data.user_id").value(responseDto.userId().toString()))
+                .andExpect(jsonPath("$.data.homepage_url").value(responseDto.homepageUrl()))
+                .andExpect(jsonPath("$.data.name").value(responseDto.name()))
+                .andExpect(jsonPath("$.data.contact_number").value(responseDto.contactNumber()))
+                .andExpect(jsonPath("$.data.img_url").value(responseDto.imgUrl()))
+                .andExpect(jsonPath("$.data.introduce").value(responseDto.introduce()))
+                .andExpect(jsonPath("$.data.prefer_items").isArray());
 
-        verify(centerQueryUseCase, times(1)).getCenterProfileByCenterId(centerId);
+        verify(centerQueryUseCase, times(1)).getCenterProfileById(centerId);
     }
 
-    @DisplayName("존재하지 않는 기관 ID로 조회 시 예외가 발생한다. (controller)")
+    @DisplayName("존재하지 않는 유저 ID로 조회 시 예외가 발생한다. (controller)")
     @Test
     void getCenterProfile_NotFound() throws Exception {
         // given
-        UUID nonExistentCenterId = UUID.randomUUID();
-        when(centerQueryUseCase.getCenterProfileByCenterId(nonExistentCenterId))
+        UUID nonExistentuserId = UUID.randomUUID();
+        when(centerQueryUseCase.getCenterProfileById(nonExistentuserId))
                 .thenThrow(new BadRequestException(NOT_EXISTS_CENTER.getMessage()));
 
-        // when // then
+        // when & then
         mockMvc.perform(
-                        get("/api/center/profile/{centerId}", nonExistentCenterId)
+                        get("/api/center/profile/{centerId}", nonExistentuserId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("400"))
                 .andExpect(jsonPath("$.detail").value("존재하지 않는 기관입니다."));
 
-        verify(centerQueryUseCase, times(1)).getCenterProfileByCenterId(nonExistentCenterId);
+        verify(centerQueryUseCase, times(1)).getCenterProfileById(nonExistentuserId);
     }
 
 }
-

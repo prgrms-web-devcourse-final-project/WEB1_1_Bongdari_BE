@@ -8,11 +8,14 @@ import com.somemore.user.domain.UserRole;
 import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
+import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -107,5 +110,29 @@ class UserQueryServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(isCustomized).isFalse();
+    }
+
+    @DisplayName("유저 id로 유저 프로필에 필요한 공통 속성을 조회할 수 있다.")
+    @Test
+    void getUserProfileByUserId() {
+
+        //given
+        UUID userId = UUID.randomUUID();
+        UserRole role = UserRole.VOLUNTEER;
+
+        UserCommonAttribute userCommonAttribute1 = UserCommonAttribute.createDefault(userId,role);
+        userCommonAttributeRepository.save(userCommonAttribute1);
+
+        //when
+        UserProfileDto result = userQueryService.getUserProfileByUserId(userId);
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.id()).isNotNull();
+        assertThat(result.userId()).isEqualTo(userId);
+        assertThat(result.name()).isEqualTo(userCommonAttribute1.getName());
+        assertThat(result.contactNumber()).isEqualTo(userCommonAttribute1.getContactNumber());
+        assertThat(result.imgUrl()).isEqualTo(userCommonAttribute1.getImgUrl());
+        assertThat(result.introduce()).isEqualTo(userCommonAttribute1.getIntroduce());
     }
 }
