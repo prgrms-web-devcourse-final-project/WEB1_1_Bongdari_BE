@@ -91,12 +91,7 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
         recruitBoardRepository.save(board);
 
         UUID volunteerId = UUID.randomUUID();
-        VolunteerApply apply = VolunteerApply.builder()
-                .volunteerId(volunteerId)
-                .recruitBoardId(board.getId())
-                .status(WAITING)
-                .attended(false)
-                .build();
+        VolunteerApply apply = createVolunteerApply(volunteerId, board.getId());
         volunteerApplyRepository.save(apply);
 
         VolunteerApplyCreateRequestDto dto = VolunteerApplyCreateRequestDto.builder()
@@ -111,7 +106,16 @@ class ApplyVolunteerApplyStatusChangeServiceTest extends IntegrationTestSupport 
                 .hasMessage(DUPLICATE_APPLICATION.getMessage());
     }
 
-    private static RecruitBoard createRecruitBoard(RecruitStatus status) {
+    private VolunteerApply createVolunteerApply(UUID volunteerId, Long recruitBoardId) {
+        return VolunteerApply.builder()
+                .volunteerId(volunteerId)
+                .recruitBoardId(recruitBoardId)
+                .status(WAITING)
+                .attended(false)
+                .build();
+    }
+
+    private RecruitBoard createRecruitBoard(RecruitStatus status) {
 
         LocalDateTime startDateTime = createStartDateTime();
         LocalDateTime endDateTime = startDateTime.plusHours(2);
