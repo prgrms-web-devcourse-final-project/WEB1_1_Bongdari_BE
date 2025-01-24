@@ -2,12 +2,9 @@ package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
-import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
-import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
-import com.somemore.domains.volunteer.validator.VolunteerDetailAccessValidator;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +23,6 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEE
 public class VolunteerQueryService implements VolunteerQueryUseCase {
 
     private final VolunteerRepository volunteerRepository;
-    private final VolunteerDetailRepository volunteerDetailRepository;
-    private final VolunteerDetailAccessValidator volunteerDetailAccessValidator;
 
     @Override
     public UUID getVolunteerIdByOAuthId(String oAuthId) {
@@ -56,11 +51,6 @@ public class VolunteerQueryService implements VolunteerQueryUseCase {
     @Override
     public List<Volunteer> getAllByIds(List<UUID> volunteerIds) {
         return volunteerRepository.findAllByIds(volunteerIds);
-    }
-
-    @Override
-    public List<VolunteerSimpleInfo> getVolunteerSimpleInfosByIds(List<UUID> ids) {
-        return volunteerRepository.findSimpleInfoByIds(ids);
     }
 
     @Override

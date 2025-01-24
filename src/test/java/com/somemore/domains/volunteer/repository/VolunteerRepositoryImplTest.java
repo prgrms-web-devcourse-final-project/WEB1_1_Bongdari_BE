@@ -1,10 +1,8 @@
 package com.somemore.domains.volunteer.repository;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.domain.VolunteerDetail;
 import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
-import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.support.IntegrationTestSupport;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,9 +22,6 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
-
-    @Autowired
-    private VolunteerDetailRepository volunteerDetailRepository;
 
     @DisplayName("봉사자의 id로 닉네임을 조회한다.")
     @Test
@@ -158,27 +152,6 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(volunteers).hasSize(3);
-    }
-
-    @DisplayName("아이디 리스트로 봉사자 간단 정보를 조회할 수 있다.")
-    @Test
-    void findSimpleInfoByIds() {
-        // given
-        List<UUID> ids = new ArrayList<>();
-
-        for (int i = 0; i < 4; i++) {
-            Volunteer volunteerTest = volunteerRepository.save(Volunteer.createDefault(NAVER, "naver"));
-            String name = "name" + i;
-            VolunteerRegisterRequestDto dto = createVolunteerRegisterRequestDto(name);
-            volunteerDetailRepository.save(VolunteerDetail.of(dto, volunteerTest.getId()));
-            ids.add(volunteerTest.getId());
-        }
-
-        // when
-        List<VolunteerSimpleInfo> simpleInfo = volunteerRepository.findSimpleInfoByIds(ids);
-
-        // then
-        assertThat(simpleInfo).hasSize(4);
     }
 
     @DisplayName("봉사자 ID로 봉사자가 존재하는지 확인할 수 있다.")
