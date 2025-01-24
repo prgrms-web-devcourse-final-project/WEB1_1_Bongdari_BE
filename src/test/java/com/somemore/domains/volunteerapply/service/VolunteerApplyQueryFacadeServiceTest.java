@@ -23,6 +23,12 @@ import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.support.IntegrationTestSupport;
 import java.util.List;
 import java.util.UUID;
+
+import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
+import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +45,9 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
     @Autowired
-    private VolunteerDetailRepository volunteerDetailRepository;
+    private UserCommonAttributeRepository userCommonAttributeRepository;
     @Autowired
     private VolunteerApplyRepository volunteerApplyRepository;
     @Autowired
@@ -60,8 +66,8 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
         reviewRepository.save(review);
 
         // when
-        VolunteerApplyWithReviewStatusResponseDto dto = volunteerApplyQueryFacadeService.getVolunteerApplyByRecruitIdAndVolunteerId(
-                recruitBoardId, volunteerId);
+        VolunteerApplyWithReviewStatusResponseDto dto =
+                volunteerApplyQueryFacadeService.getVolunteerApplyByRecruitIdAndVolunteerId(recruitBoardId, volunteerId);
 
         // then
         assertThat(dto.recruitBoardId()).isEqualTo(recruitBoardId);
@@ -77,18 +83,21 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
         RecruitBoard board = createRecruitBoard(centerId);
         recruitBoardRepository.save(board);
 
-        Volunteer volunteer1 = Volunteer.createDefault(NAVER, "naver");
-        Volunteer volunteer2 = Volunteer.createDefault(NAVER, "naver");
-        volunteerRepository.save(volunteer1);
-        volunteerRepository.save(volunteer2);
+        UUID userIdOne = UUID.randomUUID();
+        UUID userIdTwo = UUID.randomUUID();
 
-        VolunteerDetail volunteerDetail1 = createVolunteerDetail(volunteer1.getId());
-        VolunteerDetail volunteerDetail2 = createVolunteerDetail(volunteer2.getId());
-        volunteerDetailRepository.save(volunteerDetail1);
-        volunteerDetailRepository.save(volunteerDetail2);
+        UserCommonAttribute userOne = createUserCommonAttribute(userIdOne);
+        UserCommonAttribute userTwo = createUserCommonAttribute(userIdTwo);
+        userCommonAttributeRepository.save(userOne);
+        userCommonAttributeRepository.save(userTwo);
 
-        VolunteerApply apply1 = createApply(volunteer1.getId(), board.getId());
-        VolunteerApply apply2 = createApply(volunteer2.getId(), board.getId());
+        NEWVolunteer volunteerOne = createVolunteer(userIdOne);
+        NEWVolunteer volunteerTwo = createVolunteer(userIdTwo);
+        volunteerRepository.save(volunteerOne);
+        volunteerRepository.save(volunteerTwo);
+
+        VolunteerApply apply1 = createApply(volunteerOne.getId(), board.getId());
+        VolunteerApply apply2 = createApply(volunteerTwo.getId(), board.getId());
         volunteerApplyRepository.saveAll(List.of(apply1, apply2));
 
         VolunteerApplySearchCondition condition = VolunteerApplySearchCondition.builder()
@@ -96,9 +105,8 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApplyVolunteerInfoResponseDto> result = volunteerApplyQueryFacadeService.getVolunteerAppliesByRecruitIdAndCenterId(
-                board.getId(),
-                centerId, condition);
+        Page<VolunteerApplyVolunteerInfoResponseDto> result =
+                volunteerApplyQueryFacadeService.getVolunteerAppliesByRecruitIdAndCenterId(board.getId(), centerId, condition);
 
         // then
         assertThat(result).hasSize(2);
@@ -142,23 +150,6 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
-
-        VolunteerRegisterRequestDto volunteerRegisterRequestDto =
-                new VolunteerRegisterRequestDto(
-                        NAVER,
-                        "example-oauth-id",
-                        "making",
-                        "making@example.com",
-                        "male",
-                        "06-08",
-                        "1998",
-                        "010-1234-5678"
-                );
-
-        return VolunteerDetail.of(volunteerRegisterRequestDto, volunteerId);
-    }
-
     private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
@@ -166,6 +157,14 @@ class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {
                 .status(APPROVED)
                 .attended(true)
                 .build();
+    }
+
+    private static NEWVolunteer createVolunteer(UUID userIdOne) {
+        return NEWVolunteer.createDefault(userIdOne);
+    }
+
+    private static UserCommonAttribute createUserCommonAttribute(UUID userIdOne) {
+        return UserCommonAttribute.createDefault(userIdOne, UserRole.VOLUNTEER);
     }
 
     private Pageable getPageable() {

@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -30,12 +29,11 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUp() {
-        // Given
         for (int i = 1; i <= 15; i++) {
             VolunteerApply apply = VolunteerApply.builder()
                     .volunteerId(UUID.randomUUID())
                     .recruitBoardId(1L)
-                    .status(ApplyStatus.WAITING)
+                    .status(WAITING)
                     .attended(false)
                     .build();
             volunteerApplyRepository.save(apply);
@@ -55,44 +53,41 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
     @DisplayName("봉사 신청 저장 및 조회")
     @Test
     void saveAndFindById() {
-        // Given
+        // given
         VolunteerApply newApply = createApply(UUID.randomUUID(), 1L);
-        VolunteerApply savedApply = volunteerApplyRepository.save(newApply);
+        volunteerApplyRepository.save(newApply);
 
-        // When
-        Optional<VolunteerApply> foundApply = volunteerApplyRepository.findById(savedApply.getId());
+        // when
+        Optional<VolunteerApply> foundApply = volunteerApplyRepository.findById(newApply.getId());
 
-        // Then
+        // then
         assertThat(foundApply).isPresent();
-        assertThat(foundApply.get().getId()).isEqualTo(savedApply.getId());
+        assertThat(foundApply.get().getId()).isEqualTo(newApply.getId());
         assertThat(foundApply.get().getStatus()).isEqualTo(APPROVED);
     }
 
     @DisplayName("모집글 ID 리스트로 봉사자 ID 리스트 조회")
     @Test
     void findVolunteerIdsByRecruitIds() {
-        // When
-        List<UUID> volunteerIds = volunteerApplyRepository.findVolunteerIdsByRecruitIds(
-                List.of(1L, 2L));
+        // when
+        List<UUID> volunteerIds = volunteerApplyRepository.findVolunteerIdsByRecruitIds(List.of(1L, 2L));
 
-        // Then
+        // then
         assertThat(volunteerIds).hasSize(20);
     }
 
     @DisplayName("모집글 ID로 페이징된 봉사 신청 조회")
     @Test
     void findAllByRecruitId() {
-        // Given
+        // given
         PageRequest firstPage = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("created_at")));
         PageRequest secondPage = PageRequest.of(1, 10, Sort.by(Sort.Order.asc("created_at")));
 
-        // When
-        Page<VolunteerApply> firstPageResult = volunteerApplyRepository.findAllByRecruitId(1L,
-                firstPage);
-        Page<VolunteerApply> secondPageResult = volunteerApplyRepository.findAllByRecruitId(1L,
-                secondPage);
+        // when
+        Page<VolunteerApply> firstPageResult = volunteerApplyRepository.findAllByRecruitId(1L, firstPage);
+        Page<VolunteerApply> secondPageResult = volunteerApplyRepository.findAllByRecruitId(1L, secondPage);
 
-        // Then
+        // then
         assertThat(firstPageResult.getContent()).hasSize(10);
         assertThat(firstPageResult.getTotalElements()).isEqualTo(15);
         assertThat(firstPageResult.getTotalPages()).isEqualTo(2);
@@ -115,8 +110,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(newApply);
 
         // when
-        Optional<VolunteerApply> findApply = volunteerApplyRepository.findByRecruitIdAndVolunteerId(
-                recruitId, volunteerId);
+        Optional<VolunteerApply> findApply = volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitId, volunteerId);
 
         // then
         assertThat(findApply).isPresent();
@@ -133,8 +127,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(newApply);
 
         // when
-        boolean result = volunteerApplyRepository.existsByRecruitIdAndVolunteerId(recruitId,
-                volunteerId);
+        boolean result = volunteerApplyRepository.existsByRecruitIdAndVolunteerId(recruitId, volunteerId);
 
         // then
         assertThat(result).isTrue();
@@ -173,13 +166,12 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitBoardId,
-                condition);
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitBoardId, condition);
 
         // then
         assertThat(applies.getTotalElements()).isEqualTo(3);
         assertThat(applies.getContent())
-                .allMatch(apply -> apply.getStatus() == APPROVED && !apply.getAttended());
+                .allMatch(apply -> apply.getStatus() == status && apply.getAttended() == attended);
 
     }
 
@@ -187,14 +179,14 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findAllByVolunteerId() {
         // given
-        UUID centerId = UUID.randomUUID();
+        UUID volunteerId = UUID.randomUUID();
         ApplyStatus status = APPROVED;
         Boolean attended = false;
 
-        volunteerApplyRepository.save(createApply(centerId, status, attended));
-        volunteerApplyRepository.save(createApply(centerId, status, attended));
-        volunteerApplyRepository.save(createApply(centerId, status, attended));
-        volunteerApplyRepository.save(createApply(centerId, REJECTED, !attended));
+        volunteerApplyRepository.save(createApply(volunteerId, status, attended));
+        volunteerApplyRepository.save(createApply(volunteerId, status, attended));
+        volunteerApplyRepository.save(createApply(volunteerId, status, attended));
+        volunteerApplyRepository.save(createApply(volunteerId, REJECTED, !attended));
 
         VolunteerApplySearchCondition condition = VolunteerApplySearchCondition.builder()
                 .status(status)
@@ -203,13 +195,12 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(centerId,
-                condition);
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(volunteerId, condition);
 
         // then
         assertThat(applies.getTotalElements()).isEqualTo(3);
         assertThat(applies.getContent())
-                .allMatch(apply -> apply.getStatus() == APPROVED && !apply.getAttended());
+                .allMatch(apply -> apply.getStatus() == status && apply.getAttended() == attended);
 
     }
 
@@ -250,8 +241,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private static VolunteerApply createApply(Long recruitId, ApplyStatus status,
-            Boolean attended) {
+    private static VolunteerApply createApply(Long recruitId, ApplyStatus status, Boolean attended) {
         return VolunteerApply.builder()
                 .volunteerId(UUID.randomUUID())
                 .recruitBoardId(recruitId)
@@ -260,10 +250,9 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private static VolunteerApply createApply(UUID centerId, ApplyStatus status,
-            Boolean attended) {
+    private static VolunteerApply createApply(UUID volunteerId, ApplyStatus status, Boolean attended) {
         return VolunteerApply.builder()
-                .volunteerId(centerId)
+                .volunteerId(volunteerId)
                 .recruitBoardId(101L)
                 .status(status)
                 .attended(attended)
