@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import java.util.List;
+
+import static com.somemore.user.domain.UserRole.VOLUNTEER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -120,7 +123,7 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         UUID userId = UUID.randomUUID();
         UserRole role = UserRole.VOLUNTEER;
 
-        UserCommonAttribute userCommonAttribute1 = UserCommonAttribute.createDefault(userId,role);
+        UserCommonAttribute userCommonAttribute1 = UserCommonAttribute.createDefault(userId, role);
         userCommonAttributeRepository.save(userCommonAttribute1);
 
         //when
@@ -134,5 +137,34 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         assertThat(result.contactNumber()).isEqualTo(userCommonAttribute1.getContactNumber());
         assertThat(result.imgUrl()).isEqualTo(userCommonAttribute1.getImgUrl());
         assertThat(result.introduce()).isEqualTo(userCommonAttribute1.getIntroduce());
+    }
+
+    @DisplayName("유저 아이디(userId) 리스트로 유저 공통 속성 리스트를 조회할 수 있다.")
+    @Test
+    void findAllByUserIds() {
+        // given
+        UserCommonAttribute one = createUserCommonAttribute();
+        UserCommonAttribute two = createUserCommonAttribute();
+        UserCommonAttribute three = createUserCommonAttribute();
+
+        userCommonAttributeRepository.save(one);
+        userCommonAttributeRepository.save(two);
+        userCommonAttributeRepository.save(three);
+
+        List<UUID> userIds = List.of(one.getUserId(), two.getUserId(), three.getUserId());
+
+        // when
+        List<UserCommonAttribute> result = userQueryService.getAllByUserIds(userIds);
+
+        // then
+        assertThat(result.size()).isEqualTo(3);
+        assertThat(result)
+                .extracting(UserCommonAttribute::getUserId)
+                .containsExactlyInAnyOrder(one.getUserId(), two.getUserId(), three.getUserId());
+
+    }
+
+    private UserCommonAttribute createUserCommonAttribute() {
+        return UserCommonAttribute.createDefault(UUID.randomUUID(), VOLUNTEER);
     }
 }
