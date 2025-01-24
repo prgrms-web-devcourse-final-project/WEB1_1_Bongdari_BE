@@ -6,6 +6,7 @@ import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
+import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 import com.somemore.user.usecase.UserQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,13 @@ public class UserQueryService implements UserQueryUseCase {
     @Override
     public boolean isDuplicateAccountId(String accountId) {
         return userRepository.existsByAccountId(accountId);
+    }
+
+    @Override
+    public UserProfileDto getUserProfileByUserId(UUID userId) {
+
+        return userCommonAttributeRepository.findUserProfileByUserId(userId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
     }
 
 }
