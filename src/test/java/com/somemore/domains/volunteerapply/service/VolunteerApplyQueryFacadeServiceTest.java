@@ -1,19 +1,9 @@
 package com.somemore.domains.volunteerapply.service;
 
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
-import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.repository.ReviewRepository;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.domain.VolunteerDetail;
-import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
-import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyRecruitInfoResponseDto;
@@ -21,9 +11,6 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerI
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.support.IntegrationTestSupport;
-import java.util.List;
-import java.util.UUID;
-
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
@@ -36,6 +23,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class VolunteerApplyQueryFacadeServiceTest extends IntegrationTestSupport {

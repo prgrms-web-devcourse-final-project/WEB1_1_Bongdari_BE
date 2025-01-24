@@ -85,7 +85,7 @@ class UserCommonAttributeRepositoryImplTest extends IntegrationTestSupport {
         List<UserCommonAttribute> result = userCommonAttributeRepository.findAllByUserIds(userIds);
 
         // then
-        assertThat(result.size()).isEqualTo(3);
+        assertThat(result).hasSize(3);
         assertThat(result)
                 .extracting(UserCommonAttribute::getUserId)
                 .containsExactlyInAnyOrder(one.getUserId(), two.getUserId(), three.getUserId());

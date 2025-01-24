@@ -42,7 +42,7 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         UserAuthInfo userAuthInfo = UserAuthInfo.createForOAuth(OAuthProvider.NAVER);
 
         user = userRepository.save(User.of(userAuthInfo, UserRole.VOLUNTEER));
-        userCommonAttribute = userCommonAttributeRepository.save(UserCommonAttribute.createDefault(user.getId(),UserRole.VOLUNTEER));
+        userCommonAttribute = userCommonAttributeRepository.save(UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER));
     }
 
 
@@ -157,7 +157,7 @@ class UserQueryServiceTest extends IntegrationTestSupport {
         List<UserCommonAttribute> result = userQueryService.getAllByUserIds(userIds);
 
         // then
-        assertThat(result.size()).isEqualTo(3);
+        assertThat(result).hasSize(3);
         assertThat(result)
                 .extracting(UserCommonAttribute::getUserId)
                 .containsExactlyInAnyOrder(one.getUserId(), two.getUserId(), three.getUserId());

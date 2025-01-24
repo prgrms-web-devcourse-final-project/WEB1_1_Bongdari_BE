@@ -61,7 +61,7 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                         volunteer.nickname))
                 .from(volunteer)
                 .where(
-                        InIds(ids),
+                        inIds(ids),
                         isNotDeleted()
                 )
                 .fetch();
@@ -76,7 +76,7 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                         volunteer.nickname))
                 .from(volunteer)
                 .where(
-                        InIds(ids),
+                        inIds(ids),
                         isNotDeleted()
                 )
                 .fetch();
@@ -86,7 +86,7 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
         return volunteer.deleted.eq(false);
     }
 
-    private static BooleanExpression InIds(List<UUID> ids) {
+    private static BooleanExpression inIds(List<UUID> ids) {
         return volunteer.id.in(ids);
     }
 }

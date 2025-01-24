@@ -8,7 +8,6 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerI
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.NoSuchElementException;

@@ -1,8 +1,6 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.domain.VolunteerDetail;
-import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
@@ -176,23 +174,6 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         );
 
         assertEquals(NOT_EXISTS_VOLUNTEER.getMessage(), exception.getMessage());
-    }
-
-    private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
-
-        VolunteerRegisterRequestDto volunteerRegisterRequestDto =
-                new VolunteerRegisterRequestDto(
-                        OAuthProvider.NAVER,
-                        "example-oauth-id",
-                        "making",
-                        "making@example.com",
-                        "male",
-                        "06-08",
-                        "1998",
-                        "010-1234-5678"
-                );
-
-        return VolunteerDetail.of(volunteerRegisterRequestDto, volunteerId);
     }
 
 }

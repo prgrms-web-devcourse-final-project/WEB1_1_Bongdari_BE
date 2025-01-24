@@ -1,7 +1,6 @@
 package com.somemore.domains.volunteer.repository;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
 import com.somemore.support.IntegrationTestSupport;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -185,12 +184,6 @@ class VolunteerRepositoryImplTest extends IntegrationTestSupport {
         Volunteer volunteer = Volunteer.createDefault(NAVER, "oauth-id-" + i);
         volunteer.updateVolunteerStats(i * 10, i);
         volunteerRepository.save(volunteer);
-    }
-
-    private static VolunteerRegisterRequestDto createVolunteerRegisterRequestDto(String name) {
-        return new VolunteerRegisterRequestDto(
-                NAVER, "naver", name, "email", "M", "1111", "1111",
-                "010-0000-0000");
     }
 
 }

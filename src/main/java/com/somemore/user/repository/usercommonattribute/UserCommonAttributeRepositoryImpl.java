@@ -73,7 +73,7 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
         return queryFactory
                 .selectFrom(userCommonAttribute)
                 .where(
-                        InUserIds(userIds),
+                        inUserIds(userIds),
                         isNotDeleted())
                 .fetch();
     }
@@ -86,7 +86,7 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
         return userCommonAttribute.deleted.eq(false);
     }
 
-    private static BooleanExpression InUserIds(List<UUID> userIds) {
+    private static BooleanExpression inUserIds(List<UUID> userIds) {
         return userCommonAttribute.userId.in(userIds);
     }
 
