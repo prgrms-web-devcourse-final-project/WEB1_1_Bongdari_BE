@@ -51,7 +51,8 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
         );
     }
 
-    public Optional<CenterProfileDto> findCenterProfileByUserId(UUID userId) {
+    @Override
+    public Optional<CenterProfileDto> findCenterProfileById(UUID centerId) {
         return Optional.ofNullable(
                 queryFactory.select(Projections.constructor(CenterProfileDto.class,
                                 center.id,
@@ -59,7 +60,7 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
                                 center.homepageUrl))
                         .from(center)
                         .where(
-                                center.userId.eq(userId),
+                                center.id.eq(centerId),
                                 isNotDeleted()
                         )
                         .fetchOne()

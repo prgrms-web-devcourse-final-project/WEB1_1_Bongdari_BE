@@ -14,5 +14,5 @@ public interface NEWCenterRepository {
 
     Optional<NEWCenter> findByUserId(UUID userId);
 
-    Optional<CenterProfileDto> findCenterProfileByUserId(UUID userId);
+    Optional<CenterProfileDto> findCenterProfileById(UUID centerId);
 }

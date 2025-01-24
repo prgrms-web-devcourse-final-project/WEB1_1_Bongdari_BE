@@ -39,12 +39,12 @@ public class NEWCenterQueryService implements NEWCenterQueryUseCase {
     }
 
     @Override
-    public CenterProfileResponseDto getCenterProfileByUserId(UUID userId) {
+    public CenterProfileResponseDto getCenterProfileById(UUID centerId) {
 
-        CenterProfileDto centerProfileDto = centerRepository.findCenterProfileByUserId(userId)
+        CenterProfileDto centerProfileDto = centerRepository.findCenterProfileById(centerId)
                 .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_CENTER));
 
-        UserProfileDto userProfileDto = userQueryUseCase.getUserProfileByUserId(userId);
+        UserProfileDto userProfileDto = userQueryUseCase.getUserProfileByUserId(centerProfileDto.userId());
 
         List<PreferItemResponseDto> preferItems = preferItemQueryUseCase.getPreferItemDtosByCenterId(centerProfileDto.id());
 

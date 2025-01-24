@@ -22,10 +22,10 @@ public class CenterQueryApiController {
     private final NEWCenterQueryUseCase centerQueryUseCase;
 
     @Operation(summary = "기관 프로필 조회 API")
-    @GetMapping("/profile/{userId}")
-    public ApiResponse<CenterProfileResponseDto> getCenterProfile(@PathVariable UUID userId) {
+    @GetMapping("/profile/{centerId}")
+    public ApiResponse<CenterProfileResponseDto> getCenterProfile(@PathVariable UUID centerId) {
 
-        CenterProfileResponseDto responseDto = centerQueryUseCase.getCenterProfileByUserId(userId);
+        CenterProfileResponseDto responseDto = centerQueryUseCase.getCenterProfileById(centerId);
 
         return ApiResponse.ok(200, responseDto, "기관 프로필 조회 성공");
     }

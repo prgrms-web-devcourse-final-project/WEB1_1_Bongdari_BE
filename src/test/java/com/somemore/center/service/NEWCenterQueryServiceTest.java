@@ -90,7 +90,7 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
         List<PreferItemResponseDto> preferItems = preferItemQueryUseCase.getPreferItemDtosByCenterId(center.getId());
 
         //when
-        CenterProfileResponseDto result = centerQueryService.getCenterProfileByUserId(userId);
+        CenterProfileResponseDto result = centerQueryService.getCenterProfileById(center.getId());
 
         //then
         assertThat(result).isNotNull();

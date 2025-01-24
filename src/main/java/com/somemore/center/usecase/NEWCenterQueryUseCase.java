@@ -11,5 +11,5 @@ public interface NEWCenterQueryUseCase {
 
     UUID getIdByUserId(UUID userId);
 
-    CenterProfileResponseDto getCenterProfileByUserId(UUID userId);
+    CenterProfileResponseDto getCenterProfileById(UUID centerId);
 }

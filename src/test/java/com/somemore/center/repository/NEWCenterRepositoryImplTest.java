@@ -39,7 +39,7 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
 
     }
 
-    @DisplayName("유저 아이디로 기관 정보를 가져올 수 있다.")
+    @DisplayName("기관 아이디로 기관 프로필 정보를 가져올 수 있다.")
     @Test
     void findCenterProfileByUserId() {
 
@@ -49,7 +49,7 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
         centerRepository.save(center);
 
         // when
-        Optional<CenterProfileDto> result = centerRepository.findCenterProfileByUserId(userId);
+        Optional<CenterProfileDto> result = centerRepository.findCenterProfileById(center.getId());
 
         // then
         assertThat(result).isPresent();
@@ -63,10 +63,10 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
     void findCenterProfileByUserId_NoResult() {
 
         // given
-        UUID nonExistentUserId = UUID.randomUUID();
+        UUID nonExistentCenterId = UUID.randomUUID();
 
         // when
-        Optional<CenterProfileDto> result = centerRepository.findCenterProfileByUserId(nonExistentUserId);
+        Optional<CenterProfileDto> result = centerRepository.findCenterProfileById(nonExistentCenterId);
 
         // then
         assertThat(result).isEmpty();
