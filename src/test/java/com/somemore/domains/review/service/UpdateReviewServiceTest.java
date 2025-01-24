@@ -51,28 +51,12 @@ class UpdateReviewServiceTest extends IntegrationTestSupport {
         assertThat(updateReview.getContent()).isEqualTo(dto.content());
     }
 
-    @DisplayName("리뷰 이미지 링크를 업데이트 할 수 있다.")
-    @Test
-    void updateReviewImageUrl() {
-        // given
-        Long id = review.getId();
-        String newImgUrl = "newLink.co.kr";
-
-        // when
-        updateReviewService.updateReviewImageUrl(id, volunteerId, newImgUrl);
-
-        // then
-        Review updateReview = reviewRepository.findById(id).orElseThrow();
-        assertThat(updateReview.getImgUrl()).isEqualTo(newImgUrl);
-    }
-
     private Review createReview(Long applyId, UUID volunteerId) {
         return Review.builder()
                 .volunteerApplyId(applyId)
                 .volunteerId(volunteerId)
                 .title("제목제목")
                 .content("내용내용")
-                .imgUrl("이미지링크")
                 .build();
     }
 }

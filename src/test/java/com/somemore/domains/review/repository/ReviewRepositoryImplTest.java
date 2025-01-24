@@ -246,7 +246,6 @@ class ReviewRepositoryImplTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .title(title)
                 .content("내용내용")
-                .imgUrl("이미지링크")
                 .build();
     }
 

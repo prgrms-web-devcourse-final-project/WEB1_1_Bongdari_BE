@@ -1,15 +1,14 @@
 package com.somemore.domains.review.service.validator;
 
-import com.somemore.domains.review.domain.Review;
-import com.somemore.global.exception.BadRequestException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_REVIEW;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.somemore.domains.review.domain.Review;
+import com.somemore.global.exception.BadRequestException;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class ReviewValidatorTest {
 
@@ -20,7 +19,7 @@ class ReviewValidatorTest {
     void validateWriter() {
         // given
         UUID volunteerId = UUID.randomUUID();
-        Review review = createReview(volunteerId, "리뷰 제목", "내용내용", "이미지링크");
+        Review review = createReview(volunteerId, "리뷰 제목", "내용내용");
 
         // when
         // then
@@ -34,7 +33,7 @@ class ReviewValidatorTest {
     void validateWriterWhenMissMatch() {
         // given
         UUID wrongVolunteerId = UUID.randomUUID();
-        Review review = createReview(UUID.randomUUID(), "다른 제목", "다른 내용", "다른 링크");
+        Review review = createReview(UUID.randomUUID(), "다른 제목", "다른 내용");
 
         // when
         // then
@@ -44,13 +43,12 @@ class ReviewValidatorTest {
                 .hasMessage(UNAUTHORIZED_REVIEW.getMessage());
     }
 
-    private Review createReview(UUID volunteerId, String title, String content, String imgUrl) {
+    private Review createReview(UUID volunteerId, String title, String content) {
         return Review.builder()
                 .volunteerApplyId(1L)
                 .volunteerId(volunteerId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .build();
     }
 }

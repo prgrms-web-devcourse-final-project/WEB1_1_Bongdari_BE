@@ -1,14 +1,12 @@
 package com.somemore.domains.review.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.domains.review.dto.request.ReviewUpdateRequestDto;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 
 class ReviewTest {
 
@@ -50,26 +48,12 @@ class ReviewTest {
         assertThat(review.getContent()).isEqualTo(dto.content());
     }
 
-    @DisplayName("이미지 링크를 업데이트 할 수 있다.")
-    @Test
-    void updateWithImgUrl() {
-        // given
-        String newImgUrl = "newLink";
-
-        // when
-        review.updateWith(newImgUrl);
-
-        // then
-        assertThat(review.getImgUrl()).isEqualTo(newImgUrl);
-    }
-
     private Review createReview(Long applyId, UUID volunteerId) {
         return Review.builder()
                 .volunteerApplyId(applyId)
                 .volunteerId(volunteerId)
                 .title("제목제목")
                 .content("내용내용")
-                .imgUrl("이미지링크")
                 .build();
     }
 }

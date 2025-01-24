@@ -21,8 +21,6 @@ public record ReviewDetailResponseDto(
         String title,
         @Schema(description = "리뷰 내용", example = "정말 유익했습니다. 더보기..")
         String content,
-        @Schema(description = "이미지 링크", example = "https://image.domain.com/links")
-        String imgUrl,
         @Schema(description = "작성 일자", example = "2024-12-01T09:00:00", type = "string")
         LocalDateTime createdAt,
         @Schema(description = "수정 일자", example = "2024-12-01T09:00:00", type = "string")
@@ -35,7 +33,6 @@ public record ReviewDetailResponseDto(
                 .volunteerId(review.getVolunteerId())
                 .title(review.getTitle())
                 .content(review.getContent())
-                .imgUrl(review.getImgUrl())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .build();

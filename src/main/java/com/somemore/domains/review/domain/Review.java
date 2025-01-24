@@ -1,5 +1,8 @@
 package com.somemore.domains.review.domain;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 import com.somemore.domains.review.dto.request.ReviewUpdateRequestDto;
 import com.somemore.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -8,14 +11,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -40,17 +39,12 @@ public class Review extends BaseEntity {
     @Column(name = "content", length = 1000, nullable = false)
     private String content;
 
-    @Column(name = "img_url", nullable = false)
-    private String imgUrl;
-
     @Builder
-    public Review(Long volunteerApplyId, UUID volunteerId, String title,
-                  String content, String imgUrl) {
+    public Review(Long volunteerApplyId, UUID volunteerId, String title, String content) {
         this.volunteerApplyId = volunteerApplyId;
         this.volunteerId = volunteerId;
         this.title = title;
         this.content = content;
-        this.imgUrl = imgUrl;
     }
 
     public boolean isWriter(UUID volunteerId) {
@@ -62,7 +56,4 @@ public class Review extends BaseEntity {
         this.content = dto.content();
     }
 
-    public void updateWith(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
 }

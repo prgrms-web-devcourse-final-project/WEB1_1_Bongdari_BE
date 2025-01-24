@@ -1,5 +1,11 @@
 package com.somemore.domains.review.service;
 
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.global.exception.ExceptionMessage.REVIEW_ALREADY_EXISTS;
+import static com.somemore.global.exception.ExceptionMessage.REVIEW_RESTRICTED_TO_ATTENDED;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.request.ReviewCreateRequestDto;
 import com.somemore.domains.review.repository.ReviewRepository;
@@ -8,19 +14,12 @@ import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.DuplicateException;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.exception.ExceptionMessage.REVIEW_ALREADY_EXISTS;
-import static com.somemore.global.exception.ExceptionMessage.REVIEW_RESTRICTED_TO_ATTENDED;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class CreateReviewServiceTest extends IntegrationTestSupport {
@@ -55,7 +54,7 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Long reviewId = createReviewService.createReview(requestDto, volunteerId, "");
+        Long reviewId = createReviewService.createReview(requestDto, volunteerId);
 
         // then
         Optional<Review> findReview = reviewRepository.findById(reviewId);
@@ -82,7 +81,6 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .title("리뷰 제목")
                 .content("리뷰 내용")
-                .imgUrl("")
                 .build();
         reviewRepository.save(review);
 
@@ -95,7 +93,7 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> createReviewService.createReview(requestDto, volunteerId, ""))
+                () -> createReviewService.createReview(requestDto, volunteerId))
                 .isInstanceOf(DuplicateException.class)
                 .hasMessage(REVIEW_ALREADY_EXISTS.getMessage());
     }
@@ -124,7 +122,7 @@ class CreateReviewServiceTest extends IntegrationTestSupport {
         // when
         // then
         assertThatThrownBy(
-                () -> createReviewService.createReview(requestDto, volunteerId, ""))
+                () -> createReviewService.createReview(requestDto, volunteerId))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage(REVIEW_RESTRICTED_TO_ATTENDED.getMessage());
     }
