@@ -4,7 +4,7 @@ import com.somemore.domains.center.dto.request.PreferItemCreateRequestDto;
 import com.somemore.domains.center.dto.response.PreferItemCreateResponseDto;
 import com.somemore.domains.center.usecase.command.CreatePreferItemUseCase;
 import com.somemore.domains.center.usecase.command.DeletePreferItemUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,9 +34,9 @@ public class PreferItemCommandApiController {
     @PostMapping()
     public ApiResponse<PreferItemCreateResponseDto> registerPreferItem(
             @Valid @RequestBody PreferItemCreateRequestDto requestDto,
-            @CurrentUser UUID userId) {
+            @UserId UUID centerId) {
 
-        PreferItemCreateResponseDto responseDto = createPreferItemUseCase.createPreferItem(userId,
+        PreferItemCreateResponseDto responseDto = createPreferItemUseCase.createPreferItem(centerId,
                 requestDto);
 
         return ApiResponse.ok(200, responseDto, "관심 기관 등록 성공");
@@ -45,7 +45,7 @@ public class PreferItemCommandApiController {
     @Secured("ROLE_CENTER")
     @Operation(summary = "기관 선호물품 삭제 API")
     @DeleteMapping("/{preferItemId}")
-    public ApiResponse<String> deletePreferItem(@CurrentUser UUID centerId, @PathVariable Long preferItemId) {
+    public ApiResponse<String> deletePreferItem(@UserId UUID centerId, @PathVariable Long preferItemId) {
 
         deletePreferItemUseCase.deletePreferItem(centerId, preferItemId);
 
