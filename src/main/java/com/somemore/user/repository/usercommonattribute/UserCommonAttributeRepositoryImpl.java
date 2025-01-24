@@ -9,6 +9,7 @@ import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -68,12 +69,25 @@ public class UserCommonAttributeRepositoryImpl implements UserCommonAttributeRep
         );
     }
 
+    public List<UserCommonAttribute> findAllByUserIds(List<UUID> userIds) {
+        return queryFactory
+                .selectFrom(userCommonAttribute)
+                .where(
+                        InUserIds(userIds),
+                        isNotDeleted())
+                .fetch();
+    }
+
     private static BooleanExpression eqUserId(UUID userId) {
         return userCommonAttribute.userId.eq(userId);
     }
 
     private static BooleanExpression isNotDeleted() {
         return userCommonAttribute.deleted.eq(false);
+    }
+
+    private static BooleanExpression InUserIds(List<UUID> userIds) {
+        return userCommonAttribute.userId.in(userIds);
     }
 
 }
