@@ -32,14 +32,14 @@ class CenterQueryApiControllerTest extends ControllerTestSupport {
     void setUp() {
         userId = UUID.randomUUID();
         responseDto = CenterProfileResponseDto.builder()
-                .id(userId) // id로 수정
-                .userId(UUID.randomUUID()) // userId 추가
+                .id(userId)
+                .userId(UUID.randomUUID())
                 .homepageUrl("http://example.com")
                 .name("Test Center")
                 .contactNumber("010-1234-5678")
                 .imgUrl("http://example.com/image.jpg")
                 .introduce("This is a test center.")
-                .preferItems(List.of()) // preferItems 추가
+                .preferItems(List.of())
                 .build();
     }
 
