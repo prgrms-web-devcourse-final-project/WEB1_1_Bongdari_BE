@@ -43,4 +43,8 @@ public class NEWCenter extends BaseEntity {
                 .homepageUrl("")
                 .build();
     }
+
+    public void update(String homepageUrl) {
+        this.homepageUrl = homepageUrl;
+    }
 }
