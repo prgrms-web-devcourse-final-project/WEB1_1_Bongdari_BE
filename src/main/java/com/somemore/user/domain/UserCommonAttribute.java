@@ -46,7 +46,6 @@ public class UserCommonAttribute extends BaseEntity {
     private boolean isCustomized;
 
     public void update(CommonBasicInfoRequestDto commonBasicInfoRequestDto) {
-        // TODO param의 정보를 필드에 업데이트
         this.name = commonBasicInfoRequestDto.name();
         this.contactNumber = commonBasicInfoRequestDto.contactNumber();
         this.imgUrl = commonBasicInfoRequestDto.imgUrl();
