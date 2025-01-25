@@ -29,13 +29,13 @@ public class UpdateBasicInfoService implements UpdateBasicInfoUseCase {
     private final NEWCenterQueryUseCase centerQueryUseCase;
 
     @Override
-    public void update(UUID userId, UUID roleId, VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto) {
+    public void update(UUID userId, VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto) {
         updateCommonAttribute(userId, volunteerBasicInfoRequestDto.commonBasicInfo());
         updateVolunteerAttribute(userId, volunteerBasicInfoRequestDto);
     }
 
     @Override
-    public void update(UUID userId, UUID roleId, CenterBasicInfoRequestDto centerBasicInfoRequestDto) {
+    public void update(UUID userId, CenterBasicInfoRequestDto centerBasicInfoRequestDto) {
         updateCommonAttribute(userId, centerBasicInfoRequestDto.commonBasicInfo());
         updateCenterAttribute(userId, centerBasicInfoRequestDto);
     }

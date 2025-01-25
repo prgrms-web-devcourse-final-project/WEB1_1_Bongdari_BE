@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface UpdateBasicInfoUseCase {
 
-    void update(UUID userId, UUID roleId, VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto);
+    void update(UUID userId, VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto);
 
-    void update(UUID userId, UUID roleId, CenterBasicInfoRequestDto centerBasicInfoRequestDto);
+    void update(UUID userId, CenterBasicInfoRequestDto centerBasicInfoRequestDto);
 }
