@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +27,7 @@ public class UserCommandController {
     private final UpdateBasicInfoUseCase updateBasicInfoUseCase;
 
     @Secured("ROLE_VOLUNTEER")
-    @PostMapping("/basic-info/volunteer")
+    @PutMapping("/basic-info/volunteer")
     @Operation(summary = "봉사자 기본 정보 업데이트", description = "봉사자의 기본 정보를 업데이트합니다.")
     public ApiResponse<String> registerBasicInfo(
             @UserId UUID userId,
@@ -38,7 +38,7 @@ public class UserCommandController {
     }
 
     @Secured("ROLE_CENTER")
-    @PostMapping("/basic-info/center")
+    @PutMapping("/basic-info/center")
     @Operation(summary = "센터 기본 정보 업데이트", description = "센터의 기본 정보를 업데이트합니다.")
     public ApiResponse<String> registerBasicInfo(
             @UserId UUID userId,
