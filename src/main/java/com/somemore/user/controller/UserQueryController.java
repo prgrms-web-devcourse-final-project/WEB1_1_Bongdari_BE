@@ -35,9 +35,8 @@ public class UserQueryController {
     }
 
     @GetMapping("/check/basic-info")
-    @Operation(summary = "유저 기본 정보 입력 상태 확인", description = "현재 유저의 필수 입력 정보가 모두 완료되었는지 확인합니다."
-    )
-    public ApiResponse<Boolean> checkUserExists(
+    @Operation(summary = "유저 기본 정보 입력 상태 확인", description = "현재 유저의 필수 입력 정보가 모두 완료되었는지 확인합니다.")
+    public ApiResponse<Boolean> checkBasicInfo(
             @UserId UUID userId
     ) {
         boolean isBasicInfoComplete = validateBasicInfoUseCase.isBasicInfoComplete(userId);
