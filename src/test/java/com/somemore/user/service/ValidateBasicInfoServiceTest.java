@@ -5,6 +5,7 @@ import com.somemore.user.domain.User;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.dto.UserAuthInfo;
+import com.somemore.user.dto.basicinfo.CommonBasicInfoRequestDto;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +40,10 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     @Test
     void isBasicInfoComplete_ReturnsTrue() {
         // given
+        CommonBasicInfoRequestDto commonBasicInfoRequestDto =
+                new CommonBasicInfoRequestDto("test", "test", "test", "test");
         UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER);
-        userCommonAttribute.customize();
+        userCommonAttribute.update(commonBasicInfoRequestDto);
         userCommonAttributeRepository.save(userCommonAttribute);
 
         // when
