@@ -32,7 +32,7 @@ public interface RecruitBoardRepository {
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
 
-    List<RecruitBoard> findAll();
+    List<RecruitBoard> findAllByDeletedFalse();
 
     long updateStatusToClosedForDateRange(LocalDateTime startTime, LocalDateTime endTime);
 

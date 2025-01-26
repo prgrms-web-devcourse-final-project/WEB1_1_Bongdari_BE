@@ -1,5 +1,9 @@
 package com.somemore.domains.recruitboard.repository;
 
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.CLOSED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.COMPLETED;
+import static com.somemore.domains.recruitboard.domain.RecruitStatus.RECRUITING;
+
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -205,8 +209,8 @@ public class RecruitBoardRepositoryImpl implements RecruitBoardRepository {
     }
 
     @Override
-    public List<RecruitBoard> findAll() {
-        return recruitBoardJpaRepository.findAll();
+    public List<RecruitBoard> findAllByDeletedFalse() {
+        return recruitBoardJpaRepository.findAllByDeletedFalse();
     }
 
     @Override
