@@ -3,6 +3,7 @@ package com.somemore.domains.search.scheduler;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
+import com.somemore.domains.search.domain.RecruitBoardDocument;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.support.IntegrationTestSupport;
 import org.awaitility.Awaitility;
@@ -42,7 +43,7 @@ class RecruitBoardUpdateSchedulerTest extends IntegrationTestSupport {
 
         // when
         // then
-        Page<RecruitBoardWithCenter> recruitBoards = searchBoardRepository
+        Page<RecruitBoardDocument> recruitBoards = searchBoardRepository
                 .findByRecruitBoardsContaining(condition);
 
         Awaitility.await()
