@@ -9,9 +9,11 @@ import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
+import com.somemore.domains.search.domain.RecruitBoardDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -76,6 +78,29 @@ public record RecruitBoardDetailResponseDto(
                 .admitted(info.getAdmitted())
                 .location(location)
                 .center(center)
+                .build();
+    }
+
+    public static RecruitBoardDetailResponseDto fromDocument(RecruitBoardDocument document) {
+        return RecruitBoardDetailResponseDto.builder()
+                .id(document.getId())
+                .createdAt(document.getCreatedAt())
+                .updatedAt(document.getUpdatedAt())
+                .title(document.getTitle())
+                .content(document.getContent())
+                .region(document.getRegion())
+                .recruitStatus(document.getRecruitStatus())
+                .recruitmentCount(document.getRecruitmentCount())
+                .volunteerStartDateTime(document.getVolunteerStartDateTime())
+                .volunteerEndDateTime(document.getVolunteerEndDateTime())
+                .volunteerCategory(document.getVolunteerCategory())
+                .volunteerHours(document.getVolunteerHours())
+                .admitted(document.getAdmitted())
+                .location(LocationResponseDto.of(document.getAddress(),
+                        BigDecimal.valueOf(document.getLocation()[1]),
+                        BigDecimal.valueOf(document.getLocation()[0])))
+                .center(CenterSimpleInfoResponseDto.of(document.getCenterId(),
+                        document.getCenterName()))
                 .build();
     }
 
