@@ -5,8 +5,7 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByConditi
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
-import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
-import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
+import com.somemore.domains.search.domain.RecruitBoardDocument;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.domains.search.usecase.RecruitBoardDocumentUseCase;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +26,16 @@ public class RecruitBoardDocumentService implements RecruitBoardDocumentUseCase 
     @Transactional(readOnly = true)
     @Override
     public Page<RecruitBoardWithCenterResponseDto> getRecruitBoardBySearch(RecruitBoardSearchCondition condition) {
-        Page<RecruitBoardWithCenter> boards = searchBoardRepository.findByRecruitBoardsContaining(condition);
-        return boards.map(RecruitBoardWithCenterResponseDto::from);
+        Page<RecruitBoardDocument> boards = searchBoardRepository.findByRecruitBoardsContaining(condition);
+        return boards.map(RecruitBoardWithCenterResponseDto::fromDocument);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Page<RecruitBoardDetailResponseDto> getRecruitBoardsNearbyWithKeyword(
             RecruitBoardNearByCondition condition) {
-        Page<RecruitBoardDetail> boards = searchBoardRepository.findAllNearbyWithKeyword(condition);
-        return boards.map(RecruitBoardDetailResponseDto::from);
+        Page<RecruitBoardDocument> boards = searchBoardRepository.findAllNearbyWithKeyword(condition);
+        return boards.map(RecruitBoardDetailResponseDto::fromDocument);
     }
 
     @Transactional
