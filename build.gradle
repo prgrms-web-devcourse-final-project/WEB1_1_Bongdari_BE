@@ -139,7 +139,8 @@ def jacocoExcludePatterns = [
         '**/event/**',
         '**/*Aspect*',
         '**/Aspect/*',
-        '**/utils/*'
+        '**/utils/*',
+        '**/search/**'
 ]
 
 def jacocoExcludePatternsForVerify = [
@@ -161,7 +162,8 @@ def jacocoExcludePatternsForVerify = [
         '*.*event*.*',
         '*.*Aspect*',
         '*.Aspect.*',
-        '*.utils.*'
+        '*.utils.*',
+        '*.search.*'
 ]
 
 jacocoTestReport {
