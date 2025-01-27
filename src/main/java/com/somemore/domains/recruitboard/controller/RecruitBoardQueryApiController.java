@@ -63,6 +63,33 @@ public class RecruitBoardQueryApiController {
         );
     }
 
+    @GetMapping("/recruit-boards/center/{centerId}")
+    @Operation(summary = "특정 기관 모집글 조회", description = "특정 기관의 봉사 모집글을 조회합니다.")
+    public ApiResponse<Page<RecruitBoardResponseDto>> getRecruitBoardsByCenterId(
+            @PathVariable UUID centerId,
+            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) VolunteerCategory category,
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) Boolean admitted,
+            @RequestParam(required = false) RecruitStatus status
+    ) {
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword(keyword)
+                .category(category)
+                .region(region)
+                .admitted(admitted)
+                .status(status)
+                .pageable(pageable)
+                .build();
+
+        return ApiResponse.ok(
+                200,
+                recruitBoardQueryUseCase.getRecruitBoardsByCenterId(centerId, condition),
+                "특정 기관 봉사 활동 모집글 조회 성공"
+        );
+    }
+
     @Secured("ROLE_CENTER")
     @GetMapping("/recruit-boards/me")
     @Operation(summary = "기관이 작성한 모집글 조회", description = "기관의 봉사 모집글을 조회합니다.")
