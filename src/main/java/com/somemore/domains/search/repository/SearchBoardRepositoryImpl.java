@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Repository
@@ -98,6 +99,14 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
         communityBoardDocumentRepository.deleteAll();
     }
 
+    private List<CommunityBoardDocument> getCommunityBoardDocuments(String keyword) {
+
+        if (keyword == null || keyword.isEmpty()) {
+            return communityBoardDocumentRepository.findAll();
+        }
+        return communityBoardDocumentRepository.findDocumentsByTitleOrContentOrNicknameContaining(keyword);
+    }
+
     private List<RecruitBoardDocument> convertRecruitBoardToDocuments(List<RecruitBoard> recruitBoards) {
         List<RecruitBoardDocument> communityBoardDocuments = new ArrayList<>();
 
@@ -154,122 +163,92 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
     }
 
     private NativeQuery getRecruitBoardWithSearchCondition(RecruitBoardSearchCondition condition) {
-        Query query;
-        List<Query> mustQueries = new ArrayList<>();
-        List<Query> shouldQueries = new ArrayList<>();
+        return buildNativeQuery(builder -> {
+            if (condition.category() != null) {
+                builder.addMustQuery("volunteerCategory", condition.category().toString());
+            }
+            if (condition.region() != null && !condition.region().isEmpty()) {
+                builder.addMustQuery("region", condition.region());
+            }
+            if (condition.admitted() != null) {
+                builder.addMustQuery("admitted", String.valueOf(condition.admitted()));
+            }
+            if (condition.status() != null) {
+                builder.addMustQuery("recruitStatus", condition.status().toString());
+            }
+            if (condition.keyword() != null && !condition.keyword().isEmpty()) {
+                builder.addShouldQuery(condition.keyword());
+            }
+        });
+    }
+    private NativeQuery getRecruitBoardWithNearByCondition(RecruitBoardNearByCondition condition) {
+        return buildNativeQuery(builder -> {
+            if (condition.latitude() != null && condition.longitude() != null && condition.radius() != null) {
+                builder.addGeoDistanceQuery(condition.latitude(), condition.longitude(), condition.radius());
+            }
+            if (condition.status() != null) {
+                builder.addMustQuery("recruitStatus", condition.status().toString());
+            }
+            if (condition.keyword() != null && !condition.keyword().isEmpty()) {
+                builder.addShouldQuery(condition.keyword());
+            }
+        });
+    }
+    private NativeQuery buildNativeQuery(Consumer<QueryBuilder> builderConsumer) {
+        QueryBuilder builder = new QueryBuilder();
+        builderConsumer.accept(builder);
+        return NativeQuery.builder()
+                .withQuery(builder.build())
+                .build();
+    }
+    private static class QueryBuilder {
+        private final List<Query> mustQueries = new ArrayList<>();
+        private final List<Query> shouldQueries = new ArrayList<>();
 
-        if (condition.category() != null) {
+        void addMustQuery(String field, String value) {
             mustQueries.add(QueryBuilders.term()
-                    .field("volunteerCategory")
-                    .value(condition.category().toString())
+                    .field(field)
+                    .value(value)
                     .build()
                     ._toQuery());
         }
-        if (condition.region() != null && !condition.region().isEmpty()) {
-            mustQueries.add(QueryBuilders.term()
-                    .field("region")
-                    .value(condition.region())
-                    .build()
-                    ._toQuery());
-        }
-        if (condition.admitted() != null) {
-            mustQueries.add(QueryBuilders.term()
-                    .field("admitted")
-                    .value(condition.admitted())
-                    .build()
-                    ._toQuery());
-        }
-        if (condition.status() != null) {
-            mustQueries.add(QueryBuilders.term()
-                    .field("recruitStatus")
-                    .value(condition.status().toString())
-                    .build()
-                    ._toQuery());
-        }
-        if (condition.keyword() != null && !condition.keyword().isEmpty()) {
+
+        void addShouldQuery(String keyword) {
             shouldQueries.add(
                     QueryBuilders.multiMatch()
                             .fields("title^3", "content^2", "centerName")
-                            .query(condition.keyword())
+                            .query(keyword)
                             .fuzziness("AUTO")
                             .build()
                             ._toQuery()
             );
         }
 
-        if (mustQueries.isEmpty() && shouldQueries.isEmpty()) {
-            query = QueryBuilders.matchAll().build()._toQuery();
-        } else {
-            query = new BoolQuery.Builder()
-                    .must(mustQueries)
-                    .should(shouldQueries)
-                    .build()
-                    ._toQuery();
-        }
-
-        return NativeQuery.builder()
-                .withQuery(query)
-                .build();
-    }
-
-    private NativeQuery getRecruitBoardWithNearByCondition(RecruitBoardNearByCondition condition) {
-        Query query;
-        List<Query> mustQueries = new ArrayList<>();
-        List<Query> shouldQueries = new ArrayList<>();
-
-        if (condition.latitude() != null && condition.longitude() != null && condition.radius() != null) {
-            String distance = condition.radius() + "km";
-
+        void addGeoDistanceQuery(double latitude, double longitude, double radius) {
+            String distance = radius + "km";
             mustQueries.add(QueryBuilders.geoDistance()
                     .field("location")
                     .distance(distance)
                     .location(GeoLocation.of(builder -> builder
                             .latlon(latlon -> latlon
-                                    .lat(condition.latitude())
-                                    .lon(condition.longitude())
+                                    .lat(latitude)
+                                    .lon(longitude)
                             )
                     ))
                     .build()
                     ._toQuery());
         }
-        if (condition.status() != null) {
-            mustQueries.add(QueryBuilders.term()
-                    .field("recruitStatus")
-                    .value(condition.status().toString())
-                    .build()
-                    ._toQuery());
-        }
-        if (condition.keyword() != null && !condition.keyword().isEmpty()) {
-            shouldQueries.add(
-                    QueryBuilders.multiMatch()
-                            .fields("title^3", "content^2", "centerName")
-                            .query(condition.keyword())
-                            .fuzziness("AUTO")
-                            .build()
-                            ._toQuery()
-            );
-        }
 
-        if (mustQueries.isEmpty() && shouldQueries.isEmpty()) {
-            query = QueryBuilders.matchAll().build()._toQuery();
-        } else {
-            query = new BoolQuery.Builder()
-                    .must(mustQueries)
-                    .should(shouldQueries)
-                    .build()
-                    ._toQuery();
+        Query build() {
+            if (mustQueries.isEmpty() && shouldQueries.isEmpty()) {
+                return QueryBuilders.matchAll().build()._toQuery();
+            } else {
+                return new BoolQuery.Builder()
+                        .must(mustQueries)
+                        .should(shouldQueries)
+                        .build()
+                        ._toQuery();
+            }
         }
-
-        return NativeQuery.builder()
-                .withQuery(query)
-                .build();
-    }
-
-    private List<CommunityBoardDocument> getCommunityBoardDocuments(String keyword) {
-
-        if (keyword == null || keyword.isEmpty()) {
-            return communityBoardDocumentRepository.findAll();
-        }
-        return communityBoardDocumentRepository.findDocumentsByTitleOrContentOrNicknameContaining(keyword);
     }
 }
