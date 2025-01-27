@@ -60,8 +60,6 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
     public Page<RecruitBoardDocument> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition) {
         NativeQuery searchQuery = getRecruitBoardWithNearByCondition(condition);
 
-        System.out.println("Native Query : " + searchQuery.getQuery());
-
         List<RecruitBoardDocument> boardDocuments =
                 elasticsearchOperations.search(searchQuery, RecruitBoardDocument.class)
                         .stream()
