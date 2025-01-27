@@ -8,9 +8,8 @@ import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
-import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardDetail;
-import com.somemore.domains.recruitboard.repository.mapper.RecruitBoardWithCenter;
 import com.somemore.domains.search.domain.CommunityBoardDocument;
+import com.somemore.domains.search.domain.RecruitBoardDocument;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
@@ -172,7 +171,7 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
         searchBoardRepository.saveRecruitBoardDocuments(recruitBoards);
 
         //then
-        Page<RecruitBoardWithCenter> findBoard = searchBoardRepository.findByRecruitBoardsContaining(condition);
+        Page<RecruitBoardDocument> findBoard = searchBoardRepository.findByRecruitBoardsContaining(condition);
 
         assertThat(findBoard).isNotNull();
         assertThat(findBoard.getTotalElements()).isEqualTo(2);
@@ -192,7 +191,7 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Page<RecruitBoardWithCenter> findBoards = searchBoardRepository.findByRecruitBoardsContaining(condition);
+        Page<RecruitBoardDocument> findBoards = searchBoardRepository.findByRecruitBoardsContaining(condition);
 
         //then
         assertThat(findBoards).isNotNull();
@@ -212,7 +211,7 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Page<RecruitBoardWithCenter> findBoards = searchBoardRepository.findByRecruitBoardsContaining(condition);
+        Page<RecruitBoardDocument> findBoards = searchBoardRepository.findByRecruitBoardsContaining(condition);
 
         //then
         assertThat(findBoards).isNotNull();
@@ -236,7 +235,7 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<RecruitBoardDetail> result = searchBoardRepository.findAllNearbyWithKeyword(condition);
+        Page<RecruitBoardDocument> result = searchBoardRepository.findAllNearbyWithKeyword(condition);
 
         // then
         assertThat(result).isNotNull();
@@ -252,14 +251,14 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
 
         RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
                 .keyword(null)
-                .latitude(37.5935)
-                .longitude(126.9780)
+                .latitude(37.64598908)
+                .longitude(127.00640578)
                 .radius(5.0)
                 .pageable(pageable)
                 .build();
 
         // when
-        Page<RecruitBoardDetail> result = searchBoardRepository.findAllNearbyWithKeyword(condition);
+        Page<RecruitBoardDocument> result = searchBoardRepository.findAllNearbyWithKeyword(condition);
 
         // then
         assertThat(result).isNotNull();

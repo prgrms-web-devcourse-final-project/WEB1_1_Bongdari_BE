@@ -74,7 +74,7 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         //given
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-                .keyword("노인")
+                .keyword("강북")
                 .pageable(pageable)
                 .build();
 
@@ -105,9 +105,9 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         //then
         assertThat(dtos).isNotNull();
         assertThat(dtos.getContent()).isNotNull();
-        assertThat(dtos.getTotalElements()).isEqualTo(25);
+        assertThat(dtos.getTotalElements()).isEqualTo(5);
         assertThat(dtos.getSize()).isEqualTo(5);
-        assertThat(dtos.getTotalPages()).isEqualTo(5);
+        assertThat(dtos.getTotalPages()).isEqualTo(1);
     }
 
     @DisplayName("위치 기반으로 반경 내에 검색 키워드가 포함된 모집글을 반환한다. (elasticsearch)")
@@ -140,8 +140,8 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         Pageable pageable = getPageable();
         RecruitBoardNearByCondition condition = RecruitBoardNearByCondition.builder()
                 .keyword(null)
-                .latitude(37.5935)
-                .longitude(126.9780)
+                .latitude(37.64598908)
+                .longitude(127.00640578)
                 .radius(5.0)
                 .pageable(pageable)
                 .build();
@@ -152,7 +152,7 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(25);
+        assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getContent()).isNotEmpty();
     }
 
