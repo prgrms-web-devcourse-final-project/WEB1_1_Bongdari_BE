@@ -77,6 +77,14 @@ public class NEWVolunteer extends BaseEntity {
                 .build();
     }
 
+    public void update(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void update(Gender gender) {
+        this.gender = gender;
+    }
+
     public void updateVolunteerStats(int hours, int count) {
         this.totalVolunteerHours += hours;
         this.totalVolunteerCount += count;
