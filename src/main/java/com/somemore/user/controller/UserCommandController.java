@@ -8,7 +8,6 @@ import com.somemore.user.usecase.UpdateBasicInfoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +18,6 @@ import java.util.UUID;
 
 @Tag(name = "User Command API", description = "유저 생성 수정 삭제 관련 API")
 @RestController
-@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserCommandController {
@@ -45,6 +43,6 @@ public class UserCommandController {
             @RequestBody CenterBasicInfoRequestDto centerBasicInfoRequestDto
     ) {
         updateBasicInfoUseCase.update(userId, centerBasicInfoRequestDto);
-        return ApiResponse.ok("센터 기본 정보 업데이틍 완료");
+        return ApiResponse.ok("센터 기본 정보 업데이 완료");
     }
 }
