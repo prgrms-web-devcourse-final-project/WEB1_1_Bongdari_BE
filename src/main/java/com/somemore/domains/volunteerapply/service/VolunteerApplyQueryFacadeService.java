@@ -60,11 +60,11 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
         recruitBoardValidator.validateWriter(recruitBoard, centerId);
 
         Page<VolunteerApply> applies = volunteerApplyQueryUseCase.getAllByRecruitId(recruitBoardId, condition);
-        Map<UUID, VolunteerInfoResponseDto> volunteerMap = getVolunteerInfoMap(applies);
+        Map<UUID, VolunteerInfoResponseDto> volunteerMapToVolunteerId = getVolunteerInfoMap(applies);
 
         return applies.map(apply -> VolunteerApplyVolunteerInfoResponseDto.of(
                 apply,
-                volunteerMap.get(apply.getVolunteerId())
+                volunteerMapToVolunteerId.get(apply.getVolunteerId())
         ));
     }
 
@@ -74,11 +74,11 @@ public class VolunteerApplyQueryFacadeService implements VolunteerApplyQueryFaca
             VolunteerApplySearchCondition condition
     ) {
         Page<VolunteerApply> applies = volunteerApplyQueryUseCase.getAllByVolunteerId(volunteerId, condition);
-        Map<Long, RecruitBoard> boardMap = getRecruitBoardMap(applies);
+        Map<Long, RecruitBoard> boardMapToId = getRecruitBoardMap(applies);
 
         return applies.map(apply -> VolunteerApplyRecruitInfoResponseDto.of(
                 apply,
-                boardMap.get(apply.getRecruitBoardId()))
+                boardMapToId.get(apply.getRecruitBoardId()))
         );
     }
 
