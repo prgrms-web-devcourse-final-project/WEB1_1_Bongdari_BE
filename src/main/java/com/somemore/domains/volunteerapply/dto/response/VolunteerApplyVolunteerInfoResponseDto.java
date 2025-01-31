@@ -2,10 +2,9 @@ package com.somemore.domains.volunteerapply.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.domains.volunteer.dto.response.VolunteerSimpleInfoResponseDto;
-import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
+import com.somemore.volunteer.dto.VolunteerInfoResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -19,8 +18,7 @@ public record VolunteerApplyVolunteerInfoResponseDto(
         Long id,
         @Schema(description = "모집글 ID", example = "2")
         Long recruitBoardId,
-        @Schema(description = "지원 상태", example = "WAITING", allowableValues = {"WAITING",
-                "APPROVED", "REJECTED"})
+        @Schema(description = "지원 상태", example = "WAITING", allowableValues = {"WAITING", "APPROVED", "REJECTED"})
         ApplyStatus status,
         @Schema(description = "참석 여부", example = "true")
         Boolean attend,
@@ -28,16 +26,15 @@ public record VolunteerApplyVolunteerInfoResponseDto(
         LocalDateTime createdAt,
         @Schema(description = "지원 수정일", example = "2024-11-05T12:00:00")
         LocalDateTime updatedAt,
-        @Schema(description = "봉사자 정보", implementation = VolunteerSimpleInfoResponseDto.class)
-        VolunteerSimpleInfoResponseDto volunteer
+        @Schema(description = "봉사자 정보", implementation = VolunteerInfoResponseDto.class)
+        VolunteerInfoResponseDto volunteer
 ) {
 
     public static VolunteerApplyVolunteerInfoResponseDto of(
             VolunteerApply volunteerApply,
-            VolunteerSimpleInfo volunteerSimpleInfo
+            VolunteerInfoResponseDto volunteer
     ) {
-        VolunteerSimpleInfoResponseDto volunteer = VolunteerSimpleInfoResponseDto.from(
-                volunteerSimpleInfo);
+
         return VolunteerApplyVolunteerInfoResponseDto.builder()
                 .id(volunteerApply.getId())
                 .recruitBoardId(volunteerApply.getRecruitBoardId())

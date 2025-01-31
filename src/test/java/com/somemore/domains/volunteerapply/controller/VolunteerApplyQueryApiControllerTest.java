@@ -119,7 +119,7 @@ class VolunteerApplyQueryApiControllerTest extends ControllerTestSupport {
 
     @Test
     @DisplayName("지원자 리스트를 조회 성공 테스트")
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void getVolunteerApplies() throws Exception {
         // given
         Long recruitBoardId = 1L;

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXIST_USER;
@@ -48,6 +49,11 @@ public class UserQueryService implements UserQueryUseCase {
     public UserCommonAttribute getCommonAttributeByUserId(UUID userId) {
         return userCommonAttributeRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException(NOT_EXIST_USER));
+    }
+
+    @Override
+    public List<UserCommonAttribute> getAllByUserIds(List<UUID> userIds) {
+        return userCommonAttributeRepository.findAllByUserIds(userIds);
     }
 
     @Override

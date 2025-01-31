@@ -1,12 +1,8 @@
 package com.somemore.domains.volunteer.service;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.domain.VolunteerDetail;
-import com.somemore.domains.volunteer.dto.request.VolunteerRegisterRequestDto;
 import com.somemore.domains.volunteer.dto.response.VolunteerRankingResponseDto;
-import com.somemore.domains.volunteer.repository.VolunteerDetailRepository;
 import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.IntegrationTestSupport;
@@ -22,9 +18,7 @@ import static com.somemore.domains.volunteer.domain.Volunteer.createDefault;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 class VolunteerQueryServiceTest extends IntegrationTestSupport {
@@ -34,9 +28,6 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
-
-    @Autowired
-    private VolunteerDetailRepository volunteerDetailRepository;
 
     final String oAuthId = "example-oauth-id";
     final OAuthProvider oAuthProvider = OAuthProvider.NAVER;
@@ -158,30 +149,6 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         assertThat(volunteers).hasSize(2);
     }
 
-    @DisplayName("아이디 리스트로 봉사자 간단 정보를 조회할 수 있다")
-    @Test
-    void getVolunteerSimpleInfosByIds() {
-        // given
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
-        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, "1234");
-
-        volunteerRepository.save(volunteer1);
-        volunteerRepository.save(volunteer2);
-
-        VolunteerDetail detail1 = createVolunteerDetail(volunteer1.getId());
-        VolunteerDetail detail2 = createVolunteerDetail(volunteer1.getId());
-
-        volunteerDetailRepository.save(detail1);
-        volunteerDetailRepository.save(detail2);
-
-        // when
-        List<VolunteerSimpleInfo> volunteers = volunteerQueryService.getVolunteerSimpleInfosByIds(
-                List.of(volunteer1.getId(), volunteer2.getId(), UUID.randomUUID()));
-
-        // then
-        assertThat(volunteers).hasSize(2);
-    }
-
     @DisplayName("봉사자 ID로 봉사자가 존재하는지 확인할 수 있다 (service)")
     @Test
     void validateVolunteerExists() {
@@ -207,23 +174,6 @@ class VolunteerQueryServiceTest extends IntegrationTestSupport {
         );
 
         assertEquals(NOT_EXISTS_VOLUNTEER.getMessage(), exception.getMessage());
-    }
-
-    private static VolunteerDetail createVolunteerDetail(UUID volunteerId) {
-
-        VolunteerRegisterRequestDto volunteerRegisterRequestDto =
-                new VolunteerRegisterRequestDto(
-                        OAuthProvider.NAVER,
-                        "example-oauth-id",
-                        "making",
-                        "making@example.com",
-                        "male",
-                        "06-08",
-                        "1998",
-                        "010-1234-5678"
-                );
-
-        return VolunteerDetail.of(volunteerRegisterRequestDto, volunteerId);
     }
 
 }

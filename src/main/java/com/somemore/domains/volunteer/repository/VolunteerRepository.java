@@ -2,7 +2,6 @@ package com.somemore.domains.volunteer.repository;
 
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
-import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +22,6 @@ public interface VolunteerRepository {
     void deleteAllInBatch();
 
     List<Volunteer> findAllByIds(List<UUID> volunteerIds);
-
-    List<VolunteerSimpleInfo> findSimpleInfoByIds(List<UUID> ids);
 
     boolean existsByVolunteerId(UUID volunteerId);
 

@@ -8,7 +8,6 @@ import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyVolunteerI
 import com.somemore.domains.volunteerapply.dto.response.VolunteerApplyWithReviewStatusResponseDto;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryFacadeUseCase;
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.exception.NoSuchElementException;
@@ -90,7 +89,7 @@ public class VolunteerApplyQueryApiController {
     @Operation(summary = "지원자 리스트 조회", description = "특정 모집글에 대한 지원자 리스트를 조회합니다.")
     @GetMapping("/volunteer-applies/recruit-board/{recruitBoardId}")
     public ApiResponse<Page<VolunteerApplyVolunteerInfoResponseDto>> getVolunteerApplies(
-            @CurrentUser UUID centerId,
+            @RoleId UUID centerId,
             @PathVariable Long recruitBoardId,
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
             @RequestParam(required = false) Boolean attended,

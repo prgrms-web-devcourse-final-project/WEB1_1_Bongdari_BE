@@ -5,10 +5,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.domains.volunteer.domain.QVolunteer;
-import com.somemore.domains.volunteer.domain.QVolunteerDetail;
 import com.somemore.domains.volunteer.domain.Volunteer;
 import com.somemore.domains.volunteer.repository.mapper.VolunteerOverviewForRankingByHours;
-import com.somemore.domains.volunteer.repository.mapper.VolunteerSimpleInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +22,6 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
     private final JPAQueryFactory queryFactory;
 
     private static final QVolunteer volunteer = QVolunteer.volunteer;
-    private static final QVolunteerDetail volunteerDetail = QVolunteerDetail.volunteerDetail;
 
     @Override
     public Volunteer save(Volunteer volunteer) {
@@ -73,25 +70,6 @@ public class VolunteerRepositoryImpl implements VolunteerRepository {
     @Override
     public List<Volunteer> findAllByIds(List<UUID> volunteerIds) {
         return volunteerJpaRepository.findAllByIdInAndDeletedFalse(volunteerIds);
-    }
-
-    @Override
-    public List<VolunteerSimpleInfo> findSimpleInfoByIds(List<UUID> ids) {
-        BooleanExpression exp = volunteer.id.in(ids)
-                .and(isNotDeleted());
-
-        return queryFactory
-                .select(Projections.constructor(VolunteerSimpleInfo.class,
-                        volunteer.id,
-                        volunteerDetail.name,
-                        volunteer.nickname,
-                        volunteerDetail.email,
-                        volunteer.imgUrl,
-                        volunteer.tier))
-                .from(volunteer)
-                .join(volunteerDetail).on(volunteer.id.eq(volunteerDetail.volunteerId))
-                .where(exp)
-                .fetch();
     }
 
     private Optional<Volunteer> findOne(BooleanExpression condition) {

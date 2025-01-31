@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
+import static com.somemore.user.domain.UserRole.VOLUNTEER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -26,7 +28,7 @@ class UserCommonAttributeRepositoryImplTest extends IntegrationTestSupport {
     void saveUserCommonAttribute() {
         // given
         UUID userId = UUID.randomUUID();
-        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, UserRole.VOLUNTEER);
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, VOLUNTEER);
 
         // when
         UserCommonAttribute savedUserCommonAttribute = userCommonAttributeRepository.save(userCommonAttribute);
@@ -63,5 +65,34 @@ class UserCommonAttributeRepositoryImplTest extends IntegrationTestSupport {
         assertThat(userProfile.contactNumber()).isEqualTo(userCommonAttribute.getContactNumber());
         assertThat(userProfile.imgUrl()).isEqualTo(userCommonAttribute.getImgUrl());
         assertThat(userProfile.introduce()).isEqualTo(userCommonAttribute.getIntroduce());
+    }
+
+    @DisplayName("유저 아이디(userId) 리스트로 유저 공통 속성 리스트를 조회할 수 있다.")
+    @Test
+    void findAllByUserIds() {
+        // given
+        UserCommonAttribute one = createUserCommonAttribute();
+        UserCommonAttribute two = createUserCommonAttribute();
+        UserCommonAttribute three = createUserCommonAttribute();
+
+        userCommonAttributeRepository.save(one);
+        userCommonAttributeRepository.save(two);
+        userCommonAttributeRepository.save(three);
+
+        List<UUID> userIds = List.of(one.getUserId(), two.getUserId(), three.getUserId());
+
+        // when
+        List<UserCommonAttribute> result = userCommonAttributeRepository.findAllByUserIds(userIds);
+
+        // then
+        assertThat(result).hasSize(3);
+        assertThat(result)
+                .extracting(UserCommonAttribute::getUserId)
+                .containsExactlyInAnyOrder(one.getUserId(), two.getUserId(), three.getUserId());
+
+    }
+
+    private UserCommonAttribute createUserCommonAttribute() {
+        return UserCommonAttribute.createDefault(UUID.randomUUID(), VOLUNTEER);
     }
 }

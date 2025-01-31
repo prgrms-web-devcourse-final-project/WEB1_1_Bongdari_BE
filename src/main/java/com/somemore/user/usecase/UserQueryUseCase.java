@@ -5,6 +5,7 @@ import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
 import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserQueryUseCase {
@@ -16,6 +17,8 @@ public interface UserQueryUseCase {
     User getByAccountId(String accountId);
 
     UserCommonAttribute getCommonAttributeByUserId(UUID userId);
+
+    List<UserCommonAttribute> getAllByUserIds(List<UUID> userIds);
 
     boolean getIsCustomizedByUserId(UUID userId);
 

@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.domain.QNEWVolunteer;
 import com.somemore.volunteer.repository.record.VolunteerNickname;
+import com.somemore.volunteer.repository.record.VolunteerNicknameAndId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +61,22 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                         volunteer.nickname))
                 .from(volunteer)
                 .where(
-                        volunteer.id.in(ids),
+                        inIds(ids),
+                        isNotDeleted()
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<VolunteerNicknameAndId> findVolunteerNicknameAndIdsByIds(List<UUID> ids) {
+        return queryFactory
+                .select(Projections.constructor(VolunteerNicknameAndId.class,
+                        volunteer.id,
+                        volunteer.userId,
+                        volunteer.nickname))
+                .from(volunteer)
+                .where(
+                        inIds(ids),
                         isNotDeleted()
                 )
                 .fetch();
@@ -68,5 +84,9 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
 
     private static BooleanExpression isNotDeleted() {
         return volunteer.deleted.eq(false);
+    }
+
+    private static BooleanExpression inIds(List<UUID> ids) {
+        return volunteer.id.in(ids);
     }
 }
