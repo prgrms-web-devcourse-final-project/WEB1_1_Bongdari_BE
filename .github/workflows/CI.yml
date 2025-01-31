@@ -91,7 +91,7 @@ jobs:
 
       - name: 테스트 레포트 저장
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: build/reports/tests/test
