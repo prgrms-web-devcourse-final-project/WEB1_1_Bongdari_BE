@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -27,7 +27,7 @@ public class GetPresignedUrlController {
     @Operation(summary = "이미지 업로드 URL 조회", description = "이미지 업로드 URL을 조회합니다.")
     public ApiResponse<String> getImageUploadUrl(
             @UserId UUID userId,
-            @RequestParam String fileName
+            @RequestBody String fileName
     ) {
         // (이미지 업로드 유저 기록 방법, TIMESTAMP OR RANDOM UUID는 모두 적용)
         // 1. userId를 fileName과 함께 log 기반으로 저장, 이미지 업로드 유저 기록
