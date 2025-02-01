@@ -27,7 +27,7 @@ public class UserCommandController {
     @Secured("ROLE_VOLUNTEER")
     @PutMapping("/basic-info/volunteer")
     @Operation(summary = "봉사자 기본 정보 업데이트", description = "봉사자의 기본 정보를 업데이트합니다.")
-    public ApiResponse<String> registerBasicInfo(
+    public ApiResponse<String> updateBasicInfo(
             @UserId UUID userId,
             @RequestBody VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto
     ) {
@@ -38,11 +38,12 @@ public class UserCommandController {
     @Secured("ROLE_CENTER")
     @PutMapping("/basic-info/center")
     @Operation(summary = "센터 기본 정보 업데이트", description = "센터의 기본 정보를 업데이트합니다.")
-    public ApiResponse<String> registerBasicInfo(
+    public ApiResponse<String> updateBasicInfo(
             @UserId UUID userId,
             @RequestBody CenterBasicInfoRequestDto centerBasicInfoRequestDto
     ) {
         updateBasicInfoUseCase.update(userId, centerBasicInfoRequestDto);
         return ApiResponse.ok("센터 기본 정보 업데이 완료");
     }
+
 }
