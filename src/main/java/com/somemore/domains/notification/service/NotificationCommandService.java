@@ -2,8 +2,8 @@ package com.somemore.domains.notification.service;
 
 import com.somemore.domains.notification.domain.Notification;
 import com.somemore.domains.notification.dto.NotificationIdsRequestDto;
+import com.somemore.domains.notification.repository.NotificationRepository;
 import com.somemore.domains.notification.usecase.NotificationCommandUseCase;
-import com.somemore.domains.notification.usecase.NotificationQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTIFICATION;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_NOTIFICATION;
 
 @Slf4j
@@ -21,11 +22,12 @@ import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_NOTIFI
 @Transactional
 public class NotificationCommandService implements NotificationCommandUseCase {
 
-    private final NotificationQueryUseCase notificationQueryUseCase;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public void markSingleNotificationAsRead(UUID userId, Long notificationId) {
-        Notification notification = notificationQueryUseCase.getNotification(notificationId);
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_NOTIFICATION));
 
         validateNotificationOwnership(userId, notification.getReceiverId());
 
@@ -34,7 +36,7 @@ public class NotificationCommandService implements NotificationCommandUseCase {
 
     @Override
     public void markMultipleNotificationsAsRead(UUID userId, NotificationIdsRequestDto notificationIds) {
-        List<Notification> notifications = notificationQueryUseCase.getNotifications(notificationIds.ids());
+        List<Notification> notifications = notificationRepository.findAllByIds(notificationIds.ids());
 
         notifications.forEach(notification ->
                 validateNotificationOwnership(userId, notification.getReceiverId()));
