@@ -42,6 +42,28 @@ class NotificationRepositoryTest extends IntegrationTestSupport {
         }
     }
 
+    @DisplayName("사용자의 읽지 않은 알림을 조회한다.")
+    @Test
+    void findByReceiverIdAndUnread() {
+        // when
+        List<Notification> notifications = notificationRepository.findByReceiverIdAndUnread(receiverId);
+
+        // then
+        assertThat(notifications).hasSize(10);
+        assertThat(notifications.getFirst().isRead()).isFalse();
+    }
+
+    @DisplayName("사용자의 읽은 알림을 조회한다.")
+    @Test
+    void findByReceiverIdAndRead() {
+        // when
+        List<Notification> notifications = notificationRepository.findByReceiverIdAndRead(receiverId);
+
+        // then
+        assertThat(notifications).hasSize(10);
+        assertThat(notifications.getFirst().isRead()).isTrue();
+    }
+
     @DisplayName("알림이 없는 사용자의 읽지 않은 알림을 조회하면 빈 리스트를 반환한다.")
     @Test
     void findByReceiverIdAndUnread_noNotifications() {
@@ -49,7 +71,7 @@ class NotificationRepositoryTest extends IntegrationTestSupport {
         UUID unknownReceiverId = UUID.randomUUID();
 
         // when
-        List<Notification> notifications = notificationRepository.findAllByUserId(unknownReceiverId);
+        List<Notification> notifications = notificationRepository.findByReceiverIdAndUnread(unknownReceiverId);
 
         // then
         assertThat(notifications).isEmpty();

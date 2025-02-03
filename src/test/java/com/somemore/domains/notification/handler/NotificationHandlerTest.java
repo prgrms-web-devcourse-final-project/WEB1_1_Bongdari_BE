@@ -53,7 +53,7 @@ class NotificationHandlerTest extends IntegrationTestSupport {
         notificationHandler.handle(notification);
 
         // then
-        List<Notification> notifications = notificationRepository.findAllByUserId(receiverId);
+        List<Notification> notifications = notificationRepository.findByReceiverIdAndUnread(receiverId);
         assertThat(notifications).hasSize(1);
 
         Notification savedNotification = notifications.getFirst();
