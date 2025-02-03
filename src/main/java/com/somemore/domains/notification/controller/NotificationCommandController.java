@@ -2,7 +2,7 @@ package com.somemore.domains.notification.controller;
 
 import com.somemore.domains.notification.dto.NotificationIdsRequestDto;
 import com.somemore.domains.notification.usecase.NotificationCommandUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +29,7 @@ public class NotificationCommandController {
     @Operation(summary = "알림(1개) 읽음 처리", description = "알림 1개를 읽음 처리합니다.")
     @PatchMapping("/read/{notificationId}")
     public ApiResponse<String> markSingleNotification(
-            @CurrentUser UUID userId,
+            @UserId UUID userId,
             @PathVariable Long notificationId
     ) {
         notificationCommandUseCase.markSingleNotificationAsRead(userId, notificationId);
@@ -40,7 +40,7 @@ public class NotificationCommandController {
     @Operation(summary = "알림(N개) 읽음 처리", description = "알림 N개를 읽음 처리합니다.")
     @PostMapping("/read/multiple")
     public ApiResponse<String> markMultipleNotifications(
-            @CurrentUser UUID userId,
+            @UserId UUID userId,
             @RequestBody NotificationIdsRequestDto notificationIds
     ) {
         notificationCommandUseCase.markMultipleNotificationsAsRead(userId, notificationIds);
