@@ -7,7 +7,6 @@ import com.somemore.domains.notification.domain.NotificationSubType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema(description = "알림 응답 DTO")
@@ -34,11 +33,5 @@ public record NotificationResponseDto(
                 notification.getRelatedId(),
                 notification.getCreatedAt()
         );
-    }
-
-    public static List<NotificationResponseDto> from(List<Notification> notifications) {
-        return notifications.stream()
-                .map(NotificationResponseDto::from)
-                .toList();
     }
 }
