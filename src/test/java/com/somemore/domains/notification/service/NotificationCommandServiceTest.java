@@ -5,7 +5,6 @@ import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.domains.notification.dto.NotificationIdsRequestDto;
 import com.somemore.domains.notification.repository.NotificationRepository;
 import com.somemore.global.exception.BadRequestException;
-import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,7 +53,7 @@ class NotificationCommandServiceTest extends IntegrationTestSupport {
 
         // when / then
         assertThatThrownBy(() -> notificationCommandService.markSingleNotificationAsRead(receiverId, nonExistentNotificationId))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining(NOT_EXISTS_NOTIFICATION.getMessage());
     }
 
