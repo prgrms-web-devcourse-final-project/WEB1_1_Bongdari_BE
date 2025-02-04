@@ -29,7 +29,7 @@ public record ReviewDetailWithNicknameResponseDto(
         LocalDateTime updateAt
 ) {
 
-    public static ReviewDetailWithNicknameResponseDto from(Review review, String volunteerNickname) {
+    public static ReviewDetailWithNicknameResponseDto of(Review review, String volunteerNickname) {
         return ReviewDetailWithNicknameResponseDto.builder()
                 .id(review.getId())
                 .volunteerId(review.getVolunteerId())
