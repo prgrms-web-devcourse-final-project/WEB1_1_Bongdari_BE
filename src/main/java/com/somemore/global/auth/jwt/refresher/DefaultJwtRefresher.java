@@ -30,7 +30,8 @@ public class DefaultJwtRefresher implements JwtRefresher {
         jwtValidator.validateToken(refreshTokenValue);
 
         Claims claims = jwtParser.parseToken(refreshTokenValue);
-        refreshToken.updateAccessToken(generateAccessToken(claims));
+        EncodedToken newAccessToken = generateAccessToken(claims);
+        refreshToken.updateAccessToken(newAccessToken);
         tokenManager.save(refreshToken);
 
         return EncodedToken.from(refreshToken.getAccessToken());

@@ -10,7 +10,9 @@ public interface JwtUseCase {
 
     EncodedToken generateToken(UserIdentity userIdentity, TokenType tokenType);
 
-    void processAccessToken(EncodedToken token, HttpServletResponse response);
+    void validateAccessToken(EncodedToken accessToken, HttpServletResponse response);
 
-    Claims getClaims(EncodedToken token);
+    Claims getClaims(EncodedToken accessToken);
+
+    EncodedToken refreshAccessToken(EncodedToken accessToken);
 }

@@ -19,9 +19,9 @@ public record EncodedToken(String value) {
                 || value.equals(UNINITIALIZED);
     }
 
-    public EncodedToken removePrefix(String prefix) {
-        if (this.value.startsWith(prefix)) {
-            return new EncodedToken(this.value.substring(prefix.length()));
+    public EncodedToken removePrefix() {
+        if (this.value.startsWith(PREFIX)) {
+            return new EncodedToken(this.value.substring(PREFIX.length()));
         }
         return this;
     }

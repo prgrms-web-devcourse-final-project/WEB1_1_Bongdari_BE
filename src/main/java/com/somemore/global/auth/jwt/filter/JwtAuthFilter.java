@@ -46,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         EncodedToken accessToken = getAccessToken(request);
-        jwtUseCase.processAccessToken(accessToken, response);
+        jwtUseCase.validateAccessToken(accessToken, response);
 
         Claims claims = jwtUseCase.getClaims(accessToken);
         JwtAuthenticationToken auth = createAuthenticationToken(claims, accessToken);
@@ -66,8 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new JwtException(JwtErrorType.MISSING_TOKEN);
         }
 
-        String prefix = "Bearer ";
-        return accessToken.removePrefix(prefix);
+        return accessToken.removePrefix();
     }
 
     private static EncodedToken findAccessTokenFromHeader(HttpServletRequest request) {
