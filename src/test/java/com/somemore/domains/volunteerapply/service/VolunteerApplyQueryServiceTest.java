@@ -99,7 +99,33 @@ class VolunteerApplyQueryServiceTest extends IntegrationTestSupport {
                 () -> volunteerApplyQueryService.getByRecruitIdAndVolunteerId(wrongRecruitBoardId, wrongVolunteerId))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage(NOT_EXISTS_VOLUNTEER_APPLY.getMessage());
+    }
 
+    @DisplayName("아이디로 모집글 아이디를 조회할 수 있다.")
+    @Test
+    void getRecruitBoardIdById() {
+        // given
+        Long id = apply.getId();
+
+        // when
+        Long boardId = volunteerApplyQueryService.getRecruitBoardIdById(id);
+
+        // then
+        assertThat(boardId).isEqualTo(recruitBoardId);
+    }
+
+    @DisplayName("존재하지 않는 모집글 아이디와 봉사자 아이디로 조회할 수 있다")
+    @Test
+    void getRecruitBoardIdByIdWhenDoesNotExist() {
+        // given
+        Long wrongId = 999L;
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> volunteerApplyQueryService.getRecruitBoardIdById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_VOLUNTEER_APPLY.getMessage());
     }
 
     @DisplayName("모집글 아이디로 지원 현황을 조회할 수 있다.")

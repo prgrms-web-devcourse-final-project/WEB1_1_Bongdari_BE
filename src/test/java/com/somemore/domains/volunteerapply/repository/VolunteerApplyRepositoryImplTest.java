@@ -1,9 +1,17 @@
 package com.somemore.domains.volunteerapply.repository;
 
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.REJECTED;
+import static com.somemore.domains.volunteerapply.domain.ApplyStatus.WAITING;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.dto.condition.VolunteerApplySearchCondition;
 import com.somemore.support.IntegrationTestSupport;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,13 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.somemore.domains.volunteerapply.domain.ApplyStatus.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
@@ -70,7 +71,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
     @Test
     void findVolunteerIdsByRecruitIds() {
         // when
-        List<UUID> volunteerIds = volunteerApplyRepository.findVolunteerIdsByRecruitIds(List.of(1L, 2L));
+        List<UUID> volunteerIds = volunteerApplyRepository.findVolunteerIdsByRecruitIds(
+                List.of(1L, 2L));
 
         // then
         assertThat(volunteerIds).hasSize(20);
@@ -84,8 +86,10 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         PageRequest secondPage = PageRequest.of(1, 10, Sort.by(Sort.Order.asc("created_at")));
 
         // when
-        Page<VolunteerApply> firstPageResult = volunteerApplyRepository.findAllByRecruitId(1L, firstPage);
-        Page<VolunteerApply> secondPageResult = volunteerApplyRepository.findAllByRecruitId(1L, secondPage);
+        Page<VolunteerApply> firstPageResult = volunteerApplyRepository.findAllByRecruitId(1L,
+                firstPage);
+        Page<VolunteerApply> secondPageResult = volunteerApplyRepository.findAllByRecruitId(1L,
+                secondPage);
 
         // then
         assertThat(firstPageResult.getContent()).hasSize(10);
@@ -110,10 +114,29 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(newApply);
 
         // when
-        Optional<VolunteerApply> findApply = volunteerApplyRepository.findByRecruitIdAndVolunteerId(recruitId, volunteerId);
+        Optional<VolunteerApply> findApply = volunteerApplyRepository.findByRecruitIdAndVolunteerId(
+                recruitId, volunteerId);
 
         // then
         assertThat(findApply).isPresent();
+    }
+
+    @DisplayName("아이디로 모집글아이디 조회할 수 있다.")
+    @Test
+    void findRecruitBoardIdById() {
+        // given
+        Long recruitId = 1234L;
+
+        VolunteerApply newApply = createApply(UUID.randomUUID(), recruitId);
+        volunteerApplyRepository.save(newApply);
+
+        // when
+        Optional<Long> findBoardId = volunteerApplyRepository.findRecruitBoardIdById(
+                newApply.getId());
+
+        // then
+        assertThat(findBoardId).isPresent();
+        assertThat(findBoardId.get()).isEqualTo(recruitId);
     }
 
     @DisplayName("모집글 아이디와 봉사자 아이디로 봉사 지원 존재 유무를 확인 할 수 있다.")
@@ -127,7 +150,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
         volunteerApplyRepository.save(newApply);
 
         // when
-        boolean result = volunteerApplyRepository.existsByRecruitIdAndVolunteerId(recruitId, volunteerId);
+        boolean result = volunteerApplyRepository.existsByRecruitIdAndVolunteerId(recruitId,
+                volunteerId);
 
         // then
         assertThat(result).isTrue();
@@ -166,7 +190,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitBoardId, condition);
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitBoardId,
+                condition);
 
         // then
         assertThat(applies.getTotalElements()).isEqualTo(3);
@@ -195,7 +220,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(volunteerId, condition);
+        Page<VolunteerApply> applies = volunteerApplyRepository.findAllByVolunteerId(volunteerId,
+                condition);
 
         // then
         assertThat(applies.getTotalElements()).isEqualTo(3);
@@ -241,7 +267,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private static VolunteerApply createApply(Long recruitId, ApplyStatus status, Boolean attended) {
+    private static VolunteerApply createApply(Long recruitId, ApplyStatus status,
+            Boolean attended) {
         return VolunteerApply.builder()
                 .volunteerId(UUID.randomUUID())
                 .recruitBoardId(recruitId)
@@ -250,7 +277,8 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private static VolunteerApply createApply(UUID volunteerId, ApplyStatus status, Boolean attended) {
+    private static VolunteerApply createApply(UUID volunteerId, ApplyStatus status,
+            Boolean attended) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(101L)
