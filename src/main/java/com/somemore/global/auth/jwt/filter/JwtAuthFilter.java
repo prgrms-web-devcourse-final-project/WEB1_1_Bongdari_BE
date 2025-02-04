@@ -46,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         EncodedToken accessToken = getAccessToken(request);
-        jwtUseCase.processAccessToken(accessToken, response);
+        jwtUseCase.validateAccessToken(accessToken, response);
 
         Claims claims = jwtUseCase.getClaims(accessToken);
         JwtAuthenticationToken auth = createAuthenticationToken(claims, accessToken);

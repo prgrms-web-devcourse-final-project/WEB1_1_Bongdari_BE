@@ -31,17 +31,13 @@ public class JwtService implements JwtUseCase {
     }
 
     @Override
-    public void processAccessToken(EncodedToken accessToken, HttpServletResponse response) {
-        try {
-            jwtValidator.validateToken(accessToken);
-        } catch (JwtException e) {
-            handleJwtExpiredException(e, accessToken, response);
-        }
+    public void validateAccessToken(EncodedToken accessToken, HttpServletResponse response) {
+        jwtValidator.validateToken(accessToken);
     }
 
     @Override
-    public Claims getClaims(EncodedToken token) {
-        return jwtParser.parseToken(token);
+    public Claims getClaims(EncodedToken accessToken) {
+        return jwtParser.parseToken(accessToken);
     }
 
     private void handleJwtExpiredException(JwtException e, EncodedToken accessToken, HttpServletResponse response) {

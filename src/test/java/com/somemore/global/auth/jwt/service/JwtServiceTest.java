@@ -132,7 +132,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         // then
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
-        assertThatThrownBy(() -> jwtService.processAccessToken(expiredAccessToken, mockResponse))
+        assertThatThrownBy(() -> jwtService.validateAccessToken(expiredAccessToken, mockResponse))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }
@@ -149,7 +149,7 @@ class JwtServiceTest extends IntegrationTestSupport {
         // then
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
 
-        assertThatThrownBy(() -> jwtService.processAccessToken(expiredAccessToken, mockResponse))
+        assertThatThrownBy(() -> jwtService.validateAccessToken(expiredAccessToken, mockResponse))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }
@@ -217,7 +217,7 @@ class JwtServiceTest extends IntegrationTestSupport {
 
         // when
         // then
-        assertThatThrownBy(() -> jwtService.processAccessToken(expiredAccessToken, new MockHttpServletResponse()))
+        assertThatThrownBy(() -> jwtService.validateAccessToken(expiredAccessToken, new MockHttpServletResponse()))
                 .isInstanceOf(JwtException.class)
                 .hasMessage(JwtErrorType.EXPIRED_TOKEN.getMessage());
     }
