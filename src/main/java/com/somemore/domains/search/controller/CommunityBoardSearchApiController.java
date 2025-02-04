@@ -39,12 +39,12 @@ public class CommunityBoardSearchApiController {
                     communityBoardDocumentUseCase.get().getCommunityBoardBySearch(keyword, pageable.getPageNumber()),
                     "커뮤니티 게시글 검색 리스트 조회 성공"
             );
-        } else {
-            return ApiResponse.ok(
+        }
+
+        return ApiResponse.ok(
                     200,
                     communityBoardQueryUseCase.getCommunityBoards(keyword, pageable.getPageNumber()),
                     "커뮤니티 게시글 검색 리스트 조회 성공"
             );
-        }
     }
 }

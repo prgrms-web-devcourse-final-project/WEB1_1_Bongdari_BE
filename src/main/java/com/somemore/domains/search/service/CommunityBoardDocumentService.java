@@ -2,11 +2,11 @@ package com.somemore.domains.search.service;
 
 import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
+import com.somemore.domains.search.annotation.ConditionalOnElasticSearchEnabled;
 import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.domains.search.usecase.CommunityBoardDocumentUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@ConditionalOnProperty(name = "elastic.search.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnElasticSearchEnabled
 public class CommunityBoardDocumentService implements CommunityBoardDocumentUseCase {
 
     private final SearchBoardRepository searchBoardRepository;

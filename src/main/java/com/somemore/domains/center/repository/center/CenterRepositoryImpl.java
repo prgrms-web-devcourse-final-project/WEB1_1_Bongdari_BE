@@ -69,7 +69,7 @@ public class CenterRepositoryImpl implements CenterRepository {
 
     @Override
     public String findNameById(UUID id) {
-        return findDynamicField(id, center.name)
+        return findDynamicFieldByCenterId(id, center.name)
                 .orElse(null);
     }
 
@@ -77,7 +77,7 @@ public class CenterRepositoryImpl implements CenterRepository {
         return center.deleted.isFalse();
     }
 
-    private <T> Optional<T> findDynamicField(UUID id, Path<T> field) {
+    private <T> Optional<T> findDynamicFieldByCenterId(UUID id, Path<T> field) {
 
         return Optional.ofNullable(
                 queryFactory

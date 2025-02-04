@@ -5,11 +5,11 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByConditi
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
+import com.somemore.domains.search.annotation.ConditionalOnElasticSearchEnabled;
 import com.somemore.domains.search.domain.RecruitBoardDocument;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.domains.search.usecase.RecruitBoardDocumentUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@ConditionalOnProperty(name = "elastic.search.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnElasticSearchEnabled
 public class RecruitBoardDocumentService implements RecruitBoardDocumentUseCase {
 
     private final SearchBoardRepository searchBoardRepository;

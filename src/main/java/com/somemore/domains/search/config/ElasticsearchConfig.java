@@ -1,13 +1,13 @@
 package com.somemore.domains.search.config;
 
+import com.somemore.domains.search.annotation.ConditionalOnElasticSearchEnabled;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 @Configuration
-@ConditionalOnProperty(name = "elastic.search.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnElasticSearchEnabled
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
     @Value("${elastic.search.uri}")
     private String uri;

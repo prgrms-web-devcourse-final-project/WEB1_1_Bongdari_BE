@@ -57,13 +57,13 @@ public class RecruitBoardSearchApiController {
                     recruitBoardDocumentUseCase.get().getRecruitBoardBySearch(condition),
                     "봉사 활동 모집글 검색 조회 성공"
             );
-        } else {
-            return ApiResponse.ok(
-                    200,
-                    recruitBoardQueryUseCase.getAllWithCenter(condition),
-                    "봉사 활동 모집글 검색 조회 성공"
-            );
         }
+
+        return ApiResponse.ok(
+                200,
+                recruitBoardQueryUseCase.getAllWithCenter(condition),
+                "봉사 활동 모집글 검색 조회 성공"
+        );
     }
 
     @GetMapping("/recruit-boards/nearby")
@@ -91,13 +91,13 @@ public class RecruitBoardSearchApiController {
                     recruitBoardDocumentUseCase.get().getRecruitBoardsNearbyWithKeyword(condition),
                     "근처 봉사 활동 모집글 조회 성공"
             );
-        } else {
-            return ApiResponse.ok(
-                    200,
-                    recruitBoardQueryUseCase.getRecruitBoardsNearby(condition),
-                    "근처 봉사 활동 모집글 조회 성공"
-            );
         }
+
+        return ApiResponse.ok(
+                200,
+                recruitBoardQueryUseCase.getRecruitBoardsNearby(condition),
+                "근처 봉사 활동 모집글 조회 성공"
+        );
     }
 
     //TODO: 특정 기관 모집글 조회, 기관이 작성한 모집글 조회 추가

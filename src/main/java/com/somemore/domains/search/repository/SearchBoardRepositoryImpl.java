@@ -9,12 +9,12 @@ import com.somemore.domains.location.usecase.query.LocationQueryUseCase;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
+import com.somemore.domains.search.annotation.ConditionalOnElasticSearchEnabled;
 import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.domain.RecruitBoardDocument;
 import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Repository
-@ConditionalOnProperty(name = "elastic.search.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnElasticSearchEnabled
 public class SearchBoardRepositoryImpl implements SearchBoardRepository {
 
     private final ElasticsearchOperations elasticsearchOperations;
