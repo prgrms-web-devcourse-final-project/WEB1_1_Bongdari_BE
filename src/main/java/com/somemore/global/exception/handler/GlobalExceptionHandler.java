@@ -1,5 +1,6 @@
 package com.somemore.global.exception.handler;
 
+import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.DuplicateException;
 import com.somemore.global.exception.ImageUploadException;
@@ -77,6 +78,18 @@ public class GlobalExceptionHandler {
         problemDetail.setDetail("인증에 문제가 발생했습니다.");
 
         log.warn("InvalidAuthenticationException: {}", e.getMessage());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(JwtException.class)
+    ProblemDetail handleJwtException(JwtException e) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("토큰 문제");
+        problemDetail.setDetail("토큰 처리에 문제가 발생했습니다.");
+
+        log.warn("JwtException: {}", e.getMessage());
 
         return problemDetail;
     }
