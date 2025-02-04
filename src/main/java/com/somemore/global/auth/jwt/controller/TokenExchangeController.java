@@ -2,6 +2,7 @@ package com.somemore.global.auth.jwt.controller;
 
 import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.dto.AccessTokenRequestDto;
 import com.somemore.global.auth.jwt.manager.TokenManager;
 import com.somemore.global.auth.jwt.usecase.JwtUseCase;
 import com.somemore.global.common.response.ApiResponse;

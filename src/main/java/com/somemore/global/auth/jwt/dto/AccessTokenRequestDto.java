@@ -1,4 +1,4 @@
-package com.somemore.global.auth.jwt.controller;
+package com.somemore.global.auth.jwt.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
