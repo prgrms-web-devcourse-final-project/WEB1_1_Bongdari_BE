@@ -114,22 +114,22 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         VolunteerApply apply = createApply(UUID.randomUUID(), boardId);
         volunteerApplyRepository.save(apply);
 
-        Review review = createReview(apply.getId(), UUID.randomUUID(), "제 인생 최고의 봉사활동",
+        Review newReview = createReview(apply.getId(), UUID.randomUUID(), "제 인생 최고의 봉사활동",
                 "정말 유익했습니다. 더보기..");
-        reviewRepository.save(review);
+        reviewRepository.save(newReview);
 
-        Long id = review.getId();
+        Long id = newReview.getId();
 
         // when
         ReviewDetailResponseDto findOne = reviewQueryService.getDetailById(id);
 
         // then
-        assertThat(findOne).extracting("id").isEqualTo(review.getId());
-        assertThat(findOne).extracting("volunteerId").isEqualTo(review.getVolunteerId());
-        assertThat(findOne).extracting("volunteerApplyId").isEqualTo(review.getVolunteerApplyId());
+        assertThat(findOne).extracting("id").isEqualTo(newReview.getId());
+        assertThat(findOne).extracting("volunteerId").isEqualTo(newReview.getVolunteerId());
+        assertThat(findOne).extracting("volunteerApplyId").isEqualTo(newReview.getVolunteerApplyId());
         assertThat(findOne).extracting("recruitBoardId").isEqualTo(boardId);
-        assertThat(findOne).extracting("title").isEqualTo(review.getTitle());
-        assertThat(findOne).extracting("content").isEqualTo(review.getContent());
+        assertThat(findOne).extracting("title").isEqualTo(newReview.getTitle());
+        assertThat(findOne).extracting("content").isEqualTo(newReview.getContent());
     }
 
 

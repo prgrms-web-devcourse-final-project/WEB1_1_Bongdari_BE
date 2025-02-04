@@ -1,20 +1,18 @@
 package com.somemore.volunteer.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.repository.record.VolunteerNickname;
 import com.somemore.volunteer.repository.record.VolunteerNicknameAndId;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.atomicReferenceArray;
 
 @Transactional
 class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
@@ -36,7 +34,6 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
         NEWVolunteer volunteerByUserId = volunteerRepository.findByUserId(userId).orElseThrow();
         NEWVolunteer volunteerById = volunteerRepository.findById(volunteer.getId()).orElseThrow();
 
-
         assertThat(volunteer)
                 .isEqualTo(volunteerByUserId)
                 .isEqualTo(volunteerById);
@@ -55,7 +52,7 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(nickname).isPresent();
-        assertThat(nickname.get()).isEqualTo(volunteer.getNickname());
+        assertThat(nickname).contains(volunteer.getNickname());
     }
 
     @DisplayName("id 리스트로 nickname 리스트를 조회할 수 있다.")
@@ -106,7 +103,8 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
         List<UUID> ids = List.of(volunteer1.getId(), volunteer2.getId(), volunteer3.getId());
 
         // when
-        List<VolunteerNicknameAndId> nicknames = volunteerRepository.findVolunteerNicknameAndIdsByIds(ids);
+        List<VolunteerNicknameAndId> nicknames = volunteerRepository.findVolunteerNicknameAndIdsByIds(
+                ids);
 
         // then
         assertThat(nicknames).extracting(VolunteerNicknameAndId::userId)

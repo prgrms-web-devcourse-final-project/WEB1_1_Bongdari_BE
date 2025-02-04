@@ -136,7 +136,7 @@ class VolunteerApplyRepositoryImplTest extends IntegrationTestSupport {
 
         // then
         assertThat(findBoardId).isPresent();
-        assertThat(findBoardId.get()).isEqualTo(recruitId);
+        assertThat(findBoardId).contains(recruitId);
     }
 
     @DisplayName("모집글 아이디와 봉사자 아이디로 봉사 지원 존재 유무를 확인 할 수 있다.")
