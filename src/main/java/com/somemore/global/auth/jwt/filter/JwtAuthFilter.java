@@ -66,8 +66,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new JwtException(JwtErrorType.MISSING_TOKEN);
         }
 
-        String prefix = "Bearer ";
-        return accessToken.removePrefix(prefix);
+        return accessToken.removePrefix();
     }
 
     private static EncodedToken findAccessTokenFromHeader(HttpServletRequest request) {

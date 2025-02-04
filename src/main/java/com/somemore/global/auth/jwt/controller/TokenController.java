@@ -42,8 +42,9 @@ public class TokenController {
     public ApiResponse<String> refreshAccessToken(
             @Valid @RequestBody AccessTokenRequestDto accessTokenRequestDto
     ) {
-        EncodedToken newAccessToken = jwtUseCase.refreshAccessToken(
-                EncodedToken.from(accessTokenRequestDto.accessToken()));
+        EncodedToken accessToken = EncodedToken.from(accessTokenRequestDto.accessToken())
+                .removePrefix();
+        EncodedToken newAccessToken = jwtUseCase.refreshAccessToken(accessToken);
 
         return ApiResponse.ok(HttpStatus.OK.value(),
                 newAccessToken.getValueWithPrefix(),
