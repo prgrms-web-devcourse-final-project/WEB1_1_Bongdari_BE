@@ -51,8 +51,9 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
         Optional<String> nickname = volunteerRepository.findNicknameById(volunteer.getId());
 
         // then
-        assertThat(nickname).isPresent();
-        assertThat(nickname).contains(volunteer.getNickname());
+        assertThat(nickname)
+                .isPresent()
+                .contains(volunteer.getNickname());
     }
 
     @DisplayName("id 리스트로 nickname 리스트를 조회할 수 있다.")
