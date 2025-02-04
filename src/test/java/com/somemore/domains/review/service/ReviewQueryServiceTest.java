@@ -5,14 +5,13 @@ import static com.somemore.domains.recruitboard.domain.VolunteerCategory.CULTURA
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
-import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.center.CenterRepository;
+import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
@@ -56,7 +55,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     private NEWVolunteerRepository volunteerRepository;
 
     @Autowired
-    private CenterRepository centerRepository;
+    private NEWCenterRepository centerRepository;
 
     private Long volunteerApplyId;
     private Review review;
@@ -126,12 +125,12 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         // then
         assertThat(findOne).extracting("id").isEqualTo(newReview.getId());
         assertThat(findOne).extracting("volunteerId").isEqualTo(newReview.getVolunteerId());
-        assertThat(findOne).extracting("volunteerApplyId").isEqualTo(newReview.getVolunteerApplyId());
+        assertThat(findOne).extracting("volunteerApplyId")
+                .isEqualTo(newReview.getVolunteerApplyId());
         assertThat(findOne).extracting("recruitBoardId").isEqualTo(boardId);
         assertThat(findOne).extracting("title").isEqualTo(newReview.getTitle());
         assertThat(findOne).extracting("content").isEqualTo(newReview.getContent());
     }
-
 
     @DisplayName("봉사자 ID로 리뷰 리스트를 조회할 수 있다.")
     @Test
@@ -184,7 +183,7 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getReviewsByCenterId() {
         // given
-        Center center = createCenter("Test Center");
+        NEWCenter center = createCenter();
         centerRepository.save(center);
 
         RecruitBoard board1 = createCompletedRecruitBoard(center.getId(), COUNSELING);
@@ -227,8 +226,12 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
         assertThat(result.getPageable().getPageNumber()).isZero();
     }
 
-    private static NEWVolunteer createVolunteer() {
+    private NEWVolunteer createVolunteer() {
         return NEWVolunteer.createDefault(UUID.randomUUID());
+    }
+
+    private NEWCenter createCenter() {
+        return NEWCenter.createDefault(UUID.randomUUID());
     }
 
     private Review createReview(Long applyId, UUID volunteerId) {
