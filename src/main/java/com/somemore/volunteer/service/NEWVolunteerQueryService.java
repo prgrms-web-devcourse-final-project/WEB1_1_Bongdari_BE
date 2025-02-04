@@ -43,6 +43,12 @@ public class NEWVolunteerQueryService implements NEWVolunteerQueryUseCase {
     }
 
     @Override
+    public String getNicknameById(UUID id) {
+        return volunteerRepository.findNicknameById(id)
+                .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_VOLUNTEER));
+    }
+
+    @Override
     public List<VolunteerNicknameAndId> getVolunteerNicknameAndIdsByIds(List<UUID> ids) {
         return volunteerRepository.findVolunteerNicknameAndIdsByIds(ids);
     }

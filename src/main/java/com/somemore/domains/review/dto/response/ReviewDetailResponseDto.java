@@ -15,6 +15,10 @@ import java.util.UUID;
 public record ReviewDetailResponseDto(
         @Schema(description = "리뷰 ID", example = "123")
         Long id,
+        @Schema(description = "봉사 지원 ID", example = "1")
+        Long volunteerApplyId,
+        @Schema(description = "모집글 ID", example = "1")
+        Long recruitBoardId,
         @Schema(description = "봉사자(작성자) ID", example = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
         UUID volunteerId,
         @Schema(description = "리뷰 제목", example = "제 인생 최고의 봉사활동")
@@ -27,9 +31,11 @@ public record ReviewDetailResponseDto(
         LocalDateTime updatedAt
 ) {
 
-    public static ReviewDetailResponseDto from(Review review) {
+    public static ReviewDetailResponseDto of(Review review, Long recruitBoardId) {
         return ReviewDetailResponseDto.builder()
                 .id(review.getId())
+                .volunteerApplyId(review.getVolunteerApplyId())
+                .recruitBoardId(recruitBoardId)
                 .volunteerId(review.getVolunteerId())
                 .title(review.getTitle())
                 .content(review.getContent())

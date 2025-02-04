@@ -53,6 +53,19 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
     }
 
     @Override
+    public Optional<String> findNicknameById(UUID id) {
+        return Optional.ofNullable(
+                queryFactory.select(volunteer.nickname)
+                        .from(volunteer)
+                        .where(
+                                volunteer.id.eq(id),
+                                isNotDeleted()
+                        )
+                        .fetchOne()
+        );
+    }
+
+    @Override
     public List<VolunteerNickname> findNicknamesByIds(List<UUID> ids) {
 
         return queryFactory

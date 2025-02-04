@@ -38,6 +38,13 @@ public class VolunteerApplyQueryService implements VolunteerApplyQueryUseCase {
     }
 
     @Override
+    public Long getRecruitBoardIdById(Long id) {
+        return volunteerApplyRepository.findRecruitBoardIdById(id).orElseThrow(
+                () -> new NoSuchElementException(NOT_EXISTS_VOLUNTEER_APPLY)
+        );
+    }
+
+    @Override
     public VolunteerApplySummaryResponseDto getSummaryByRecruitId(Long recruitId) {
 
         List<VolunteerApply> applies = volunteerApplyRepository.findAllByRecruitId(recruitId);

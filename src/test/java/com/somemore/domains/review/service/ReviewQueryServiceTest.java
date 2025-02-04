@@ -4,16 +4,14 @@ import static com.somemore.domains.recruitboard.domain.VolunteerCategory.COUNSEL
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.CULTURAL_EVENT;
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.OTHER;
 import static com.somemore.domains.volunteerapply.domain.ApplyStatus.APPROVED;
-import static com.somemore.global.auth.oauth.domain.OAuthProvider.NAVER;
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
-import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.support.fixture.RecruitBoardFixture.createCompletedRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.center.CenterRepository;
+import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
@@ -22,12 +20,12 @@ import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
 import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
 import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.repository.ReviewRepository;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,10 +52,10 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     private VolunteerApplyRepository volunteerApplyRepository;
 
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
 
     @Autowired
-    private CenterRepository centerRepository;
+    private NEWCenterRepository centerRepository;
 
     private Long volunteerApplyId;
     private Review review;
@@ -107,29 +105,38 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .hasMessage(NOT_EXISTS_REVIEW.getMessage());
     }
 
-
     @DisplayName("아이디로 리뷰를 상세 조회할 수 있다.")
     @Test
     void getDetailById() {
         // given
-        Long id = review.getId();
+        Long boardId = 1234L;
+        VolunteerApply apply = createApply(UUID.randomUUID(), boardId);
+        volunteerApplyRepository.save(apply);
+
+        Review newReview = createReview(apply.getId(), UUID.randomUUID(), "제 인생 최고의 봉사활동",
+                "정말 유익했습니다. 더보기..");
+        reviewRepository.save(newReview);
+
+        Long id = newReview.getId();
 
         // when
         ReviewDetailResponseDto findOne = reviewQueryService.getDetailById(id);
 
         // then
-        assertThat(findOne).extracting("id").isEqualTo(review.getId());
-        assertThat(findOne).extracting("volunteerId").isEqualTo(review.getVolunteerId());
-        assertThat(findOne).extracting("title").isEqualTo(review.getTitle());
-        assertThat(findOne).extracting("content").isEqualTo(review.getContent());
+        assertThat(findOne).extracting("id").isEqualTo(newReview.getId());
+        assertThat(findOne).extracting("volunteerId").isEqualTo(newReview.getVolunteerId());
+        assertThat(findOne).extracting("volunteerApplyId")
+                .isEqualTo(newReview.getVolunteerApplyId());
+        assertThat(findOne).extracting("recruitBoardId").isEqualTo(boardId);
+        assertThat(findOne).extracting("title").isEqualTo(newReview.getTitle());
+        assertThat(findOne).extracting("content").isEqualTo(newReview.getContent());
     }
-
 
     @DisplayName("봉사자 ID로 리뷰 리스트를 조회할 수 있다.")
     @Test
     void getReviewsByVolunteerId() {
         // given
-        Volunteer volunteer = Volunteer.createDefault(NAVER, "naver");
+        NEWVolunteer volunteer = createVolunteer();
         volunteerRepository.save(volunteer);
 
         String nickname = volunteer.getNickname();
@@ -176,16 +183,15 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getReviewsByCenterId() {
         // given
-        Center center = createCenter("Test Center");
+        NEWCenter center = createCenter();
         centerRepository.save(center);
 
         RecruitBoard board1 = createCompletedRecruitBoard(center.getId(), COUNSELING);
         RecruitBoard board2 = createCompletedRecruitBoard(center.getId(), CULTURAL_EVENT);
         recruitBoardRepository.saveAll(List.of(board1, board2));
 
-        Volunteer volunteer1 = Volunteer.createDefault(NAVER, "naver");
-        Volunteer volunteer2 = Volunteer.createDefault(NAVER, "naver");
-        volunteer2.markAsDeleted();
+        NEWVolunteer volunteer1 = createVolunteer();
+        NEWVolunteer volunteer2 = createVolunteer();
         volunteerRepository.save(volunteer1);
         volunteerRepository.save(volunteer2);
 
@@ -213,11 +219,19 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .extracting("id", "title", "volunteerNickname")
                 .containsExactlyInAnyOrder(
                         tuple(review1.getId(), "제 인생 최고의 봉사활동", volunteer1.getNickname()),
-                        tuple(review2.getId(), "보람있는 봉사활동", "삭제된 아이디")
+                        tuple(review2.getId(), "보람있는 봉사활동", volunteer2.getNickname())
                 );
 
         assertThat(result.getPageable().getPageSize()).isEqualTo(5);
         assertThat(result.getPageable().getPageNumber()).isZero();
+    }
+
+    private NEWVolunteer createVolunteer() {
+        return NEWVolunteer.createDefault(UUID.randomUUID());
+    }
+
+    private NEWCenter createCenter() {
+        return NEWCenter.createDefault(UUID.randomUUID());
     }
 
     private Review createReview(Long applyId, UUID volunteerId) {
@@ -238,18 +252,18 @@ class ReviewQueryServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
-    private Pageable getPageable() {
-        Sort sort = Sort.by(Sort.Order.desc("created_at"));
-        return PageRequest.of(0, 5, sort);
-    }
-
-    private static VolunteerApply createApply(UUID volunteerId, Long recruitId) {
+    private VolunteerApply createApply(UUID volunteerId, Long recruitId) {
         return VolunteerApply.builder()
                 .volunteerId(volunteerId)
                 .recruitBoardId(recruitId)
                 .status(APPROVED)
                 .attended(false)
                 .build();
+    }
+
+    private Pageable getPageable() {
+        Sort sort = Sort.by(Sort.Order.desc("created_at"));
+        return PageRequest.of(0, 5, sort);
     }
 
 }
