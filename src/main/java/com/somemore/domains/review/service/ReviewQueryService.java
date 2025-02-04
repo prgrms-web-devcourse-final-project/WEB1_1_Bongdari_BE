@@ -29,7 +29,6 @@ public class ReviewQueryService implements ReviewQueryUseCase {
 
     private final ReviewRepository reviewRepository;
     private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
-    private final CenterQueryUseCase centerQueryUseCase;
     private final VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
 
     @Override
@@ -70,8 +69,6 @@ public class ReviewQueryService implements ReviewQueryUseCase {
             UUID centerId,
             ReviewSearchCondition condition
     ) {
-        centerQueryUseCase.validateCenterExists(centerId);
-
         Page<Review> reviews = reviewRepository.findAllByCenterIdAndSearch(centerId, condition);
         List<UUID> volunteerIds = reviews.get().map(Review::getVolunteerId).toList();
         Map<UUID, String> volunteerNicknames = mapVolunteerIdsToNicknames(volunteerIds);
