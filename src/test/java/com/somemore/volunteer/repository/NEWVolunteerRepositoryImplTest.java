@@ -4,6 +4,7 @@ import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.repository.record.VolunteerNickname;
 import com.somemore.volunteer.repository.record.VolunteerNicknameAndId;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.atomicReferenceArray;
 
 @Transactional
 class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
@@ -39,6 +41,21 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
                 .isEqualTo(volunteerByUserId)
                 .isEqualTo(volunteerById);
 
+    }
+
+    @DisplayName("아이디로 봉사자 닉네임을 조회할 수 있다.")
+    @Test
+    void findNicknameById() {
+        // given
+        NEWVolunteer volunteer = NEWVolunteer.createDefault(UUID.randomUUID());
+        volunteerRepository.save(volunteer);
+
+        // when
+        Optional<String> nickname = volunteerRepository.findNicknameById(volunteer.getId());
+
+        // then
+        assertThat(nickname).isPresent();
+        assertThat(nickname.get()).isEqualTo(volunteer.getNickname());
     }
 
     @DisplayName("id 리스트로 nickname 리스트를 조회할 수 있다.")

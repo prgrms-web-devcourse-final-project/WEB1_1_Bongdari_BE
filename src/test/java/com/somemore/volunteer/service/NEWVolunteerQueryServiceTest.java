@@ -1,19 +1,21 @@
 package com.somemore.volunteer.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_VOLUNTEER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import com.somemore.volunteer.repository.record.VolunteerNicknameAndId;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class NEWVolunteerQueryServiceTest extends IntegrationTestSupport {
@@ -66,6 +68,33 @@ class NEWVolunteerQueryServiceTest extends IntegrationTestSupport {
         assertThat(foundUserId).isEqualTo(volunteer.getUserId());
     }
 
+    @Test
+    @DisplayName("ID로 닉네임을 조회한다")
+    void getNicknameById() {
+        // given
+        UUID id = volunteer.getId();
+
+        // when
+        String nickname = volunteerQueryService.getNicknameById(id);
+
+        // then
+        assertThat(nickname).isEqualTo(volunteer.getNickname());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 ID로 닉네임을 조회하면 에러가 발생한다.")
+    void getNicknameByIdWhenDoesNotExist() {
+        // given
+        UUID wrongId = UUID.randomUUID();
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> volunteerQueryService.getNicknameById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_VOLUNTEER.getMessage());
+    }
+
     @DisplayName("아이디 리스트로 VolunteerNicknameAndId 리스트를 조회할 수 있다.")
     @Test
     void findVolunteerNicknameAndIdsByIds() {
@@ -85,7 +114,8 @@ class NEWVolunteerQueryServiceTest extends IntegrationTestSupport {
         List<UUID> ids = List.of(volunteer1.getId(), volunteer2.getId(), volunteer3.getId());
 
         // when
-        List<VolunteerNicknameAndId> nicknames = volunteerQueryService.getVolunteerNicknameAndIdsByIds(ids);
+        List<VolunteerNicknameAndId> nicknames = volunteerQueryService.getVolunteerNicknameAndIdsByIds(
+                ids);
 
         // then
         assertThat(nicknames).extracting(VolunteerNicknameAndId::userId)
