@@ -1,5 +1,7 @@
 package com.somemore.domains.review.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
+
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
@@ -7,20 +9,18 @@ import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
 import com.somemore.domains.review.dto.response.ReviewDetailWithNicknameResponseDto;
 import com.somemore.domains.review.repository.ReviewRepository;
 import com.somemore.domains.review.usecase.ReviewQueryUseCase;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
+import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.global.exception.NoSuchElementException;
+import com.somemore.volunteer.repository.record.VolunteerNicknameAndId;
+import com.somemore.volunteer.usecase.NEWVolunteerQueryUseCase;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -28,8 +28,9 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 public class ReviewQueryService implements ReviewQueryUseCase {
 
     private final ReviewRepository reviewRepository;
-    private final VolunteerQueryUseCase volunteerQueryUseCase;
+    private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
     private final CenterQueryUseCase centerQueryUseCase;
+    private final VolunteerApplyQueryUseCase volunteerApplyQueryUseCase;
 
     @Override
     public boolean existsByVolunteerApplyId(Long volunteerApplyId) {
@@ -45,7 +46,9 @@ public class ReviewQueryService implements ReviewQueryUseCase {
     @Override
     public ReviewDetailResponseDto getDetailById(Long id) {
         Review review = getById(id);
-        return ReviewDetailResponseDto.from(review);
+        Long recruitBoardId = volunteerApplyQueryUseCase.getRecruitBoardIdById(
+                review.getVolunteerApplyId());
+        return ReviewDetailResponseDto.of(review, recruitBoardId);
     }
 
     @Override
@@ -54,10 +57,11 @@ public class ReviewQueryService implements ReviewQueryUseCase {
             ReviewSearchCondition condition
     ) {
         String nickname = volunteerQueryUseCase.getNicknameById(volunteerId);
-        Page<Review> reviews = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId, condition);
+        Page<Review> reviews = reviewRepository.findAllByVolunteerIdAndSearch(volunteerId,
+                condition);
 
         return reviews.map(
-                review -> ReviewDetailWithNicknameResponseDto.from(review, nickname)
+                review -> ReviewDetailWithNicknameResponseDto.of(review, nickname)
         );
     }
 
@@ -70,24 +74,18 @@ public class ReviewQueryService implements ReviewQueryUseCase {
 
         Page<Review> reviews = reviewRepository.findAllByCenterIdAndSearch(centerId, condition);
         List<UUID> volunteerIds = reviews.get().map(Review::getVolunteerId).toList();
-        Map<UUID, String> volunteerNicknames = getVolunteerNicknames(volunteerIds);
+        Map<UUID, String> volunteerNicknames = mapVolunteerIdsToNicknames(volunteerIds);
 
-        return reviews.map(
-                review -> {
-                    String nickname = volunteerNicknames.getOrDefault(review.getVolunteerId(),
-                            "삭제된 아이디");
-                    return ReviewDetailWithNicknameResponseDto.from(review, nickname);
-                });
+        return reviews.map(review -> {
+            String nickname = volunteerNicknames.get(review.getVolunteerId());
+            return ReviewDetailWithNicknameResponseDto.of(review, nickname);
+        });
     }
 
-    private Map<UUID, String> getVolunteerNicknames(List<UUID> volunteerIds) {
-        List<Volunteer> volunteers = volunteerQueryUseCase.getAllByIds(volunteerIds);
-
-        Map<UUID, String> volunteerNicknames = new HashMap<>();
-        for (Volunteer volunteer : volunteers) {
-            volunteerNicknames.put(volunteer.getId(), volunteer.getNickname());
-        }
-
-        return volunteerNicknames;
+    private Map<UUID, String> mapVolunteerIdsToNicknames(List<UUID> volunteerIds) {
+        return volunteerQueryUseCase.getVolunteerNicknameAndIdsByIds(volunteerIds)
+                .stream()
+                .collect(Collectors.toMap(VolunteerNicknameAndId::id,
+                        VolunteerNicknameAndId::nickname));
     }
 }
