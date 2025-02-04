@@ -2,7 +2,6 @@ package com.somemore.domains.review.service;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_REVIEW;
 
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
 import com.somemore.domains.review.domain.Review;
 import com.somemore.domains.review.dto.condition.ReviewSearchCondition;
 import com.somemore.domains.review.dto.response.ReviewDetailResponseDto;
