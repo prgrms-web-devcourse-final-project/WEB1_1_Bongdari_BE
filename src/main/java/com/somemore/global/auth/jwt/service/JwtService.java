@@ -3,8 +3,6 @@ package com.somemore.global.auth.jwt.service;
 import com.somemore.global.auth.authentication.UserIdentity;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
 import com.somemore.global.auth.jwt.domain.TokenType;
-import com.somemore.global.auth.jwt.exception.JwtErrorType;
-import com.somemore.global.auth.jwt.exception.JwtException;
 import com.somemore.global.auth.jwt.generator.JwtGenerator;
 import com.somemore.global.auth.jwt.parser.JwtParser;
 import com.somemore.global.auth.jwt.refresher.JwtRefresher;
@@ -40,12 +38,8 @@ public class JwtService implements JwtUseCase {
         return jwtParser.parseToken(accessToken);
     }
 
-    private void handleJwtExpiredException(JwtException e, EncodedToken accessToken, HttpServletResponse response) {
-        if (e.getErrorType() == JwtErrorType.EXPIRED_TOKEN) {
-            EncodedToken refreshedToken = jwtRefresher.refreshAccessToken(accessToken);
-            // TODO 프론트엔드와 협의 : 만료된 액세스 토큰 관리 방법
-            return;
-        }
-        throw e;
+    @Override
+    public EncodedToken refreshAccessToken(EncodedToken accessToken) {
+        return jwtRefresher.refreshAccessToken(accessToken);
     }
 }

@@ -12,5 +12,7 @@ public interface JwtUseCase {
 
     void validateAccessToken(EncodedToken accessToken, HttpServletResponse response);
 
-    Claims getClaims(EncodedToken token);
+    Claims getClaims(EncodedToken accessToken);
+
+    EncodedToken refreshAccessToken(EncodedToken accessToken);
 }
