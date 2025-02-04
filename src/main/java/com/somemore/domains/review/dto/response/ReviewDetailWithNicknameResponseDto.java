@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.domains.review.domain.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Builder;
 
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)
@@ -26,7 +25,7 @@ public record ReviewDetailWithNicknameResponseDto(
         @Schema(description = "작성 일자", example = "2024-12-01T09:00:00", type = "string")
         LocalDateTime createdAt,
         @Schema(description = "수정 일자", example = "2024-12-01T09:00:00", type = "string")
-        LocalDateTime updateAt
+        LocalDateTime updatedAt
 ) {
 
     public static ReviewDetailWithNicknameResponseDto of(Review review, String volunteerNickname) {
@@ -37,7 +36,7 @@ public record ReviewDetailWithNicknameResponseDto(
                 .title(review.getTitle())
                 .content(review.getContent())
                 .createdAt(review.getCreatedAt())
-                .updateAt(review.getUpdatedAt())
+                .updatedAt(review.getUpdatedAt())
                 .build();
     }
 
