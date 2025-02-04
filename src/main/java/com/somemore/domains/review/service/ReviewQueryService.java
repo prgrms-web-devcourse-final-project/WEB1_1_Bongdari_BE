@@ -72,10 +72,10 @@ public class ReviewQueryService implements ReviewQueryUseCase {
         List<UUID> volunteerIds = reviews.get().map(Review::getVolunteerId).toList();
         Map<UUID, String> volunteerNicknames = mapVolunteerIdsToNicknames(volunteerIds);
 
-        return reviews.map(review -> {
-            String nickname = volunteerNicknames.get(review.getVolunteerId());
-            return ReviewDetailWithNicknameResponseDto.of(review, nickname);
-        });
+        return reviews.map(review ->
+                ReviewDetailWithNicknameResponseDto.of(review,
+                        volunteerNicknames.get(review.getVolunteerId()))
+        );
     }
 
     private Map<UUID, String> mapVolunteerIdsToNicknames(List<UUID> volunteerIds) {
