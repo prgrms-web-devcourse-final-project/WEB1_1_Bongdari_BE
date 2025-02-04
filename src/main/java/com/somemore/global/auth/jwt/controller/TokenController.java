@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/auth/token")
 @Tag(name = "Token API", description = "JWT 관련 API")
-public class TokenExchangeController {
+public class TokenController {
 
     private final TokenManager tokenManager;
     private final JwtUseCase jwtUseCase;
@@ -49,6 +49,4 @@ public class TokenExchangeController {
                 newAccessToken.getValueWithPrefix(),
                 "액세스 토큰 갱신 성공");
     }
-
-
 }
