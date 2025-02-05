@@ -86,7 +86,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         return Arrays.stream(cookies)
                 .filter(Objects::nonNull)
-                .filter(cookie -> cookie.getName().equals(TokenType.ACCESS.name()))
+                .filter(cookie -> cookie.getName().equals(TokenType.ACCESS.getDescription()))
                 .map(Cookie::getValue)
                 .findFirst()
                 .map(EncodedToken::new)
