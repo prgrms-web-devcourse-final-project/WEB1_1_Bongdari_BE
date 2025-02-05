@@ -53,6 +53,10 @@ public class UserCommonAttribute extends BaseEntity {
         this.isCustomized = true;
     }
 
+    public void updateImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public static UserCommonAttribute createDefault(UUID userId, UserRole role) {
         return UserCommonAttribute.builder()
                 .userId(userId)
