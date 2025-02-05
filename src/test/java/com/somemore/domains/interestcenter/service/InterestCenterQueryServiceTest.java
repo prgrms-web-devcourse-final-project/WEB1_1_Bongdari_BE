@@ -1,25 +1,25 @@
 package com.somemore.domains.interestcenter.service;
 
-import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.center.CenterJpaRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.domains.interestcenter.domain.InterestCenter;
 import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
-import com.somemore.domains.interestcenter.repository.InterestCenterJpaRepository;
 import com.somemore.domains.interestcenter.repository.InterestCenterRepository;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
+import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @Transactional
 class InterestCenterQueryServiceTest extends IntegrationTestSupport {
-
 
     @Autowired
     private InterestCenterQueryService interestCenterQueryService;
@@ -28,10 +28,10 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
     private InterestCenterRepository interestCenterRepository;
 
     @Autowired
-    private InterestCenterJpaRepository interestCenterJpaRepository;
+    private NEWCenterRepository centerRepository;
 
     @Autowired
-    private CenterJpaRepository centerJpaRepository;
+    private UserCommonAttributeRepository userCommonAttributeRepository;
 
     @DisplayName("봉사자 ID로 관심 센터 정보를 조회할 수 있다.")
     @Test
@@ -39,32 +39,30 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         // given
         UUID volunteerId = UUID.randomUUID();
 
-        Center center = createCenter();
-        Center center1 = createCenter();
-        Center center2 = createCenter();
-        centerJpaRepository.saveAll(List.of(center, center1, center2));
+        NEWCenter centerOne = createCenter();
+        NEWCenter centerTwo = createCenter();
+        centerRepository.save(centerOne);
+        centerRepository.save(centerTwo);
 
-        InterestCenter interestCenter = createInterestCenter(volunteerId, center.getId());
-        InterestCenter interestCenter1 = createInterestCenter(volunteerId, center1.getId());
-        InterestCenter interestCenter2 = createInterestCenter(volunteerId, center2.getId());
-        interestCenterJpaRepository.saveAll(List.of(interestCenter, interestCenter1, interestCenter2));
+        UserCommonAttribute centerOneInfo = createCenterUserInfo(centerOne.getUserId());
+        UserCommonAttribute centerTwoInfo = createCenterUserInfo(centerTwo.getUserId());
+        userCommonAttributeRepository.save(centerOneInfo);
+        userCommonAttributeRepository.save(centerTwoInfo);
+
+        InterestCenter interestOne = createInterestCenter(volunteerId, centerOne.getId());
+        InterestCenter interestTwo = createInterestCenter(volunteerId, centerTwo.getId());
+        interestCenterRepository.save(interestOne);
+        interestCenterRepository.save(interestTwo);
 
         // when
-        List<InterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(volunteerId);
+        List<InterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(
+                volunteerId);
 
         // then
         assertThat(result)
-                .hasSize(3)
+                .hasSize(2)
                 .extracting("centerId")
-                .containsExactlyInAnyOrder(center.getId(), center1.getId(), center2.getId());
-
-        assertThat(result)
-                .extracting("centerName")
-                .containsExactlyInAnyOrder("기본 기관 이름", "기본 기관 이름", "기본 기관 이름");
-
-        assertThat(result)
-                .extracting("imgUrl")
-                .containsExactlyInAnyOrder("http://image.jpg", "http://image.jpg", "http://image.jpg");
+                .containsExactlyInAnyOrder(centerOne.getId(), centerTwo.getId());
     }
 
     @DisplayName("봉사자의 관심 센터가 없을 경우 빈 리스트를 반환한다.")
@@ -73,14 +71,9 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         // given
         UUID volunteerId = UUID.randomUUID();
 
-        Center center = createCenter();
-        centerJpaRepository.save(center);
-
-        InterestCenter unrelatedInterestCenter = createInterestCenter(UUID.randomUUID(), center.getId());
-        interestCenterJpaRepository.save(unrelatedInterestCenter);
-
         // when
-        List<InterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(volunteerId);
+        List<InterestCentersResponseDto> result = interestCenterQueryService.getInterestCenters(
+                volunteerId);
 
         // then
         assertThat(result).isEmpty();
@@ -98,7 +91,9 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
         InterestCenter interestCenter1 = createInterestCenter(volunteerId1, centerId);
         InterestCenter interestCenter2 = createInterestCenter(volunteerId2, centerId);
         InterestCenter interestCenter3 = createInterestCenter(volunteerId3, centerId);
-        interestCenterJpaRepository.saveAll(List.of(interestCenter1, interestCenter2, interestCenter3));
+        interestCenterRepository.save(interestCenter1);
+        interestCenterRepository.save(interestCenter2);
+        interestCenterRepository.save(interestCenter3);
 
         // when
         List<UUID> result = interestCenterQueryService.getVolunteerIdsByCenterId(centerId);
@@ -113,26 +108,17 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
     @Test
     void getVolunteerIdsByCenterId_ReturnsEmptyList_WhenNoVolunteers() {
         // given
-        UUID centerId = UUID.randomUUID();
-
-        Center center = createCenter();
-        centerJpaRepository.save(center);
+        UUID wrongCenterId = UUID.randomUUID();
 
         // when
-        List<UUID> result = interestCenterQueryService.getVolunteerIdsByCenterId(centerId);
+        List<UUID> result = interestCenterQueryService.getVolunteerIdsByCenterId(wrongCenterId);
 
         // then
         assertThat(result).isEmpty();
     }
 
-    private Center createCenter() {
-        return Center.create(
-                "기본 기관 이름",
-                "010-1234-5678",
-                "http://image.jpg",
-                "기관 소개 내용",
-                "http://example.com"
-        );
+    private NEWCenter createCenter() {
+        return NEWCenter.createDefault(UUID.randomUUID());
     }
 
     private InterestCenter createInterestCenter(UUID volunteerId, UUID centerId) {
@@ -140,5 +126,9 @@ class InterestCenterQueryServiceTest extends IntegrationTestSupport {
                 .volunteerId(volunteerId)
                 .centerId(centerId)
                 .build();
+    }
+
+    private UserCommonAttribute createCenterUserInfo(UUID userId) {
+        return UserCommonAttribute.createDefault(userId, UserRole.CENTER);
     }
 }

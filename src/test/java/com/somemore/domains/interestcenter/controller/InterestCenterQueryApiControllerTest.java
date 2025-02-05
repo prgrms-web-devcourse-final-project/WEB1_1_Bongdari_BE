@@ -1,21 +1,20 @@
 package com.somemore.domains.interestcenter.controller;
 
-import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
-import com.somemore.domains.interestcenter.usecase.InterestCenterQueryUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-
-import java.util.List;
-import java.util.UUID;
-
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
+import com.somemore.domains.interestcenter.usecase.InterestCenterQueryUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
+import java.util.List;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 
 class InterestCenterQueryApiControllerTest extends ControllerTestSupport {
 
@@ -24,7 +23,7 @@ class InterestCenterQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사자 ID로 관심기관 목록을 조회할 수 있다.")
     @Test
-    @WithMockCustomUser
+    @MockUser
     void getInterestCenters_ShouldReturnInterestCentersList() throws Exception {
         // given
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
@@ -51,7 +50,7 @@ class InterestCenterQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사자 ID로 관심기관이 없을 경우 빈 리스트를 반환한다.")
     @Test
-    @WithMockCustomUser
+    @MockUser
     void getInterestCenters_ShouldReturnEmptyList_WhenNoInterestCenters() throws Exception {
         // given
         UUID volunteerId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
