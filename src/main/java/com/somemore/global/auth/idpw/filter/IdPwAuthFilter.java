@@ -2,7 +2,9 @@ package com.somemore.global.auth.idpw.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somemore.global.auth.authentication.UserIdentity;
+import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.jwt.domain.EncodedToken;
+import com.somemore.global.auth.jwt.domain.TokenType;
 import com.somemore.global.auth.jwt.usecase.GenerateTokensOnLoginUseCase;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +28,7 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase;
+    private final CookieUseCase cookieUseCase;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -42,9 +45,8 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
         response.setStatus(HttpServletResponse.SC_OK);
 
         UserIdentity userIdentity = (UserIdentity) authResult.getPrincipal();
-        EncodedToken accessToken = generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(userIdentity);
 
-        response.setHeader("Authorization", accessToken.getValueWithPrefix());
+        processToken(response, userIdentity);
     }
 
     @Override
@@ -53,6 +55,14 @@ public class IdPwAuthFilter extends UsernamePasswordAuthenticationFilter {
         configureUnauthorizedResponse(response);
 
         objectMapper.writeValue(response.getWriter(), problemDetail);
+    }
+
+    private void processToken(HttpServletResponse response, UserIdentity userIdentity) {
+        generateTokensOnLoginUseCase.generateAuthTokensAndReturnAccessToken(userIdentity);
+
+        EncodedToken loginToken = generateTokensOnLoginUseCase.generateLoginToken(userIdentity);
+
+        cookieUseCase.setToken(response, loginToken.value(), TokenType.SIGN_IN);
     }
 
     private void configureUnauthorizedResponse(HttpServletResponse response) {

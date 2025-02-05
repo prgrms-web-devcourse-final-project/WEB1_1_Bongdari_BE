@@ -1,6 +1,7 @@
 package com.somemore.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.somemore.global.auth.cookie.CookieUseCase;
 import com.somemore.global.auth.idpw.filter.IdPwAuthFilter;
 import com.somemore.global.auth.jwt.filter.JwtAuthFilter;
 import com.somemore.global.auth.jwt.filter.JwtExceptionFilter;
@@ -45,10 +46,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
                                                    AuthenticationManager authenticationManager,
                                                    GenerateTokensOnLoginUseCase generateTokensOnLoginUseCase,
-//                                                   CookieUseCase cookieUseCase,
+                                                   CookieUseCase cookieUseCase,
                                                    ObjectMapper objectMapper) throws Exception {
 
-        IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, objectMapper);
+        IdPwAuthFilter idPwAuthFilter = new IdPwAuthFilter(authenticationManager, generateTokensOnLoginUseCase, cookieUseCase, objectMapper);
         idPwAuthFilter.setFilterProcessesUrl("/api/sign-in/id-pw");
 
         httpSecurity
