@@ -2,7 +2,6 @@ package com.somemore.domains.center.service.query;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 
-import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.repository.center.CenterRepository;
 import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
 import com.somemore.global.exception.BadRequestException;
@@ -36,8 +35,4 @@ public class CenterQueryService implements CenterQueryUseCase {
         return name;
     }
 
-    private Center getCenterById(UUID centerId) {
-        return centerRepository.findCenterById(centerId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_CENTER.getMessage()));
-    }
 }
