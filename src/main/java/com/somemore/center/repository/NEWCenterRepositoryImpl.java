@@ -5,12 +5,14 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.domain.QNEWCenter;
+import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.center.repository.record.CenterProfileDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
+import com.somemore.user.domain.QUserCommonAttribute;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository("newCenterRepository")
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
     private final JPAQueryFactory queryFactory;
 
     private static final QNEWCenter center = QNEWCenter.nEWCenter;
+    private static final QUserCommonAttribute userCommonAttribute = QUserCommonAttribute.userCommonAttribute;
 
     @Override
     public NEWCenter save(NEWCenter center) {
@@ -31,7 +34,7 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
         return Optional.ofNullable(
                 queryFactory.selectFrom(center)
                         .where(
-                                center.id.eq(id),
+                                idEq(id),
                                 isNotDeleted()
                         )
                         .fetchOne()
@@ -60,11 +63,50 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
                                 center.homepageUrl))
                         .from(center)
                         .where(
-                                center.id.eq(centerId),
+                                idEq(centerId),
                                 isNotDeleted()
                         )
                         .fetchOne()
         );
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return queryFactory
+                .selectOne()
+                .from(center)
+                .where(
+                        idEq(id),
+                        isNotDeleted()
+                )
+                .fetchFirst() != null;
+    }
+
+    @Override
+    public List<CenterOverviewInfo> findOverviewInfosByIds(List<UUID> ids) {
+        return queryFactory
+                .select(Projections.constructor(
+                        CenterOverviewInfo.class,
+                        center.id,
+                        userCommonAttribute.name,
+                        userCommonAttribute.imgUrl
+                ))
+                .from(center)
+                .join(userCommonAttribute)
+                .on(userCommonAttribute.userId.eq(center.userId))
+                .where(
+                        idIn(ids),
+                        isNotDeleted()
+                )
+                .fetch();
+    }
+
+    private static BooleanExpression idIn(List<UUID> ids) {
+        return center.id.in(ids);
+    }
+
+    private BooleanExpression idEq(UUID id) {
+        return center.id.eq(id);
     }
 
     private BooleanExpression isNotDeleted() {

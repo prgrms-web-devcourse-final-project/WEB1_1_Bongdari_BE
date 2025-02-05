@@ -2,11 +2,10 @@ package com.somemore.domains.interestcenter.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
+import com.somemore.center.repository.record.CenterOverviewInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.util.UUID;
+import lombok.Builder;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
@@ -18,6 +17,7 @@ public record InterestCentersResponseDto(
         @Schema(description = "관심기관의 프로필 이미지 링크", example = "~~/image.jpeg")
         String imgUrl
 ) {
+
     public static InterestCentersResponseDto of(CenterOverviewInfo responseDto) {
         return InterestCentersResponseDto.builder()
                 .centerId(responseDto.centerId())

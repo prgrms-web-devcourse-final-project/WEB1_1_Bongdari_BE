@@ -1,21 +1,20 @@
 package com.somemore.domains.interestcenter.service;
 
-import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import com.somemore.center.repository.record.CenterOverviewInfo;
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.domains.interestcenter.dto.response.InterestCentersResponseDto;
 import com.somemore.domains.interestcenter.repository.InterestCenterRepository;
 import com.somemore.domains.interestcenter.usecase.InterestCenterQueryUseCase;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class InterestCenterQueryService implements InterestCenterQueryUseCase {
 
-    private final CenterQueryUseCase centerQueryUseCase;
+    private final NEWCenterQueryUseCase centerQueryUseCase;
     private final InterestCenterRepository interestCenterRepository;
 
     @Override
@@ -34,7 +33,6 @@ public class InterestCenterQueryService implements InterestCenterQueryUseCase {
 
     @Override
     public List<UUID> getVolunteerIdsByCenterId(UUID centerId) {
-
         return interestCenterRepository.findVolunteerIdsByCenterId(centerId);
     }
 }

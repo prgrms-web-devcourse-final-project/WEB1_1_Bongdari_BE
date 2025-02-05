@@ -1,8 +1,11 @@
 package com.somemore.center.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
+
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.repository.NEWCenterRepository;
+import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.center.repository.record.CenterProfileDto;
 import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.domains.center.dto.response.PreferItemResponseDto;
@@ -11,12 +14,11 @@ import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 import com.somemore.user.usecase.UserQueryUseCase;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,12 +46,25 @@ public class NEWCenterQueryService implements NEWCenterQueryUseCase {
         CenterProfileDto centerProfileDto = centerRepository.findCenterProfileById(centerId)
                 .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_CENTER));
 
-        UserProfileDto userProfileDto = userQueryUseCase.getUserProfileByUserId(centerProfileDto.userId());
+        UserProfileDto userProfileDto = userQueryUseCase.getUserProfileByUserId(
+                centerProfileDto.userId());
 
-        List<PreferItemResponseDto> preferItems = preferItemQueryUseCase.getPreferItemDtosByCenterId(centerProfileDto.id());
+        List<PreferItemResponseDto> preferItems = preferItemQueryUseCase.getPreferItemDtosByCenterId(
+                centerProfileDto.id());
 
         return CenterProfileResponseDto.of(centerProfileDto, userProfileDto, preferItems);
     }
 
+    @Override
+    public void validateCenterExists(UUID id) {
+        if (centerRepository.doesNotExistById(id)) {
+            throw new NoSuchElementException(NOT_EXISTS_CENTER);
+        }
+    }
+
+    @Override
+    public List<CenterOverviewInfo> getCenterOverviewsByIds(List<UUID> ids) {
+        return centerRepository.findOverviewInfosByIds(ids);
+    }
 
 }
