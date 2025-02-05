@@ -451,38 +451,6 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         assertThat(two.getRecruitStatus()).isEqualTo(COMPLETED);
     }
 
-//    @DisplayName("모집글을 elastic search index에 저장할 수 있다. (repository)")
-//    @Test
-//    void saveDocuments() {
-//        //given
-//        Pageable pageable = getPageable();
-//        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
-//                .keyword("저장")
-//                .pageable(pageable)
-//                .build();
-//
-//        List<RecruitBoard> recruitBoards = new ArrayList<>();
-//
-//        RecruitBoard board1 = createRecruitBoard("저장 잘 되나요?", centerId);
-//        RecruitBoard savedBoard1 = recruitBoardRepository.save(board1);
-//        RecruitBoard board2 = createRecruitBoard("저장해줘", centerId);
-//        RecruitBoard savedBoard2 = recruitBoardRepository.save(board2);
-//        recruitBoards.add(savedBoard1);
-//        recruitBoards.add(savedBoard2);
-//
-//        //when
-//        recruitBoardRepository.saveDocuments(recruitBoards);
-//
-//        //then
-//        Page<RecruitBoardWithCenter> findBoard = recruitBoardRepository.findByRecruitBoardsContaining(condition);
-//
-//        assertThat(findBoard).isNotNull();
-//        assertThat(findBoard.getTotalElements()).isEqualTo(2);
-//
-//        recruitBoardRepository.deleteDocument(savedBoard1.getId());
-//        recruitBoardRepository.deleteDocument(savedBoard2.getId());
-//    }
-
     private static UserCommonAttribute createUserCommonAttribute(UUID userId) {
         return UserCommonAttribute.createDefault(userId, UserRole.CENTER);
     }
@@ -565,5 +533,4 @@ class RecruitBoardRepositoryImplTest extends IntegrationTestSupport {
         Sort sort = Sort.by(Sort.Order.desc("created_at"));
         return PageRequest.of(0, 5, sort);
     }
-
 }

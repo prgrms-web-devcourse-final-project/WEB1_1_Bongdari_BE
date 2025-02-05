@@ -42,8 +42,6 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
     DeleteCommunityBoardUseCase deleteCommunityBoardUseCase;
     @Autowired
     CommunityBoardQueryService communityBoardQueryService;
-//    @Autowired
-//    private CommunityBoardDocumentService communityBoardDocumentService;
 
     private UUID writerId1;
     private Long communityId1;
@@ -148,7 +146,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
                 .withMessage(ExceptionMessage.NOT_EXISTS_COMMUNITY_BOARD.getMessage());
     }
 
-    @DisplayName("검색 키워드가 포함된 커뮤니티 게시글 리스트를 페이지로 조회한다.")
+    @DisplayName("검색 키워드가 포함된 커뮤니티 게시글 리스트를 페이지로 조회한다. (rdb)")
     @Test
     void getCommunityBoardsBySearch() {
 
@@ -167,30 +165,5 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
         assertThat(dtos.getSize()).isEqualTo(10);
         assertThat(dtos.getTotalPages()).isEqualTo(1);
     }
-
-//    @DisplayName("게시글을 elastic search index에 저장한다. (service)")
-//    @Test
-//    void saveCommunityBoardDocuments() {
-//        //given
-//        List<CommunityBoard> communityBoards = new ArrayList<>();
-//
-//        CommunityBoard communityBoard = createCommunityBoard("저장 잘 되나요?", "안녕하세요",  UUID.randomUUID());
-//        CommunityBoard savedBoard = communityBoardRepository.save(communityBoard);
-//        communityBoards.add(savedBoard);
-//
-//        //when
-//        communityBoardDocumentService.saveCommunityBoardDocuments(communityBoards);
-//
-//        //then
-//        Page<CommunityBoardResponseDto> dtos = communityBoardDocumentService.getCommunityBoardBySearch("", 0);
-//
-//        assertThat(dtos).isNotNull();
-//        assertThat(dtos.getContent()).isNotNull();
-////        assertThat(dtos.getTotalElements()).isEqualTo(17);
-////        assertThat(dtos.getSize()).isEqualTo(10);
-////        assertThat(dtos.getTotalPages()).isEqualTo(2);
-//
-//        communityBoardRepository.deleteDocument(savedBoard.getId());
-//    }
 }
 

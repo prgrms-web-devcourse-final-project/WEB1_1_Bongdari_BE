@@ -1,5 +1,6 @@
 package com.somemore.domains.center.repository.center;
 
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -66,7 +67,27 @@ public class CenterRepositoryImpl implements CenterRepository {
         centerJpaRepository.deleteAllInBatch();
     }
 
+    @Override
+    public String findNameById(UUID id) {
+        return findDynamicFieldByCenterId(id, center.name)
+                .orElse(null);
+    }
+
     private static BooleanExpression isNotDeleted() {
         return center.deleted.isFalse();
+    }
+
+    private <T> Optional<T> findDynamicFieldByCenterId(UUID id, Path<T> field) {
+
+        return Optional.ofNullable(
+                queryFactory
+                        .select(field)
+                        .from(center)
+                        .where(
+                                center.id.eq(id),
+                                isNotDeleted()
+                        )
+                        .fetchOne()
+        );
     }
 }

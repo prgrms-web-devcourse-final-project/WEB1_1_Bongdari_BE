@@ -137,9 +137,9 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(isExist).isTrue();
     }
 
-    @DisplayName("검색 키워드가 포함된 커뮤니티 게시글을 페이지로 조회할 수 있다. (Repository)")
+    @DisplayName("검색 키워드가 포함된 게시글을 페이지로 조회할 수 있다. (rdb)")
     @Test
-    void getCommunityBoardsBySearch() {
+    void findByCommunityBoardsContaining() {
 
         //given
         Pageable pageable = getPageable();
@@ -157,34 +157,6 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(communityBoards.getSize()).isEqualTo(10);
         assertThat(communityBoards.getNumber()).isZero();
     }
-
-//    @DisplayName("게시글을 elastic search index에 저장할 수 있다. (repository)")
-//    @Test
-//    void saveDocuments() {
-//        //given
-//        Pageable pageable = getPageable();
-//
-//        List<CommunityBoard> communityBoards = new ArrayList<>();
-//
-//        CommunityBoard communityBoard1 = createCommunityBoard("저장 잘 되나요?", writerId);
-//        CommunityBoard savedBoard1 = communityBoardRepository.save(communityBoard1);
-//        CommunityBoard communityBoard2 = createCommunityBoard("잘 되나요?", "저장이요", writerId);
-//        CommunityBoard savedBoard2 = communityBoardRepository.save(communityBoard2);
-//        communityBoards.add(savedBoard1);
-//        communityBoards.add(savedBoard2);
-//
-//        //when
-//        communityBoardRepository.saveDocuments(communityBoards);
-//
-//        //then
-//        Page<CommunityBoardView> findBoard = communityBoardRepository.findByCommunityBoardsContaining("저장", pageable);
-//
-//        assertThat(findBoard).isNotNull();
-//        assertThat(findBoard.getTotalElements()).isEqualTo(2);
-//
-//        communityBoardRepository.deleteDocument(savedBoard1.getId());
-//        communityBoardRepository.deleteDocument(savedBoard2.getId());
-//    }
 
     private Pageable getPageable() {
         return PageRequest.of(0, 10);

@@ -28,10 +28,6 @@ spring:
       port: 6379
       password:  # 테스트에서는 비밀번호 없이 연결
 
-    elasticsearch:
-      repositories:
-        enabled: true
-
   web:
     locale: ko_KR
     locale-resolver: fixed
@@ -70,11 +66,7 @@ default:
 
 elastic:
   search:
-    uri: ec2-43-201-249-131.ap-northeast-2.compute.amazonaws.com:9200
+    uri: localhost:9200
     username: elastic
     password: changeme
-
-management:
-  health:
-    elasticsearch:
-      enabled: false
+    enabled: false

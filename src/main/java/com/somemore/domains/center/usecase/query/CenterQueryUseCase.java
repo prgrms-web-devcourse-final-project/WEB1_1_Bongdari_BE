@@ -12,4 +12,5 @@ public interface CenterQueryUseCase {
     List<CenterOverviewInfo> getCenterOverviewsByIds(List<UUID> centerIds);
 
     void validateCenterExists(UUID centerId);
+    String getNameById(UUID id);
 }

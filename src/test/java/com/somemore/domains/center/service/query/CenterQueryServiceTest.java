@@ -136,6 +136,33 @@ class CenterQueryServiceTest extends IntegrationTestSupport {
         assertThatCode(callable).doesNotThrowAnyException();
     }
 
+    @DisplayName("기관 Id로 기관명을 조회할 수 있다. (service)")
+    @Test
+    void getNameById() {
+        // given
+        Center center = createCenter();
+        Center foundCenter = centerRepository.save(center);
+
+        // when
+        String foundName = centerQueryService.getNameById(foundCenter.getId());
+
+        // then
+        assertThat(foundName).isEqualTo("기본 기관 이름");
+    }
+
+    @DisplayName("존재하지 않는 기관 id로 기관명 조회 시 예외가 발생한다. (service)")
+    @Test
+    void getNameByNonExistentId() {
+        // given
+        // when
+        ThrowableAssert.ThrowingCallable callable = () -> centerQueryService.getNameById(UUID.randomUUID());
+
+        // then
+        assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(callable)
+                .withMessage(ExceptionMessage.NOT_EXISTS_CENTER.getMessage());
+    }
+
     private Center createCenter() {
         return Center.create(
                 "기본 기관 이름",

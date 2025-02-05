@@ -32,14 +32,9 @@ public interface RecruitBoardRepository {
 
     List<RecruitBoard> findAllByIds(List<Long> ids);
 
-    List<RecruitBoard> findAll();
+    List<RecruitBoard> findAllByDeletedFalse();
 
     long updateStatusToClosedForDateRange(LocalDateTime startTime, LocalDateTime endTime);
 
     long updateStatusToCompletedForDateRange(LocalDateTime startTime, LocalDateTime endTime);
-
-//    Page<RecruitBoardDetail> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition);
-//    Page<RecruitBoardWithCenter> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition);
-//    void saveDocuments(List<RecruitBoard> recruitBoards);
-//    void deleteDocument(Long id);
 }

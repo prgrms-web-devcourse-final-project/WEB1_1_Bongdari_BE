@@ -50,6 +50,6 @@ public class CommunityBoardQueryService implements CommunityBoardQueryUseCase {
 
     @Override
     public List<CommunityBoard> getAllCommunityBoards() {
-        return communityBoardRepository.findAll();
+        return communityBoardRepository.findAllByDeletedFalse();
     }
 }

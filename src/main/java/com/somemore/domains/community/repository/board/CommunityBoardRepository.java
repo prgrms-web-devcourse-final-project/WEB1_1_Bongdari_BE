@@ -11,23 +11,13 @@ import java.util.UUID;
 
 public interface CommunityBoardRepository {
     CommunityBoard save(CommunityBoard communityBoard);
-
     Optional<CommunityBoard> findById(Long id);
-
     Page<CommunityBoardView> findCommunityBoards(String keyword, Pageable pageable);
-
     Page<CommunityBoardView> findByWriterId(UUID writerId, Pageable pageable);
-
     boolean existsById(Long id);
-
     default boolean doesNotExistById(Long id) {
         return !existsById(id);
     }
-
     void deleteAllInBatch();
-
-    //    Page<CommunityBoardView> findByCommunityBoardsContaining(String keyword, Pageable pageable);
-//    void saveDocuments(List<CommunityBoard> communityBoards);
-    List<CommunityBoard> findAll();
-//    void deleteDocument(Long id);
+    List<CommunityBoard> findAllByDeletedFalse();
 }
