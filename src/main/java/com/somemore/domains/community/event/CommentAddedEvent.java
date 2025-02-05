@@ -27,4 +27,13 @@ public class CommentAddedEvent extends ServerEvent<NotificationSubType> {
         this.volunteerId = volunteerId;
         this.communityBoardId = communityBoardId;
     }
+
+    public static CommentAddedEvent of(UUID targetUserId, Long communityBoardId) {
+        return CommentAddedEvent.builder()
+                .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.COMMENT_ADDED)
+                .volunteerId(targetUserId)
+                .communityBoardId(communityBoardId)
+                .build();
+    }
 }
