@@ -1,18 +1,5 @@
 package com.somemore.domains.interestcenter.controller;
 
-import com.somemore.domains.interestcenter.dto.request.RegisterInterestCenterRequestDto;
-import com.somemore.domains.interestcenter.dto.response.RegisterInterestCenterResponseDto;
-import com.somemore.domains.interestcenter.usecase.CancelInterestCenterUseCase;
-import com.somemore.domains.interestcenter.usecase.RegisterInterestCenterUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -20,6 +7,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.somemore.domains.interestcenter.dto.request.RegisterInterestCenterRequestDto;
+import com.somemore.domains.interestcenter.dto.response.RegisterInterestCenterResponseDto;
+import com.somemore.domains.interestcenter.usecase.CancelInterestCenterUseCase;
+import com.somemore.domains.interestcenter.usecase.RegisterInterestCenterUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
+import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 
 class InterestCenterCommandApiControllerTest extends ControllerTestSupport {
 
@@ -38,14 +37,16 @@ class InterestCenterCommandApiControllerTest extends ControllerTestSupport {
         );
     }
 
-    @WithMockCustomUser
+    @MockUser
     @Test
     void registerInterestCenter_ShouldReturnSuccess() throws Exception {
         // given
         UUID volunteerId = UUID.randomUUID();
 
-        RegisterInterestCenterResponseDto responseDto = new RegisterInterestCenterResponseDto(1L, volunteerId, requestDto.centerId());
-        given(registerInterestCenterUseCase.registerInterestCenter(any(UUID.class), any(RegisterInterestCenterRequestDto.class)))
+        RegisterInterestCenterResponseDto responseDto = new RegisterInterestCenterResponseDto(1L,
+                volunteerId, requestDto.centerId());
+        given(registerInterestCenterUseCase.registerInterestCenter(any(UUID.class),
+                any(RegisterInterestCenterRequestDto.class)))
                 .willReturn(responseDto);
 
         // when & then
@@ -55,16 +56,18 @@ class InterestCenterCommandApiControllerTest extends ControllerTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("관심 기관 등록 성공"))
                 .andExpect(jsonPath("$.data.id").value(responseDto.id()))
-                .andExpect(jsonPath("$.data.volunteer_id").value(responseDto.volunteerId().toString()))
+                .andExpect(
+                        jsonPath("$.data.volunteer_id").value(responseDto.volunteerId().toString()))
                 .andExpect(jsonPath("$.data.center_id").value(responseDto.centerId().toString()));
     }
 
-    @WithMockCustomUser
+    @MockUser
     @Test
     void deleteInterestCenter_ShouldReturnSuccess() throws Exception {
         // given
         UUID centerId = UUID.randomUUID();
-        doNothing().when(cancelInterestCenterUseCase).cancelInterestCenter(any(UUID.class), any(UUID.class));
+        doNothing().when(cancelInterestCenterUseCase)
+                .cancelInterestCenter(any(UUID.class), any(UUID.class));
 
         // when & then
         mockMvc.perform(delete("/api/interest-center/{centerId}", centerId))
