@@ -4,15 +4,14 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.domains.center.domain.Center;
 import com.somemore.domains.center.domain.QCenter;
-import com.somemore.domains.center.repository.mapper.CenterOverviewInfo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository("centerRepository")

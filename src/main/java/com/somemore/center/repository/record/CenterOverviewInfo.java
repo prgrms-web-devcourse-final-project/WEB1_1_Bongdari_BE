@@ -1,4 +1,4 @@
-package com.somemore.domains.center.repository.mapper;
+package com.somemore.center.repository.record;
 
 
 import java.util.UUID;
