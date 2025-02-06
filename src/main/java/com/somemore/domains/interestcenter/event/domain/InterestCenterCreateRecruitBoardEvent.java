@@ -3,6 +3,7 @@ package com.somemore.domains.interestcenter.event.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.somemore.domains.notification.domain.NotificationSubType;
+import com.somemore.domains.recruitboard.event.CreateRecruitBoardEvent;
 import com.somemore.global.common.event.ServerEvent;
 import com.somemore.global.common.event.ServerEventType;
 import lombok.Getter;
@@ -28,5 +29,15 @@ public class InterestCenterCreateRecruitBoardEvent extends ServerEvent<Notificat
         this.volunteerId = volunteerId;
         this.centerId = centerId;
         this.recruitBoardId = recruitBoardId;
+    }
+
+    public static InterestCenterCreateRecruitBoardEvent of(CreateRecruitBoardEvent createRecruitBoardEvent, UUID volunteerId, UUID centerId) {
+        return InterestCenterCreateRecruitBoardEvent.builder()
+                .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.INTEREST_CENTER_CREATE_RECRUIT_BOARD)
+                .volunteerId(volunteerId)
+                .centerId(centerId)
+                .recruitBoardId(createRecruitBoardEvent.getRecruitBoardId())
+                .build();
     }
 }
