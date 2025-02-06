@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.domains.community.domain.CommunityComment;
 import com.somemore.domains.community.domain.QCommunityComment;
 import com.somemore.domains.community.repository.mapper.CommunityCommentView;
-import com.somemore.domains.volunteer.domain.QVolunteer;
+import com.somemore.volunteer.domain.QNEWVolunteer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ public class CommunityCommentRepositoryImpl implements CommunityCommentRepositor
     private final CommunityCommentJpaRepository communityCommentJpaRepository;
 
     private static final QCommunityComment communityComment = QCommunityComment.communityComment;
-    private static final QVolunteer volunteer = QVolunteer.volunteer;
+    private static final QNEWVolunteer volunteer = QNEWVolunteer.nEWVolunteer;
 
     @Override
     public CommunityComment save(CommunityComment communityComment) {
