@@ -2,9 +2,7 @@ package com.somemore.center.service;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 import static com.somemore.user.domain.UserRole.CENTER;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.domain.PreferItem;
@@ -13,12 +11,17 @@ import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
 import com.somemore.center.usecase.PreferItemQueryUseCase;
+import com.somemore.domains.center.domain.Center;
+import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import java.util.List;
 import java.util.UUID;
+
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,5 +139,35 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport {
                 () -> centerQueryService.validateCenterExists(wrongId))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage(NOT_EXISTS_CENTER.getMessage());
+    }
+
+    @DisplayName("기관 Id로 기관명을 조회할 수 있다. (service)")
+    @Test
+    void getNameById() {
+        // given
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
+        centerRepository.save(center);
+        UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(center.getUserId(), CENTER);
+        userCommonAttributeRepository.save(userCommonAttribute);
+
+        // when
+        String foundName = centerQueryService.getNameById(center.getId());
+
+        // then
+        assertThat(foundName).contains("기관");
+    }
+
+    @DisplayName("존재하지 않는 기관 id로 기관명 조회 시 예외가 발생한다. (service)")
+    @Test
+    void getNameByNonExistentId() {
+        // given
+        // when
+        ThrowableAssert.ThrowingCallable callable = () -> centerQueryService.getNameById(
+                UUID.randomUUID());
+
+        // then
+        assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(callable)
+                .withMessage(ExceptionMessage.NOT_EXISTS_CENTER.getMessage());
     }
 }
