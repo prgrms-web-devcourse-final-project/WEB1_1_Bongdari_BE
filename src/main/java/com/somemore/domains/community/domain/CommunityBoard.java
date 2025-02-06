@@ -38,24 +38,19 @@ public class CommunityBoard extends BaseEntity {
     @Column(name = "content", length = 1000, nullable = false)
     private String content;
 
-    @Column(name = "img_url", nullable = false)
-    private String imgUrl;
-
     @Builder
-    public CommunityBoard(UUID writerId, String title, String content, String imgUrl) {
+    public CommunityBoard(UUID writerId, String title, String content) {
         this.writerId = writerId;
         this.title = title;
         this.content = content;
-        this.imgUrl = imgUrl;
     }
 
     public boolean isWriter(UUID writerId) {
         return this.writerId.equals(writerId);
     }
 
-    public void updateWith(CommunityBoardUpdateRequestDto dto, String imgUrl) {
+    public void updateWith(CommunityBoardUpdateRequestDto dto) {
         this.title = dto.title();
         this.content = dto.content();
-        this.imgUrl = imgUrl;
     }
 }
