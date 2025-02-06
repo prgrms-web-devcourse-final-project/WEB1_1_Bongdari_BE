@@ -2,7 +2,7 @@ package com.somemore.domains.notification.controller;
 
 import com.somemore.domains.notification.dto.NotificationResponseDto;
 import com.somemore.domains.notification.usecase.NotificationQueryUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +27,7 @@ public class NotificationQueryController {
     @Operation(summary = "읽지 않은 알림 조회", description = "읽지 않은 알림들을 조회합니다.")
     @GetMapping("/unread")
     public ApiResponse<List<NotificationResponseDto>> getUnreadNotifications(
-            @CurrentUser UUID userId
+            @UserId UUID userId
     ) {
         return ApiResponse.ok(200,
                 notificationQueryUseCase.getUnreadNotifications(userId),
@@ -39,7 +39,7 @@ public class NotificationQueryController {
     @Operation(summary = "읽은 알림 조회", description = "읽은 알림들을 조회합니다.")
     @GetMapping("/read")
     public ApiResponse<List<NotificationResponseDto>> getReadNotifications(
-            @CurrentUser UUID userId
+            @UserId UUID userId
     ) {
 
         return ApiResponse.ok(200,
