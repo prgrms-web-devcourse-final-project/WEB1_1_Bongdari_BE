@@ -1,14 +1,15 @@
-package com.somemore.domains.center.controller;
+package com.somemore.center.controller;
 
-import com.somemore.domains.center.dto.request.PreferItemCreateRequestDto;
-import com.somemore.domains.center.dto.response.PreferItemCreateResponseDto;
-import com.somemore.domains.center.usecase.command.CreatePreferItemUseCase;
-import com.somemore.domains.center.usecase.command.DeletePreferItemUseCase;
-import com.somemore.global.auth.annotation.UserId;
+import com.somemore.center.dto.request.PreferItemCreateRequestDto;
+import com.somemore.center.dto.response.PreferItemCreateResponseDto;
+import com.somemore.center.usecase.CreatePreferItemUseCase;
+import com.somemore.center.usecase.DeletePreferItemUseCase;
+import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,10 +30,11 @@ public class PreferItemCommandApiController {
 
     @Secured("ROLE_CENTER")
     @Operation(summary = "기관 선호물품 등록 API")
-    @PostMapping()
+    @PostMapping
     public ApiResponse<PreferItemCreateResponseDto> registerPreferItem(
             @Valid @RequestBody PreferItemCreateRequestDto requestDto,
-            @UserId UUID centerId) {
+            @RoleId UUID centerId
+    ) {
 
         PreferItemCreateResponseDto responseDto = createPreferItemUseCase.createPreferItem(centerId,
                 requestDto);
@@ -45,7 +45,10 @@ public class PreferItemCommandApiController {
     @Secured("ROLE_CENTER")
     @Operation(summary = "기관 선호물품 삭제 API")
     @DeleteMapping("/{preferItemId}")
-    public ApiResponse<String> deletePreferItem(@UserId UUID centerId, @PathVariable Long preferItemId) {
+    public ApiResponse<String> deletePreferItem(
+            @RoleId UUID centerId,
+            @PathVariable Long preferItemId
+    ) {
 
         deletePreferItemUseCase.deletePreferItem(centerId, preferItemId);
 

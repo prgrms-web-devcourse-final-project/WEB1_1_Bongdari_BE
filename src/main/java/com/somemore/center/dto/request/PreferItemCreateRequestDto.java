@@ -1,11 +1,10 @@
-package com.somemore.domains.center.dto.request;
+package com.somemore.center.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.somemore.domains.center.domain.PreferItem;
+import com.somemore.center.domain.PreferItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -16,6 +15,7 @@ public record PreferItemCreateRequestDto(
         String itemName
 
 ) {
+
     public PreferItem toEntity(UUID centerId) {
         return PreferItem.create(centerId, itemName);
     }
