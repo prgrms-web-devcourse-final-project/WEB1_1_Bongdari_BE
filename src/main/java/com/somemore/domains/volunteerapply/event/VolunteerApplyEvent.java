@@ -3,6 +3,8 @@ package com.somemore.domains.volunteerapply.event;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.somemore.domains.notification.domain.NotificationSubType;
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.global.common.event.ServerEvent;
 import com.somemore.global.common.event.ServerEventType;
 import lombok.Getter;
@@ -31,5 +33,16 @@ public class VolunteerApplyEvent extends ServerEvent<NotificationSubType> {
         this.volunteerApplyId = volunteerApplyId;
         this.centerId = centerId;
         this.recruitBoardId = recruitBoardId;
+    }
+
+    public static VolunteerApplyEvent of(VolunteerApply apply, RecruitBoard board) {
+        return VolunteerApplyEvent.builder()
+                .type(ServerEventType.NOTIFICATION)
+                .subType(NotificationSubType.VOLUNTEER_APPLY)
+                .volunteerId(apply.getVolunteerId())
+                .volunteerApplyId(apply.getId())
+                .centerId(board.getCenterId())
+                .recruitBoardId(board.getId())
+                .build();
     }
 }

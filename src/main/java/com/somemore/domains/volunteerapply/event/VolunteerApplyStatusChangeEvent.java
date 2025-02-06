@@ -43,7 +43,7 @@ public class VolunteerApplyStatusChangeEvent extends ServerEvent<NotificationSub
         this.newStatus = newStatus;
     }
 
-    public static VolunteerApplyStatusChangeEvent from(VolunteerApply apply, RecruitBoard recruitBoard, ApplyStatus oldStatus) {
+    public static VolunteerApplyStatusChangeEvent of(VolunteerApply apply, RecruitBoard recruitBoard, ApplyStatus oldStatus) {
 
         return VolunteerApplyStatusChangeEvent.builder()
                 .type(ServerEventType.NOTIFICATION)
