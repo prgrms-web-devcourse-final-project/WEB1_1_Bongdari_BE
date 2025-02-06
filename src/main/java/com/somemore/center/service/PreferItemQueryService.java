@@ -1,15 +1,14 @@
-package com.somemore.domains.center.service.query;
+package com.somemore.center.service;
 
-import com.somemore.domains.center.domain.PreferItem;
-import com.somemore.domains.center.dto.response.PreferItemResponseDto;
-import com.somemore.domains.center.repository.preferitem.PreferItemRepository;
-import com.somemore.domains.center.usecase.query.PreferItemQueryUseCase;
+import com.somemore.center.domain.PreferItem;
+import com.somemore.center.dto.response.PreferItemResponseDto;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
+import com.somemore.center.usecase.PreferItemQueryUseCase;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,7 +29,8 @@ public class PreferItemQueryService implements PreferItemQueryUseCase {
         return preferItemRepository.findByCenterId(centerId);
     }
 
-    private static List<PreferItemResponseDto> preferItemConvertToDtos(List<PreferItem> preferItems) {
+    private static List<PreferItemResponseDto> preferItemConvertToDtos(
+            List<PreferItem> preferItems) {
         return preferItems.stream()
                 .map(PreferItemResponseDto::from)
                 .toList();
