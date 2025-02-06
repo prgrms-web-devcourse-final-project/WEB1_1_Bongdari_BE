@@ -1,37 +1,41 @@
 package com.somemore.domains.interestcenter.service;
 
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import static com.somemore.global.exception.ExceptionMessage.DUPLICATE_INTEREST_CENTER;
+
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.domains.interestcenter.domain.InterestCenter;
 import com.somemore.domains.interestcenter.dto.request.RegisterInterestCenterRequestDto;
 import com.somemore.domains.interestcenter.dto.response.RegisterInterestCenterResponseDto;
 import com.somemore.domains.interestcenter.repository.InterestCenterRepository;
 import com.somemore.domains.interestcenter.usecase.RegisterInterestCenterUseCase;
 import com.somemore.global.exception.DuplicateException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.DUPLICATE_INTEREST_CENTER;
-
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class RegisterInterestCenterService implements RegisterInterestCenterUseCase {
 
-    private final InterestCenterRepository repository;
-    private final CenterQueryUseCase centerQueryUseCase;
+    private final InterestCenterRepository interestCenterRepository;
+    private final NEWCenterQueryUseCase centerQueryUseCase;
 
     @Override
-    public RegisterInterestCenterResponseDto registerInterestCenter(UUID volunteerId, RegisterInterestCenterRequestDto requestDto) {
-
+    public RegisterInterestCenterResponseDto registerInterestCenter(
+            UUID volunteerId,
+            RegisterInterestCenterRequestDto requestDto
+    ) {
         centerQueryUseCase.validateCenterExists(requestDto.centerId());
-
-        boolean isDuplicate = repository.existsByVolunteerIdAndCenterId(volunteerId, requestDto.centerId());
+        boolean isDuplicate = interestCenterRepository.existsByVolunteerIdAndCenterId(volunteerId,
+                requestDto.centerId());
         if (isDuplicate) {
-            throw new DuplicateException(DUPLICATE_INTEREST_CENTER.getMessage());
+            throw new DuplicateException(DUPLICATE_INTEREST_CENTER);
         }
 
-        InterestCenter interestCenter = repository.save(requestDto.toEntity(volunteerId));
+        InterestCenter interestCenter = interestCenterRepository.save(
+                requestDto.toEntity(volunteerId));
 
         return RegisterInterestCenterResponseDto.from(interestCenter);
     }

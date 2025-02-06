@@ -1,23 +1,30 @@
 package com.somemore.center.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.center.repository.record.CenterProfileDto;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
+import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private NEWCenterRepositoryImpl centerRepository;
+
+    @Autowired
+    private UserCommonAttributeRepository userCommonAttributeRepository;
 
     @DisplayName("유저 아이디로 기관을 등록할 수 있다.")
     @Test
@@ -42,7 +49,6 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
     @DisplayName("기관 아이디로 기관 프로필 정보를 가져올 수 있다.")
     @Test
     void findCenterProfileByUserId() {
-
         // given
         UUID userId = UUID.randomUUID();
         NEWCenter center = NEWCenter.createDefault(userId);
@@ -66,9 +72,55 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
         UUID nonExistentCenterId = UUID.randomUUID();
 
         // when
-        Optional<CenterProfileDto> result = centerRepository.findCenterProfileById(nonExistentCenterId);
+        Optional<CenterProfileDto> result = centerRepository.findCenterProfileById(
+                nonExistentCenterId);
 
         // then
         assertThat(result).isEmpty();
+    }
+
+    @DisplayName("아이디로 기관 존재 유무를 조회할 수 있다.")
+    @Test
+    void existsById() {
+        // given
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
+        centerRepository.save(center);
+
+        // when
+        boolean result = centerRepository.existsById(center.getId());
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @DisplayName("아이디 리스트로 기관 기본 정보를 조회할 수 있다.")
+    @Test
+    void findUserIdsByIds() {
+        // given
+        NEWCenter centerOne = NEWCenter.createDefault(UUID.randomUUID());
+        NEWCenter centerTwo = NEWCenter.createDefault(UUID.randomUUID());
+        centerRepository.save(centerOne);
+        centerRepository.save(centerTwo);
+
+        UserCommonAttribute centerUserInfoOne = createCenterUserAttribute(centerOne.getUserId());
+        UserCommonAttribute centerUserInfoTwo = createCenterUserAttribute(centerTwo.getUserId());
+        userCommonAttributeRepository.save(centerUserInfoOne);
+        userCommonAttributeRepository.save(centerUserInfoTwo);
+
+        List<UUID> ids = List.of(centerOne.getId(), centerTwo.getId());
+
+        // when
+        List<CenterOverviewInfo> centerOverviewInfos = centerRepository.findOverviewInfosByIds(ids);
+
+        // then
+        assertThat(centerOverviewInfos)
+                .isNotNull()
+                .hasSize(2)
+                .extracting(CenterOverviewInfo::centerId)
+                .containsExactlyInAnyOrderElementsOf(ids);
+    }
+
+    private UserCommonAttribute createCenterUserAttribute(UUID userId) {
+        return UserCommonAttribute.createDefault(userId, UserRole.CENTER);
     }
 }

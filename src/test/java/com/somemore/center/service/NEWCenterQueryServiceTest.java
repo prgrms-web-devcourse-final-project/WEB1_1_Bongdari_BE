@@ -1,5 +1,11 @@
 package com.somemore.center.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
+import static com.somemore.user.domain.UserRole.CENTER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
 import com.somemore.center.repository.NEWCenterRepository;
@@ -7,22 +13,19 @@ import com.somemore.domains.center.domain.PreferItem;
 import com.somemore.domains.center.dto.response.PreferItemResponseDto;
 import com.somemore.domains.center.repository.preferitem.PreferItemJpaRepository;
 import com.somemore.domains.center.usecase.query.PreferItemQueryUseCase;
+import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.user.domain.UserRole.CENTER;
-import static org.assertj.core.api.Assertions.assertThat;
-
 @Transactional
-class NEWCenterQueryServiceTest extends IntegrationTestSupport{
+class NEWCenterQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private NEWCenterQueryService centerQueryService;
@@ -42,7 +45,6 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
     @Test
     @DisplayName("사용자 ID로 기관을 조회한다")
     void getByUserId() {
-
         //given
         UUID userId = UUID.randomUUID();
         NEWCenter center = NEWCenter.createDefault(userId);
@@ -58,7 +60,6 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
     @Test
     @DisplayName("사용자 ID로 기관 ID를 조회한다")
     void getIdByUserId() {
-
         //given
         UUID userId = UUID.randomUUID();
         NEWCenter center = NEWCenter.createDefault(userId);
@@ -74,7 +75,6 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
     @DisplayName("기관의 유저 ID로 기관 정보를 조회할 수 있다.")
     @Test
     void getCenterProfileByUserId() {
-
         //given
         UUID userId = UUID.randomUUID();
         NEWCenter center = NEWCenter.createDefault(userId);
@@ -87,7 +87,8 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
         PreferItem preferItem1 = PreferItem.create(center.getId(), "간식");
         preferItemRepository.saveAll(List.of(preferItem, preferItem1));
 
-        List<PreferItemResponseDto> preferItems = preferItemQueryUseCase.getPreferItemDtosByCenterId(center.getId());
+        List<PreferItemResponseDto> preferItems = preferItemQueryUseCase.getPreferItemDtosByCenterId(
+                center.getId());
 
         //when
         CenterProfileResponseDto result = centerQueryService.getCenterProfileById(center.getId());
@@ -95,7 +96,8 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
         //then
         assertThat(result).isNotNull();
         assertThat(result)
-                .extracting("id", "userId", "homepageUrl", "name", "contactNumber", "imgUrl", "introduce", "preferItems")
+                .extracting("id", "userId", "homepageUrl", "name", "contactNumber", "imgUrl",
+                        "introduce", "preferItems")
                 .containsExactly(
                         center.getId(),
                         userId,
@@ -106,5 +108,33 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport{
                         userCommonAttribute.getIntroduce(),
                         preferItems
                 );
+    }
+
+    @DisplayName("아이디로 기관 존재유무를 검증할 수 있다.")
+    @Test
+    void validateCenterExists() {
+        //given
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
+        centerRepository.save(center);
+
+        // when
+        // then
+        assertThatCode(
+                () -> centerQueryService.validateCenterExists(center.getId()))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("존재하지 않는 아이디로 기관 존재유무를 검증하면 에러가 발생한다.")
+    @Test
+    void validateCenterExistsWhenDoesNotExist() {
+        //given
+        UUID wrongId = UUID.randomUUID();
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> centerQueryService.validateCenterExists(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_CENTER.getMessage());
     }
 }
