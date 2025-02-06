@@ -10,6 +10,7 @@ import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.center.repository.record.CenterProfileDto;
 import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.center.usecase.PreferItemQueryUseCase;
+import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
@@ -72,6 +73,17 @@ public class NEWCenterQueryService implements NEWCenterQueryUseCase {
     @Override
     public List<CenterOverviewInfo> getCenterOverviewsByIds(List<UUID> ids) {
         return centerRepository.findOverviewInfosByIds(ids);
+    }
+
+    @Override
+    public String getNameById(UUID id) {
+        String name = centerRepository.findNameById(id);
+
+        if (name == null || name.isBlank()) {
+            throw new BadRequestException(NOT_EXISTS_CENTER);
+        }
+
+        return name;
     }
 
 }

@@ -19,4 +19,7 @@ public interface NEWCenterQueryUseCase {
     void validateCenterExists(UUID id);
 
     List<CenterOverviewInfo> getCenterOverviewsByIds(List<UUID> ids);
+
+    String getNameById(UUID id);
+
 }
