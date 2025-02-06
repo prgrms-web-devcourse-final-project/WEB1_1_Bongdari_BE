@@ -17,7 +17,7 @@ import com.somemore.domains.community.usecase.comment.CreateCommunityCommentUseC
 import com.somemore.domains.community.usecase.comment.DeleteCommunityCommentUseCase;
 import com.somemore.domains.community.usecase.comment.UpdateCommunityCommentUseCase;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.support.annotation.MockUser;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
 
     @Test
     @DisplayName("커뮤니티 댓글 등록 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void createCommunityComment() throws Exception {
         //given
         CommunityCommentCreateRequestDto requestDto = CommunityCommentCreateRequestDto.builder()
@@ -66,7 +66,7 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
 
     @Test
     @DisplayName("커뮤니티 댓글 수정 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void updateCommunityComment_success() throws Exception {
         //given
         CommunityCommentUpdateRequestDto requestDto = CommunityCommentUpdateRequestDto.builder()
@@ -92,7 +92,7 @@ public class CommunityCommentCommandApiControllerTest extends ControllerTestSupp
 
     @Test
     @DisplayName("커뮤니티 댓글 삭제 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void deleteCommunityComment_success() throws Exception {
         //given
         willDoNothing().given(deleteCommunityCommentUseCase)

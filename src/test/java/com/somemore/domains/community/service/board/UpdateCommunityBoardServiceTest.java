@@ -32,7 +32,6 @@ class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
 
     private UUID writerId;
     private Long communityId;
-    private String imgUrl;
 
     @BeforeEach
     void setUp() {
@@ -42,9 +41,8 @@ class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         writerId = UUID.randomUUID();
-        imgUrl = "https://image.test.url/123";
 
-        communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId, imgUrl);
+        communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId);
     }
 
     @AfterEach
@@ -65,7 +63,7 @@ class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
         String newImgUrl = "https://image.test.url/567";
 
         //when
-        updateCommunityBoardService.updateCommunityBoard(dto, communityId, writerId, newImgUrl);
+        updateCommunityBoardService.updateCommunityBoard(dto, communityId, writerId);
 
         //then
         Optional<CommunityBoard> updatedCommunityBoard = communityBoardRepository.findById(communityId);
@@ -74,7 +72,6 @@ class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
         assertThat(updatedCommunityBoard.get().getWriterId()).isEqualTo(writerId);
         assertThat(updatedCommunityBoard.get().getTitle()).isEqualTo("수정된 커뮤니티 테스트 제목");
         assertThat(updatedCommunityBoard.get().getContent()).isEqualTo("수정된 커뮤니티 테스트 내용");
-        assertThat(updatedCommunityBoard.get().getImgUrl()).isEqualTo("https://image.test.url/567");
     }
 
     @DisplayName("작성자가 아닌 id로 커뮤니티 게시글을 수정하고자 할 때 예외를 던진다.")
@@ -88,7 +85,7 @@ class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        ThrowableAssert.ThrowingCallable callable = () -> updateCommunityBoardService.updateCommunityBoard(dto, communityId, UUID.randomUUID(), null);
+        ThrowableAssert.ThrowingCallable callable = () -> updateCommunityBoardService.updateCommunityBoard(dto, communityId, UUID.randomUUID());
 
         //then
         assertThatExceptionOfType(BadRequestException.class)

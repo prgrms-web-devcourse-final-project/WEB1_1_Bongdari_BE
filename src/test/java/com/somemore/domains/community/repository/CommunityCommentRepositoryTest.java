@@ -5,10 +5,9 @@ import com.somemore.domains.community.domain.CommunityComment;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.repository.comment.CommunityCommentRepository;
 import com.somemore.domains.community.repository.mapper.CommunityCommentView;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
     @Autowired
     CommunityBoardRepository communityBoardRepository;
     @Autowired
-    VolunteerRepository volunteerRepository;
+    NEWVolunteerRepository volunteerRepository;
 
     private Long boardId;
     private UUID writerId;
@@ -41,8 +40,7 @@ class CommunityCommentRepositoryTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUp() {
-        String oAuthId = "example-oauth-id";
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
+        NEWVolunteer volunteer = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer);
         writerId = volunteer.getId();
 

@@ -31,7 +31,6 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
 
     private UUID writerId;
     private Long communityId;
-    private String imgUrl;
 
     @BeforeEach
     void setUp() {
@@ -41,9 +40,8 @@ class DeleteCommunityBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         writerId = UUID.randomUUID();
-        imgUrl = "https://image.test.url/123";
 
-        communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId, imgUrl);
+        communityId = createCommunityBoardUseCase.createCommunityBoard(dto, writerId);
     }
 
     @AfterEach
