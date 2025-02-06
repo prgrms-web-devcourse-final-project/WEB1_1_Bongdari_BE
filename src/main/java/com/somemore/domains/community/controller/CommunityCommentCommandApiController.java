@@ -5,7 +5,7 @@ import com.somemore.domains.community.dto.request.CommunityCommentUpdateRequestD
 import com.somemore.domains.community.usecase.comment.CreateCommunityCommentUseCase;
 import com.somemore.domains.community.usecase.comment.DeleteCommunityCommentUseCase;
 import com.somemore.domains.community.usecase.comment.UpdateCommunityCommentUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,13 +36,13 @@ public class CommunityCommentCommandApiController {
     @Operation(summary = "커뮤니티 댓글 등록", description = "커뮤니티 게시글에 댓글을 등록합니다.")
     @PostMapping(value = "/comment")
     public ApiResponse<Long> createCommunityComment(
-            @CurrentUser UUID userId,
+            @RoleId UUID volunteerId,
             @PathVariable Long boardId,
             @Valid @RequestBody CommunityCommentCreateRequestDto requestDto) {
 
         return ApiResponse.ok(
                 201,
-                createCommunityCommentUseCase.createCommunityComment(requestDto, userId, boardId),
+                createCommunityCommentUseCase.createCommunityComment(requestDto, volunteerId, boardId),
                 "커뮤니티 댓글 등록 성공");
     }
 
@@ -50,12 +50,12 @@ public class CommunityCommentCommandApiController {
     @Operation(summary = "커뮤니티 댓글 수정", description = "커뮤니티 댓글을 수정합니다.")
     @PutMapping(value = "/comment/{id}")
     public ApiResponse<String> updateCommunityComment(
-            @CurrentUser UUID userId,
+            @RoleId UUID volunteerId,
             @PathVariable Long boardId,
             @PathVariable Long id,
             @Valid @RequestBody CommunityCommentUpdateRequestDto requestDto
     ) {
-        updateCommunityCommentUseCase.updateCommunityComment(requestDto, id, userId, boardId);
+        updateCommunityCommentUseCase.updateCommunityComment(requestDto, id, volunteerId, boardId);
 
         return ApiResponse.ok("커뮤니티 댓글 수정 성공");
     }
@@ -64,11 +64,11 @@ public class CommunityCommentCommandApiController {
     @Operation(summary = "커뮤니티 댓글 삭제", description = "커뮤니티 댓글을 삭제합니다.")
     @DeleteMapping(value = "/comment/{id}")
     public ApiResponse<String> deleteCommunityComment(
-            @CurrentUser UUID userId,
+            @RoleId UUID volunteerId,
             @PathVariable Long boardId,
             @PathVariable Long id
     ) {
-        deleteCommunityCommentUseCase.deleteCommunityComment(userId, id, boardId);
+        deleteCommunityCommentUseCase.deleteCommunityComment(volunteerId, id, boardId);
 
         return ApiResponse.ok("커뮤니티 댓글 삭제 성공");
     }

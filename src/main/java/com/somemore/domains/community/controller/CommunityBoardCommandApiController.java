@@ -5,7 +5,7 @@ import com.somemore.domains.community.dto.request.CommunityBoardUpdateRequestDto
 import com.somemore.domains.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.UpdateCommunityBoardUseCase;
-import com.somemore.global.auth.annotation.CurrentUser;
+import com.somemore.global.auth.annotation.RoleId;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
@@ -42,7 +42,7 @@ public class CommunityBoardCommandApiController {
     @Operation(summary = "커뮤니티 게시글 등록", description = "커뮤니티 게시글을 등록합니다.")
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Long> createCommunityBoard(
-            @CurrentUser UUID userId,
+            @RoleId UUID volunteerId,
             @Valid @RequestPart("data") CommunityBoardCreateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
@@ -50,7 +50,7 @@ public class CommunityBoardCommandApiController {
 
         return ApiResponse.ok(
                 201,
-                createCommunityBoardUseCase.createCommunityBoard(requestDto, userId, imgUrl),
+                createCommunityBoardUseCase.createCommunityBoard(requestDto, volunteerId, imgUrl),
                 "커뮤니티 게시글 등록 성공"
         );
     }
@@ -59,13 +59,13 @@ public class CommunityBoardCommandApiController {
     @Operation(summary = "커뮤니티 게시글 수정", description = "커뮤니티 게시글을 수정합니다.")
     @PutMapping(value = "/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<String> updateCommunityBoard(
-            @CurrentUser UUID userId,
+            @RoleId UUID volunteerId,
             @PathVariable Long id,
             @Valid @RequestPart("data") CommunityBoardUpdateRequestDto requestDto,
             @RequestPart(value = "img_file", required = false) MultipartFile image
     ) {
         String imgUrl = imageUploadUseCase.uploadImage(new ImageUploadRequestDto(image));
-        updateCommunityBoardUseCase.updateCommunityBoard(requestDto, id, userId, imgUrl);
+        updateCommunityBoardUseCase.updateCommunityBoard(requestDto, id, volunteerId, imgUrl);
 
         return ApiResponse.ok("커뮤니티 게시글 수정 성공");
     }
@@ -74,10 +74,10 @@ public class CommunityBoardCommandApiController {
     @Operation(summary = "커뮤니티 게시글 삭제", description = "커뮤니티 게시글을 삭제합니다.")
     @DeleteMapping(value = "/{id}")
     public ApiResponse<String> deleteCommunityBoard(
-            @CurrentUser UUID userId,
+            @RoleId UUID volunteerId,
             @PathVariable Long id
     ) {
-        deleteCommunityBoardUseCase.deleteCommunityBoard(userId, id);
+        deleteCommunityBoardUseCase.deleteCommunityBoard(volunteerId, id);
 
         return ApiResponse.ok("커뮤니티 게시글 삭제 성공");
     }
