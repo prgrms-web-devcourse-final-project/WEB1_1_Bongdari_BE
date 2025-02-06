@@ -1,6 +1,5 @@
 package com.somemore.domains.volunteerapply.service;
 
-import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
@@ -9,7 +8,6 @@ import com.somemore.domains.volunteerapply.event.VolunteerApplyEvent;
 import com.somemore.domains.volunteerapply.repository.VolunteerApplyRepository;
 import com.somemore.domains.volunteerapply.usecase.ApplyVolunteerApplyUseCase;
 import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,15 +58,7 @@ public class ApplyVolunteerApplyService implements ApplyVolunteerApplyUseCase {
     }
 
     private void publishVolunteerApplyEvent(VolunteerApply apply, RecruitBoard board) {
-        VolunteerApplyEvent event = VolunteerApplyEvent.builder()
-                .type(ServerEventType.NOTIFICATION)
-                .subType(NotificationSubType.VOLUNTEER_APPLY)
-                .volunteerId(apply.getVolunteerId())
-                .volunteerApplyId(apply.getId())
-                .centerId(board.getCenterId())
-                .recruitBoardId(board.getId())
-                .build();
-
+        VolunteerApplyEvent event = VolunteerApplyEvent.of(apply, board);
         serverEventPublisher.publish(event);
     }
 }
