@@ -1,19 +1,20 @@
-package com.somemore.domains.center.service.query;
+package com.somemore.center.service;
 
-import com.somemore.domains.center.domain.PreferItem;
-import com.somemore.domains.center.dto.response.PreferItemResponseDto;
-import com.somemore.domains.center.repository.preferitem.PreferItemRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.somemore.center.domain.PreferItem;
+import com.somemore.center.dto.response.PreferItemResponseDto;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PreferItemQueryServiceTest {
@@ -35,7 +36,8 @@ class PreferItemQueryServiceTest {
         when(preferItemRepository.findByCenterId(centerId)).thenReturn(preferItems);
 
         // When
-        List<PreferItemResponseDto> result = preferItemQueryService.getPreferItemDtosByCenterId(centerId);
+        List<PreferItemResponseDto> result = preferItemQueryService.getPreferItemDtosByCenterId(
+                centerId);
 
         // Then
         assertThat(result).hasSize(2);
