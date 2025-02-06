@@ -2,7 +2,7 @@ package com.somemore.domains.search.repository;
 
 import co.elastic.clients.elasticsearch._types.GeoLocation;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.location.domain.Location;
 import com.somemore.domains.location.usecase.query.LocationQueryUseCase;
@@ -12,7 +12,7 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchConditi
 import com.somemore.domains.search.annotation.ConditionalOnElasticSearchEnabled;
 import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.domain.RecruitBoardDocument;
-import com.somemore.domains.volunteer.usecase.VolunteerQueryUseCase;
+import com.somemore.volunteer.usecase.NEWVolunteerQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.domain.Page;
@@ -39,8 +39,8 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
     private final RecruitBoardDocumentRepository recruitBoardDocumentRepository;
     private final CommunityBoardDocumentRepository communityBoardDocumentRepository;
 
-    private final VolunteerQueryUseCase volunteerQueryUseCase;
-    private final CenterQueryUseCase centerQueryUseCase;
+    private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
+    private final NEWCenterQueryUseCase centerQueryUseCase;
     private final LocationQueryUseCase locationQueryUseCase;
 
     @Override
