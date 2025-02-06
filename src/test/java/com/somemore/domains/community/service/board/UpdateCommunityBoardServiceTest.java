@@ -60,8 +60,6 @@ class UpdateCommunityBoardServiceTest extends IntegrationTestSupport {
                 .content("수정된 커뮤니티 테스트 내용")
                 .build();
 
-        String newImgUrl = "https://image.test.url/567";
-
         //when
         updateCommunityBoardService.updateCommunityBoard(dto, communityId, writerId);
 
