@@ -1,14 +1,14 @@
-package com.somemore.domains.center.repository.preferitem;
+package com.somemore.center.repository.preferitem;
 
-import com.somemore.domains.center.domain.PreferItem;
-import org.springframework.stereotype.Repository;
-
+import com.somemore.center.domain.PreferItem;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PreferItemRepository {
+
     void save(PreferItem preferItem);
 
     void deleteById(Long preferItemId);

@@ -1,4 +1,4 @@
-package com.somemore.domains.center.controller;
+package com.somemore.center.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -9,10 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.somemore.domains.center.dto.request.PreferItemCreateRequestDto;
-import com.somemore.domains.center.dto.response.PreferItemCreateResponseDto;
-import com.somemore.domains.center.usecase.command.CreatePreferItemUseCase;
-import com.somemore.domains.center.usecase.command.DeletePreferItemUseCase;
+import com.somemore.center.dto.request.PreferItemCreateRequestDto;
+import com.somemore.center.dto.response.PreferItemCreateResponseDto;
+import com.somemore.center.usecase.CreatePreferItemUseCase;
+import com.somemore.center.usecase.DeletePreferItemUseCase;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.MockUser;

@@ -1,17 +1,19 @@
-package com.somemore.domains.center.service.command;
-
-import com.somemore.domains.center.domain.PreferItem;
-import com.somemore.domains.center.repository.preferitem.PreferItemRepository;
-import com.somemore.domains.center.usecase.command.DeletePreferItemUseCase;
-import com.somemore.global.exception.BadRequestException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+package com.somemore.center.service;
 
 import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_PREFER_ITEM;
 import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_PREFER_ITEM;
 
+import com.somemore.center.domain.PreferItem;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
+import com.somemore.center.usecase.DeletePreferItemUseCase;
+import com.somemore.global.exception.BadRequestException;
+import com.somemore.global.exception.NoSuchElementException;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class DeletePreferItemService implements DeletePreferItemUseCase {
@@ -21,7 +23,7 @@ public class DeletePreferItemService implements DeletePreferItemUseCase {
     @Override
     public void deletePreferItem(UUID centerId, Long preferItemId) {
         PreferItem preferItem = preferItemRepository.findById(preferItemId)
-                .orElseThrow(() -> new BadRequestException(NOT_EXISTS_PREFER_ITEM));
+                .orElseThrow(() -> new NoSuchElementException(NOT_EXISTS_PREFER_ITEM));
 
         validatePreferItemOwnership(centerId, preferItem);
 

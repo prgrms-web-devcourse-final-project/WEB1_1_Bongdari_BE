@@ -3,13 +3,11 @@ package com.somemore.center.dto.response;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.somemore.center.repository.record.CenterProfileDto;
-import com.somemore.domains.center.dto.response.PreferItemResponseDto;
 import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.Builder;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
@@ -39,7 +37,9 @@ public record CenterProfileResponseDto(
         @Schema(description = "선호 물품 리스트")
         List<PreferItemResponseDto> preferItems
 ) {
-    public static CenterProfileResponseDto of(CenterProfileDto centerProfileDto, UserProfileDto userProfileDto, List<PreferItemResponseDto> preferItems) {
+
+    public static CenterProfileResponseDto of(CenterProfileDto centerProfileDto,
+            UserProfileDto userProfileDto, List<PreferItemResponseDto> preferItems) {
         return CenterProfileResponseDto.builder()
                 .id(centerProfileDto.id())
                 .userId(centerProfileDto.userId())

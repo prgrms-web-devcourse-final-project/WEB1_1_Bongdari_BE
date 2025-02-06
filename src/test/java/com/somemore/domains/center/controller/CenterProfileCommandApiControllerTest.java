@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.somemore.center.usecase.UpdateCenterProfileUseCase;
 import com.somemore.domains.center.dto.request.CenterProfileUpdateRequestDto;
-import com.somemore.domains.center.usecase.command.UpdateCenterProfileUseCase;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
 import com.somemore.support.annotation.WithMockCustomUser;
