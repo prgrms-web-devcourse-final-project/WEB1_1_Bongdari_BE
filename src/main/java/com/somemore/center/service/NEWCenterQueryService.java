@@ -4,12 +4,12 @@ import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_CENTER;
 
 import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
+import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.center.repository.record.CenterProfileDto;
 import com.somemore.center.usecase.NEWCenterQueryUseCase;
-import com.somemore.domains.center.dto.response.PreferItemResponseDto;
-import com.somemore.domains.center.usecase.query.PreferItemQueryUseCase;
+import com.somemore.center.usecase.PreferItemQueryUseCase;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;

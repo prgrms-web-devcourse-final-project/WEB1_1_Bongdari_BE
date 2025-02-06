@@ -7,12 +7,12 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.domain.PreferItem;
 import com.somemore.center.dto.response.CenterProfileResponseDto;
+import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.NEWCenterRepository;
-import com.somemore.domains.center.domain.PreferItem;
-import com.somemore.domains.center.dto.response.PreferItemResponseDto;
-import com.somemore.domains.center.repository.preferitem.PreferItemJpaRepository;
-import com.somemore.domains.center.usecase.query.PreferItemQueryUseCase;
+import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
+import com.somemore.center.usecase.PreferItemQueryUseCase;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;

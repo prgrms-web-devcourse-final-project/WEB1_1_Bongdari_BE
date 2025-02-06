@@ -1,7 +1,9 @@
 package com.somemore.domains.center.controller;
 
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
+import com.somemore.center.usecase.UpdateCenterProfileUseCase;
 import com.somemore.domains.center.dto.request.CenterProfileUpdateRequestDto;
-import com.somemore.domains.center.usecase.command.UpdateCenterProfileUseCase;
 import com.somemore.global.auth.annotation.CurrentUser;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
@@ -9,6 +11,7 @@ import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,10 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.UUID;
-
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @Tag(name = "Center Command API", description = "센터 프로필 수정 API")
 @RequiredArgsConstructor
