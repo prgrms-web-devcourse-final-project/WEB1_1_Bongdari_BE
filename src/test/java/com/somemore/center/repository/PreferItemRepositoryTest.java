@@ -1,18 +1,17 @@
-package com.somemore.domains.center.repository;
-
-import com.somemore.domains.center.domain.PreferItem;
-import com.somemore.domains.center.repository.preferitem.PreferItemJpaRepository;
-import com.somemore.domains.center.repository.preferitem.PreferItemRepository;
-import com.somemore.support.IntegrationTestSupport;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.UUID;
+package com.somemore.center.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+
+import com.somemore.center.domain.PreferItem;
+import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
+import com.somemore.center.repository.preferitem.PreferItemRepository;
+import com.somemore.support.IntegrationTestSupport;
+import java.util.List;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class PreferItemRepositoryTest extends IntegrationTestSupport {
 
@@ -39,7 +38,8 @@ class PreferItemRepositoryTest extends IntegrationTestSupport {
         preferItemJpaRepository.saveAll(List.of(preferItem, preferItem1, preferItem2, preferItem3));
 
         //when
-        List<PreferItem> preferItems = preferItemRepository.findByCenterId(UUID.fromString("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a2"));
+        List<PreferItem> preferItems = preferItemRepository.findByCenterId(
+                UUID.fromString("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a2"));
 
         //then
         assertThat(preferItems).hasSize(1)
