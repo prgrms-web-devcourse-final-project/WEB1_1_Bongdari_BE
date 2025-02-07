@@ -4,23 +4,23 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.somemore.domains.center.domain.QCenter;
+import com.somemore.center.domain.QNEWCenter;
 import com.somemore.domains.note.domain.Note;
 import com.somemore.domains.note.domain.QNote;
 import com.somemore.domains.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.domains.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.domains.note.repository.mapper.NoteReceiverViewForCenter;
 import com.somemore.domains.note.repository.mapper.NoteReceiverViewForVolunteer;
-import com.somemore.domains.volunteer.domain.QVolunteer;
+import com.somemore.user.domain.QUserCommonAttribute;
+import com.somemore.volunteer.domain.QNEWVolunteer;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Repository
@@ -30,8 +30,9 @@ public class NoteRepositoryImpl implements NoteRepository {
     private final NoteJpaRepository noteJpaRepository;
 
     private static final QNote note = QNote.note;
-    private static final QVolunteer volunteer = QVolunteer.volunteer;
-    private static final QCenter center = QCenter.center;
+    private static final QNEWVolunteer volunteer = QNEWVolunteer.nEWVolunteer;
+    private static final QNEWCenter center = QNEWCenter.nEWCenter;
+    private static final QUserCommonAttribute userCommonAttribute = QUserCommonAttribute.userCommonAttribute;
 
     private static final String SENDER_ID = "senderId";
     private static final String SENDER_NAME = "senderName";
@@ -48,7 +49,8 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
-    public Page<NoteReceiverViewForCenter> findNotesByReceiverIsCenter(UUID centerId, Pageable pageable) {
+    public Page<NoteReceiverViewForCenter> findNotesByReceiverIsCenter(UUID centerId,
+            Pageable pageable) {
 
         BooleanExpression activeVolunteer = isActiveVolunteer();
         BooleanExpression condition = isReceiver(centerId);
@@ -79,7 +81,8 @@ public class NoteRepositoryImpl implements NoteRepository {
     }
 
     @Override
-    public Page<NoteReceiverViewForVolunteer> findNotesByReceiverIsVolunteer(UUID volunteerId, Pageable pageable) {
+    public Page<NoteReceiverViewForVolunteer> findNotesByReceiverIsVolunteer(UUID volunteerId,
+            Pageable pageable) {
         BooleanExpression activeCenter = isActiveCenter();
         BooleanExpression condition = isReceiver(volunteerId);
 
@@ -89,11 +92,12 @@ public class NoteRepositoryImpl implements NoteRepository {
                         note.id,
                         note.title,
                         center.id.as(SENDER_ID),
-                        center.name.as(SENDER_NAME),
+                        userCommonAttribute.name.as(SENDER_NAME),
                         note.isRead
                 ))
                 .from(note)
                 .join(center).on(note.senderId.eq(center.id).and(activeCenter))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId))
                 .where(condition)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -103,6 +107,8 @@ public class NoteRepositoryImpl implements NoteRepository {
         JPAQuery<Long> count = queryFactory
                 .select(note.count())
                 .from(note)
+                .join(center).on(note.senderId.eq(center.id).and(activeCenter))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId))
                 .where(condition);
 
         return PageableExecutionUtils.getPage(results, pageable, count::fetchOne);
@@ -121,11 +127,12 @@ public class NoteRepositoryImpl implements NoteRepository {
                         note.content,
                         volunteer.id.as(SENDER_ID),
                         volunteer.nickname.as(SENDER_NAME),
-                        volunteer.imgUrl.as(SENDER_PROFILE_IMG_LINK),
+                        userCommonAttribute.imgUrl.as(SENDER_PROFILE_IMG_LINK),
                         note.createdAt
                 ))
                 .from(note)
                 .join(volunteer).on(note.senderId.eq(volunteer.id).and(activeVolunteer))
+                .join(userCommonAttribute).on(volunteer.userId.eq(userCommonAttribute.userId))
                 .where(note.id.eq(noteId).and(note.deleted.eq(false)))
                 .fetchOne();
 
@@ -144,12 +151,13 @@ public class NoteRepositoryImpl implements NoteRepository {
                         note.title,
                         note.content,
                         center.id.as(SENDER_ID),
-                        center.name.as(SENDER_NAME),
-                        center.imgUrl.as(SENDER_PROFILE_IMG_LINK),
+                        userCommonAttribute.name.as(SENDER_NAME),
+                        userCommonAttribute.imgUrl.as(SENDER_PROFILE_IMG_LINK),
                         note.createdAt
                 ))
                 .from(note)
                 .join(center).on(note.senderId.eq(center.id).and(activeCenter))
+                .join(userCommonAttribute).on(center.userId.eq(userCommonAttribute.userId))
                 .where(note.id.eq(noteId).and(note.deleted.eq(false)))
                 .fetchOne();
 

@@ -1,5 +1,7 @@
 package com.somemore.domains.note.service;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
+
 import com.somemore.domains.note.domain.Note;
 import com.somemore.domains.note.repository.NoteRepository;
 import com.somemore.domains.note.usecase.NoteMarkAsReadUseCase;
@@ -7,8 +9,6 @@ import com.somemore.global.exception.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +21,6 @@ public class NoteMarkAsReadService implements NoteMarkAsReadUseCase {
     public void noteMarkAsRead(Long noteId) {
         Note note = getNote(noteId);
         note.markAsRead();
-        noteRepository.save(note);
     }
 
     private Note getNote(Long noteId) {
