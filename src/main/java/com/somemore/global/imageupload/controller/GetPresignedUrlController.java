@@ -23,7 +23,7 @@ public class GetPresignedUrlController {
 
     private final ImageUploadUseCase imageUploadUseCase;
 
-    @Secured("ROLE_VOLUNTEER, ROLE_CENTER")
+    @Secured({"ROLE_VOLUNTEER", "ROLE_CENTER"})
     @PostMapping("/upload")
     @Operation(summary = "이미지 업로드 URL 조회", description = "이미지 업로드 URL을 조회합니다.")
     public ApiResponse<String> getImageUploadUrl(

@@ -50,7 +50,7 @@ public class UserCommandController {
         return ApiResponse.ok("센터 기본 정보 수정 완료");
     }
 
-    @Secured("ROLE_VOLUNTEER, ROLE_CENTER")
+    @Secured({"ROLE_VOLUNTEER", "ROLE_CENTER"})
     @PutMapping("/image/volunteer")
     @Operation(summary = "유저 프로필 이미지 수정", description = "프로필 이미지를 수정합니다. 응답으로 제공되는 URL에 이미지를 PUT 해야 합니다.")
     public ApiResponse<String> updateVolunteerImage(
