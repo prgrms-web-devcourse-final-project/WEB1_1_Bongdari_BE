@@ -45,10 +45,9 @@ public class UserCommonAttribute extends BaseEntity {
     @Column(name = "is_customized", nullable = false)
     private boolean isCustomized;
 
-    public void update(CommonBasicInfoRequestDto commonBasicInfoRequestDto) {
+    public void updateBasicInfo(CommonBasicInfoRequestDto commonBasicInfoRequestDto) {
         this.name = commonBasicInfoRequestDto.name();
         this.contactNumber = commonBasicInfoRequestDto.contactNumber();
-        this.imgUrl = commonBasicInfoRequestDto.imgUrl();
         this.introduce = commonBasicInfoRequestDto.introduce();
         this.isCustomized = true;
     }

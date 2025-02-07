@@ -42,8 +42,8 @@ public class ImageUploadService implements ImageUploadUseCase {
 
 
     @Override
-    public String getPresignedUrl(String filename) {
-        if(imageUploadValidator.isEmptyFileName(filename)) {
+    public PresignedUrl getPresignedUrl(String filename) {
+        if (imageUploadValidator.isEmptyFileName(filename)) {
             return null;
         }
 
@@ -56,9 +56,10 @@ public class ImageUploadService implements ImageUploadUseCase {
                         .key(uniqueFilename))
                 .build();
 
-        return s3Presigner.presignGetObject(getObjectPresignRequest)
-                .url()
-                .toString();
+        return PresignedUrl.from(
+                s3Presigner.presignGetObject(getObjectPresignRequest)
+                        .url()
+                        .toString());
     }
 
     @Override

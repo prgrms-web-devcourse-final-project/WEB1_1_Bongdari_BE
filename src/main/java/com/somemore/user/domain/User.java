@@ -1,7 +1,6 @@
 package com.somemore.user.domain;
 
 import com.somemore.global.common.entity.BaseEntity;
-import com.somemore.user.dto.UserAuthInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

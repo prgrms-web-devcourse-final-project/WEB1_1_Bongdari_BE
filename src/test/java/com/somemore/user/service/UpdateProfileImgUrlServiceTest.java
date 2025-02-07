@@ -2,7 +2,7 @@ package com.somemore.user.service;
 
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;
-import com.somemore.user.dto.request.UpdateProfileImgUrlRequestDto;
+import com.somemore.user.dto.request.ImgUrlRequestDto;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.UUID;
 
 import static com.somemore.user.domain.UserRole.CENTER;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UpdateProfileImgUrlServiceTest extends IntegrationTestSupport {
 
@@ -26,7 +27,7 @@ class UpdateProfileImgUrlServiceTest extends IntegrationTestSupport {
 
     @DisplayName("프로필 이미지 링크를 업데이트 할 수 있다.")
     @Test
-    void updateProfileImgUrl() {
+    void update() {
 
         // given
         UUID userId = UUID.randomUUID();
@@ -34,17 +35,16 @@ class UpdateProfileImgUrlServiceTest extends IntegrationTestSupport {
         UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, CENTER);
         commonAttributeRepository.save(userCommonAttribute);
 
-        String profileImgUrl = "https://example.com/new_profile.jpg";
-
-        UpdateProfileImgUrlRequestDto requestDto = new UpdateProfileImgUrlRequestDto(userId, profileImgUrl);
+        String fileName = "new_profile.jpg";
 
         // when
-        updateProfileImgUrlService.updateProfileImgUrl(requestDto);
+        updateProfileImgUrlService.update(userId, new ImgUrlRequestDto(fileName));
 
         // then
         UserCommonAttribute updatedUserCommonAttribute = userQueryService.getCommonAttributeByUserId(userId);
 
-        assertEquals(profileImgUrl, updatedUserCommonAttribute.getImgUrl());
+        assertThat(updatedUserCommonAttribute.getImgUrl())
+                .contains(fileName);
 
         assertEquals(userCommonAttribute.getName(), updatedUserCommonAttribute.getName());
         assertEquals(userCommonAttribute.getContactNumber(), updatedUserCommonAttribute.getContactNumber());

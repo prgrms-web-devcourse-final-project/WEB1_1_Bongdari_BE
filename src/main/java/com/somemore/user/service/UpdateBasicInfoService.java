@@ -42,7 +42,7 @@ public class UpdateBasicInfoService implements UpdateBasicInfoUseCase {
 
     private void updateCommonAttribute(UUID userId, CommonBasicInfoRequestDto commonBasicInfoRequestDto) {
         UserCommonAttribute commonAttribute = userQueryUseCase.getCommonAttributeByUserId(userId);
-        commonAttribute.update(commonBasicInfoRequestDto);
+        commonAttribute.updateBasicInfo(commonBasicInfoRequestDto);
     }
 
     private void updateVolunteerAttribute(UUID userId, VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto) {

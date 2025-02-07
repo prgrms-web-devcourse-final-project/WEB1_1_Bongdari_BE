@@ -1,7 +1,9 @@
 package com.somemore.user.usecase;
 
-import com.somemore.user.dto.request.UpdateProfileImgUrlRequestDto;
+import com.somemore.user.dto.request.ImgUrlRequestDto;
+
+import java.util.UUID;
 
 public interface UpdateProfileImgUrlUseCase {
-    void updateProfileImgUrl(UpdateProfileImgUrlRequestDto updateProfileImgUrlRequestDto);
+    String update(UUID userId, ImgUrlRequestDto dto);
 }

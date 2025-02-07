@@ -2,9 +2,9 @@ package com.somemore.user.service;
 
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.User;
+import com.somemore.user.domain.UserAuthInfo;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
-import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.dto.basicinfo.CommonBasicInfoRequestDto;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
@@ -41,9 +41,9 @@ class ValidateBasicInfoServiceTest extends IntegrationTestSupport {
     void isBasicInfoComplete_ReturnsTrue() {
         // given
         CommonBasicInfoRequestDto commonBasicInfoRequestDto =
-                new CommonBasicInfoRequestDto("test", "test", "test", "test");
+                new CommonBasicInfoRequestDto("test", "test", "test");
         UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(user.getId(), UserRole.VOLUNTEER);
-        userCommonAttribute.update(commonBasicInfoRequestDto);
+        userCommonAttribute.updateBasicInfo(commonBasicInfoRequestDto);
         userCommonAttributeRepository.save(userCommonAttribute);
 
         // when
