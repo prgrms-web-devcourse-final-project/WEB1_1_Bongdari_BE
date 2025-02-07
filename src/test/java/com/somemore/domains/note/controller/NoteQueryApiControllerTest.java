@@ -1,5 +1,13 @@
 package com.somemore.domains.note.controller;
 
+import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.somemore.domains.note.repository.mapper.NoteDetailViewForCenter;
 import com.somemore.domains.note.repository.mapper.NoteDetailViewForVolunteer;
 import com.somemore.domains.note.repository.mapper.NoteReceiverViewForCenter;
@@ -7,7 +15,10 @@ import com.somemore.domains.note.repository.mapper.NoteReceiverViewForVolunteer;
 import com.somemore.domains.note.usecase.NoteQueryUseCase;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.support.annotation.MockUser;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,18 +28,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import static com.somemore.global.exception.ExceptionMessage.NOT_EXISTS_NOTE;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @MockBean
@@ -36,7 +35,7 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("기관은 자신에게 온 쪽지를 페이지 형태로 확인할 수 있다. (Controller)")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void getNotesByCenterId() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 6);
@@ -54,7 +53,8 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
                         .isRead(true)
                         .build()
         );
-        Page<NoteReceiverViewForCenter> mockResponse = new PageImpl<>(notes, pageable, notes.size());
+        Page<NoteReceiverViewForCenter> mockResponse = new PageImpl<>(notes, pageable,
+                notes.size());
 
         when(noteQueryUseCase.getNotesForCenter(any(UUID.class), eq(pageable)))
                 .thenReturn(mockResponse);
@@ -83,7 +83,7 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사자는 자신에게 온 쪽지를 페이지 형태로 확인할 수 있다. (Controller)")
     @Test
-    @WithMockCustomUser
+    @MockUser
     void getNotesByVolunteerId() throws Exception {
         // given
         Pageable pageable = PageRequest.of(0, 6);
@@ -101,7 +101,8 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
                         .isRead(true)
                         .build()
         );
-        Page<NoteReceiverViewForVolunteer> mockResponse = new PageImpl<>(notes, pageable, notes.size());
+        Page<NoteReceiverViewForVolunteer> mockResponse = new PageImpl<>(notes, pageable,
+                notes.size());
 
         when(noteQueryUseCase.getNotesForVolunteer(any(UUID.class), eq(pageable)))
                 .thenReturn(mockResponse);
@@ -130,7 +131,7 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("기관은 특정 쪽지의 상세 내용을 조회할 수 있다. (Controller)")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void getNoteDetailForCenter() throws Exception {
         // given
         Long noteId = 1L;
@@ -162,7 +163,7 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("봉사자는 특정 쪽지의 상세 내용을 조회할 수 있다. (Controller)")
     @Test
-    @WithMockCustomUser
+    @MockUser
     void getNoteDetailForVolunteer() throws Exception {
         // given
         Long noteId = 1L;
@@ -194,7 +195,7 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("존재하지 않는 쪽지를 기관이 조회할 경우 예외를 반환한다.")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void getNoteDetailForCenter_NotFound() throws Exception {
         // given
         Long nonExistentNoteId = 9999L;
@@ -213,7 +214,7 @@ class NoteQueryApiControllerTest extends ControllerTestSupport {
 
     @DisplayName("존재하지 않는 쪽지를 봉사자가 조회할 경우 예외를 반환한다.")
     @Test
-    @WithMockCustomUser
+    @MockUser
     void getNoteDetailForVolunteer_NotFound() throws Exception {
         // given
         Long nonExistentNoteId = 9999L;
