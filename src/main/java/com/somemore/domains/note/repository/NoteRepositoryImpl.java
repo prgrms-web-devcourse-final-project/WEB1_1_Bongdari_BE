@@ -75,6 +75,7 @@ public class NoteRepositoryImpl implements NoteRepository {
         JPAQuery<Long> count = queryFactory
                 .select(note.count())
                 .from(note)
+                .join(volunteer).on(note.senderId.eq(volunteer.id).and(activeVolunteer))
                 .where(condition);
 
         return PageableExecutionUtils.getPage(results, pageable, count::fetchOne);
