@@ -12,6 +12,8 @@ public interface NEWCenterQueryUseCase {
 
     UUID getIdByUserId(UUID userId);
 
+    UUID getUserIdById(UUID centerId);
+
     CenterProfileResponseDto getCenterProfileById(UUID centerId);
 
     void validateCenterExists(UUID id);

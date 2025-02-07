@@ -41,6 +41,13 @@ public class NEWCenterQueryService implements NEWCenterQueryUseCase {
     }
 
     @Override
+    public UUID getUserIdById(UUID centerId) {
+        return centerRepository.findById(centerId)
+                .orElseThrow(() -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_CENTER))
+                .getUserId();
+    }
+
+    @Override
     public CenterProfileResponseDto getCenterProfileById(UUID centerId) {
 
         CenterProfileDto centerProfileDto = centerRepository.findCenterProfileById(centerId)

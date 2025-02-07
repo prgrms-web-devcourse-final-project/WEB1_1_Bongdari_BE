@@ -79,6 +79,6 @@ public class VolunteerApplyStatusChangeService implements ApproveVolunteerApplyU
         if (apply.getStatus() == oldStatus) {
             return;
         }
-        serverEventPublisher.publish(VolunteerApplyStatusChangeEvent.from(apply, recruitBoard, oldStatus));
+        serverEventPublisher.publish(VolunteerApplyStatusChangeEvent.of(apply, recruitBoard, oldStatus));
     }
 }

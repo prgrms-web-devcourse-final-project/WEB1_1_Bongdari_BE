@@ -2,6 +2,8 @@ package com.somemore.domains.volunteerrecord.event;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.somemore.domains.recruitboard.domain.RecruitBoard;
+import com.somemore.domains.volunteerapply.domain.VolunteerApply;
 import com.somemore.global.common.event.DomainEventSubType;
 import com.somemore.global.common.event.ServerEvent;
 import com.somemore.global.common.event.ServerEventType;
@@ -36,4 +38,15 @@ public class VolunteerRecordCreateEvent extends ServerEvent<DomainEventSubType> 
         this.volunteerHours = volunteerHours;
     }
 
+    public static VolunteerRecordCreateEvent of(VolunteerApply apply, RecruitBoard recruitBoard) {
+        return VolunteerRecordCreateEvent
+                .builder()
+                .type(ServerEventType.DOMAIN_EVENT)
+                .subType(DomainEventSubType.VOLUNTEER_HOURS_SETTLE)
+                .volunteerId(apply.getVolunteerId())
+                .title(recruitBoard.getTitle())
+                .volunteerDate(recruitBoard.getRecruitmentInfo().getVolunteerEndDateTime().toLocalDate())
+                .volunteerHours(recruitBoard.getRecruitmentInfo().getVolunteerHours())
+                .build();
+    }
 }

@@ -35,6 +35,6 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
             return principal.userId();
         }
 
-        return new InvalidAuthenticationException(INVALID_PRINCIPAL_TYPE);
+        throw new InvalidAuthenticationException(INVALID_PRINCIPAL_TYPE);
     }
 }

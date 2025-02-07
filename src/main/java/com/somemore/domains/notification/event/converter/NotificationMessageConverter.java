@@ -3,6 +3,7 @@ package com.somemore.domains.notification.event.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.domains.community.event.CommentAddedEvent;
 import com.somemore.domains.interestcenter.event.domain.InterestCenterCreateRecruitBoardEvent;
 import com.somemore.domains.notification.domain.Notification;
@@ -11,9 +12,12 @@ import com.somemore.domains.volunteerapply.domain.ApplyStatus;
 import com.somemore.domains.volunteerapply.event.VolunteerApplyEvent;
 import com.somemore.domains.volunteerapply.event.VolunteerApplyStatusChangeEvent;
 import com.somemore.domains.volunteerapply.event.VolunteerReviewRequestEvent;
+import com.somemore.volunteer.usecase.NEWVolunteerQueryUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,8 +25,10 @@ import org.springframework.stereotype.Component;
 public class NotificationMessageConverter {
 
     private final ObjectMapper objectMapper;
+    private final NEWVolunteerQueryUseCase volunteerQueryUseCase;
+    private final NEWCenterQueryUseCase centerQueryUseCase;
 
-    public static final String SUB_TYPE = "subType";
+    private static final String SUB_TYPE = "subType";
 
     public Notification from(String message) {
         try {
@@ -50,8 +56,10 @@ public class NotificationMessageConverter {
     private Notification buildVolunteerReviewRequestNotification(String message) throws JsonProcessingException {
         VolunteerReviewRequestEvent event = objectMapper.readValue(message, VolunteerReviewRequestEvent.class);
 
+        UUID volunteerUserId = volunteerQueryUseCase.getUserIdById(event.getVolunteerId());
+
         return Notification.builder()
-                .receiverId(event.getVolunteerId())
+                .receiverId(volunteerUserId)
                 .title(createVolunteerReviewRequestNotificationTitle())
                 .type(NotificationSubType.VOLUNTEER_REVIEW_REQUEST)
                 .relatedId(event.getRecruitBoardId())
@@ -61,8 +69,10 @@ public class NotificationMessageConverter {
     private Notification buildVolunteerApplyStatusChangeNotification(String message) throws JsonProcessingException {
         VolunteerApplyStatusChangeEvent event = objectMapper.readValue(message, VolunteerApplyStatusChangeEvent.class);
 
+        UUID volunteerUserId = volunteerQueryUseCase.getUserIdById(event.getVolunteerId());
+
         return Notification.builder()
-                .receiverId(event.getVolunteerId())
+                .receiverId(volunteerUserId)
                 .title(createVolunteerApplyStatusChangeNotificationTitle(event.getNewStatus()))
                 .type(NotificationSubType.VOLUNTEER_APPLY_STATUS_CHANGE)
                 .relatedId(event.getRecruitBoardId())
@@ -72,8 +82,10 @@ public class NotificationMessageConverter {
     private Notification buildCommentAddedNotification(String message) throws JsonProcessingException {
         CommentAddedEvent event = objectMapper.readValue(message, CommentAddedEvent.class);
 
+        UUID volunteerUserId = volunteerQueryUseCase.getUserIdById(event.getVolunteerId());
+
         return Notification.builder()
-                .receiverId(event.getVolunteerId())
+                .receiverId(volunteerUserId)
                 .title(createCommentAddedNotificationTitle())
                 .type(NotificationSubType.COMMENT_ADDED)
                 .relatedId(event.getCommunityBoardId())
@@ -83,8 +95,10 @@ public class NotificationMessageConverter {
     private Notification buildVolunteerApplyNotification(String message) throws JsonProcessingException {
         VolunteerApplyEvent event = objectMapper.readValue(message, VolunteerApplyEvent.class);
 
+        UUID centerUserId = centerQueryUseCase.getUserIdById(event.getCenterId());
+
         return Notification.builder()
-                .receiverId(event.getCenterId())
+                .receiverId(centerUserId)
                 .title(createVolunteerApplyNotificationTitle())
                 .type(NotificationSubType.VOLUNTEER_APPLY)
                 .relatedId(event.getRecruitBoardId())
@@ -94,8 +108,10 @@ public class NotificationMessageConverter {
     private Notification buildInterestCenterCreateRecruitBoardNotification(String message) throws JsonProcessingException {
         InterestCenterCreateRecruitBoardEvent event = objectMapper.readValue(message, InterestCenterCreateRecruitBoardEvent.class);
 
+        UUID volunteerUserId = volunteerQueryUseCase.getUserIdById(event.getVolunteerId());
+
         return Notification.builder()
-                .receiverId(event.getVolunteerId())
+                .receiverId(volunteerUserId)
                 .title(createInterestCenterCreateRecruitBoardNotificationTitle())
                 .type(NotificationSubType.INTEREST_CENTER_CREATE_RECRUIT_BOARD)
                 .relatedId(event.getRecruitBoardId())

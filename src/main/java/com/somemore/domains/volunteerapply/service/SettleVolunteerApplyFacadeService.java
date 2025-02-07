@@ -1,10 +1,5 @@
 package com.somemore.domains.volunteerapply.service;
 
-import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
-import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
-import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
-
-import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.volunteerapply.domain.VolunteerApply;
@@ -14,14 +9,18 @@ import com.somemore.domains.volunteerapply.usecase.SettleVolunteerApplyFacadeUse
 import com.somemore.domains.volunteerapply.usecase.VolunteerApplyQueryUseCase;
 import com.somemore.domains.volunteerrecord.event.VolunteerRecordEventPublisher;
 import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.volunteer.usecase.UpdateVolunteerUseCase;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.somemore.global.exception.ExceptionMessage.RECRUIT_BOARD_ID_MISMATCH;
+import static com.somemore.global.exception.ExceptionMessage.UNAUTHORIZED_RECRUIT_BOARD;
+import static com.somemore.global.exception.ExceptionMessage.VOLUNTEER_APPLY_LIST_MISMATCH;
 
 @RequiredArgsConstructor
 @Transactional
@@ -79,17 +78,8 @@ public class SettleVolunteerApplyFacadeService implements SettleVolunteerApplyFa
         }
     }
 
-    private void publishVolunteerReviewRequestEvent(VolunteerApply apply,
-            RecruitBoard recruitBoard) {
-        VolunteerReviewRequestEvent event = VolunteerReviewRequestEvent.builder()
-                .type(ServerEventType.NOTIFICATION)
-                .subType(NotificationSubType.VOLUNTEER_REVIEW_REQUEST)
-                .volunteerId(apply.getVolunteerId())
-                .volunteerApplyId(apply.getId())
-                .centerId(recruitBoard.getCenterId())
-                .recruitBoardId(recruitBoard.getId())
-                .build();
-
+    private void publishVolunteerReviewRequestEvent(VolunteerApply apply, RecruitBoard recruitBoard) {
+        VolunteerReviewRequestEvent event = VolunteerReviewRequestEvent.of(apply, recruitBoard);
         serverEventPublisher.publish(event);
     }
 }

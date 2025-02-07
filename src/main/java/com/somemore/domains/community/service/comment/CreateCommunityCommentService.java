@@ -6,9 +6,7 @@ import com.somemore.domains.community.event.CommentAddedEvent;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.repository.comment.CommunityCommentRepository;
 import com.somemore.domains.community.usecase.comment.CreateCommunityCommentUseCase;
-import com.somemore.domains.notification.domain.NotificationSubType;
 import com.somemore.global.common.event.ServerEventPublisher;
-import com.somemore.global.common.event.ServerEventType;
 import com.somemore.global.exception.BadRequestException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +37,8 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
             validateParentCommentExists(communityComment.getParentCommentId());
         }
 
-        publishCommentAddedEvent(communityComment);
+        publishCommentAddedEvent(communityComment, writerId);
+
         return communityCommentRepository.save(communityComment).getId();
     }
 
@@ -55,36 +54,35 @@ public class CreateCommunityCommentService implements CreateCommunityCommentUseC
         }
     }
 
-    private void publishCommentAddedEvent(CommunityComment communityComment) {
+    private void publishCommentAddedEvent(CommunityComment communityComment, UUID writerId) {
         Long parentCommentId = communityComment.getParentCommentId();
 
-        UUID targetVolunteerId = getTargetVolunteerId(communityComment, parentCommentId);
+        UUID targetUserId = getTargetUserId(communityComment, parentCommentId);
 
-        CommentAddedEvent event = CommentAddedEvent.builder()
-                .type(ServerEventType.NOTIFICATION)
-                .subType(NotificationSubType.COMMENT_ADDED)
-                .volunteerId(targetVolunteerId)
-                .communityBoardId(communityComment.getCommunityBoardId())
-                .build();
+        if (writerId == targetUserId) {
+            return;
+        }
+
+        CommentAddedEvent event = CommentAddedEvent.of(targetUserId, communityComment.getCommunityBoardId());
 
         serverEventPublisher.publish(event);
     }
 
-    private UUID getTargetVolunteerId(CommunityComment communityComment, Long parentCommentId) {
-        UUID targetVolunteerId;
+    private UUID getTargetUserId(CommunityComment communityComment, Long parentCommentId) {
+        UUID targetUserId;
 
         if (parentCommentId == null) {
-            targetVolunteerId = communityBoardRepository.findById(communityComment.getCommunityBoardId())
+            targetUserId = communityBoardRepository.findById(communityComment.getCommunityBoardId())
                     .orElseThrow(EntityNotFoundException::new)
                     .getWriterId();
 
-            return targetVolunteerId;
+            return targetUserId;
         }
 
-        targetVolunteerId = communityCommentRepository.findById(parentCommentId)
+        targetUserId = communityCommentRepository.findById(parentCommentId)
                 .map(CommunityComment::getWriterId)
                 .orElse(null);
 
-        return targetVolunteerId;
+        return targetUserId;
     }
 }
