@@ -7,12 +7,11 @@ import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.DeleteCommunityBoardUseCase;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     CommunityBoardRepository communityBoardRepository;
     @Autowired
-    VolunteerRepository volunteerRepository;
+    NEWVolunteerRepository volunteerRepository;
     @Autowired
     CenterRepository centerRepository;
     @Autowired
@@ -48,12 +47,10 @@ class CommunityBoardQueryServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUp() {
-        String oAuthId = "example-oauth-id";
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId);
+        NEWVolunteer volunteer = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer);
 
-        String oAuthId2 = "example-oauth-id";
-        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId2);
+        NEWVolunteer volunteer2 = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer2);
 
         writerId1 = volunteer.getId();

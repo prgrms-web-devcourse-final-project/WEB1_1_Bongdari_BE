@@ -21,8 +21,6 @@ public record CommunityBoardDetailResponseDto(
         String title,
         @Schema(description = "커뮤니티 게시글 내용", example = "저 포함 5명이 같이 가면 좋을 거 같아요")
         String content,
-        @Schema(description = "이미지 URL", example = "https://image.domain.com/links")
-        String imageUrl,
         @Schema(description = "커뮤니티 게시글 생성 일시", example = "2023-12-02T11:00:00")
         LocalDateTime createdAt,
         @Schema(description = "커뮤니티 게시글 수정 일시", example = "2023-12-02T11:00:00")
@@ -34,7 +32,6 @@ public record CommunityBoardDetailResponseDto(
                 board.getWriterId(),
                 board.getTitle(),
                 board.getContent(),
-                board.getImgUrl(),
                 board.getCreatedAt(),
                 board.getUpdatedAt()
         );

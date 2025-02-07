@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.domain.QCommunityBoard;
 import com.somemore.domains.community.repository.mapper.CommunityBoardView;
-import com.somemore.domains.volunteer.domain.QVolunteer;
+import com.somemore.volunteer.domain.QNEWVolunteer;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
     private final CommunityBoardJpaRepository communityBoardJpaRepository;
 
     private static final QCommunityBoard communityBoard = QCommunityBoard.communityBoard;
-    private static final QVolunteer volunteer = QVolunteer.volunteer;
+    private static final QNEWVolunteer volunteer = QNEWVolunteer.nEWVolunteer;
 
     @Override
     public CommunityBoard save(CommunityBoard communityBoard) {
@@ -91,6 +91,11 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
         communityBoardJpaRepository.deleteAllInBatch();
     }
 
+    @Override
+    public List<CommunityBoard> findAllByDeletedFalse() {
+        return communityBoardJpaRepository.findAllByDeletedFalse();
+    }
+
     private JPAQuery<CommunityBoardView> getCommunityBoardsQuery() {
         return queryFactory
                 .select(Projections.constructor(CommunityBoardView.class,
@@ -99,11 +104,6 @@ public class CommunityBoardRepositoryImpl implements CommunityBoardRepository {
                 .from(communityBoard)
                 .join(volunteer).on(communityBoard.writerId.eq(volunteer.id))
                 .orderBy(communityBoard.createdAt.desc());
-    }
-
-    @Override
-    public List<CommunityBoard> findAllByDeletedFalse() {
-        return communityBoardJpaRepository.findAllByDeletedFalse();
     }
 
     private BooleanExpression isNotDeleted() {

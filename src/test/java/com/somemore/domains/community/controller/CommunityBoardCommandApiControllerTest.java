@@ -1,12 +1,10 @@
 package com.somemore.domains.community.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,18 +13,12 @@ import com.somemore.domains.community.dto.request.CommunityBoardUpdateRequestDto
 import com.somemore.domains.community.usecase.board.CreateCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.DeleteCommunityBoardUseCase;
 import com.somemore.domains.community.usecase.board.UpdateCommunityBoardUseCase;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
+import com.somemore.support.annotation.MockUser;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 public class CommunityBoardCommandApiControllerTest extends ControllerTestSupport {
 
@@ -39,45 +31,26 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
     @MockBean
     private DeleteCommunityBoardUseCase deleteCommunityBoardUseCase;
 
-    @MockBean
-    private ImageUploadUseCase imageUploadUseCase;
-
     @Test
     @DisplayName("커뮤니티 게시글 등록 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void createCommunityBoard_success() throws Exception {
         //given
-        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
+        CommunityBoardCreateRequestDto requestDto = CommunityBoardCreateRequestDto.builder()
                 .title("11/29 OO도서관 봉사 같이 갈 사람 모집합니다.")
                 .content("저 포함 5명이 같이 가면 좋을 거 같아요.")
                 .build();
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "img_file",
-                "test-image.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "test image content".getBytes()
-        );
-
-        MockMultipartFile requestData = new MockMultipartFile(
-                "data",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(dto)
-        );
-
-        String mockImageUrl = "http://example.com/image/test-image.jpg";
+        String requestBody = objectMapper.writeValueAsString(requestDto);
         long communityBoardId = 1L;
 
-        given(imageUploadUseCase.uploadImage(any())).willReturn(mockImageUrl);
-        given(createCommunityBoardUseCase.createCommunityBoard(any(), any(UUID.class),
-                anyString())).willReturn(communityBoardId);
+        given(createCommunityBoardUseCase.createCommunityBoard(any(), any(UUID.class)))
+                .willReturn(communityBoardId);
 
         //when
-        mockMvc.perform(multipart("/api/community-board")
-                        .file(requestData)
-                        .file(imageFile)
-                        .contentType(MULTIPART_FORM_DATA)
+        mockMvc.perform(post("/api/community-board")
+                        .content(requestBody)
+                        .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
                 //then
                 .andExpect(status().isOk())
@@ -88,7 +61,7 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
 
     @Test
     @DisplayName("커뮤니티 게시글 수정 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void updateCommunityBoard_success() throws Exception {
         //given
         CommunityBoardUpdateRequestDto requestDto = CommunityBoardUpdateRequestDto.builder()
@@ -96,40 +69,15 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
                 .content("지난 주 토요일에 방문했는데 강추드려요.")
                 .build();
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "img_file",
-                "test-image.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "test image content".getBytes()
-        );
-
-        MockMultipartFile requestData = new MockMultipartFile(
-                "data",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(requestDto)
-        );
-
-        String imageUrl = "http://example.com/image/test-image.jpg";
-
-        given(imageUploadUseCase.uploadImage(any())).willReturn(imageUrl);
         willDoNothing().given(updateCommunityBoardUseCase)
-                .updateCommunityBoard(any(), any(), any(UUID.class), anyString());
+                .updateCommunityBoard(any(), any(), any(UUID.class));
 
-        MockMultipartHttpServletRequestBuilder builder = multipart("/api/community-board/{id}", 1);
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
+        String requestBody = objectMapper.writeValueAsString(requestDto);
 
         //when
-        mockMvc.perform(builder
-                        .file(requestData)
-                        .file(imageFile)
-                        .contentType(MULTIPART_FORM_DATA)
+        mockMvc.perform(put("/api/community-board/{id}", 1)
+                        .content(requestBody)
+                        .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer access-token"))
 
                 //then
@@ -141,7 +89,7 @@ public class CommunityBoardCommandApiControllerTest extends ControllerTestSuppor
 
     @Test
     @DisplayName("커뮤니티 게시글 삭제 성공 테스트")
-    @WithMockCustomUser
+    @MockUser
     void deleteCommunityBoard_success() throws Exception {
         //given
         Long communityBoardId = 1L;

@@ -8,11 +8,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record CommunityCommentResponseDto(
         @Schema(description = "커뮤니티 댓글 ID", example = "1234")
         Long id,
+        @Schema(description = "작성자 ID", example = "123e4567-e89b-12d3-a456-426614174000")
+        UUID writerId,
         @Schema(description = "작성자(봉사자) 닉네임", example = "dkdudab")
         String writerNickname,
         @Schema(description = "커뮤니티 댓글 내용", example = "저도 함께 하고 싶습니다.")
@@ -39,6 +42,7 @@ public record CommunityCommentResponseDto(
     public static CommunityCommentResponseDto from(CommunityCommentView comment) {
         return new CommunityCommentResponseDto(
                 comment.communityComment().getId(),
+                comment.communityComment().getWriterId(),
                 comment.writerNickname(),
                 comment.communityComment().getContent(),
                 comment.communityComment().getUpdatedAt(),

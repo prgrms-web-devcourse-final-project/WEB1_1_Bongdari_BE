@@ -19,14 +19,11 @@ public record CommunityBoardCreateRequestDto(
         @NotBlank(message = "게시글 내용은 필수 값입니다.")
         String content
 ) {
-    public CommunityBoard toEntity(UUID writerId, String imgUrl) {
+    public CommunityBoard toEntity(UUID writerId) {
         return CommunityBoard.builder()
                 .writerId(writerId)
                 .title(title)
                 .content(content)
-                .imgUrl(imgUrl)
                 .build();
     }
-
-
 }

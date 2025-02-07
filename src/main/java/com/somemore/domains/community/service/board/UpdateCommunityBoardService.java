@@ -23,10 +23,10 @@ public class UpdateCommunityBoardService implements UpdateCommunityBoardUseCase 
     private final CommunityBoardRepository communityBoardRepository;
 
     @Override
-    public void updateCommunityBoard(CommunityBoardUpdateRequestDto requestDto, Long communityBoardId, UUID writerId, String imgUrl) {
+    public void updateCommunityBoard(CommunityBoardUpdateRequestDto requestDto, Long communityBoardId, UUID writerId) {
         CommunityBoard communityBoard = getCommunityBoardById(communityBoardId);
         validateWriter(communityBoard, writerId);
-        communityBoard.updateWith(requestDto, imgUrl);
+        communityBoard.updateWith(requestDto);
 
         communityBoardRepository.save(communityBoard);
     }

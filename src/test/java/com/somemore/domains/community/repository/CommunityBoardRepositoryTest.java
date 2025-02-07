@@ -3,10 +3,9 @@ package com.somemore.domains.community.repository;
 import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.repository.mapper.CommunityBoardView;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,19 +27,17 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
 
     private UUID writerId;
 
     @BeforeEach
     void setUp() {
-        String oAuthId1 = "example-oauth-id1";
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
+        NEWVolunteer volunteer1 = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer1);
         writerId = volunteer1.getId();
 
-        String oAuthId2 = "example-oauth-id2";
-        Volunteer volunteer2 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId2);
+        NEWVolunteer volunteer2 = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer2);
 
         for (int i = 1; i <= 8; i++) {
@@ -60,7 +57,7 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
     @Test
     void getCommunityBoardById() {
         //given
-        CommunityBoard communityBoard = createCommunityBoard(UUID.randomUUID());
+        CommunityBoard communityBoard = createCommunityBoard(writerId);
         communityBoardRepository.save(communityBoard);
 
         //when
@@ -70,21 +67,17 @@ class CommunityBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(foundCommunityBoard).isNotNull();
         assertThat(foundCommunityBoard.get().getTitle()).isEqualTo("테스트 커뮤니티 게시글 제목");
         assertThat(foundCommunityBoard.get().getContent()).isEqualTo("테스트 커뮤니티 게시글 내용");
-        assertThat(foundCommunityBoard.get().getImgUrl()).isEqualTo("http://community.example.com/123");
-        assertThat(foundCommunityBoard.get().getWriterId()).isEqualTo(communityBoard.getWriterId());
+        assertThat(foundCommunityBoard.get().getWriterId()).isEqualTo(writerId);
     }
 
     @DisplayName("삭제된 커뮤니티 id로 커뮤니티 상세 정보를 조회할 때 예외를 반환할 수 있다. (Repository)")
     @Test
     void getCommunityBoardByDeletedId() {
         //given
-        CommunityBoard communityBoard = createCommunityBoard(UUID.randomUUID());
-        communityBoardRepository.save(communityBoard);
-
         communityBoardRepository.deleteAllInBatch();
 
         //when
-        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.findById(communityBoard.getId());
+        Optional<CommunityBoard> foundCommunityBoard = communityBoardRepository.findById(1L);
 
         //then
         assertThat(foundCommunityBoard).isEmpty();

@@ -8,6 +8,5 @@ public interface UpdateCommunityBoardUseCase {
     void updateCommunityBoard(
             CommunityBoardUpdateRequestDto requestDto,
             Long communityBoardId,
-            UUID writerId,
-            String imgUrl);
+            UUID writerId);
 }

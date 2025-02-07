@@ -6,10 +6,9 @@ import com.somemore.domains.community.dto.response.CommunityCommentResponseDto;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.community.repository.comment.CommunityCommentRepository;
 import com.somemore.domains.community.usecase.comment.DeleteCommunityCommentUseCase;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +30,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
     @Autowired
     private DeleteCommunityCommentUseCase deleteCommunityCommentUseCase;
 
@@ -40,8 +39,7 @@ class CommunityCommentQueryServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUp() {
-        String oAuthId1 = "example-oauth-id";
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
+        NEWVolunteer volunteer1 = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer1);
         writerId = volunteer1.getId();
 

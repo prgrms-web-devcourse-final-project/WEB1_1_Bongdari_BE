@@ -35,10 +35,9 @@ class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
                 .build();
 
         UUID writerId = UUID.randomUUID();
-        String imgUrl = "https://image.test.url/123";
 
         //when
-        Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId, imgUrl);
+        Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId);
 
         //then
         Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
@@ -48,32 +47,5 @@ class CreateCommunityBoardServiceTest extends IntegrationTestSupport {
         assertThat(communityBoard.get().getWriterId()).isEqualTo(writerId);
         assertThat(communityBoard.get().getTitle()).isEqualTo(dto.title());
         assertThat(communityBoard.get().getContent()).isEqualTo(dto.content());
-        assertThat(communityBoard.get().getImgUrl()).isEqualTo(imgUrl);
-    }
-
-    @DisplayName("커뮤니티 게시글을 이미지 링크 없이 등록할 시 빈 문자열을 저장한다.")
-    @Test
-    void createCommunityWithoutImgUrl() {
-        //given
-        CommunityBoardCreateRequestDto dto = CommunityBoardCreateRequestDto.builder()
-                .title("커뮤니티 테스트 제목")
-                .content("커뮤니티 테스트 내용")
-                .build();
-
-        UUID writerId = UUID.randomUUID();
-        String imgUrl = null;
-
-        //when
-        Long communityId = createCommunityBoardService.createCommunityBoard(dto, writerId, imgUrl);
-
-        //then
-        Optional<CommunityBoard> communityBoard = communityBoardRepository.findById(communityId);
-
-        assertThat(communityBoard).isPresent();
-        assertThat(communityBoard.get().getId()).isEqualTo(communityId);
-        assertThat(communityBoard.get().getWriterId()).isEqualTo(writerId);
-        assertThat(communityBoard.get().getTitle()).isEqualTo(dto.title());
-        assertThat(communityBoard.get().getContent()).isEqualTo(dto.content());
-        assertThat(communityBoard.get().getImgUrl()).isEmpty();
     }
 }
