@@ -1,25 +1,24 @@
 package com.somemore.domains.note.controller;
 
-import com.somemore.domains.note.dto.SendNoteToCenterRequestDto;
-import com.somemore.domains.note.dto.SendNoteToVolunteerRequestDto;
-import com.somemore.domains.note.usecase.SendNoteToCenterUseCase;
-import com.somemore.domains.note.usecase.SendNoteToVolunteerUseCase;
-import com.somemore.support.ControllerTestSupport;
-import com.somemore.support.annotation.WithMockCustomUser;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-
-import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class NoteCommandApiControllerTest extends ControllerTestSupport{
+import com.somemore.domains.note.dto.SendNoteToCenterRequestDto;
+import com.somemore.domains.note.dto.SendNoteToVolunteerRequestDto;
+import com.somemore.domains.note.usecase.SendNoteToCenterUseCase;
+import com.somemore.domains.note.usecase.SendNoteToVolunteerUseCase;
+import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+
+class NoteCommandApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private SendNoteToCenterUseCase sendNoteToCenterUseCase;
@@ -29,7 +28,7 @@ class NoteCommandApiControllerTest extends ControllerTestSupport{
 
     @DisplayName("봉사자는 기관에게 쪽지를 보낼수 있다 (controller)")
     @Test
-    @WithMockCustomUser
+    @MockUser
     void sendNoteToCenter_Success() throws Exception {
         // Given
         UUID receiverId = UUID.randomUUID();
@@ -39,7 +38,8 @@ class NoteCommandApiControllerTest extends ControllerTestSupport{
                 "쪽지 내용"
         );
 
-        when(sendNoteToCenterUseCase.sendNoteToCenter(any(UUID.class), any(SendNoteToCenterRequestDto.class)))
+        when(sendNoteToCenterUseCase.sendNoteToCenter(any(UUID.class),
+                any(SendNoteToCenterRequestDto.class)))
                 .thenReturn(1L);
 
         // When & Then
@@ -73,7 +73,7 @@ class NoteCommandApiControllerTest extends ControllerTestSupport{
 
     @DisplayName("기관은 봉사자에게 쪽지를 보낼수 있다 (controller)")
     @Test
-    @WithMockCustomUser(role = "CENTER")
+    @MockUser(role = "ROLE_CENTER")
     void sendNoteToVolunteer_Success() throws Exception {
         // Given
         UUID receiverId = UUID.randomUUID();
@@ -83,7 +83,8 @@ class NoteCommandApiControllerTest extends ControllerTestSupport{
                 "쪽지 내용"
         );
 
-        when(sendNoteToVolunteerUseCase.sendNoteToVolunteer(any(UUID.class), any(SendNoteToVolunteerRequestDto.class)))
+        when(sendNoteToVolunteerUseCase.sendNoteToVolunteer(any(UUID.class),
+                any(SendNoteToVolunteerRequestDto.class)))
                 .thenReturn(1L);
 
         // When & Then

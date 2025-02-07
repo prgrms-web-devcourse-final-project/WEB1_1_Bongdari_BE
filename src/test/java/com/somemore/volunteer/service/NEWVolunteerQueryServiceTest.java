@@ -124,4 +124,18 @@ class NEWVolunteerQueryServiceTest extends IntegrationTestSupport {
                         volunteer2.getUserId(),
                         volunteer3.getUserId());
     }
+
+    @DisplayName("존재하지 않는 아이디로 봉사자 존재여부를 검증하면 에러가 발생한다.")
+    @Test
+    void validateExistsById() {
+        // given
+        UUID wrongId = UUID.randomUUID();
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> volunteerQueryService.validateExistsById(wrongId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage(NOT_EXISTS_VOLUNTEER.getMessage());
+    }
 }
