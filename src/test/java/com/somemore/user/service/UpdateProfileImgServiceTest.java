@@ -1,11 +1,10 @@
-package com.somemore.center.service;
+package com.somemore.user.service;
 
 import com.somemore.center.domain.NEWCenter;
-import com.somemore.center.dto.request.CenterProfileImgUpdateRequestDto;
 import com.somemore.center.repository.NEWCenterRepository;
-import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.dto.request.ImgUrlRequestDto;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,17 +15,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.somemore.user.domain.UserRole.CENTER;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Transactional
-class UpdateCenterProfileImgServiceTest extends IntegrationTestSupport {
+class UpdateProfileImgServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private UpdateCenterProfileImgService updateCenterProfileImgService;
-
-    @Autowired
-    private ImageUploadUseCase imageUploadUseCase;
+    private UpdateProfileImgUrlService updateCenterProfileImgService;
 
     @Autowired
     private NEWCenterRepository centerRepository;
@@ -34,7 +30,7 @@ class UpdateCenterProfileImgServiceTest extends IntegrationTestSupport {
     @Autowired
     private UserCommonAttributeRepository userCommonAttributeRepository;
 
-    @DisplayName("파일명을 받아 기관 프로필 이미지의 presignedUrl을 발급해준다.")
+    @DisplayName("파일명을 받아 프로필 이미지의 presignedUrl을 발급해준다.")
     @Test
     void updateCenterProfileImg() {
 
@@ -43,15 +39,12 @@ class UpdateCenterProfileImgServiceTest extends IntegrationTestSupport {
 
         NEWCenter center = NEWCenter.createDefault(userId);
         centerRepository.save(center);
-        UUID centerId = center.getId();
 
         UserCommonAttribute userCommonAttribute = UserCommonAttribute.createDefault(userId, CENTER);
         userCommonAttributeRepository.save(userCommonAttribute);
 
-        CenterProfileImgUpdateRequestDto requestDto = new CenterProfileImgUpdateRequestDto("test.png");
-
         //when
-        String presignedUrl = updateCenterProfileImgService.updateCenterProfileImg(centerId, requestDto);
+        String presignedUrl = updateCenterProfileImgService.update(userId, new ImgUrlRequestDto("test.png"));
 
         //then
         assertThat(presignedUrl).isNotNull();
@@ -59,9 +52,6 @@ class UpdateCenterProfileImgServiceTest extends IntegrationTestSupport {
         Optional<UserCommonAttribute> updatedUserCommonAttribute = userCommonAttributeRepository.findByUserId(userId);
         assertThat(updatedUserCommonAttribute)
                 .isNotNull();
-        assertTrue(updatedUserCommonAttribute.get().getImgUrl().contains(requestDto.fileName()));
-
+        assertTrue(updatedUserCommonAttribute.get().getImgUrl().contains("test.png"));
     }
-
-
 }
