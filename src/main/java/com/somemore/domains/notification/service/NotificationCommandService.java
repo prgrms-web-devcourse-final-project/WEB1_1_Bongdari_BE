@@ -38,6 +38,7 @@ public class NotificationCommandService implements NotificationCommandUseCase {
 
         notifications.forEach(notification ->
                 validateNotificationOwnership(userId, notification.getReceiverId()));
+
         notifications.forEach(Notification::markAsRead);
     }
 
