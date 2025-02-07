@@ -1,22 +1,21 @@
 package com.somemore.domains.note.service;
 
-import com.somemore.domains.center.usecase.query.CenterQueryUseCase;
+import com.somemore.center.usecase.NEWCenterQueryUseCase;
 import com.somemore.domains.note.domain.Note;
 import com.somemore.domains.note.dto.SendNoteToCenterRequestDto;
 import com.somemore.domains.note.repository.NoteRepository;
 import com.somemore.domains.note.usecase.SendNoteToCenterUseCase;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
 public class SendNoteToCenterService implements SendNoteToCenterUseCase {
 
-    private final CenterQueryUseCase centerQueryUseCase;
+    private final NEWCenterQueryUseCase centerQueryUseCase;
     private final NoteRepository noteRepository;
 
     @Override

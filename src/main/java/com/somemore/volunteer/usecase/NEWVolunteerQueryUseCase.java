@@ -19,4 +19,5 @@ public interface NEWVolunteerQueryUseCase {
 
     List<VolunteerNicknameAndId> getVolunteerNicknameAndIdsByIds(List<UUID> ids);
 
+    void validateExistsById(UUID id);
 }
