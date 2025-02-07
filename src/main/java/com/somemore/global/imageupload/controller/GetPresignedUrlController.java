@@ -3,6 +3,7 @@ package com.somemore.global.imageupload.controller;
 import com.somemore.global.auth.annotation.UserId;
 import com.somemore.global.common.response.ApiResponse;
 import com.somemore.global.imageupload.usecase.ImageUploadUseCase;
+import com.somemore.user.dto.request.ImgUrlRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class GetPresignedUrlController {
     @Operation(summary = "이미지 업로드 URL 조회", description = "이미지 업로드 URL을 조회합니다.")
     public ApiResponse<String> getImageUploadUrl(
             @UserId UUID userId,
-            @RequestBody String fileName
+            @RequestBody ImgUrlRequestDto dto
     ) {
-        return ApiResponse.ok(imageUploadUseCase.getPresignedUrl(fileName).value(),
+        return ApiResponse.ok(imageUploadUseCase.getPresignedUrl(dto.fileName()).value(),
                 "이미지 업로드 URL 발급 성공");
     }
 }

@@ -30,29 +30,29 @@ public class UserCommandController {
 
     @Secured("ROLE_VOLUNTEER")
     @PutMapping("/basic-info/volunteer")
-    @Operation(summary = "봉사자 기본 정보 업데이트", description = "봉사자의 기본 정보를 업데이트합니다.")
+    @Operation(summary = "봉사자 기본 정보 수정", description = "봉사자의 기본 정보를 수정합니다.")
     public ApiResponse<String> updateBasicInfo(
             @UserId UUID userId,
             @Valid @RequestBody VolunteerBasicInfoRequestDto volunteerBasicInfoRequestDto
     ) {
         updateBasicInfoUseCase.update(userId, volunteerBasicInfoRequestDto);
-        return ApiResponse.ok("봉사자 기본 정보 업데이트 완료");
+        return ApiResponse.ok("봉사자 기본 정보 수정 완료");
     }
 
     @Secured("ROLE_CENTER")
     @PutMapping("/basic-info/center")
-    @Operation(summary = "센터 기본 정보 업데이트", description = "센터의 기본 정보를 업데이트합니다.")
+    @Operation(summary = "센터 기본 정보 수정", description = "센터의 기본 정보를 수정합니다.")
     public ApiResponse<String> updateBasicInfo(
             @UserId UUID userId,
             @Valid @RequestBody CenterBasicInfoRequestDto centerBasicInfoRequestDto
     ) {
         updateBasicInfoUseCase.update(userId, centerBasicInfoRequestDto);
-        return ApiResponse.ok("센터 기본 정보 업데이 완료");
+        return ApiResponse.ok("센터 기본 정보 수정 완료");
     }
 
     @Secured("ROLE_VOLUNTEER, ROLE_CENTER")
     @PutMapping("/image/volunteer")
-    @Operation(summary = "유저 프로필 이미지 업데이트", description = "프로필 이미지를 수정합니다. 응답으로 제공되는 URL에 이미지를 PUT 해야 합니다.")
+    @Operation(summary = "유저 프로필 이미지 수정", description = "프로필 이미지를 수정합니다. 응답으로 제공되는 URL에 이미지를 PUT 해야 합니다.")
     public ApiResponse<String> updateVolunteerImage(
             @UserId UUID userId,
             @Valid @RequestBody ImgUrlRequestDto imgUrlRequestDto
