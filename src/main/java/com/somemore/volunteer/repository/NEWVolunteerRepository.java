@@ -21,4 +21,9 @@ public interface NEWVolunteerRepository {
 
     List<VolunteerNicknameAndId> findVolunteerNicknameAndIdsByIds(List<UUID> ids);
 
+    boolean existsById(UUID id);
+
+    default boolean doesNotExistById(UUID id) {
+        return !existsById(id);
+    }
 }

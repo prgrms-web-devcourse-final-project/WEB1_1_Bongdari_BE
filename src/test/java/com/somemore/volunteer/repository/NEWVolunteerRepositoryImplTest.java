@@ -114,4 +114,19 @@ class NEWVolunteerRepositoryImplTest extends IntegrationTestSupport {
                         volunteer2.getUserId(),
                         volunteer3.getUserId());
     }
+
+    @DisplayName("아이디로 존재 여부를 조회할 수 있다.")
+    @Test
+    void existsById() {
+        // given
+        NEWVolunteer volunteer = NEWVolunteer.createDefault(UUID.randomUUID());
+        volunteerRepository.save(volunteer);
+        UUID id = volunteer.getId();
+
+        // when
+        boolean result = volunteerRepository.existsById(id);
+
+        // then
+        assertThat(result).isTrue();
+    }
 }

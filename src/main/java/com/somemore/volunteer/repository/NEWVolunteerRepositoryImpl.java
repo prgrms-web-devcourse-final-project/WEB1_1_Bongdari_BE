@@ -7,12 +7,11 @@ import com.somemore.volunteer.domain.NEWVolunteer;
 import com.somemore.volunteer.domain.QNEWVolunteer;
 import com.somemore.volunteer.repository.record.VolunteerNickname;
 import com.somemore.volunteer.repository.record.VolunteerNicknameAndId;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository("newVolunteerRepository")
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
         return Optional.ofNullable(
                 queryFactory.selectFrom(volunteer)
                         .where(
-                                volunteer.id.eq(id),
+                                idEq(id),
                                 isNotDeleted()
                         )
                         .fetchOne()
@@ -58,7 +57,7 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                 queryFactory.select(volunteer.nickname)
                         .from(volunteer)
                         .where(
-                                volunteer.id.eq(id),
+                                idEq(id),
                                 isNotDeleted()
                         )
                         .fetchOne()
@@ -93,6 +92,21 @@ public class NEWVolunteerRepositoryImpl implements NEWVolunteerRepository {
                         isNotDeleted()
                 )
                 .fetch();
+    }
+
+    public boolean existsById(UUID id) {
+        return queryFactory
+                .selectOne()
+                .from(volunteer)
+                .where(
+                        idEq(id),
+                        isNotDeleted()
+                )
+                .fetchFirst() != null;
+    }
+
+    private static BooleanExpression idEq(UUID id) {
+        return volunteer.id.eq(id);
     }
 
     private static BooleanExpression isNotDeleted() {
