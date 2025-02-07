@@ -57,7 +57,7 @@ public class UserCommandController {
             @UserId UUID userId,
             @Valid @RequestBody ImgUrlRequestDto imgUrlRequestDto
     ) {
-        updateProfileImgUrlUseCase.update(userId, imgUrlRequestDto);
-        return ApiResponse.ok("프로필 이미지 수정 완료");
+        return ApiResponse.ok(updateProfileImgUrlUseCase.update(userId, imgUrlRequestDto),
+                "프로필 이미지 수정 완료");
     }
 }
