@@ -1,22 +1,9 @@
 package com.somemore.global.imageupload.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.somemore.global.exception.ImageUploadException;
 import com.somemore.global.imageupload.dto.ImageUploadRequestDto;
 import com.somemore.global.imageupload.validator.ImageUploadValidator;
 import com.somemore.support.IntegrationTestSupport;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +18,22 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class ImageUploadServiceTest extends IntegrationTestSupport {
 
@@ -120,17 +123,17 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
         PresignedGetObjectRequest mockPresignedRequest = mock(PresignedGetObjectRequest.class);
         URL mockUrl = mock(URL.class);
 
-        when(mockUrl.toString()).thenReturn("https://test-bucket.s3.amazonaws.com/unique-test-image.jpg");
+        when(mockUrl.toString()).thenReturn("https://test-bucket.s3.amazonaws.com/unique-test-image.jpg?수많은쿼리스트링");
         when(mockPresignedRequest.url()).thenReturn(mockUrl);
         when(mockPresigner.presignGetObject(any(GetObjectPresignRequest.class))).thenReturn(mockPresignedRequest);
 
         // when
-        String presignedUrl = imageUploadService.getPresignedUrl(filename);
+        PresignedUrl presignedUrl = imageUploadService.getPresignedUrl(filename);
 
         // then
         assertNotNull(presignedUrl);
-        assertTrue(presignedUrl.startsWith("https://test-bucket.s3.amazonaws.com/"));
-        assertTrue(presignedUrl.endsWith(".jpg"));
+        assertTrue(presignedUrl.removeQueryString().startsWith("https://test-bucket.s3.amazonaws.com/"));
+        assertTrue(presignedUrl.removeQueryString().endsWith(".jpg"));
 
         verify(imageUploadValidator, times(1)).isEmptyFileName(filename);
         verify(mockPresigner, times(1)).presignGetObject(any(GetObjectPresignRequest.class));
@@ -146,7 +149,7 @@ class ImageUploadServiceTest extends IntegrationTestSupport {
         when(imageUploadValidator.isEmptyFileName(filename)).thenReturn(true);
 
         // when
-        String presignedUrl = imageUploadService.getPresignedUrl(filename);
+        PresignedUrl presignedUrl = imageUploadService.getPresignedUrl(filename);
 
         // then
         assertNull(presignedUrl);
