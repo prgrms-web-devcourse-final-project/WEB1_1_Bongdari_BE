@@ -1,17 +1,21 @@
 package com.somemore.domains.search.service;
 
-import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.center.CenterRepository;
+import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.domains.location.domain.Location;
 import com.somemore.domains.location.repository.LocationRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
+import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.search.repository.SearchBoardRepository;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.user.domain.UserCommonAttribute;
+import com.somemore.user.domain.UserRole;
+import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.support.fixture.LocationFixture.createLocation;
 import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,7 +52,10 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
     private LocationRepository locationRepository;
 
     @Autowired
-    private CenterRepository centerRepository;
+    private NEWCenterRepository centerRepository;
+
+    @Autowired
+    private UserCommonAttributeRepository userCommonAttributeRepository;
 
     private final List<RecruitBoard> boards = new ArrayList<>();
 
@@ -57,7 +64,7 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         Location location = createLocation();
         locationRepository.save(location);
 
-        Center center = createCenter();
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
         centerRepository.save(center);
 
         for (int i = 1; i <= 30; i++) {
@@ -100,7 +107,8 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Page<RecruitBoardWithCenterResponseDto> dtos = recruitBoardDocumentService.getRecruitBoardBySearch(condition);
+        Page<RecruitBoardWithCenterResponseDto> dtos =
+                recruitBoardDocumentService.getRecruitBoardBySearch(condition);
 
         //then
         assertThat(dtos).isNotNull();
@@ -125,7 +133,8 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<RecruitBoardDetailResponseDto> result = recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
+        Page<RecruitBoardDetailResponseDto> result =
+                recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
                 condition);
 
         // then
@@ -147,8 +156,8 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        Page<RecruitBoardDetailResponseDto> result = recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(
-                condition);
+        Page<RecruitBoardDetailResponseDto> result =
+                recruitBoardDocumentService.getRecruitBoardsNearbyWithKeyword(condition);
 
         // then
         assertThat(result).isNotNull();
@@ -156,12 +165,60 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
         assertThat(result.getContent()).isNotEmpty();
     }
 
+    @DisplayName("특정 센터의 검색 키워드가 포함된 모집글을 조회한다. (elasticsearch)")
+    @Test
+    void getRecruitBoardsByCenterIdWithKeyword() {
+        //given
+        Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("봉사")
+                .pageable(pageable)
+                .build();
+
+        //when
+        Page<RecruitBoardResponseDto> dtos = recruitBoardDocumentService
+                .getRecruitBoardsByCenterIdWithKeyword(
+                        UUID.fromString("2f5ea614-d7be-11ef-8ad6-0665912995d5"), condition);
+
+        //then
+        assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
+        assertThat(dtos.getTotalElements()).isEqualTo(5);
+        assertThat(dtos.getSize()).isEqualTo(5);
+        assertThat(dtos.getTotalPages()).isEqualTo(1);
+    }
+
+    @DisplayName("키워드 없이 검색 시 특정 센터가 작성한 모집글을 모두 조회한다. (elasticsearch)")
+    @Test
+    void getRecruitBoardsByCenterIdWithNull() {
+        //given
+        Pageable pageable = getPageable();
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("")
+                .pageable(pageable)
+                .build();
+
+        //when
+        Page<RecruitBoardResponseDto> dtos = recruitBoardDocumentService
+                .getRecruitBoardsByCenterIdWithKeyword(
+                        UUID.fromString("2f5ea614-d7be-11ef-8ad6-0665912995d5"), condition);
+
+        //then
+        assertThat(dtos).isNotNull();
+        assertThat(dtos.getContent()).isNotNull();
+        assertThat(dtos.getTotalElements()).isEqualTo(5);
+        assertThat(dtos.getSize()).isEqualTo(5);
+        assertThat(dtos.getTotalPages()).isEqualTo(1);
+    }
+
     @DisplayName("모집글을 elastic search index에 저장한다. (service)")
     @Test
     void saveRecruitBoardDocuments() {
         //given
-        Center center = createCenter("특별한 기관");
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
         centerRepository.save(center);
+        UserCommonAttribute userCommonAttribute = createUserCommonAttribute(center.getUserId());
+        userCommonAttributeRepository.save(userCommonAttribute);
 
         Pageable pageable = getPageable();
         RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
@@ -189,6 +246,10 @@ class RecruitBoardDocumentServiceTest extends IntegrationTestSupport {
 
         searchBoardRepository.deleteRecruitBoardDocument(savedBoard1.getId());
         searchBoardRepository.deleteRecruitBoardDocument(savedBoard2.getId());
+    }
+
+    private static UserCommonAttribute createUserCommonAttribute(UUID userId) {
+        return UserCommonAttribute.createDefault(userId, UserRole.CENTER);
     }
 
     private Pageable getPageable() {

@@ -3,11 +3,13 @@ package com.somemore.domains.search.controller;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
+import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.domains.recruitboard.usecase.RecruitBoardQueryUseCase;
 import com.somemore.domains.search.config.ElasticsearchHealthChecker;
 import com.somemore.domains.search.usecase.RecruitBoardDocumentUseCase;
 import com.somemore.support.ControllerTestSupport;
+import com.somemore.support.annotation.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static com.somemore.domains.recruitboard.domain.VolunteerCategory.ADMINISTRATIVE_SUPPORT;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -109,6 +112,81 @@ class RecruitBoardSearchApiControllerTest extends ControllerTestSupport {
         } else {
             verify(recruitBoardQueryUseCase, times(1)).getRecruitBoardsNearby(
                     any(RecruitBoardNearByCondition.class));
+        }
+    }
+
+    @Test
+    @DisplayName("특정 기관이 작성한 모집글을 검색 조건으로 페이징 조회 성공")
+    void getRecruitBoardsByCenterId() throws Exception {
+        // given
+        UUID centerId = UUID.randomUUID();
+        Page<RecruitBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
+
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            given(recruitBoardDocumentUseCase
+                    .getRecruitBoardsByCenterIdWithKeyword(eq(centerId),
+                            any(RecruitBoardSearchCondition.class)))
+                    .willReturn(page);
+        } else {
+            given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(eq(centerId),
+                    any(RecruitBoardSearchCondition.class)))
+                    .willReturn(page);
+        }
+
+        // when
+        // then
+        mockMvc.perform(get("/api/recruit-boards/center/{centerId}", centerId.toString())
+                        .param("keyword", "volunteer")
+                        .param("category", ADMINISTRATIVE_SUPPORT.name())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("특정 기관 봉사 활동 모집글 조회 성공"));
+
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            verify(recruitBoardDocumentUseCase, times(1))
+                    .getRecruitBoardsByCenterIdWithKeyword(eq(centerId), any(RecruitBoardSearchCondition.class));
+        } else {
+            verify(recruitBoardQueryUseCase, times(1))
+                    .getRecruitBoardsByCenterId(eq(centerId), any(RecruitBoardSearchCondition.class));
+        }
+    }
+
+    @Test
+    @MockUser(role = "ROLE_CENTER")
+    @DisplayName("기관이 작성한 모집글을 검색 조건으로 페이징 조회 성공")
+    void getMyRecruitBoards() throws Exception {
+        // given
+        Page<RecruitBoardResponseDto> page = new PageImpl<>(Collections.emptyList());
+
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            given(recruitBoardDocumentUseCase
+                    .getRecruitBoardsByCenterIdWithKeyword(any(),
+                            any(RecruitBoardSearchCondition.class)))
+                    .willReturn(page);
+        } else {
+            given(recruitBoardQueryUseCase.getRecruitBoardsByCenterId(any(),
+                    any(RecruitBoardSearchCondition.class)))
+                    .willReturn(page);
+        }
+
+        // when
+        // then
+        mockMvc.perform(get("/api/recruit-boards/me")
+                        .param("keyword", "volunteer")
+                        .param("category", ADMINISTRATIVE_SUPPORT.name())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.message").value("기관 봉사 활동 모집글 조회 성공"));
+
+        if (elasticsearchHealthChecker.isElasticsearchRunning()) {
+            verify(recruitBoardDocumentUseCase, times(1))
+                    .getRecruitBoardsByCenterIdWithKeyword(any(), any(RecruitBoardSearchCondition.class));
+        } else {
+            verify(recruitBoardQueryUseCase, times(1))
+                    .getRecruitBoardsByCenterId(any(), any(RecruitBoardSearchCondition.class));
         }
     }
 }
