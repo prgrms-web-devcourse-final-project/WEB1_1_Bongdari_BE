@@ -15,10 +15,6 @@ public record CommonBasicInfoRequestDto(
         @NotBlank(message = "연락처는 필수 값입니다.")
         String contactNumber,
 
-        @Schema(description = "이미지 링크", example = "https://image.image")
-        @NotBlank(message = "이미지 링크는 필수 값입니다.")
-        String imgUrl,
-
         @Schema(description = "소개 글", example = "햄부기햄북햄북어햄북스딱스함부르크햄부가우가햄비기햄부거햄부가티햄부기온앤온을 차려오거라")
         @NotBlank(message = "소개 글은 필수 값입니다.")
         String introduce
