@@ -45,7 +45,7 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
 
     @Override
     public Page<RecruitBoardDocument> findByRecruitBoardsContaining(RecruitBoardSearchCondition condition) {
-        NativeQuery searchQuery = getRecruitBoardWithSearchCondition(condition);
+        NativeQuery searchQuery = getRecruitBoardWithSearchCondition(null, condition);
 
         List<RecruitBoardDocument> boardDocuments =
                 elasticsearchOperations.search(searchQuery, RecruitBoardDocument.class)
@@ -59,6 +59,19 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
     @Override
     public Page<RecruitBoardDocument> findAllNearbyWithKeyword(RecruitBoardNearByCondition condition) {
         NativeQuery searchQuery = getRecruitBoardWithNearByCondition(condition);
+
+        List<RecruitBoardDocument> boardDocuments =
+                elasticsearchOperations.search(searchQuery, RecruitBoardDocument.class)
+                        .stream()
+                        .map(SearchHit::getContent)
+                        .toList();
+
+        return PageableExecutionUtils.getPage(boardDocuments, condition.pageable(), boardDocuments::size);
+    }
+
+    @Override
+    public Page<RecruitBoardDocument> findAllByCenterIdWithKeyword(UUID centerId, RecruitBoardSearchCondition condition) {
+        NativeQuery searchQuery = getRecruitBoardWithSearchCondition(centerId, condition);
 
         List<RecruitBoardDocument> boardDocuments =
                 elasticsearchOperations.search(searchQuery, RecruitBoardDocument.class)
@@ -160,8 +173,11 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
         return communityBoardDocuments;
     }
 
-    private NativeQuery getRecruitBoardWithSearchCondition(RecruitBoardSearchCondition condition) {
+    private NativeQuery getRecruitBoardWithSearchCondition(UUID centerId, RecruitBoardSearchCondition condition) {
         return buildNativeQuery(builder -> {
+            if (centerId != null) {
+                builder.addMustQuery("centerId", centerId.toString());
+            }
             if (condition.category() != null) {
                 builder.addMustQuery("volunteerCategory", condition.category().toString());
             }
@@ -179,6 +195,7 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
             }
         });
     }
+
     private NativeQuery getRecruitBoardWithNearByCondition(RecruitBoardNearByCondition condition) {
         return buildNativeQuery(builder -> {
             if (condition.latitude() != null && condition.longitude() != null && condition.radius() != null) {
@@ -192,6 +209,7 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
             }
         });
     }
+
     private NativeQuery buildNativeQuery(Consumer<QueryBuilder> builderConsumer) {
         QueryBuilder builder = new QueryBuilder();
         builderConsumer.accept(builder);
@@ -199,6 +217,7 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
                 .withQuery(builder.build())
                 .build();
     }
+
     private static class QueryBuilder {
         private final List<Query> mustQueries = new ArrayList<>();
         private final List<Query> shouldQueries = new ArrayList<>();

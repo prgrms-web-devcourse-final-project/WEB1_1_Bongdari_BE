@@ -6,6 +6,7 @@ import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.domain.RecruitStatus;
 import com.somemore.domains.recruitboard.domain.RecruitmentInfo;
 import com.somemore.domains.recruitboard.domain.VolunteerCategory;
+import com.somemore.domains.search.domain.RecruitBoardDocument;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -67,6 +68,26 @@ public record RecruitBoardResponseDto(
                 .volunteerCategory(info.getVolunteerCategory())
                 .volunteerHours(info.getVolunteerHours())
                 .admitted(info.getAdmitted())
+                .build();
+    }
+
+    public static RecruitBoardResponseDto fromDocument(RecruitBoardDocument document) {
+        return RecruitBoardResponseDto.builder()
+                .id(document.getId())
+                .centerId(document.getCenterId())
+                .locationId(document.getLocationId())
+                .createdAt(document.getCreatedAt())
+                .updatedAt(document.getUpdatedAt())
+                .title(document.getTitle())
+                .content(document.getContent())
+                .region(document.getRegion())
+                .recruitStatus(document.getRecruitStatus())
+                .recruitmentCount(document.getRecruitmentCount())
+                .volunteerStartDateTime(document.getVolunteerStartDateTime())
+                .volunteerEndDateTime(document.getVolunteerEndDateTime())
+                .volunteerCategory(document.getVolunteerCategory())
+                .volunteerHours(document.getVolunteerHours())
+                .admitted(document.getAdmitted())
                 .build();
     }
 }
