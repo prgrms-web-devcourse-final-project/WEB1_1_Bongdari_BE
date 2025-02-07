@@ -1,4 +1,4 @@
-package com.somemore.user.dto;
+package com.somemore.user.domain;
 
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.global.util.encoder.BCryptPasswordEncoderUtil;

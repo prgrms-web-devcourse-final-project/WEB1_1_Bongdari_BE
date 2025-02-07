@@ -3,9 +3,9 @@ package com.somemore.user.service;
 import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.User;
+import com.somemore.user.domain.UserAuthInfo;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
-import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.repository.user.UserRepository;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import com.somemore.user.repository.usercommonattribute.record.UserProfileDto;
@@ -15,9 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 import java.util.List;
+import java.util.UUID;
 
 import static com.somemore.user.domain.UserRole.VOLUNTEER;
 import static org.assertj.core.api.Assertions.assertThat;

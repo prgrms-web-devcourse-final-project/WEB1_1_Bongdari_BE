@@ -4,9 +4,9 @@ import com.somemore.center.domain.NEWCenter;
 import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.User;
+import com.somemore.user.domain.UserAuthInfo;
 import com.somemore.user.domain.UserCommonAttribute;
 import com.somemore.user.domain.UserRole;
-import com.somemore.user.dto.UserAuthInfo;
 import com.somemore.user.dto.basicinfo.CenterBasicInfoRequestDto;
 import com.somemore.user.dto.basicinfo.CommonBasicInfoRequestDto;
 import com.somemore.user.dto.basicinfo.VolunteerBasicInfoRequestDto;
@@ -114,7 +114,6 @@ class UpdateBasicInfoServiceTest extends IntegrationTestSupport {
 
     private static CommonBasicInfoRequestDto createCommonBasicInfoRequestDto() {
         return new CommonBasicInfoRequestDto(
-                "test",
                 "test",
                 "test",
                 "test"
