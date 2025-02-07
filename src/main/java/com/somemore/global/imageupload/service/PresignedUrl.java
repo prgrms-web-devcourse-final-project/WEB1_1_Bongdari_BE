@@ -19,7 +19,7 @@ public record PresignedUrl(
     }
 
     public static PresignedUrl from(String url) {
-        if (url.contains("?")) {
+        if (url != null && url.contains("?")) {
             return new PresignedUrl(url);
         }
         log.error("PresignedUrl({})이 올바르지 않은 형식입니다.", url);
