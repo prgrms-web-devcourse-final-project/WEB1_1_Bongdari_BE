@@ -103,9 +103,8 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
     }
 
     @Override
-    public String findNameById(UUID id) {
-        return findDynamicFieldByCenterId(id, userCommonAttribute.name)
-                .orElse(null);
+    public Optional<String> findNameById(UUID id) {
+        return findDynamicFieldByCenterId(id, userCommonAttribute.name);
     }
 
     private static BooleanExpression idIn(List<UUID> ids) {

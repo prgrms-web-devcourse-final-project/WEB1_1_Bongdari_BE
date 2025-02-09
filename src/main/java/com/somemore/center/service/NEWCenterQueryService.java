@@ -77,13 +77,8 @@ public class NEWCenterQueryService implements NEWCenterQueryUseCase {
 
     @Override
     public String getNameById(UUID id) {
-        String name = centerRepository.findNameById(id);
-
-        if (name == null || name.isBlank()) {
-            throw new BadRequestException(NOT_EXISTS_CENTER);
-        }
-
-        return name;
+        return centerRepository.findNameById(id)
+                .orElseThrow(
+                        () -> new NoSuchElementException(ExceptionMessage.NOT_EXISTS_CENTER));
     }
-
 }

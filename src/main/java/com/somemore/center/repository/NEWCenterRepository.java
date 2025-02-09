@@ -25,6 +25,6 @@ public interface NEWCenterRepository {
 
     List<CenterOverviewInfo> findOverviewInfosByIds(List<UUID> ids);
 
-    String findNameById(UUID id);
+    Optional<String> findNameById(UUID id);
 
 }
