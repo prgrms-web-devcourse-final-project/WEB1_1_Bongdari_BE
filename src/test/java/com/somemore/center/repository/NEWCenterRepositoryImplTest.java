@@ -132,11 +132,11 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
         userCommonAttributeRepository.save(centerUserInfo);
 
         //when
-        String foundName = centerRepository.findNameById(center.getId());
+        Optional<String> foundName = centerRepository.findNameById(center.getId());
 
         //then
-        AssertionsForClassTypes.assertThat(foundName).isNotNull();
-        AssertionsForClassTypes.assertThat(foundName).contains("기관");
+        assertThat(foundName).isPresent();
+        assertThat(foundName.get()).contains("기관");
     }
 
     @DisplayName("존재하지 않는 기관 id로 기관명 조회 시 null을 반환한다.")
@@ -144,10 +144,10 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
     void findNameByNonExistentId() {
         //given
         //when
-        String foundName = centerRepository.findNameById(UUID.randomUUID());
+        Optional<String> foundName = centerRepository.findNameById(UUID.randomUUID());
 
         //then
-        AssertionsForClassTypes.assertThat(foundName).isNull();
+        assertThat(foundName).isEmpty();
     }
 
     private UserCommonAttribute createCenterUserAttribute(UUID userId) {

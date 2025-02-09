@@ -165,7 +165,7 @@ class NEWCenterQueryServiceTest extends IntegrationTestSupport {
                 UUID.randomUUID());
 
         // then
-        assertThatExceptionOfType(BadRequestException.class)
+        assertThatExceptionOfType(NoSuchElementException.class)
                 .isThrownBy(callable)
                 .withMessage(ExceptionMessage.NOT_EXISTS_CENTER.getMessage());
     }
