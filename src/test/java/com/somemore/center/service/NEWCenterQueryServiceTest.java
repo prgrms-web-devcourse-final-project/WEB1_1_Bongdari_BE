@@ -11,7 +11,6 @@ import com.somemore.center.dto.response.PreferItemResponseDto;
 import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.center.repository.preferitem.PreferItemJpaRepository;
 import com.somemore.center.usecase.PreferItemQueryUseCase;
-import com.somemore.global.exception.BadRequestException;
 import com.somemore.global.exception.ExceptionMessage;
 import com.somemore.global.exception.NoSuchElementException;
 import com.somemore.support.IntegrationTestSupport;
