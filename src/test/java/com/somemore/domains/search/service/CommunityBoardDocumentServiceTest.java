@@ -4,10 +4,9 @@ import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.dto.response.CommunityBoardResponseDto;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.search.repository.SearchBoardRepository;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +35,7 @@ class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
     @Autowired
     private CommunityBoardRepository communityBoardRepository;
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
 
     private UUID volunteerId;
 
@@ -44,8 +43,7 @@ class CommunityBoardDocumentServiceTest extends IntegrationTestSupport {
     void setUp() {
         List<CommunityBoard> communityBoards = new ArrayList<>();
 
-        String oAuthId1 = "example-oauth-id1";
-        Volunteer volunteer = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
+        NEWVolunteer volunteer = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer);
         volunteerId = volunteer.getId();
 

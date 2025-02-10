@@ -1,5 +1,6 @@
 package com.somemore.center.repository;
 
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -101,6 +102,11 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
                 .fetch();
     }
 
+    @Override
+    public Optional<String> findNameById(UUID id) {
+        return findDynamicFieldByCenterId(id, userCommonAttribute.name);
+    }
+
     private static BooleanExpression idIn(List<UUID> ids) {
         return center.id.in(ids);
     }
@@ -113,4 +119,18 @@ public class NEWCenterRepositoryImpl implements NEWCenterRepository {
         return center.deleted.isFalse();
     }
 
+    private <T> Optional<T> findDynamicFieldByCenterId(UUID id, Path<T> field) {
+        return Optional.ofNullable(
+                queryFactory
+                        .select(field)
+                        .from(center)
+                        .join(userCommonAttribute)
+                        .on(userCommonAttribute.userId.eq(center.userId))
+                        .where(
+                                center.id.eq(id),
+                                isNotDeleted()
+                        )
+                        .fetchOne()
+        );
+    }
 }

@@ -1,5 +1,6 @@
 package com.somemore.center.repository;
 
+import static com.somemore.user.domain.UserRole.CENTER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.somemore.center.domain.NEWCenter;
@@ -7,11 +8,11 @@ import com.somemore.center.repository.record.CenterOverviewInfo;
 import com.somemore.center.repository.record.CenterProfileDto;
 import com.somemore.support.IntegrationTestSupport;
 import com.somemore.user.domain.UserCommonAttribute;
-import com.somemore.user.domain.UserRole;
 import com.somemore.user.repository.usercommonattribute.UserCommonAttributeRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,35 @@ class NEWCenterRepositoryImplTest extends IntegrationTestSupport {
                 .containsExactlyInAnyOrderElementsOf(ids);
     }
 
+    @DisplayName("기관 Id로 기관명을 조회할 수 있다.")
+    @Test
+    void findNameById() {
+        //given
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
+        centerRepository.save(center);
+        UserCommonAttribute centerUserInfo = createCenterUserAttribute(center.getUserId());
+        userCommonAttributeRepository.save(centerUserInfo);
+
+        //when
+        Optional<String> foundName = centerRepository.findNameById(center.getId());
+
+        //then
+        assertThat(foundName).isPresent();
+        assertThat(foundName.get()).contains("기관");
+    }
+
+    @DisplayName("존재하지 않는 기관 id로 기관명 조회 시 null을 반환한다.")
+    @Test
+    void findNameByNonExistentId() {
+        //given
+        //when
+        Optional<String> foundName = centerRepository.findNameById(UUID.randomUUID());
+
+        //then
+        assertThat(foundName).isEmpty();
+    }
+
     private UserCommonAttribute createCenterUserAttribute(UUID userId) {
-        return UserCommonAttribute.createDefault(userId, UserRole.CENTER);
+        return UserCommonAttribute.createDefault(userId, CENTER);
     }
 }

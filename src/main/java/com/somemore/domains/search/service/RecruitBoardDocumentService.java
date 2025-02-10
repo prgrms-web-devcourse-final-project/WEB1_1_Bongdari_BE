@@ -4,6 +4,7 @@ import com.somemore.domains.recruitboard.domain.RecruitBoard;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardNearByCondition;
 import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchCondition;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardDetailResponseDto;
+import com.somemore.domains.recruitboard.dto.response.RecruitBoardResponseDto;
 import com.somemore.domains.recruitboard.dto.response.RecruitBoardWithCenterResponseDto;
 import com.somemore.domains.search.annotation.ConditionalOnElasticSearchEnabled;
 import com.somemore.domains.search.domain.RecruitBoardDocument;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -36,6 +38,15 @@ public class RecruitBoardDocumentService implements RecruitBoardDocumentUseCase 
             RecruitBoardNearByCondition condition) {
         Page<RecruitBoardDocument> boards = searchBoardRepository.findAllNearbyWithKeyword(condition);
         return boards.map(RecruitBoardDetailResponseDto::fromDocument);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<RecruitBoardResponseDto> getRecruitBoardsByCenterIdWithKeyword(UUID centerId,
+                                                           RecruitBoardSearchCondition condition) {
+        Page<RecruitBoardDocument> boards =
+                searchBoardRepository.findAllByCenterIdWithKeyword(centerId, condition);
+        return boards.map(RecruitBoardResponseDto::fromDocument);
     }
 
     @Transactional

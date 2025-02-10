@@ -1,7 +1,7 @@
 package com.somemore.domains.search.repository;
 
-import com.somemore.domains.center.domain.Center;
-import com.somemore.domains.center.repository.center.CenterRepository;
+import com.somemore.center.domain.NEWCenter;
+import com.somemore.center.repository.NEWCenterRepository;
 import com.somemore.domains.community.domain.CommunityBoard;
 import com.somemore.domains.community.repository.board.CommunityBoardRepository;
 import com.somemore.domains.recruitboard.domain.RecruitBoard;
@@ -10,10 +10,9 @@ import com.somemore.domains.recruitboard.dto.condition.RecruitBoardSearchConditi
 import com.somemore.domains.recruitboard.repository.RecruitBoardRepository;
 import com.somemore.domains.search.domain.CommunityBoardDocument;
 import com.somemore.domains.search.domain.RecruitBoardDocument;
-import com.somemore.domains.volunteer.domain.Volunteer;
-import com.somemore.domains.volunteer.repository.VolunteerRepository;
-import com.somemore.global.auth.oauth.domain.OAuthProvider;
 import com.somemore.support.IntegrationTestSupport;
+import com.somemore.volunteer.domain.NEWVolunteer;
+import com.somemore.volunteer.repository.NEWVolunteerRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.somemore.support.fixture.CenterFixture.createCenter;
 import static com.somemore.support.fixture.RecruitBoardFixture.createRecruitBoard;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,22 +42,21 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private RecruitBoardRepository recruitBoardRepository;
     @Autowired
-    private CenterRepository centerRepository;
+    private NEWCenterRepository centerRepository;
     @Autowired
     private SearchBoardRepository searchBoardRepository;
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private NEWVolunteerRepository volunteerRepository;
 
     private UUID writerId, centerId;
 
     @BeforeEach
     void setUp() {
-        String oAuthId1 = "example-oauth-id1";
-        Volunteer volunteer1 = Volunteer.createDefault(OAuthProvider.NAVER, oAuthId1);
+        NEWVolunteer volunteer1 = NEWVolunteer.createDefault(UUID.randomUUID());
         volunteerRepository.save(volunteer1);
         writerId = volunteer1.getId();
 
-        Center center = createCenter();
+        NEWCenter center = NEWCenter.createDefault(UUID.randomUUID());
         centerRepository.save(center);
         centerId = center.getId();
     }
@@ -215,9 +212,9 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(findBoards).isNotNull();
-        assertThat(findBoards.getTotalElements()).isEqualTo(20);
+        assertThat(findBoards.getTotalElements()).isEqualTo(5);
         assertThat(findBoards.getSize()).isEqualTo(5);
-        assertThat(findBoards.getTotalPages()).isEqualTo(4);
+        assertThat(findBoards.getTotalPages()).isEqualTo(1);
     }
 
     @DisplayName("위치 기반으로 반경 내에 검색 키워드가 포함된 모집글을 조회할 수 있다. (elasticsearch)")
@@ -264,6 +261,48 @@ class SearchBoardRepositoryTest extends IntegrationTestSupport {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(20);
         assertThat(result.getContent()).isNotEmpty();
+    }
+
+    @DisplayName("특정 센터의 검색 키워드가 포함된 모집글을 조회할 수 있다. (elasticsearch)")
+    @Test
+    void findAllByCenterIdWithKeyword() {
+        //given
+        Pageable pageable = getPageable(5);
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword("봉사")
+                .pageable(pageable)
+                .build();
+
+        //when
+        Page<RecruitBoardDocument> findBoards = searchBoardRepository
+                .findAllByCenterIdWithKeyword(UUID.fromString("2f5ea614-d7be-11ef-8ad6-0665912995d5"), condition);
+
+        //then
+        assertThat(findBoards).isNotNull();
+        assertThat(findBoards.getTotalElements()).isEqualTo(5);
+        assertThat(findBoards.getSize()).isEqualTo(5);
+        assertThat(findBoards.getTotalPages()).isEqualTo(1);
+    }
+
+    @DisplayName("키워드 없이 검색 시 특정 센터가 작성한 모집글을 모두 조회할 수 있다. (elasticsearch)")
+    @Test
+    void findAllByCenterIdContainingWithNull() {
+        //given
+        Pageable pageable = getPageable(5);
+        RecruitBoardSearchCondition condition = RecruitBoardSearchCondition.builder()
+                .keyword(null)
+                .pageable(pageable)
+                .build();
+
+        //when
+        Page<RecruitBoardDocument> findBoards = searchBoardRepository
+                .findAllByCenterIdWithKeyword(UUID.fromString("2f5ea614-d7be-11ef-8ad6-0665912995d5"), condition);
+
+        //then
+        assertThat(findBoards).isNotNull();
+        assertThat(findBoards.getTotalElements()).isEqualTo(5);
+        assertThat(findBoards.getSize()).isEqualTo(5);
+        assertThat(findBoards.getTotalPages()).isEqualTo(1);
     }
 
     private Pageable getPageable(int size) {
