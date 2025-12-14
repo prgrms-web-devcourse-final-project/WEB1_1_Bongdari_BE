@@ -4,10 +4,6 @@
 
 Programmers DevCourse BE 1기 8팀 최종 프로젝트 - 백엔드
 
-## ▶️ [손모아 사이트](https://www.somemore.site/)
-
-## ▶️ [Notion](https://www.notion.so/prgrms/Team08-81045d7e1f3e48ccbb9b215a663b97c6?pvs=4)
-
 ***
 
 ## 📺 시연 영상
@@ -68,13 +64,9 @@ Programmers DevCourse BE 1기 8팀 최종 프로젝트 - 백엔드
 - 연결: 도움이 필요한 곳과 봉사자를 직접 연결
 - 자율성: 기관과 봉사자 모두에게 주도적인 참여 기회 제공
 
-###
-
-📄 [프로젝트 기획서](https://www.notion.so/prgrms/96e6ee529a8a42ada5ccdcbb13ffbb81?pvs=4)
-
 ### 개발 기간
 
-> 2024/11/12 ~ 개발 중
+> 2024/11/12 ~ 2024/02/10
 
 ---
 
@@ -118,38 +110,8 @@ Programmers DevCourse BE 1기 8팀 최종 프로젝트 - 백엔드
 
 🙏🏻 [요구사항 명세](https://docs.google.com/spreadsheets/d/1mYRyznCwWFqOqJjJhN7t6W8J8CqahkIvknfgWDqXuYs/edit?gid=0#gid=0)
 
----
 
-# 6. API 명세
-
-<img width="1456" alt="스크린샷 2024-12-10 오전 10 19 53" src="https://github.com/user-attachments/assets/3a4f0762-468f-4368-bdf9-13eb68e39e09">
-
-
-📡 [API 명세](https://www.notion.so/prgrms/API-13c3e47046bf81e0ada9d52ca117e5d4?pvs=4)
-
-⭐️ [Swagger](https://api.somemore.site/swagger-ui/index.html#/)
-
----
-
-# 7. 트러블 슈팅
-
-🚀 [트러블 슈팅](https://www.notion.so/prgrms/1e34c1f077404fd7a87b4ac670b5b43c?v=1433e47046bf811aa93a000ca3880ec5&pvs=4)
-
----
-
-# 8. 성능 개선기
-
-❤️‍🩹 [성능 개선기](https://www.notion.so/prgrms/de9f07e7d91845bb9ed15efb4a4e7092?v=1573e47046bf810980eb000c74210814&pvs=4)
-
----
-
-# 9. ADR
-
-🤔 [Architectural Decision Records](https://www.notion.so/prgrms/ADR-7648f69a1b4a4ca6ace47d7828d27015?pvs=4)
-
---- 
-
-# 9. 개발 환경
+# 6. 개발 환경
 
 - OS : Mac
 - IDE : JetBrain IntelliJ
